@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.modules.test.dao.TestDataDao">
+    <sql id="Base_Column_List">
+        id,
+        name,
+        short_name,
+        age,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        comments
+    </sql>
+
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="com.yibo.modules.test.entity.TestData">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            SELECT replace(NEWID(),'-','')
+        </selectKey>
+        INSERT INTO TEST_DATA (
+            id,
+            name,
+            short_name,
+            age,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments
+        ) VALUES (
+            #{id},
+            #{name},
+            #{shortName},
+            #{age},
+            #{createBy},
+            #{createDate},
+            #{updateBy},
+            #{updateDate},
+            #{comments}
+        )
+    </insert>
+    <insert id="insertMap" >
+        INSERT INTO TEST_DATA (
+            id,
+            name,
+            short_name,
+            age,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments
+        ) VALUES (
+            replace(NEWID(),'-',''),
+            #{map.name},
+            #{map.shortName},
+            #{map.age},
+            #{map.createBy},
+            #{map.createDate},
+            #{map.updateBy},
+            #{map.updateDate},
+            #{map.comments}
+        )
+    </insert>
+
+    <!-- 更新相关 -->
+    <update id="update" parameterType="com.yibo.modules.test.entity.TestData">
+        UPDATE TEST_DATA
+        <trim prefix="SET" suffixOverrides=",">
+            name = #{name},
+            age = #{age},
+            short_name = #{shortName},
+            status = #{status},
+            create_by = #{createBy},
+            create_date = #{createDate},
+            update_by = #{updateBy},
+            update_date = #{updateDate},
+            comments = #{comments}
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <update id="updateNull" parameterType="com.yibo.modules.test.entity.TestData">
+        UPDATE TEST_DATA
+        <trim prefix="SET" suffixOverrides=",">
+            name = #{name},
+            age = #{age},
+            short_name = #{shortName},
+            status = #{status},
+            create_by = #{createBy},
+            create_date = #{createDate},
+            update_by = #{updateBy},
+            update_date = #{updateDate},
+            comments = #{comments}
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <update id="updateMap">
+        UPDATE TEST_DATA
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="map.name != null">
+                name = #{map.name},
+            </if>
+            <if test="map.age != null">
+                age = #{map.age},
+            </if>
+            <if test="map.shortName != null">
+                short_name = #{map.shortName},
+            </if>
+            <if test="map.status != null">
+                status = #{map.status},
+            </if>
+            <if test="map.createBy != null">
+                create_by = #{map.createBy},
+            </if>
+            <if test="map.createDate != null">
+                create_date = #{map.createDate},
+            </if>
+            <if test="map.updateBy != null">
+                update_by = #{map.updateBy},
+            </if>
+            <if test="map.updateDate != null">
+                update_date = #{map.updateDate},
+            </if>
+            <if test="map.comments != null">
+                comments = #{map.comments},
+            </if>
+        </trim>
+        WHERE id = #{map.id}
+    </update>
+    <update id="updateByCondition">
+        UPDATE TEST_DATA
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.name != null">
+                name = #{update.name},
+            </if>
+            <if test="update.age != null">
+                age = #{update.age},
+            </if>
+            <if test="update.shortName != null">
+                short_name = #{update.shortName},
+            </if>
+            <if test="update.status != null">
+                status = #{update.status},
+            </if>
+            <if test="update.createBy != null">
+                create_by = #{update.createBy},
+            </if>
+            <if test="update.createDate != null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.updateBy != null">
+                update_by = #{update.updateBy},
+            </if>
+            <if test="update.updateDate != null">
+                update_date = #{update.updateDate},
+            </if>
+            <if test="update.comments != null">
+                comments = #{update.comments},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </trim>
+    </update>
+
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            AND id = #{id}
+        </trim>
+    </delete>
+    <delete id="deleteByIds">
+        DELETE FROM TEST_DATA
+        WHERE id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    <delete id="deleteByCondition">
+        DELETE FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </trim>
+    </delete>
+    <delete id="deleteByProperty">
+        DELETE FROM TEST_DATA WHERE ${property} = #{value}
+    </delete>
+
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.Long" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            AND id = #{id}
+        </trim>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            TOP 1
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        WHERE ${property} = #{value}
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        WHERE ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            TOP 1
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </trim>
+        <choose>
+            <when test="condition.sort != null">
+                ORDER BY ${condition.orderby}
+            </when>
+            <otherwise>
+                ORDER BY id
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+		${executeSql}
+	</select>
+
+    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM TEST_DATA
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id != null">
+                AND id like '%' + #{condition.id} + '%'
+            </if>
+            <if test="condition.name != null">
+                AND name like '%' + #{condition.name} + '%'
+            </if>
+            <if test="condition.age != null">
+                AND age like '%' + #{condition.age} + '%'
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name like '%' + #{condition.shortName} + '%'
+            </if>
+            <if test="condition.status != null">
+                AND status like '%' + #{condition.status} + '%'
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by like '%' + #{condition.createBy} + '%'
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date like '%' + #{condition.createDate} + '%'
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by like '%' + #{condition.updateBy} + '%'
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date like '%' + #{condition.updateDate} + '%'
+            </if>
+            <if test="condition.comments != null">
+                AND comments like '%' + #{condition.comments} + '%'
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM TEST_DATA
+        <where>
+            <if test="condition.id != null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name != null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.age != null">
+                AND age = #{condition.age}
+            </if>
+            <if test="condition.shortName != null">
+                AND short_name = #{condition.shortName}
+            </if>
+            <if test="condition.status != null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                AND create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                AND update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                AND update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                AND comments = #{condition.comments}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMaxId" resultType="string">
+        SELECT MAX(id) FROM TEST_DATA
+    </select>
+</mapper>

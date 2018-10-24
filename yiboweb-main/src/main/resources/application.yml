@@ -1,0 +1,135 @@
+#全局配置
+server:
+  port: 8888
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+
+jasypt:
+  encryptor:
+    password: YiboYun
+
+webapp:
+  name: 医博基础技术框架V1.0
+  swagger-open: true
+  token-expire-time: 60 # token过期时间（分钟）
+  save-login-time: 7    # 用户选择保存登录状态对应token过期时间（天）
+  login-time-limit: 5   # 限制用户登陆错误次数（次）
+  login-after-time: 10  # 错误超过次数后多少分钟后才能继续登录（分钟）
+
+#Srping相关配置
+spring:
+  profiles:
+    active: @spring.active@
+
+  #数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    # Druid 连接池配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT getdate()
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+    # Druid StatViewServlet配置
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: root
+        login-password: ENC(FO2oLd1xhXRyjIFkhaBwR+LXBOXFHAjH)
+        allow:  # IP白名单 多个逗号分隔
+        deny:   # IP黑名单
+
+  #redis配置
+  redis:
+      host: 192.168.1.244
+      port: 8379
+      password: ENC(108NCrFBdhsxAwdjy36x4g==)
+
+#Mybatis配置
+mybatis:
+  #指定sql映射文件位置
+  mapper-locations: classpath*:com/yibo/modules/**/mapping/*.xml
+  #配置信息
+  configuration:
+    map-underscore-to-camel-case: true
+
+#忽略鉴权url
+ignored:
+  urls:
+    - /security/common/**
+    - /druid/**
+    - /swagger-ui.html
+    - /swagger-resources/**
+    - /swagger/**
+    - /**/v2/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
+
+#Swagger界面内容配置
+swagger:
+  title: Yiboweb API接口文档
+  description: Yiboweb Api Documentation
+  version: 1.0.0
+  terms-service-url: http://www.gz-yibo.com/
+  contact:
+    name: YiboYun
+    url: http://www.gz-yibo.com/
+    email: gogo163gao@163.com
+
+---
+
+#本地环境
+spring:
+  profiles: local
+  datasource:
+    username: sa
+    password: ENC(6aZ4/QyAN5Usf1YR/g8e4w==)
+    url: jdbc:sqlserver://localhost:1433;DataBaseName=OMS
+
+---
+
+#开发环境
+spring:
+  profiles: dev
+  datasource:
+    username: sa
+    password: ENC(U9Pts5e3z12WC7v4aayB5PpLJvye+guT)
+    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
+
+---
+
+#测试环境
+spring:
+  profiles: test
+  datasource:
+    username: sa
+    password: ENC(Z6b5EpiQlFBvp0/JsFxaQrncTqIHyYIs)
+    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
+
+---
+
+#生产环境
+spring:
+  profiles: produce
+  datasource:
+    username: sa
+    password: ENC(TK2UXhsEAU/tNw/r8jchsROTIh/JQVdN)
+    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
