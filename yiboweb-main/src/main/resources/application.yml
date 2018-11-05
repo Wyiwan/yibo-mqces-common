@@ -72,7 +72,7 @@ mybatis:
 #忽略鉴权url
 ignored:
   urls:
-    - /security/common/**
+    - /common/**
     - /druid/**
     - /swagger-ui.html
     - /swagger-resources/**

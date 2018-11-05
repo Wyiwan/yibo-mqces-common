@@ -11,7 +11,7 @@ package com.yibo.modules.test.service.impl;
 import com.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.test.dao.TestDataDao;
 import com.yibo.modules.test.entity.TestData;
-import com.yibo.modules.test.service.ITestDataService;
+import com.yibo.modules.test.service.TestDataService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly=true)
-public class TestDataServiceImpl extends AbstractBaseService<TestDataDao, TestData> implements ITestDataService {
+public class TestDataServiceImpl extends AbstractBaseService<TestDataDao, TestData> implements TestDataService {
 
 }

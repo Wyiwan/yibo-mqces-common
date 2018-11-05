@@ -36,7 +36,7 @@ import java.util.*;
 @Component
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Autowired
-    private PermissionService permissionService;
+    private PermissionService PermissionService;
 
     private Map<String, Collection<ConfigAttribute>> map = null;
 
@@ -49,7 +49,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         ConfigAttribute configAttribute;
 
         // 获取启用的操作权限
-        List<Permission> permissions = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
+        List<Permission> permissions = PermissionService.findByType(CommonConstant.PERMISSION_OPERATION);
         for( Permission permission : permissions ){
             if( StringUtils.isNotBlank(permission.getTitle()) && StringUtils.isNotBlank(permission.getPath()) ){
                 configAttributes = Lists.newArrayList();

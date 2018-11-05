@@ -14,7 +14,7 @@ import com.yibo.base.controller.BaseController;
 import com.yibo.base.controller.BaseForm;
 import com.yibo.common.lang.ObjectUtils;
 import com.yibo.modules.test.entity.TestData;
-import com.yibo.modules.test.service.ITestDataService;
+import com.yibo.modules.test.service.TestDataService;
 import com.yibo.security.SecurityUserDetails;
 import com.yibo.security.annotation.SecurityUser;
 import com.yibo.security.context.UserContext;
@@ -44,7 +44,7 @@ import java.util.Map;
 @RequestMapping("/test")
 public class TestDataController extends BaseController {
     @Autowired
-    ITestDataService testDataService;
+    TestDataService testDataService;
 
     //------------------------------------------------------------------------------------------------------------------
     // +新增相关（注意：返回ResponseMap类型数据，会跳过ResponseT的格式包装）

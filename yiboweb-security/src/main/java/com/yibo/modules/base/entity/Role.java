@@ -8,7 +8,7 @@
 
 package com.yibo.modules.base.entity;
 
-import com.yibo.common.entity.DataEntity;
+import com.yibo.base.entity.DataEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- *  描述: 一句话描述该类的用途
+ *  描述: 角色
  *  作者：高云
  *  邮箱: gogo163gao@163.com
  *  时间: 2018-09-16

@@ -9,8 +9,10 @@
 package com.yibo.modules.base.service;
 
 import com.yibo.base.service.IBaseService;
-import com.yibo.modules.base.dao.UserDao;
-import com.yibo.modules.base.entity.User;
+import com.yibo.modules.base.dao.RoleDao;
+import com.yibo.modules.base.entity.Role;
+
+import java.util.List;
 
 /**
  * 描述: 用户接口层
@@ -18,12 +20,12 @@ import com.yibo.modules.base.entity.User;
  * 时间: 2018-08-07
  * 版本: v1.0
  */
-public interface UserService extends IBaseService<UserDao, User> {
+public interface RoleService extends IBaseService<RoleDao, Role> {
     /**
-     * 通过用户名查询用户信息(包含用户所在部门、所拥有的权限)
-     * @param username
+     * 通过用户ID查询用户角色
+     * @param userId
      * @return
      */
-    User findByUsername(String username);
+    List<Role> findByUserId(String userId);
 
 }

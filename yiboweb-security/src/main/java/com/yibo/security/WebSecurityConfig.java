@@ -64,9 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .headers().frameOptions().disable()
             .and()
-                // 表单登录方式
                 .formLogin()
-                .loginPage("/auth/unauth")
+                .loginPage("/common/unauth")
                 .loginProcessingUrl("/auth/login").permitAll()
                 .successHandler(new AuthenticationSuccessHandler(jwtUtil))
                 .failureHandler(failHandler)

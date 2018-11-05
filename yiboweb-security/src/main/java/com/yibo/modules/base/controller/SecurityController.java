@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  *  版本: v1.0
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/common")
 public class SecurityController {
 
     @RequestMapping(value = "/unauth",method = RequestMethod.GET)
