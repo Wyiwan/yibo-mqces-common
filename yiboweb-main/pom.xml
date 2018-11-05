@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.yibo</groupId>
-            <artifactId>yiboweb-admin</artifactId>
+            <artifactId>yiboweb-test</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

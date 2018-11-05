@@ -19,7 +19,7 @@
         <module>yiboweb-common</module>
         <module>yiboweb-core</module>
         <module>yiboweb-main</module>
-        <module>yiboweb-admin</module>
+        <module>yiboweb-test</module>
         <module>yiboweb-security</module>
     </modules>
 

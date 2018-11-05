@@ -9,11 +9,11 @@
 package com.yibo.security;
 
 import com.yibo.common.collect.ListUtils;
-import com.yibo.common.constant.CommonConstant;
 import com.yibo.common.lang.StringUtils;
-import com.yibo.modules.sys.entity.Permission;
-import com.yibo.modules.sys.entity.Role;
-import com.yibo.modules.sys.entity.User;
+import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.entity.Role;
+import com.yibo.modules.base.entity.User;
+import com.yibo.security.constant.CommonConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

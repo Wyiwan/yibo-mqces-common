@@ -62,7 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-                // 允许网页iframe
                 .headers().frameOptions().disable()
             .and()
                 // 表单登录方式

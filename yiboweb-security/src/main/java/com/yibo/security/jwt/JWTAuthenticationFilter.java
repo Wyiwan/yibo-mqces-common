@@ -8,7 +8,7 @@
 
 package com.yibo.security.jwt;
 
-import com.yibo.common.constant.SecurityConstant;
+import com.yibo.security.constant.SecurityConstant;
 import com.yibo.common.lang.StringUtils;
 import com.yibo.core.protocol.ResponseTs;
 import com.yibo.core.web.exception.BizException;

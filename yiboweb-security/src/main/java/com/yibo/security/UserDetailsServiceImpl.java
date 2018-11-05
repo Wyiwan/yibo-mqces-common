@@ -9,8 +9,8 @@
 package com.yibo.security;
 
 import com.yibo.common.lang.StringUtils;
-import com.yibo.modules.sys.entity.User;
-import com.yibo.modules.sys.service.UserService;
+import com.yibo.modules.base.entity.User;
+import com.yibo.modules.base.service.UserService;
 import com.yibo.security.exception.LoginFailEnum;
 import com.yibo.security.exception.LoginFailLimitException;
 import org.springframework.beans.factory.annotation.Autowired;

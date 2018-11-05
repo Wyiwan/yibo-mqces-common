@@ -9,10 +9,10 @@
 package com.yibo.security.permission;
 
 import com.google.common.collect.Lists;
-import com.yibo.common.constant.CommonConstant;
+import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.service.PermissionService;
+import com.yibo.security.constant.CommonConstant;
 import com.yibo.common.lang.StringUtils;
-import com.yibo.modules.sys.entity.Permission;
-import com.yibo.modules.sys.service.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
