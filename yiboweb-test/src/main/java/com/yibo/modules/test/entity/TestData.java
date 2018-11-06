@@ -7,7 +7,7 @@
  */
 package com.yibo.modules.test.entity;
 
-import com.yibo.base.entity.DataEntity;
+import cn.yibo.base.entity.DataEntity;
 
 /**
  * 描述: 实体类

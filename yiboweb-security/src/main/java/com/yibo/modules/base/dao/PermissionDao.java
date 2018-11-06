@@ -1,6 +1,6 @@
 package com.yibo.modules.base.dao;
 
-import com.yibo.base.dao.CrudDao;
+import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.Permission;
 
 import java.util.List;

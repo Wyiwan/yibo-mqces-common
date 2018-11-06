@@ -8,7 +8,7 @@
 
 package com.yibo.modules.test.dao;
 
-import com.yibo.base.dao.CrudDao;
+import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.test.entity.TestData;
 
 /**

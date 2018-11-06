@@ -8,10 +8,10 @@
 
 package com.yibo.modules.base.service.impl;
 
-import com.google.common.collect.Lists;
-import com.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
+import com.google.common.collect.Lists;
+import cn.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.base.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

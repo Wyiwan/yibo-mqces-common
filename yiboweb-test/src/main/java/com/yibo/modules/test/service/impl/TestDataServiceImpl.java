@@ -8,7 +8,7 @@
 
 package com.yibo.modules.test.service.impl;
 
-import com.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.test.dao.TestDataDao;
 import com.yibo.modules.test.entity.TestData;
 import com.yibo.modules.test.service.TestDataService;

@@ -8,7 +8,7 @@
 
 package com.yibo.modules.base.entity;
 
-import com.yibo.base.entity.DataEntity;
+import cn.yibo.base.entity.DataEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;

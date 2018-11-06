@@ -8,7 +8,7 @@
 
 package com.yibo.modules.base.service;
 
-import com.yibo.base.service.IBaseService;
+import cn.yibo.base.service.IBaseService;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
 

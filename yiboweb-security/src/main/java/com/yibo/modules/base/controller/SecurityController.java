@@ -8,8 +8,8 @@
 
 package com.yibo.modules.base.controller;
 
-import com.yibo.core.web.exception.BizException;
-import com.yibo.security.exception.LoginFailEnum;
+import cn.yibo.core.web.exception.BizException;
+import cn.yibo.security.exception.LoginFailEnum;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

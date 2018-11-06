@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.yibo</groupId>
+    <groupId>cn.yibo</groupId>
     <artifactId>yiboweb-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -171,4 +171,12 @@
             </properties>
         </profile>
     </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>thirdparty</id>
+            <name>thirdparty</name>
+            <url>http://192.168.1.131:8081/nexus/content/repositories/thirdparty/</url>
+        </repository>
+    </distributionManagement>
 </project>

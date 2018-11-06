@@ -8,9 +8,9 @@
 
 package com.yibo.modules.test.service;
 
-import com.yibo.base.service.IBaseService;
-import com.yibo.modules.test.dao.TestDataDao;
+import cn.yibo.base.service.IBaseService;
 import com.yibo.modules.test.entity.TestData;
+import com.yibo.modules.test.dao.TestDataDao;
 
 /**
  *  描述: 接口层

@@ -8,11 +8,11 @@
 
 package com.yibo.modules.base.service.impl;
 
-import com.google.common.collect.Lists;
-import com.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.service.PermissionService;
+import com.google.common.collect.Lists;
+import cn.yibo.base.service.impl.AbstractBaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
