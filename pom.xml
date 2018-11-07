@@ -26,7 +26,6 @@
     <properties>
         <!-- Environment setting -->
         <java.version>1.8</java.version>
-        <yiboweb.version>1.0-SNAPSHOT</yiboweb.version>
 
         <!-- Framework setting -->
         <springboot.redis>1.4.7.RELEASE</springboot.redis>
