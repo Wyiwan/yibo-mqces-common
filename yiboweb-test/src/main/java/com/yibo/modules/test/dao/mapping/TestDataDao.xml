@@ -421,34 +421,34 @@
         FROM TEST_DATA
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="condition.id != null">
-                AND id like '%' + #{condition.id} + '%'
+                AND id like CONCAT('%', #{condition.id} , '%')
             </if>
             <if test="condition.name != null">
-                AND name like '%' + #{condition.name} + '%'
+                AND name like CONCAT('%', #{condition.name} , '%')
             </if>
             <if test="condition.age != null">
-                AND age like '%' + #{condition.age} + '%'
+                AND age like CONCAT('%', #{condition.age} , '%')
             </if>
             <if test="condition.shortName != null">
-                AND short_name like '%' + #{condition.shortName} + '%'
+                AND short_name like CONCAT('%', #{condition.shortName} , '%')
             </if>
             <if test="condition.status != null">
-                AND status like '%' + #{condition.status} + '%'
+                AND status like CONCAT('%', #{condition.status} , '%')
             </if>
             <if test="condition.createBy != null">
-                AND create_by like '%' + #{condition.createBy} + '%'
+                AND create_by like CONCAT('%', #{condition.createBy} , '%')
             </if>
             <if test="condition.createDate != null">
-                AND create_date like '%' + #{condition.createDate} + '%'
+                AND create_date like CONCAT('%', #{condition.createDate} , '%')
             </if>
             <if test="condition.updateBy != null">
-                AND update_by like '%' + #{condition.updateBy} + '%'
+                AND update_by like CONCAT('%', #{condition.updateBy} , '%')
             </if>
             <if test="condition.updateDate != null">
-                AND update_date like '%' + #{condition.updateDate} + '%'
+                AND update_date like CONCAT('%', #{condition.updateDate} , '%')
             </if>
             <if test="condition.comments != null">
-                AND comments like '%' + #{condition.comments} + '%'
+                AND comments like CONCAT('%', #{condition.comments} , '%')
             </if>
         </trim>
         <if test="orderBy!=null">
