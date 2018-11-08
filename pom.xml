@@ -6,7 +6,7 @@
 
     <groupId>cn.yibo</groupId>
     <artifactId>yiboweb-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -147,15 +147,15 @@
             <properties>
                 <spring.active>local</spring.active>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
         <profile>
             <id>dev</id>
             <properties>
                 <spring.active>dev</spring.active>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <profile>
             <id>test</id>

@@ -34,7 +34,7 @@ spring:
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT getdate()
+    validationQuery: SELECT 1
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
@@ -100,9 +100,9 @@ swagger:
 spring:
   profiles: local
   datasource:
-    username: sa
-    password: ENC(6aZ4/QyAN5Usf1YR/g8e4w==)
-    url: jdbc:sqlserver://localhost:1433;DataBaseName=OMS
+    username: root
+    password: ENC(WZH8zMOp2pSR7kxfp2LQsw==)
+    url: jdbc:mysql://localhost:3306/yibo_frame
 
 ---
 
@@ -110,9 +110,9 @@ spring:
 spring:
   profiles: dev
   datasource:
-    username: sa
-    password: ENC(U9Pts5e3z12WC7v4aayB5PpLJvye+guT)
-    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
+    username: root
+    password: ENC(tzolKZvgH0mCwcJQPN5vtA==)
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame
 
 ---
 
@@ -120,9 +120,9 @@ spring:
 spring:
   profiles: test
   datasource:
-    username: sa
-    password: ENC(Z6b5EpiQlFBvp0/JsFxaQrncTqIHyYIs)
-    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
+    username: root
+    password: ENC(4E7U6IcbrPePfppGqDWalA==)
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame
 
 ---
 
@@ -130,6 +130,6 @@ spring:
 spring:
   profiles: produce
   datasource:
-    username: sa
-    password: ENC(TK2UXhsEAU/tNw/r8jchsROTIh/JQVdN)
-    url: jdbc:sqlserver://192.168.1.141:1433;DataBaseName=YIBO_FRAME
+    username: root
+    password: ENC(4Q4ABgmCB71R6ConFllkIQ==)
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame

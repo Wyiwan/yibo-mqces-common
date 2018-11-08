@@ -6,20 +6,19 @@
 
     <groupId>cn.yibo</groupId>
     <artifactId>yiboweb-core</artifactId>
-    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>cn.yibo</groupId>
         <artifactId>yiboweb-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>cn.yibo</groupId>
             <artifactId>yiboweb-common</artifactId>
-            <version>1.0.1</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -63,8 +62,8 @@
             <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
         <!-- Lombok -->

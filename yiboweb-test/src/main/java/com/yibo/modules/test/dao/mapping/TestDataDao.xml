@@ -17,7 +17,7 @@
     <!-- 新增相关 -->
     <insert id="insert" parameterType="com.yibo.modules.test.entity.TestData">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
-            SELECT replace(NEWID(),'-','')
+            SELECT replace(UUID(),'-','')
         </selectKey>
         INSERT INTO TEST_DATA (
             id,
@@ -53,7 +53,7 @@
             update_date,
             comments
         ) VALUES (
-            replace(NEWID(),'-',''),
+            replace(UUID(),'-',''),
             #{map.name},
             #{map.shortName},
             #{map.age},
