@@ -11,14 +11,14 @@
     <parent>
         <groupId>cn.yibo</groupId>
         <artifactId>yiboweb-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>cn.yibo</groupId>
             <artifactId>yiboweb-test</artifactId>
-            <version>1.0.3</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- 测试 -->

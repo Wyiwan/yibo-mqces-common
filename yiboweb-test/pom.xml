@@ -7,12 +7,11 @@
     <groupId>cn.yibo</groupId>
     <artifactId>yiboweb-test</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.3</version>
 
     <parent>
         <groupId>cn.yibo</groupId>
         <artifactId>yiboweb-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <dependencies>

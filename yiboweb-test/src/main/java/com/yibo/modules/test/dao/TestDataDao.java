@@ -12,7 +12,7 @@ import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.test.entity.TestData;
 
 /**
- * 描述: DAO层
+ * 描述: 数据访问层
  * 作者: 高云
  * 时间: 2018-08-07
  * 版本: v1.0

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 描述: 实现层
+ * 描述: 服务实现层
  * 作者: 高云
  * 时间: 2018-08-07
  * 版本: v1.0

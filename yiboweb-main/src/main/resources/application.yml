@@ -78,10 +78,6 @@ ignored:
     - /swagger-resources/**
     - /swagger/**
     - /**/v2/api-docs
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
 
 #Swagger界面内容配置
 swagger:

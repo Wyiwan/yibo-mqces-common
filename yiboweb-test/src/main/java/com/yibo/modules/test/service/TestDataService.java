@@ -13,7 +13,7 @@ import com.yibo.modules.test.entity.TestData;
 import com.yibo.modules.test.dao.TestDataDao;
 
 /**
- *  描述: 接口层
+ *  描述: 服务接口层
  *  作者: 高云
  *  时间: 2018-08-07
  *  版本: v1.0
