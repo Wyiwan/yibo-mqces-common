@@ -9,8 +9,7 @@ package cn.yibo.base.entity;
 
 import cn.yibo.security.context.UserContext;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -20,8 +19,7 @@ import java.util.Date;
  *  时间: 2018-08-07
  *  版本: v1.0
  */
-@Getter
-@Setter
+@Data
 public abstract class DataEntity<T> extends BaseEntity<T> {
     private static final long serialVersionUID = 8724055578251954450L;
 

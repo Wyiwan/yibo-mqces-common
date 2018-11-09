@@ -8,6 +8,7 @@
 package com.yibo.modules.test.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import lombok.Data;
 
 /**
  * 描述: 实体类
@@ -15,34 +16,12 @@ import cn.yibo.base.entity.DataEntity;
  * 时间: 2018-08-07
  * 版本: v1.0
  */
+@Data
 public class TestData extends DataEntity<String> {
     private String name;
+
     private String shortName;
+
     private Integer age;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
 
 }

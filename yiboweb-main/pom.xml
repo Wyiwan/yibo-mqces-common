@@ -18,7 +18,7 @@
         <dependency>
             <groupId>cn.yibo</groupId>
             <artifactId>yiboweb-test</artifactId>
-            <version>${project.parent.version}</version>
+            <version>1.0.3</version>
         </dependency>
 
         <!-- 测试 -->
