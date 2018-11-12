@@ -7,6 +7,7 @@
  */
 package cn.yibo.base.entity;
 
+import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,7 +25,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     private static final long serialVersionUID = 8724055578251954450L;
 
     @ApiModelProperty(value = "状态：0删除 1启用 2禁用")
-    protected Integer status;
+    protected Integer status = CommonConstant.STATUS_NORMAL;
 
     @ApiModelProperty(value = "创建人")
     protected String createBy;
