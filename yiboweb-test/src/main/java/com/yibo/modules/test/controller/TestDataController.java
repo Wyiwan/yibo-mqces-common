@@ -1,10 +1,22 @@
 /*
- * Copyright (c) 2018-2020 广州医博信息技术有限公司 All Rights Reserved.
- * ProjectName: yiboweb-framework
- * FileName: TestDataController.java
- * @author: gogo163gao@163.com
- * @version: 1.0
- */
+{*****************************************************************************
+{  基础框架 v1.0.4
+{  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
+{  创建人：  高云
+{  审查人：
+{  模块：测试模块
+{  功能描述:
+{
+{  ---------------------------------------------------------------------------
+{  维护历史:
+{  日期        维护人        维护类型
+{  ---------------------------------------------------------------------------
+{  2018-11-13  高云        新建
+{
+{  ---------------------------------------------------------------------------
+{  注：本模块代码由医博代码生成工具辅助生成
+{*****************************************************************************
+*/
 
 package com.yibo.modules.test.controller;
 
@@ -18,8 +30,6 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.yibo.modules.test.entity.TestData;
 import com.yibo.modules.test.service.TestDataService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
@@ -41,22 +51,24 @@ import java.util.Map;
  * 版本: v1.0
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/data")
 public class TestDataController extends BaseController {
     @Autowired
     TestDataService testDataService;
 
     //------------------------------------------------------------------------------------------------------------------
-    // +新增相关（注意：返回ResponseMap类型数据，会跳过ResponseT的格式包装）
+    // +新增相关
     //------------------------------------------------------------------------------------------------------------------
     @PostMapping("/add")
+    @ApiOperation("add")
     public String add(TestData vo){
         testDataService.insert(vo);
         System.out.println("新增数据的ID：" + vo.getId());
         return SAVE_SUCCEED;
     }
 
-    @PostMapping("/addMap")
+    @PostMapping("/add-map")
+    @ApiOperation("add-map")
     public String addMap(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("createDate", new Date());
@@ -67,9 +79,10 @@ public class TestDataController extends BaseController {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // ※修改相关（注意：返回ResponseMap类型数据，会跳过ResponseT的格式包装）
+    // ※修改相关
     //------------------------------------------------------------------------------------------------------------------
     @PostMapping("/update")
+    @ApiOperation("update")
     public String update(TestData vo){
         // 先查询再覆盖不为为空的属性值
         TestData entity = testDataService.fetch(vo.getId());
@@ -79,13 +92,15 @@ public class TestDataController extends BaseController {
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/updateNull")
+    @PostMapping("/update-null")
+    @ApiOperation("update-null")
     public String updateNull(TestData vo){
         testDataService.updateNull(vo);
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/updateMap")
+    @PostMapping("/update-map")
+    @ApiOperation("update-map")
     public String updateMap(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("updateDate", new Date());
@@ -93,7 +108,8 @@ public class TestDataController extends BaseController {
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/updateByCondition")
+    @PostMapping("/update-by-condition")
+    @ApiOperation("update-by-condition")
     public String updateByCondition(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("updateDate", new Date());
@@ -105,108 +121,76 @@ public class TestDataController extends BaseController {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // -删除相关（注意：返回ResponseMap类型数据，会跳过ResponseT的格式包装）
+    // -删除相关
     //------------------------------------------------------------------------------------------------------------------
-    @PostMapping("/deleteById")
-    public String deleteById(String id) {
+    @PostMapping("/delete")
+    @ApiOperation("delete")
+    public String delete(String id) {
         testDataService.deleteById(id);
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/deleteByIds")
+    @PostMapping("/delete-by-ids")
+    @ApiOperation("delete-by-ids")
     public String deleteByIds(String ids) {
         testDataService.deleteByIds( Arrays.asList(ids.split(",")) );
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/deleteByCondition")
+    @PostMapping("/delete-by-condition")
+    @ApiOperation("delete-by-condition")
     public String deleteByCondition() {
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         testDataService.deleteByCondition(conditionMap);
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/deleteByProperty")
+    @PostMapping("/delete-by-property")
+    @ApiOperation("delete-by-property")
     public String deleteByProperty(String property, String value) {
         testDataService.deleteByProperty(property, value);
         return DEL_SUCCEED;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // @查询相关（注意：返回ResponseMap类型数据，会跳过ResponseT的格式包装）
+    // @查询相关
     //------------------------------------------------------------------------------------------------------------------
     @GetMapping("/fetch")
-    @ApiOperation("fetch接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据Id", paramType = "query", required = true, dataType = "String")
-    })
+    @ApiOperation("fetch")
     public TestData fetch(String id){
         TestData vo = testDataService.fetch(id);
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/findOne")
-    @ApiOperation("findOne接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "property", value = "查询的属性名称", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "value", value = "查询的属性值", paramType = "query", required = true, dataType = "String")
-    })
+    @GetMapping("/find-one")
+    @ApiOperation("find-one")
     public TestData findOne(String property, String value){
         TestData vo = testDataService.findOne(property, value);
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/findList")
-    @ApiOperation("findList接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "property", value = "查询的属性名称", paramType = "query", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "value", value = "查询的属性值", paramType = "query", required = true, dataType = "String")
-    })
+    @GetMapping("/find-list")
+    @ApiOperation("find-list")
     public List findList(String property, String value){
         return testDataService.findList(property, value);
     }
 
-    @GetMapping("/findAll")
-    @ApiOperation("findAll接口")
-    @ApiImplicitParams(value = {})
+    @GetMapping("/find-all")
+    @ApiOperation("find-all")
     public List findAll(){
         return testDataService.findAll();
     }
 
-    @GetMapping("/queryOne")
-    @ApiOperation("queryOne接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "name", value = "姓名", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "age", value = "年龄", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "shortName", value = "简称", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "createBy", value = "创建人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "createDate", value = "创建时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateBy", value = "修改人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateDate", value = "修改时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "comments", value = "备注", paramType = "query", dataType = "String")
-    })
+    @GetMapping("/query-one")
+    @ApiOperation("query-one")
     public TestData queryOne(){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         TestData vo = testDataService.queryOne(conditionMap);
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/queryList")
-    @ApiOperation("queryList接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "name", value = "姓名", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "age", value = "年龄", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "shortName", value = "简称", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "createBy", value = "创建人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "createDate", value = "创建时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateBy", value = "修改人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateDate", value = "修改时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "comments", value = "备注", paramType = "query", dataType = "String")
-    })
+    @GetMapping("/query-list")
+    @ApiOperation("query-list")
     public List queryList(@SecurityUser SecurityUserDetails user){
         System.out.println("--------------> 当前登录用户名--------------> "+ user.getUsername());
         System.out.println("--------------> 当前登录用户ID--------------> "+ user.getId());
@@ -216,22 +200,8 @@ public class TestDataController extends BaseController {
         return testDataService.queryList(conditionMap);
     }
 
-    @GetMapping("/queryPage")
-    @ApiOperation("queryPage接口")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "page", value = "页码", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "id", value = "ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "name", value = "姓名", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "age", value = "年龄", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "shortName", value = "简称", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "createBy", value = "创建人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "createDate", value = "创建时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateBy", value = "修改人", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "updateDate", value = "修改时间", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "comments", value = "备注", paramType = "query", dataType = "String")
-    })
+    @GetMapping("/query-page")
+    @ApiOperation("query-page")
     public PageInfo<T> queryPage() throws Exception{
         SecurityUserDetails user = UserContext.getUser();
         System.out.println("--------------> 当前登录用户名--------------> "+ user.getUsername());
@@ -241,26 +211,24 @@ public class TestDataController extends BaseController {
         return testDataService.queryPage(new BaseForm<T>());
     }
 
-    @GetMapping("/queryBySql")
+    @GetMapping("/query-by-sql")
+    @ApiOperation("query-by-sql")
     public List queryBySql() throws Exception{
         return testDataService.queryBySql("select * from test_data");
     }
 
     @GetMapping("/like")
+    @ApiOperation("like")
     public List like() throws Exception{
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         return testDataService.like(conditionMap);
     }
 
     @GetMapping("/count")
+    @ApiOperation("count")
     public int count() throws Exception{
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         return testDataService.count(conditionMap);
-    }
-
-    @GetMapping("/selectMaxId")
-    public Object selectMaxId() throws Exception{
-        return testDataService.selectMaxId();
     }
 
 }

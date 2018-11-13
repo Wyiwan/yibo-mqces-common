@@ -18,18 +18,17 @@
 {*****************************************************************************	
 */
 
-package com.yibo.modules.test.service;
+package com.yibo.modules.test.entity;
 
-import cn.yibo.base.service.IBaseService;
-import com.yibo.modules.test.entity.TestData;
-import com.yibo.modules.test.dao.TestDataDao;
+import lombok.Data;
 
 /**
- * 测试数据(TestData)服务接口层
+ * 测试数据(TestData)实体扩展类
  * @author 高云
  * @since 2018-11-13
  * @version v1.0
  */
-public interface TestDataService extends IBaseService<TestDataDao, TestData>{
-    
+@Data
+public class TestDataExt extends TestData{
+
 }

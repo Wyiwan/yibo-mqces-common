@@ -8,6 +8,7 @@
 package cn.yibo.base.entity;
 
 import cn.yibo.common.lang.ObjectUtils;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.io.Serializable;
 public abstract class BaseEntity<T> implements Serializable {
     private static final long serialVersionUID = 7924850300269237733L;
 
+    @ApiModelProperty(value = "唯一标识")
     protected T id;
 
     public BaseEntity(){
