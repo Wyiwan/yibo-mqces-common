@@ -67,8 +67,8 @@ public class TestDataController extends BaseController {
         return SAVE_SUCCEED;
     }
 
-    @PostMapping("/add-map")
-    @ApiOperation("add-map")
+    @PostMapping("/addMap")
+    @ApiOperation("addMap")
     public String addMap(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("createDate", new Date());
@@ -92,15 +92,15 @@ public class TestDataController extends BaseController {
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/update-null")
-    @ApiOperation("update-null")
+    @PostMapping("/updateNull")
+    @ApiOperation("updateNull")
     public String updateNull(TestData vo){
         testDataService.updateNull(vo);
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/update-map")
-    @ApiOperation("update-map")
+    @PostMapping("/updateMap")
+    @ApiOperation("updateMap")
     public String updateMap(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("updateDate", new Date());
@@ -108,8 +108,8 @@ public class TestDataController extends BaseController {
         return UPDATE_SUCCEED;
     }
 
-    @PostMapping("/update-by-condition")
-    @ApiOperation("update-by-condition")
+    @PostMapping("/updateByCondition")
+    @ApiOperation("updateByCondition")
     public String updateByCondition(){
         Map<String, Object> entityMap = new BaseForm<T>().getParameters();
         entityMap.put("updateDate", new Date());
@@ -130,23 +130,23 @@ public class TestDataController extends BaseController {
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/delete-by-ids")
-    @ApiOperation("delete-by-ids")
+    @PostMapping("/deleteByIds")
+    @ApiOperation("deleteByIds")
     public String deleteByIds(String ids) {
         testDataService.deleteByIds( Arrays.asList(ids.split(",")) );
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/delete-by-condition")
-    @ApiOperation("delete-by-condition")
+    @PostMapping("/deleteByCondition")
+    @ApiOperation("deleteByCondition")
     public String deleteByCondition() {
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         testDataService.deleteByCondition(conditionMap);
         return DEL_SUCCEED;
     }
 
-    @PostMapping("/delete-by-property")
-    @ApiOperation("delete-by-property")
+    @PostMapping("/deleteByProperty")
+    @ApiOperation("deleteByProperty")
     public String deleteByProperty(String property, String value) {
         testDataService.deleteByProperty(property, value);
         return DEL_SUCCEED;
@@ -162,35 +162,35 @@ public class TestDataController extends BaseController {
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/find-one")
-    @ApiOperation("find-one")
+    @GetMapping("/findOne")
+    @ApiOperation("findOne")
     public TestData findOne(String property, String value){
         TestData vo = testDataService.findOne(property, value);
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/find-list")
-    @ApiOperation("find-list")
+    @GetMapping("/findList")
+    @ApiOperation("findList")
     public List findList(String property, String value){
         return testDataService.findList(property, value);
     }
 
-    @GetMapping("/find-all")
-    @ApiOperation("find-all")
+    @GetMapping("/findAll")
+    @ApiOperation("findAll")
     public List findAll(){
         return testDataService.findAll();
     }
 
-    @GetMapping("/query-one")
-    @ApiOperation("query-one")
+    @GetMapping("/queryOne")
+    @ApiOperation("queryOne")
     public TestData queryOne(){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         TestData vo = testDataService.queryOne(conditionMap);
         return vo == null ? new TestData() : vo;
     }
 
-    @GetMapping("/query-list")
-    @ApiOperation("query-list")
+    @GetMapping("/queryList")
+    @ApiOperation("queryList")
     public List queryList(@SecurityUser SecurityUserDetails user){
         System.out.println("--------------> 当前登录用户名--------------> "+ user.getUsername());
         System.out.println("--------------> 当前登录用户ID--------------> "+ user.getId());
@@ -200,8 +200,8 @@ public class TestDataController extends BaseController {
         return testDataService.queryList(conditionMap);
     }
 
-    @GetMapping("/query-page")
-    @ApiOperation("query-page")
+    @GetMapping("/queryPage")
+    @ApiOperation("queryPage")
     public PageInfo<T> queryPage() throws Exception{
         SecurityUserDetails user = UserContext.getUser();
         System.out.println("--------------> 当前登录用户名--------------> "+ user.getUsername());
@@ -211,8 +211,8 @@ public class TestDataController extends BaseController {
         return testDataService.queryPage(new BaseForm<T>());
     }
 
-    @GetMapping("/query-by-sql")
-    @ApiOperation("query-by-sql")
+    @GetMapping("/queryBySql")
+    @ApiOperation("queryBySql")
     public List queryBySql() throws Exception{
         return testDataService.queryBySql("select * from test_data");
     }
