@@ -25,7 +25,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     private static final long serialVersionUID = 8724055578251954450L;
 
     @ApiModelProperty(value = "状态：0删除 1启用 2禁用")
-    protected Integer status = CommonConstant.STATUS_NORMAL;
+    protected Integer status;
 
     @ApiModelProperty(value = "创建人")
     protected String createBy;
@@ -50,6 +50,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
     @Override
     public void preInsert(){
+        this.status = CommonConstant.STATUS_NORMAL;
         this.createBy = UserContext.getUser().getId();
         this.updateBy = this.createBy;
         this.updateDate = new Date();
