@@ -1,10 +1,22 @@
 /*
- * Copyright (c) 2018-2028 广州医博信息技术有限公司 All Rights Reserved.
- * ProjectName：yiboweb-framework
- * FileName:：PermissionService.java
- * @author:：gogo163gao@163.com
- * @version：1.0
- */
+{*****************************************************************************
+{  广州医博-基础框架 v1.0
+{  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
+{  创建人：  高云
+{  审查人：
+{  模块：安全控制模块
+{  功能描述:
+{
+{  ---------------------------------------------------------------------------
+{  维护历史:
+{  日期        维护人        维护类型
+{  ---------------------------------------------------------------------------
+{  2018-08-01  高云        新建
+{
+{  ---------------------------------------------------------------------------
+{  注：本模块代码为底层基础框架封装的security包
+{*****************************************************************************
+*/
 
 package com.yibo.modules.base.service.impl;
 
@@ -34,13 +46,13 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     static Permission p1,p2,p3,p4,p5,p6,p7 = null;
     static {
-        p1 = new Permission("1", "","测试数据:新增数据:1", 1, "/test/add");
-        p2 = new Permission("2", "","测试数据:新增数据:2", 1, "/test/addMap");
-        p3 = new Permission("3", "","测试数据:分页查询", 1, "/test/queryPage");
-        p4 = new Permission("4", "","测试数据:列表数据", 1, "/test/queryList");
-        p5 = new Permission("5", "","测试数据:更新数据:1", 1, "/test/updateMap");
-        p6 = new Permission("6", "","测试数据:更新数据:2", 1, "/test/updateNull");
-        p7 = new Permission("7", "","测试数据:删除数据", 1, "/test/deleteById");
+        p1 = new Permission("1", "","测试数据:新增数据:1", 1, "/api/data/add");
+        p2 = new Permission("2", "","测试数据:新增数据:2", 1, "/api/data/addMap");
+        p3 = new Permission("3", "","测试数据:分页查询", 1, "/api/data/queryPage");
+        p4 = new Permission("4", "","测试数据:列表数据", 1, "/api/data/queryList");
+        p5 = new Permission("5", "","测试数据:更新数据:1", 1, "/api/data/updateMap");
+        p6 = new Permission("6", "","测试数据:更新数据:2", 1, "/api/data/updateNull");
+        p7 = new Permission("7", "","测试数据:删除数据", 1, "/api/data/deleteById");
     }
 
     @Override
