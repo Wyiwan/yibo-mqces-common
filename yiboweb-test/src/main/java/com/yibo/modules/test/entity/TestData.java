@@ -24,6 +24,8 @@ import cn.yibo.base.entity.DataEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * 测试数据(TestData)实体类
  * @author 高云
@@ -32,12 +34,14 @@ import lombok.Data;
  */
 @Data
 public class TestData extends DataEntity<String>{
+    @NotEmpty(message="姓名不能为空")
     @ApiModelProperty(value = "姓名")
     private String name;
     
     @ApiModelProperty(value = "年龄")
     private Integer age;
-    
+
+    @NotEmpty(message="姓名缩写不能为空")
     @ApiModelProperty(value = "缩写")
     private String shortName;
     

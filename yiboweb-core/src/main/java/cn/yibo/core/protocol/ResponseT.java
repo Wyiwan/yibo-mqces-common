@@ -11,8 +11,8 @@ package cn.yibo.core.protocol;
 import cn.yibo.common.codec.AES128Utils;
 import cn.yibo.common.codec.HexUtils;
 import cn.yibo.common.lang.StringGZIPUtils;
+import cn.yibo.core.web.exception.BusinessException;
 import com.alibaba.fastjson.JSON;
-import cn.yibo.core.web.exception.BizException;
 
 import java.io.Serializable;
 
@@ -69,17 +69,17 @@ public class ResponseT<T> implements Serializable {
         }
     }
 
-    public ResponseT(BizException bizException){
-        this(bizException, false);
+    public ResponseT(BusinessException businessException){
+        this(businessException, false);
     }
 
-    public ResponseT(BizException bizException, boolean debug){
-        this.retcode = bizException.getErrorCode();
-        this.message = bizException.getMsg();
-        this.uri = bizException.getUri();
+    public ResponseT(BusinessException businessException, boolean debug){
+        this.retcode = businessException.getErrorCode();
+        this.message = businessException.getMsg();
+        this.uri = businessException.getUri();
         this.style = StyleEnum.PLAIN;
         if( debug ){
-            this.devops = bizException.getDevops();
+            this.devops = businessException.getDevops();
         }
     }
 

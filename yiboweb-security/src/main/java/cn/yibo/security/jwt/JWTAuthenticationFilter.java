@@ -10,7 +10,7 @@ package cn.yibo.security.jwt;
 
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BizException;
+import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.constant.SecurityConstant;
 import cn.yibo.security.exception.LoginFailEnum;
@@ -108,9 +108,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
                 }
             }
         }catch(ExpiredJwtException e){
-            throw new BizException("000100", "登录已失效，请重新登录");
+            throw new BusinessException("000100", "登录已失效，请重新登录");
         }catch(Exception e){
-            ResponseTs.outResponseException(response, new BizException(LoginFailEnum.TOKEN_ERROR.getCode(), LoginFailEnum.TOKEN_ERROR.getDesc()));
+            ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.TOKEN_ERROR.getCode(), LoginFailEnum.TOKEN_ERROR.getDesc()));
         }
         return null;
     }

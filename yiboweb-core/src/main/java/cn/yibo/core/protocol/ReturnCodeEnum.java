@@ -25,7 +25,9 @@ public enum ReturnCodeEnum {
 
     SERVER_ERROR("100003","系统错误"),
 
-    REQUEST_ERROR("100004","请求错误");
+    REQUEST_ERROR("100004","请求错误"),
+
+    VALIDATE_ERROR("100005","数据校验错误");
 
     private String code;
     private String desc;

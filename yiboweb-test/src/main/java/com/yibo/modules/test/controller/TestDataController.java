@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -61,7 +62,7 @@ public class TestDataController extends BaseController {
     //------------------------------------------------------------------------------------------------------------------
     @PostMapping("/add")
     @ApiOperation("add")
-    public String add(TestData vo){
+    public String add(@Valid TestData vo){
         testDataService.insert(vo);
         System.out.println("新增数据的ID：" + vo.getId());
         return SAVE_SUCCEED;
@@ -94,7 +95,7 @@ public class TestDataController extends BaseController {
 
     @PostMapping("/updateNull")
     @ApiOperation("updateNull")
-    public String updateNull(TestData vo){
+    public String updateNull(@Valid TestData vo){
         testDataService.updateNull(vo);
         return UPDATE_SUCCEED;
     }

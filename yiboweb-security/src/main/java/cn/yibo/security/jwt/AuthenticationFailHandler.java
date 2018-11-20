@@ -10,7 +10,7 @@ package cn.yibo.security.jwt;
 
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BizException;
+import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
 import cn.yibo.security.exception.LoginFailLimitException;
 import lombok.extern.slf4j.Slf4j;
@@ -71,21 +71,21 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
 
             loginFailEnum = LoginFailEnum.INCORRECT_ERROR;
             if( restLoginTime <= 3 && restLoginTime > 0 ){
-                ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，还有" + restLoginTime + "次尝试机会"));
+                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，还有" + restLoginTime + "次尝试机会"));
             }else if( restLoginTime <= 0 ){
                 loginFailEnum = LoginFailEnum.LOGIN_FAIL_LIMIT_ERROR;
-                ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，请" + loginAfterTime + "分钟后再试"));
+                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，请" + loginAfterTime + "分钟后再试"));
             }else{
-                ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
+                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
             }
         }else if(e instanceof DisabledException || e instanceof LockedException){
             loginFailEnum = LoginFailEnum.DISABLED_ERROR;
-            ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
+            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
         }else if(e instanceof LoginFailLimitException){
-            ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), ((LoginFailLimitException)e).getMsg()));
+            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), ((LoginFailLimitException)e).getMsg()));
         }else{
             log.info(e.getMessage());
-            ResponseTs.outResponseException(response, new BizException(loginFailEnum.getCode(), loginFailEnum.getDesc(), e.getMessage()));
+            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc(), e.getMessage()));
         }
     }
 

@@ -10,7 +10,7 @@ package cn.yibo.core.protocol;
 
 import cn.yibo.common.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
-import cn.yibo.core.web.exception.BizException;
+import cn.yibo.core.web.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
 
@@ -51,7 +51,7 @@ public class ResponseTs {
      * @param <T>
      * @return
      */
-    public static <T> ResponseT<T> newResponseException(BizException ex, boolean debug){
+    public static <T> ResponseT<T> newResponseException(BusinessException ex, boolean debug){
         return new ResponseT<T>(ex, debug);
     }
 
@@ -59,7 +59,7 @@ public class ResponseTs {
      * 业务异常返回
      * @return
      */
-    public static <T> ResponseT<T> newResponseException(BizException ex){
+    public static <T> ResponseT<T> newResponseException(BusinessException ex){
         return new ResponseT<T>(ex, StringUtils.isNotBlank(ex.getDevops()));
     }
 
@@ -96,6 +96,14 @@ public class ResponseTs {
     }
 
     /**
+     * 返回数据校验异常
+     * @return
+     */
+    public static <T> ResponseT<T> newValidateError(){
+        return new ResponseT<T>(ReturnCodeEnum.VALIDATE_ERROR);
+    }
+
+    /**
      * 使用response直接输出业务数据
      * @param response
      * @param bizData
@@ -124,7 +132,7 @@ public class ResponseTs {
      * @param response
      * @param ex
      */
-    public static void outResponseException(ServletResponse response, BizException ex){
+    public static void outResponseException(ServletResponse response, BusinessException ex){
         PrintWriter out = null;
         try{
             response.setCharacterEncoding("UTF-8");

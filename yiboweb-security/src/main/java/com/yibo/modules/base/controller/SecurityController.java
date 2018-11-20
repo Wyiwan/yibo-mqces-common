@@ -8,7 +8,7 @@
 
 package com.yibo.modules.base.controller;
 
-import cn.yibo.core.web.exception.BizException;
+import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +27,6 @@ public class SecurityController {
 
     @RequestMapping(value = "/unauth",method = RequestMethod.GET)
     public void unauth(){
-        throw new BizException(LoginFailEnum.NOT_LOGGED_ERROR.getCode(), LoginFailEnum.NOT_LOGGED_ERROR.getDesc());
+        throw new BusinessException(LoginFailEnum.NOT_LOGGED_ERROR.getCode(), LoginFailEnum.NOT_LOGGED_ERROR.getDesc());
     }
 }

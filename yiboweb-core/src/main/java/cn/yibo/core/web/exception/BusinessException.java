@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2018-2028 广州医博信息技术有限公司 All Rights Reserved.
  * ProjectName：yiboweb-framework
- * FileName:：BizException.java
+ * FileName:：BusinessException.java
  * @author:：gogo163gao@163.com
  * @version：1.0
  */
@@ -15,7 +15,7 @@ package cn.yibo.core.web.exception;
  * 时间: 2018-08-07
  * 版本: v1.0
  */
-public class BizException extends RuntimeException {
+public class BusinessException extends RuntimeException {
     /** 异常码 例如：001001 业务异常，业务模块01的001错误（0业务异常、1系统异常）*/
     private String errorCode;
 
@@ -28,22 +28,22 @@ public class BizException extends RuntimeException {
     /** 表示这个错误相关的web页面，可以帮助开发人员获取更多的错误的信息 */
     private String uri;
 
-    public BizException(String errorCode, String message) {
+    public BusinessException(String errorCode, String message) {
         this.errorCode = errorCode;
         this.msg = message;
     }
 
-    public BizException(String errorCode, String message, String devops) {
+    public BusinessException(String errorCode, String message, String devops) {
         this(errorCode, message);
         this.devops = devops;
     }
 
-    public BizException(String errorCode, String message, Throwable cause) {
+    public BusinessException(String errorCode, String message, Throwable cause) {
         this(errorCode, message);
         this.devops = cause.getMessage();
     }
 
-    public BizException(String errorCode, String message, String developMsg, String uri) {
+    public BusinessException(String errorCode, String message, String developMsg, String uri) {
         this(errorCode, message, developMsg);
         this.uri = uri;
     }
@@ -82,7 +82,7 @@ public class BizException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "BizException{" +
+        return "BusinessException{" +
                 "errorCode='" + errorCode + '\'' +
                 ", msg='" + msg + '\'' +
                 ", devops='" + devops + '\'' +
