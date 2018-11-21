@@ -54,6 +54,11 @@ spring:
         login-password: ENC(FO2oLd1xhXRyjIFkhaBwR+LXBOXFHAjH)
         allow:  # IP白名单 多个逗号分隔
         deny:   # IP黑名单
+      filter:
+        wall:
+          config:
+            none-base-statement-allow: true
+            multi-statement-allow: true
 
   #redis配置
   redis:
