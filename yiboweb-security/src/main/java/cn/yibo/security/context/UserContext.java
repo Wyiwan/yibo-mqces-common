@@ -21,6 +21,7 @@
 package cn.yibo.security.context;
 
 import cn.yibo.security.SecurityUserDetails;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -33,7 +34,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserContext {
 
 	public static SecurityUserDetails getUser(){
-		return (SecurityUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if( principal != null && principal instanceof SecurityUserDetails ){
+			return (SecurityUserDetails)principal;
+		}
+		return null;
 	}
 
 }

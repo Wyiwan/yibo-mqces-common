@@ -30,6 +30,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.yibo.modules.test.entity.TestData;
 import com.yibo.modules.test.service.TestDataService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
@@ -53,6 +54,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/data")
+@Api(tags = "测试数据接口")
 public class TestDataController extends BaseController {
     @Autowired
     TestDataService testDataService;

@@ -22,6 +22,7 @@ package cn.yibo.base.entity;
 
 import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -41,21 +42,27 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     protected Integer status;
 
     @ApiModelProperty(value = "创建人")
+    @JsonIgnore
     protected String createBy;
 
     @ApiModelProperty(value = "创建人名称")
+    @JsonIgnore
     protected String createByName;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonIgnore
     protected Date createDate;
 
     @ApiModelProperty(value = "修改人")
+    @JsonIgnore
     protected String updateBy;
 
     @ApiModelProperty(value = "修改人名称")
+    @JsonIgnore
     protected String updateByName;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonIgnore
     protected Date updateDate;
 
     @ApiModelProperty(value = "备注")
@@ -64,16 +71,22 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     @Override
     public void preInsert(){
         this.status = CommonConstant.STATUS_NORMAL;
-        this.createBy = UserContext.getUser().getId();
-        this.updateBy = this.createBy;
         this.updateDate = new Date();
         this.createDate = this.updateDate;
+
+        if( UserContext.getUser() != null ){
+            this.createBy = UserContext.getUser().getId();
+            this.updateBy = this.createBy;
+        }
     }
 
     @Override
     public void preUpdate(){
-        this.updateBy = UserContext.getUser().getId();
         this.updateDate = new Date();
+
+        if( UserContext.getUser() != null ){
+            this.updateBy = UserContext.getUser().getId();
+        }
     }
 
 }

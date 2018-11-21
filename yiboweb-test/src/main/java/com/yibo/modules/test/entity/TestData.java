@@ -21,6 +21,8 @@
 package com.yibo.modules.test.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -33,6 +35,7 @@ import javax.validation.constraints.NotEmpty;
  * @version v1.0
  */
 @Data
+@ApiModel(value = "测试数据实体")
 public class TestData extends DataEntity<String>{
     @NotEmpty(message="姓名不能为空")
     @ApiModelProperty(value = "姓名")

@@ -46,13 +46,13 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     static Permission p1,p2,p3,p4,p5,p6,p7 = null;
     static {
-        p1 = new Permission("1", "","测试数据:新增数据:1", 1, "/api/data/add");
-        p2 = new Permission("2", "","测试数据:新增数据:2", 1, "/api/data/addMap");
-        p3 = new Permission("3", "","测试数据:分页查询", 1, "/api/data/queryPage");
-        p4 = new Permission("4", "","测试数据:列表数据", 1, "/api/data/queryList");
-        p5 = new Permission("5", "","测试数据:更新数据:1", 1, "/api/data/updateMap");
-        p6 = new Permission("6", "","测试数据:更新数据:2", 1, "/api/data/updateNull");
-        p7 = new Permission("7", "","测试数据:删除数据", 1, "/api/data/deleteById");
+        p1 = new Permission("1", "","测试数据:新增数据:1", 1, "/api/datas/add");
+        p2 = new Permission("2", "","测试数据:新增数据:2", 1, "/api/datas/addMap");
+        p3 = new Permission("3", "","测试数据:分页查询", 1, "/api/datas/queryPage");
+        p4 = new Permission("4", "","测试数据:列表数据", 1, "/api/datas/queryList");
+        p5 = new Permission("5", "","测试数据:更新数据:1", 1, "/api/datas/updateMap");
+        p6 = new Permission("6", "","测试数据:更新数据:2", 1, "/api/datas/updateNull");
+        p7 = new Permission("7", "","测试数据:删除数据", 1, "/api/datas/deleteById");
     }
 
     @Override
