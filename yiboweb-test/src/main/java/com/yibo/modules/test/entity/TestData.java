@@ -36,15 +36,15 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @ApiModel(value = "测试数据实体")
 public class TestData extends DataEntity<String>{
-    @NotEmpty(message="姓名不能为空")
     @ApiModelProperty(value = "姓名")
+    @NotEmpty(message="姓名不能为空")
     private String name;
     
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
-    @NotEmpty(message="姓名缩写不能为空")
     @ApiModelProperty(value = "缩写")
+    @NotEmpty(message="缩写不能为空")
     private String shortName;
     
 }
