@@ -23,48 +23,50 @@ spring:
   profiles:
     active: @spring.active@
 
+  #Redis配置
+  redis:
+      host: 192.168.1.244
+      port: 8379
+      password: ENC(108NCrFBdhsxAwdjy36x4g==)
+
   #数据源配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
 
-    # Druid 连接池配置
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    filters: stat,wall,log4j
-    maxPoolPreparedStatementPerConnectionSize: 20
-    useGlobalDataSourceStat: true
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-
-    # Druid StatViewServlet配置
+    #Druid配置
     druid:
+      # 连接池配置
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      filters: stat,wall,log4j
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      # 过滤器配置
+      filter:
+        wall:
+          enabled: true
+          config:
+            none-base-statement-allow: true
+            multi-statement-allow: true
+      # 监控配置
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
         reset-enable: true
         login-username: root
         login-password: ENC(FO2oLd1xhXRyjIFkhaBwR+LXBOXFHAjH)
-        allow:  # IP白名单 多个逗号分隔
-        deny:   # IP黑名单
-      filter:
-        wall:
-          config:
-            none-base-statement-allow: true
-            multi-statement-allow: true
-
-  #redis配置
-  redis:
-      host: 192.168.1.244
-      port: 8379
-      password: ENC(108NCrFBdhsxAwdjy36x4g==)
+        allow: # IP白名单
+        deny:  # IP黑名单
 
 #Mybatis配置
 mybatis:
@@ -108,7 +110,7 @@ spring:
   datasource:
     username: root
     password: ENC(WZH8zMOp2pSR7kxfp2LQsw==)
-    url: jdbc:mysql://localhost:3306/yibo_frame
+    url: jdbc:mysql://localhost:3306/yibo_frame?allowMultiQueries=true
 
 ---
 
@@ -118,7 +120,7 @@ spring:
   datasource:
     username: root
     password: ENC(tzolKZvgH0mCwcJQPN5vtA==)
-    url: jdbc:mysql://192.168.1.244:3036/yibo_frame
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true
 
 ---
 
@@ -128,7 +130,7 @@ spring:
   datasource:
     username: root
     password: ENC(4E7U6IcbrPePfppGqDWalA==)
-    url: jdbc:mysql://192.168.1.244:3036/yibo_frame
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true
 
 ---
 
@@ -138,4 +140,4 @@ spring:
   datasource:
     username: root
     password: ENC(4Q4ABgmCB71R6ConFllkIQ==)
-    url: jdbc:mysql://192.168.1.244:3036/yibo_frame
+    url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true

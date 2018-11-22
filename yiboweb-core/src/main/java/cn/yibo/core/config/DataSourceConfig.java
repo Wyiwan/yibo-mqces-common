@@ -20,8 +20,8 @@
 
 package cn.yibo.core.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import cn.yibo.common.io.PropertiesUtils;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -45,10 +45,11 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(basePackages = {"com.yibo.modules.*.dao"}, sqlSessionFactoryRef = "sqlSessionFactory")
 public class DataSourceConfig {
+
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource druid() {
-        return new DruidDataSource();
+        return DruidDataSourceBuilder.create().build();
     }
 
     @Bean(name = "batisConfig")
