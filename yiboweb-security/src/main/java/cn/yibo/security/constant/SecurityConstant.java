@@ -57,4 +57,14 @@ public interface SecurityConstant {
      * 用户选择JWT保存时间参数头
      */
     String SAVE_LOGIN = "saveLogin";
+
+    /**
+     * 交互token前缀key
+     */
+    String TOKEN_PRE = "YBWEB_TOKEN_PRE:";
+
+    /**
+     * 用户token前缀key 单点登录使用
+     */
+    String USER_TOKEN = "YBWEB_USER_TOKEN:";
 }

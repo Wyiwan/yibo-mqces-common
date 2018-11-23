@@ -21,20 +21,16 @@
 package cn.yibo.security.jwt;
 
 import cn.yibo.common.lang.StringUtils;
-import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.constant.SecurityConstant;
-import cn.yibo.security.exception.LoginFailEnum;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -51,78 +47,60 @@ import java.io.IOException;
  */
 @Slf4j
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
-
     private JWTUtil jwtUtil;
 
     private UserDetailsService userDetailsService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager){
-        super(authenticationManager);
-    }
-
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService){
-        super(authenticationManager);
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-    }
+    private HandlerExceptionResolver handlerExceptionResolver;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint){
         super(authenticationManager, authenticationEntryPoint);
     }
 
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService, HandlerExceptionResolver handlerExceptionResolver){
+        super(authenticationManager);
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+        this.handlerExceptionResolver = handlerExceptionResolver;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
-        String header = request.getHeader(SecurityConstant.HEADER);
+        String headToken = request.getHeader(SecurityConstant.HEADER);
 
-        if( StringUtils.isBlank(header) ){
-            header = request.getParameter(SecurityConstant.HEADER);
+        if( StringUtils.isBlank(headToken) ){
+            headToken = request.getParameter(SecurityConstant.HEADER);
         }
 
-        if( StringUtils.isBlank(header) || !header.startsWith(SecurityConstant.TOKEN_SPLIT) ){
+        if( StringUtils.isBlank(headToken) || (!jwtUtil.isTokenRedis() && !headToken.startsWith(SecurityConstant.TOKEN_SPLIT)) ){
             chain.doFilter(request, response);
             return;
         }
 
-        try {
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(request, response);
+        try{
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(headToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch(Exception e){
-            e.toString();
+        // 可优化...
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, exception);
         }
         chain.doFilter(request, response);
     }
 
     /**
      *  解析token
-     * @param request
-     * @param response
+     * @param headToken
      * @return
      */
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request, HttpServletResponse response){
-        String token = request.getHeader(SecurityConstant.HEADER);
+    private UsernamePasswordAuthenticationToken getAuthentication(String headToken){
+        String username = jwtUtil.validateToken(headToken);
 
-        try{
-            if( StringUtils.isNotBlank(token) ) {
-                final String authToken = token.substring(SecurityConstant.TOKEN_SPLIT.length());
-                String username = jwtUtil.getUsernameFromToken(authToken);
-                logger.info("checking authentication " + username);
-
-                if( StringUtils.isNotBlank(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
-
-                    // 验证Token
-                    if( jwtUtil.validateToken(authToken, userDetails) ){
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        logger.info("authenticated user " + username + ", setting security context");
-                        return authentication;
-                    }
-                }
-            }
-        }catch(ExpiredJwtException e){
-            throw new BusinessException("000100", "登录已失效，请重新登录");
-        }catch(Exception e){
-            ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.TOKEN_ERROR.getCode(), LoginFailEnum.TOKEN_ERROR.getDesc()));
+        // 可优化...
+        if( StringUtils.isNotBlank(username) ) {
+            SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            return authentication;
         }
         return null;
     }

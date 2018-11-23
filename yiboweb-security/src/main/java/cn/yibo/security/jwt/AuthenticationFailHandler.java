@@ -96,7 +96,6 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
         }else if(e instanceof LoginFailLimitException){
             ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), ((LoginFailLimitException)e).getMsg()));
         }else{
-            log.info(e.getMessage());
             ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc(), e.getMessage()));
         }
     }

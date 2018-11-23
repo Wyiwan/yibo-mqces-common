@@ -20,21 +20,28 @@
 
 package cn.yibo.security.jwt;
 
+import cn.yibo.common.idgen.IdGenerate;
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.common.web.http.ServletUtils;
-import cn.yibo.security.constant.SecurityConstant;
 import cn.yibo.security.SecurityUserDetails;
+import cn.yibo.security.constant.SecurityConstant;
+import cn.yibo.security.exception.LoginFailEnum;
+import cn.yibo.security.exception.LoginFailLimitException;
+import com.alibaba.fastjson.JSON;
+import com.yibo.modules.base.entity.TokenUser;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 描述: JWT工具类
@@ -46,11 +53,17 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JWTUtil {
+    @Value("${webapp.token-save-redis}")
+    private Boolean tokenRedis;
+
     @Value("${webapp.token-expire-time}")
     private Integer tokenExpireTime;
 
     @Value("${webapp.save-login-time}")
     private Integer saveLoginTime;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 生成JWT Token
@@ -58,14 +71,21 @@ public class JWTUtil {
      * @return
      */
     public String genAccessToken(SecurityUserDetails user){
-        String saveTime = ServletUtils.getRequest().getParameter(SecurityConstant.SAVE_LOGIN);
-        if( StringUtils.isNotBlank(saveTime) && Boolean.valueOf(saveTime) ){
-            tokenExpireTime = saveLoginTime * 60 * 24;
-        }
+        String username = user.getUsername();
 
-        Map<String, Object> claims = genClaims(user);
-        long expiration = System.currentTimeMillis() + tokenExpireTime * 60 * 1000;
-        return generateAccessToken(user.getUsername(), claims, expiration);
+        if( tokenRedis ){
+            return generateRedisToken(username);
+        }else{
+            // 保存登录的过期时间
+            String saveLogin = ServletUtils.getRequest().getParameter(SecurityConstant.SAVE_LOGIN);
+            if( StringUtils.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin) ){
+                tokenExpireTime = saveLoginTime * 60 * 24;
+            }
+
+            Map<String, Object> claims = genClaims(user);
+            long expiration = System.currentTimeMillis() + tokenExpireTime * 60 * 1000;
+            return generateAccessToken(username, claims, expiration);
+        }
     }
 
     /**
@@ -77,6 +97,20 @@ public class JWTUtil {
      */
     private String generateAccessToken(String subject, Map<String, Object> claims, long expiration){
         return SecurityConstant.TOKEN_SPLIT + generateToken(subject, claims, expiration);
+    }
+
+    /**
+     * 生成Token保存在Redis中
+     * @param username
+     * @return
+     */
+    private String generateRedisToken(String username){
+        String token = IdGenerate.uuid();
+        String saveLogin = ServletUtils.getRequest().getParameter(SecurityConstant.SAVE_LOGIN);
+        boolean saved = StringUtils.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin);
+
+        saveRedisToken(token, new TokenUser(username, null, saved));
+        return token;
     }
 
     /**
@@ -102,8 +136,11 @@ public class JWTUtil {
      * @return
      */
     private Map<String, Object> genClaims(SecurityUserDetails user){
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(SecurityConstant.CLAIM_KEY_USER_ID, user.getId());
+        Map<String, Object> claims = new HashMap<String, Object>(){
+            {
+                put(SecurityConstant.CLAIM_KEY_USER_ID, user.getId());
+            }
+        };
         return claims;
     }
 
@@ -113,49 +150,25 @@ public class JWTUtil {
      * @return
      */
     private Claims getClaimsFromToken(String token){
-        Claims claims;
-        try{
-            claims = Jwts.parser()
-                    .setSigningKey(SecurityConstant.JWT_SIGN_KEY)
-                    .parseClaimsJws(token.replace(SecurityConstant.TOKEN_SPLIT, ""))
-                    .getBody();
-        }catch(ExpiredJwtException e){
-            throw e;
-        }
-        return claims;
+        return Jwts.parser()
+                .setSigningKey(SecurityConstant.JWT_SIGN_KEY)
+                .parseClaimsJws(token.replace(SecurityConstant.TOKEN_SPLIT, ""))
+                .getBody();
     }
 
     public String getUserIdFromToken(String token){
-        String userId;
-        try{
-            final Claims claims = getClaimsFromToken(token);
-            userId = claims.get(SecurityConstant.CLAIM_KEY_USER_ID).toString();
-        }catch(Exception e){
-            userId = "";
-        }
-        return userId;
+        final Claims claims = getClaimsFromToken(token);
+        return claims.get(SecurityConstant.CLAIM_KEY_USER_ID).toString();
     }
 
     public String getUsernameFromToken(String token){
-        String username;
-        try{
-            final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        }catch(Exception e){
-            username = null;
-        }
-        return username;
+        final Claims claims = getClaimsFromToken(token);
+        return claims.getSubject();
     }
 
     public Date getExpirationDateFromToken(String token){
-        Date expiration;
-        try{
-            final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        }catch(Exception e){
-            expiration = null;
-        }
-        return expiration;
+        final Claims claims = getClaimsFromToken(token);
+        return claims.getExpiration();
     }
 
     public Boolean isTokenExpired(String token){
@@ -163,9 +176,62 @@ public class JWTUtil {
         return expiration.before(new Date());
     }
 
-    public Boolean validateToken(String token, SecurityUserDetails user){
-        final String userId = getUserIdFromToken(token);
-        final String userName = getUsernameFromToken(token);
-        return userId.equals(user.getId()) && userName.equals(user.getUsername()) && !isTokenExpired(token);
+    public Boolean isTokenRedis(){
+        return this.tokenRedis;
     }
+
+    public String validateToken(String headToken) throws LoginFailLimitException {
+        if( tokenRedis ){
+            String redisTokenPre = getRedisTokenPre(headToken);
+            if( StringUtils.isBlank(redisTokenPre) ){
+                throw new LoginFailLimitException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc());
+            }
+
+            // 若未保存登录状态重新设置失效时间
+            TokenUser tokenUser = JSON.parseObject(redisTokenPre, TokenUser.class);
+            if( !tokenUser.getSaveLogin() ){
+                setRedisToken(headToken, tokenUser);
+            }
+            return tokenUser.getUsername();
+        }else{
+            final String authToken = headToken.substring(SecurityConstant.TOKEN_SPLIT.length());
+            return getUsernameFromToken(authToken);
+        }
+    }
+
+    private void saveRedisToken(String token, TokenUser tokenUser){
+        final String username = tokenUser.getUsername();
+
+        // 使之前登录的token失效
+        String oldToken = getRedisUserToken(username);
+        if( StringUtils.isNotBlank(oldToken) ){
+            redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
+        }
+        setRedisToken(token, tokenUser);
+    }
+
+    private void setRedisToken(String token, TokenUser tokenUser){
+        final String username = tokenUser.getUsername();
+        final String tokenUserKey = SecurityConstant.USER_TOKEN + username;
+        final String tokenPreKey =  SecurityConstant.TOKEN_PRE + token;
+        String tokenUserVal = JSON.toJSONString(tokenUser);
+
+        if( tokenUser.getSaveLogin() ){
+            redisTemplate.opsForValue().set(tokenUserKey, token, saveLoginTime, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(tokenPreKey, tokenUserVal, saveLoginTime, TimeUnit.DAYS);
+        }else{
+            redisTemplate.opsForValue().set(tokenUserKey, token, tokenExpireTime, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(tokenPreKey, tokenUserVal, tokenExpireTime, TimeUnit.MINUTES);
+        }
+    }
+
+    public String getRedisUserToken(String username){
+        return redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + username);
+    }
+
+    public String getRedisTokenPre(String token){
+        return redisTemplate.opsForValue().get(SecurityConstant.TOKEN_PRE + token);
+    }
+
+
 }

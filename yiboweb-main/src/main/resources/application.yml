@@ -13,10 +13,11 @@ jasypt:
 webapp:
   name: 医博基础技术框架V1.0
   swagger-open: true
-  token-expire-time: 60 # token过期时间（分钟）
-  save-login-time: 7    # 用户选择保存登录状态对应token过期时间（天）
-  login-time-limit: 5   # 限制用户登陆错误次数（次）
-  login-after-time: 10  # 错误超过次数后多少分钟后才能继续登录（分钟）
+  token-save-redis: true  # token是否存储在redis上
+  token-expire-time: 60   # token过期时间（分钟）
+  save-login-time: 7      # 用户选择保存登录状态对应token过期时间（天）
+  login-time-limit: 5     # 限制用户登陆错误次数（次）
+  login-after-time: 10    # 错误超过次数后多少分钟后才能继续登录（分钟）
 
 #Srping相关配置
 spring:

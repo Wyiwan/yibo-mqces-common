@@ -36,11 +36,11 @@ public enum LoginFailEnum {
 
     LOGIN_FAIL_LIMIT_ERROR("101004", "登录错误次数超过限制"),
 
-    TOKEN_ERROR("101005", "解析token错误"),
+    LOGIN_EXPIRED_ERROR("101006", "登录已失效，请重新登录"),
 
-    LOGIN_FAIL_ERROR("101006", "登录失败，其他内部错误"),
+    LOGIN_FAIL_ERROR("101007", "登录失败，其他内部错误"),
 
-    UNDECLARED_ERROR("101007", "抱歉，您没有访问权限");
+    UNDECLARED_ERROR("101008", "抱歉，您没有访问权限");
 
     private String code;
     private String desc;

@@ -20,8 +20,8 @@
 
 package cn.yibo.security;
 
-import cn.yibo.security.jwt.*;
 import cn.yibo.security.config.IgnoredUrlConfig;
+import cn.yibo.security.jwt.*;
 import cn.yibo.security.permission.MyFilterSecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.web.servlet.handler.HandlerExceptionResolverComposite;
 
 /**
  *  描述: Security 核心配置类
@@ -62,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
     @Autowired
-    JWTUtil jwtUtil;
+    private JWTUtil jwtUtil;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -95,6 +96,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拦截器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 // JWT过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userDetailsService));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userDetailsService, new HandlerExceptionResolverComposite()));
     }
 }
