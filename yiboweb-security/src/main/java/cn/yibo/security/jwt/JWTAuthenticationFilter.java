@@ -21,16 +21,20 @@
 package cn.yibo.security.jwt;
 
 import cn.yibo.common.lang.StringUtils;
+import cn.yibo.core.protocol.ResponseTs;
+import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.constant.SecurityConstant;
+import cn.yibo.security.exception.LoginFailEnum;
+import cn.yibo.security.exception.LoginFailLimitException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -51,17 +55,10 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
 
     private UserDetailsService userDetailsService;
 
-    private HandlerExceptionResolver handlerExceptionResolver;
-
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint){
-        super(authenticationManager, authenticationEntryPoint);
-    }
-
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService, HandlerExceptionResolver handlerExceptionResolver){
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService){
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
     @Override
@@ -80,10 +77,15 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
         try{
             UsernamePasswordAuthenticationToken authentication = getAuthentication(headToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 可优化...
         }catch(Exception exception){
             log.error(exception.getMessage());
-            handlerExceptionResolver.resolveException(request, response, null, exception);
+
+            if( exception instanceof LoginFailLimitException || exception instanceof SignatureException || exception instanceof ExpiredJwtException ){
+                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getCode(), LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc()));
+            }else{
+                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), LoginFailEnum.LOGIN_FAIL_ERROR.getDesc()));
+            }
+            return;
         }
         chain.doFilter(request, response);
     }

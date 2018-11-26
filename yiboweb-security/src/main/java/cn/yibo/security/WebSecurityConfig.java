@@ -33,7 +33,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.web.servlet.handler.HandlerExceptionResolverComposite;
 
 /**
  *  描述: Security 核心配置类
@@ -79,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/common/unauth")
-                .loginProcessingUrl("/auth/login").permitAll()
+                .loginProcessingUrl("/api/auth/login").permitAll()
                 .successHandler(new AuthenticationSuccessHandler(jwtUtil))
                 .failureHandler(failHandler)
             .and()
@@ -96,6 +95,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拦截器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 // JWT过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userDetailsService, new HandlerExceptionResolverComposite()));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userDetailsService));
     }
 }
