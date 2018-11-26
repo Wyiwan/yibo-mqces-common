@@ -65,10 +65,12 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                     "DF4D8164E30140EE991A97D89CC22A12", 1);
         }
 
-        List<Permission> permList = PermissionService.findByUserId(user.getId());
-        List<Role> roleList = roleService.findByUserId(user.getId());
-        user.setRoles(roleList);
-        user.setPermissions(permList);
+        if( user != null ){
+            List<Permission> permList = PermissionService.findByUserId(user.getId());
+            List<Role> roleList = roleService.findByUserId(user.getId());
+            user.setRoles(roleList);
+            user.setPermissions(permList);
+        }
         return user;
     }
 
