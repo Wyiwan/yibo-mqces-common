@@ -255,13 +255,13 @@
 
     <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
         select
-            top 1
             <include refid="Base_Column_List" />
         from test_data
         <where>
             and status != 0
             and ${property} = #{value}
         </where>
+        limit 0,1
     </select>
 
     <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
@@ -291,7 +291,6 @@
 
     <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
         select
-            top 1
             <include refid="Base_Column_List" />
         from test_data
         <where>
@@ -327,6 +326,7 @@
         <if test="orderBy!=null">
             order by ${orderBy} ${sortBy}
         </if>
+        limit 0,1
     </select>
 
     <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.test.entity.TestData">
