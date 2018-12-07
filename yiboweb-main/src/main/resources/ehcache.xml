@@ -23,30 +23,17 @@
     maxEntriesLocalDisk="1000" //硬盘最大缓存个数。
 -->
 <ehcache updateCheck="false" monitoring="autodetect" dynamicConfig="true">
-         
-    <diskStore path="java.io.tmpdir/ehcache"/>
 
-    <!-- 默认缓存配置，自动失效，超过5分钟未访问此缓存失效，缓存最多可以存活10分钟，溢出存储到磁盘，不持久化，增加统计。 -->
-    <defaultCache
-            maxElementsInMemory="10000"
-            eternal="false"
-            timeToIdleSeconds="300"
-            timeToLiveSeconds="600"
-            overflowToDisk="true"
-            diskPersistent="false"
-            statistics="true"/>
+    <diskStore path="../temp/yiboweb/ehcache" />
 
-    <!-- 系统缓存配置，永不失效。-->
-    <cache name="sysCache"
-           maxElementsInMemory="50000"
-           maxElementsOnDisk="100000"
-           diskSpoolBufferSizeMB="1024"
-           eternal="true"
-           overflowToDisk="true"
-           diskPersistent="false"
-           clearOnFlush="false"
-           memoryStoreEvictionPolicy="LFU"/>
+    <!-- 默认缓存配置. 自动失效：最后一次访问时间间隔300秒失效，若没有访问过自创建时间600秒失效。-->
+    <defaultCache maxEntriesLocalHeap="1000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true" statistics="true"/>
 
+    <!-- 系统缓存 -->
+    <cache name="sysCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+
+    <!-- 用户缓存 -->
+    <cache name="userCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 </ehcache>
 
 

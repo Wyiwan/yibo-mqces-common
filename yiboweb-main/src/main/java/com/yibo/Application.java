@@ -23,6 +23,7 @@ package com.yibo;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -33,6 +34,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.yibo","com.yibo"})
+@EnableCaching
 public class Application {
 
 	public static void main(String[] args) {
