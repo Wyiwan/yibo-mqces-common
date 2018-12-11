@@ -73,6 +73,10 @@ public class JWTUtil {
     public String genAccessToken(SecurityUserDetails user){
         String username = user.getUsername();
 
+        // 删除错误次数记录
+        redisTemplate.delete("loginTimeLimit:"+username);
+
+        // 如果Redis存储Token
         if( tokenRedis ){
             return generateRedisToken(username);
         }else{
@@ -232,6 +236,5 @@ public class JWTUtil {
     public String getRedisTokenPre(String token){
         return redisTemplate.opsForValue().get(SecurityConstant.TOKEN_PRE + token);
     }
-
 
 }

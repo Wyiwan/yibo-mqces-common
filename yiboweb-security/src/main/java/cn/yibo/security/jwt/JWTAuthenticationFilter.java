@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *  描述: JWT认证过滤器
+ *  描述: 登录认证过滤器
  *  作者：高云
  *  邮箱: gogo163gao@163.com
  *  时间: 2018-09-16
@@ -98,7 +98,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
     private UsernamePasswordAuthenticationToken getAuthentication(String headToken){
         String username = jwtUtil.validateToken(headToken);
 
-        // 可优化...
         if( StringUtils.isNotBlank(username) ) {
             SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

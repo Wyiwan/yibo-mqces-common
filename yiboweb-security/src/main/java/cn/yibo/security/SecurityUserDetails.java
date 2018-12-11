@@ -43,7 +43,8 @@ import java.util.List;
  *  版本: v1.0
  */
 @Slf4j
-public class SecurityUserDetails extends User implements UserDetails {
+public class SecurityUserDetails extends User implements UserDetails{
+
     public SecurityUserDetails(User user){
         if( user != null ) {
             this.setId(user.getId());
@@ -57,31 +58,36 @@ public class SecurityUserDetails extends User implements UserDetails {
     }
 
     /**
-     * 添加用户拥有的权限和角色
+     * 获取用户拥有的权限和角色
      * @return
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<Permission> permissions = this.getPermissions();
 
         // 添加请求权限
-        if( permissions != null && permissions.size() > 0 ){
-            for( Permission permission : permissions ){
-                if( CommonConstant.PERMISSION_OPERATION.equals(permission.getType() )
-                        &&StringUtils.isNotBlank(permission.getTitle())
-                        &&StringUtils.isNotBlank(permission.getPath()) ){
-                    authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
+        List<Permission> permissions = this.getPermissions();
+        if( !ListUtils.isEmpty(permissions) ){
+            permissions.forEach(item -> {
+                String permsUrl = item.getPermsUrl();
+                String permsName = item.getPermsName();
+                String permsType = item.getPermsType();
+
+                // 如果是操作权限
+                if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
+                    authorityList.add(new SimpleGrantedAuthority(permsName));
                 }
-            }
+            });
         }
 
         // 添加角色
         List<Role> roles = this.getRoles();
         if( !ListUtils.isEmpty(roles) ){
             roles.forEach(item -> {
-                if(StringUtils.isNotBlank(item.getName())){
-                    authorityList.add(new SimpleGrantedAuthority(item.getName()));
+                String roleName = item.getRoleName();
+
+                if( StringUtils.isNotBlank(roleName) ){
+                    authorityList.add(new SimpleGrantedAuthority(roleName));
                 }
             });
         }

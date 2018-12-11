@@ -92,9 +92,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
             .and()
-                // 自定义权限拦截器
+                // 权限检查拦截器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-                // JWT过滤器
+                // 登录认证过滤器
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userDetailsService));
     }
 }
