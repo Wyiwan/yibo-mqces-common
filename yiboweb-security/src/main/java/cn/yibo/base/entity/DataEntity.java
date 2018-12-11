@@ -20,6 +20,7 @@
 
 package cn.yibo.base.entity;
 
+import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,7 +71,6 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
     @Override
     public void preInsert(){
-        this.status = CommonConstant.STATUS_NORMAL;
         this.updateDate = new Date();
         this.createDate = this.updateDate;
 
@@ -78,6 +78,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
             this.createBy = UserContext.getUser().getId();
             this.updateBy = this.createBy;
         }
+        this.status = ObjectUtils.isEmpty(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
     @Override
