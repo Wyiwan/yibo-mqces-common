@@ -29,24 +29,44 @@ package cn.yibo.security.constant;
  */
 public interface CommonConstant {
     /**
+     * 超级管理员默认账号
+     */
+    String SUPER_ADMIN_ACCOUNT = "system";
+
+    /**
+     * 超级管理员菜单权重
+     */
+    Integer SUPER_ADMIN_PERMS_WEIGHT = 80;
+
+    /**
+     * 系统管理员菜单权重
+     */
+    Integer ADMIN_PERMS_WEIGHT = 60;
+
+    /**
+     *  普通用户菜单权重
+     */
+    Integer USER_PERMS_WEIGHT = 20;
+
+    /**
      * 普通用户
      */
-    Integer USER_TYPE_NORMAL = 0;
+    String USER_TYPE_NORMAL = "0";
 
     /**
      * 管理员
      */
-    Integer USER_TYPE_ADMIN = 1;
+    String USER_TYPE_ADMIN = "1";
 
     /**
      * 页面类型-权限
      */
-    Integer PERMISSION_PAGE = 0;
+    String PERMISSION_PAGE = "0";
 
     /**
      * 操作类型-权限
      */
-    Integer PERMISSION_OPERATION = 1;
+    String PERMISSION_OPERATION = "1";
 
     /**
      * 正常状态
@@ -62,25 +82,5 @@ public interface CommonConstant {
      * 删除标志
      */
     Integer STATUS_DEL = 0;
-
-    /**
-     * 顶级菜单
-     */
-    String PARENT_ID = "0";
-
-    /**
-     * 1级菜单
-     */
-    Integer LEVEL_ONE = 1;
-
-    /**
-     * 2级菜单
-     */
-    Integer LEVEL_TWO = 2;
-
-    /**
-     * 3级菜单
-     */
-    Integer LEVEL_THREE = 3;
 
 }

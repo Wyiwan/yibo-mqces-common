@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
@@ -48,30 +49,9 @@ import java.util.*;
 @Component
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Autowired
-    private PermissionService PermissionService;
+    private PermissionService permissionService;
 
     private Map<String, Collection<ConfigAttribute>> map = null;
-
-    /**
-     * 加载权限表中所有操作请求权限
-     */
-    public void loadResourceDefine(){
-        map = new HashMap<>(16);
-        Collection<ConfigAttribute> configAttributes;
-        ConfigAttribute configAttribute;
-
-        // 获取启用的操作权限
-        List<Permission> permissions = PermissionService.findByType(CommonConstant.PERMISSION_OPERATION);
-        for( Permission permission : permissions ){
-            if( StringUtils.isNotBlank(permission.getTitle()) && StringUtils.isNotBlank(permission.getPath()) ){
-                configAttributes = Lists.newArrayList();
-                configAttribute = new SecurityConfig(permission.getTitle());
-
-                configAttributes.add(configAttribute);
-                map.put(permission.getPath(), configAttributes);
-            }
-        }
-    }
 
     /**
      * 判定用户请求的url是否在权限表中
@@ -90,11 +70,14 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         //String requestUrl = ((FilterInvocation)object).getRequestUrl();
         String requestUrl = ((FilterInvocation)object).getRequest().getRequestURI();
         PathMatcher pathMatcher = new AntPathMatcher();
-        Iterator<String> iterator = map.keySet().iterator();
-        while( iterator.hasNext() ){
-            String permUrl = iterator.next();
-            if( StringUtils.isNotBlank(permUrl) && pathMatcher.match(permUrl, requestUrl) ){
-                return map.get(permUrl);
+
+        if( map != null ){
+            Iterator<String> iterator = map.keySet().iterator();
+            while( iterator.hasNext() ){
+                String permUrl = iterator.next();
+                if( StringUtils.isNotBlank(permUrl) && pathMatcher.match(permUrl, requestUrl) ){
+                    return map.get(permUrl);
+                }
             }
         }
         return null;
@@ -110,4 +93,23 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         return true;
     }
 
+    /**
+     * 加载所有的操作权限
+     */
+    public void loadResourceDefine(){
+        // 获取启用的操作权限
+        List<Permission> permissions = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
+
+        map = new HashMap<>(16);
+        permissions.forEach(item -> {
+            String permsName = item.getPermsName();
+            String permsUrl = item.getPermsUrl();
+
+            if( StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
+                ConfigAttribute configAttribute = new SecurityConfig(permsName);
+                Collection<ConfigAttribute> configAttributes = Lists.newArrayList(configAttribute);
+                map.put(permsUrl, configAttributes);
+            }
+        });
+    }
 }

@@ -49,13 +49,15 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
             return;
         }
 
+        // 用户所拥有的权限
+        Collection<? extends GrantedAuthority> userGrantedAuthority = authentication.getAuthorities();
+
+        // 用户请求的URL权限（在权限配置表已配置）
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
         while( iterator.hasNext() ){
-            // 获取请求地址的操作权限标识
             String attribute = iterator.next().getAttribute();
 
-            // 用户所拥有的权限
-            for( GrantedAuthority authority : authentication.getAuthorities() ){
+            for( GrantedAuthority authority : userGrantedAuthority ){
                 if( attribute.trim().equals(authority.getAuthority()) ){
                     return;
                 }
