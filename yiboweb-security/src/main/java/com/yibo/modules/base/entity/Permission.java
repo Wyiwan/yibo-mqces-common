@@ -11,7 +11,7 @@
 {  维护历史:													
 {  日期        维护人        维护类型						
 {  ---------------------------------------------------------------------------	
-{  2018-12-04  高云        新建	
+{  2018-12-12  高云        新建
 { 	                                                                     
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
@@ -67,22 +67,12 @@ public class Permission extends DataEntity<String>{
     private Integer permsWeight;
 
     //------------------------------------------------------------------------------------------------------------------
-    // 以下为扩展属性
+    // 扩展属性
     //------------------------------------------------------------------------------------------------------------------
     @ApiModelProperty(value = "子菜单/权限")
     private List<Permission> children;
 
-    /*
-    @ApiModelProperty(value = "节点展开 前端所需")
-    private Boolean expand = false;
-
-    @ApiModelProperty(value = "是否勾选 前端所需")
-    private Boolean checked = false;
-
-    @ApiModelProperty(value = "是否选中 前端所需")
-    private Boolean selected = false;
-    */
-
     @ApiModelProperty(value = "是否叶子节点 前端所需")
     private Boolean isLeaf = false;
+
 }

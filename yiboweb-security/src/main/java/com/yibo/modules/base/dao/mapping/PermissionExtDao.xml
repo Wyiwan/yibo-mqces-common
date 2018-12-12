@@ -2,23 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibo.modules.base.dao.PermissionDao">
     <!-- 在这里存放用户自定义的映射配置（注：PermissionDAO.xml里各节点的ID不能在这里重复出现）  -->
-    <!-- 级联删除 -->
-    <update id="deleteCascade">
-        <foreach collection="list" item="id">
-            update sys_permission set status = 0 where ancestor_id like concat('%', #{id} , '%');
-        </foreach>
-    </update>
-
-    <!-- 调用存储过程更新ancestor字段值 -->
-    <select id="updateAncestor" parameterType="com.yibo.modules.base.entity.Permission" statementType="CALLABLE" resultType="java.util.Map">
-	    {call sp_deal_perms_ancestor(#{id,jdbcType=VARCHAR,mode=IN})}
-    </select>
-
-    <!-- 查询树结构数据 -->
-    <select id="findTree" resultType="com.yibo.modules.base.entity.Permission">
-        select id, parent_id, ancestor_id, perms_name, perms_type, perms_sort, perms_level from sys_permission where status = 1 order by ancestor_id, perms_sort;
-    </select>
-
     <!-- 根据用户ID查询权限 -->
     <select id="findByUserId" resultType="com.yibo.modules.base.entity.Permission">
         select distinct
@@ -44,7 +27,7 @@
                 and p.perms_type = #{type}
             </if>
         </where>
-        order by p.perms_sort asc
+        order by p.ancestor_id, p.perms_sort asc
     </select>
 
     <!-- 根据权重查询权限 -->
@@ -73,6 +56,35 @@
                 and p.perms_type = #{type}
             </if>
             and p.status = 1
-        order by p.perms_sort asc
+        order by p.ancestor_id, p.perms_sort asc
     </select>
+
+    <!-- 查询树结构数据 -->
+    <select id="findTree" resultType="com.yibo.modules.base.entity.Permission">
+        select id, parent_id, ancestor_id, perms_name, perms_type, perms_sort, perms_level from sys_permission where status = 1 order by ancestor_id, perms_sort;
+    </select>
+
+    <!-- 调用存储过程更新父级ID -->
+    <select id="updateAncestor" parameterType="com.yibo.modules.base.entity.Permission" statementType="CALLABLE" resultType="java.util.Map">
+	    {call sp_deal_perms_ancestor(#{id,jdbcType=VARCHAR,mode=IN})}
+    </select>
+
+    <!-- 唯一性校验 -->
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from sys_permission
+        <where>
+            and perms_name = #{condition.permsName,jdbcType=VARCHAR}
+            and status = 1
+            <if test="condition.id != null and condition.id.length() > 0">
+                and id not in(select #{condition.id})
+            </if>
+        </where>
+    </select>
+
+    <!-- 级联删除 -->
+    <update id="deleteCascade">
+        <foreach collection="list" item="id">
+            update sys_permission set status = 0 where ancestor_id like concat('%', #{id} , '%');
+        </foreach>
+    </update>
 </mapper>

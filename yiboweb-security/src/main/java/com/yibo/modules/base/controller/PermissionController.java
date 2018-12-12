@@ -22,7 +22,10 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.core.protocol.ReturnCodeEnum;
+import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
@@ -31,6 +34,7 @@ import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
@@ -63,7 +67,8 @@ public class PermissionController extends BaseController{
      */
     @ApiOperation("新增")
     @PostMapping("/created")
-    public String created(@Valid @RequestBody Permission permission){
+    public String created(@Valid @RequestBody Permission permission) throws Exception{
+        verifyUnique(permission);
         permissionService.insert(permission);
         return permission.getId();
     }
@@ -75,7 +80,8 @@ public class PermissionController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Permission permission){
+    public String updated(@RequestBody Permission permission) throws Exception{
+        verifyUnique(permission);
         Permission vo = permissionService.fetch(permission.getId());
         BeanUtils.copyProperties(permission, vo, ObjectUtils.getNullPropertyNames(permission));
 
@@ -100,20 +106,31 @@ public class PermissionController extends BaseController{
     // @查询相关
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 单个查询
-     * @param id
+     * 查询用户菜单权限
      * @return
      */
-    @ApiOperation("单个查询")
-    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/fetched")
-    public Permission fetched(String id){
-        Permission vo = permissionService.fetch(id);
-        return vo == null ? new Permission() : vo;
+    @ApiOperation("用户菜单权限查询")
+    @GetMapping("/user-menu")
+    public List userMenu(){
+        List<String> condition = Lists.newArrayList(CommonConstant.PERMISSION_PAGE);
+        List<Permission> result = UserContext.getUser().getPermissions()
+                .stream().filter((Permission p) -> condition.contains(p.getPermsType())).collect(Collectors.toList());
+        return new PermissionTree(result).getTreeList();
     }
 
     /**
-     * 列表查询
+     * 查询树结构数据
+     * @return
+     */
+    @ApiOperation("树结构查询")
+    @GetMapping("/tree")
+    public List tree(){
+        List result = permissionService.findTree();
+        return new PermissionTree(result).getTreeList();
+    }
+
+    /**
+     * 查询列表数据
      * @return
      */
     @ApiOperation("列表查询")
@@ -125,26 +142,40 @@ public class PermissionController extends BaseController{
     }
 
     /**
-     * 查询树结构数据
+     * 单个查询
+     * @param id
      * @return
      */
-    @ApiOperation("查询树结构数据")
-    @GetMapping("/tree")
-    public List tree(){
-        List result = permissionService.findTree();
-        return new PermissionTree(result).getTreeList();
+    @ApiOperation("单个实体")
+    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
+    @GetMapping("/fetched")
+    public Permission fetched(String id){
+        Permission vo = permissionService.fetch(id);
+        return vo == null ? new Permission() : vo;
     }
 
     /**
-     * 用户菜单权限查询
+     * 唯一性校验
      * @return
      */
-    @ApiOperation("用户菜单查询")
-    @GetMapping("/user-menu")
-    public List userMenu(){
-        List<String> condition = Lists.newArrayList(CommonConstant.PERMISSION_PAGE);
-        List<Permission> result = UserContext.getUser().getPermissions()
-                .stream().filter((Permission p) -> condition.contains(p.getPermsType())).collect(Collectors.toList());
-        return new PermissionTree(result).getTreeList();
+    @ApiOperation("菜单名称唯一性验证")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String"),
+            @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", dataType = "String")
+    })
+    @GetMapping("/verify")
+    public Boolean verifyUnique(){
+        Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
+        int result = permissionService.count(conditionMap);
+        return result > 0 ? false : true;
+    }
+
+    private void verifyUnique(Permission permission) throws Exception{
+        if( permission != null ){
+            Map conditionMap = MapUtils.toMap(permission);
+            if( permissionService.count(conditionMap) > 0 ){
+                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称‘"+permission.getPermsName()+"’");
+            }
+        }
     }
 }
