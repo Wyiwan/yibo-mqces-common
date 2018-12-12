@@ -4,8 +4,8 @@
     <sql id="Base_Column_List">
         id,
         name,
-        age,
         short_name,
+        age,
         status,
         create_by,
         create_date,
@@ -23,8 +23,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             name,
-            age,
             short_name,
+            age,
             status,
             create_by,
             create_date,
@@ -35,8 +35,8 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #{id,jdbcType=VARCHAR},
             #{name,jdbcType=VARCHAR},
-            #{age,jdbcType=INTEGER},
             #{shortName,jdbcType=VARCHAR},
+            #{age,jdbcType=INTEGER},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
@@ -51,8 +51,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             name,
-            age,
             short_name,
+            age,
             status,
             create_by,
             create_date,
@@ -63,8 +63,8 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             replace(UUID(),'-',''),
             #{map.name,jdbcType=VARCHAR},
-            #{map.age,jdbcType=INTEGER},
             #{map.shortName,jdbcType=VARCHAR},
+            #{map.age,jdbcType=INTEGER},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
@@ -79,8 +79,8 @@
         update test_data
         <trim prefix="set" suffixOverrides=",">
             name = #{name,jdbcType=VARCHAR},
-            age = #{age,jdbcType=INTEGER},
             short_name = #{shortName,jdbcType=VARCHAR},
+            age = #{age,jdbcType=INTEGER},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -95,8 +95,8 @@
         update test_data
         <trim prefix="set" suffixOverrides=",">
             name = #{name,jdbcType=VARCHAR},
-            age = #{age,jdbcType=INTEGER},
             short_name = #{shortName,jdbcType=VARCHAR},
+            age = #{age,jdbcType=INTEGER},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -113,11 +113,11 @@
             <if test="map.name != null">
                 name = #{map.name,jdbcType=VARCHAR},
             </if>
-            <if test="map.age != null">
-                age = #{map.age,jdbcType=INTEGER},
-            </if>
             <if test="map.shortName != null">
                 short_name = #{map.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.age != null">
+                age = #{map.age,jdbcType=INTEGER},
             </if>
             <if test="map.status != null">
                 status = #{map.status,jdbcType=INTEGER},
@@ -143,11 +143,11 @@
             <if test="update.name != null">
                 name = #{update.name,jdbcType=VARCHAR},
             </if>
-            <if test="update.age != null">
-                age = #{update.age,jdbcType=INTEGER},
-            </if>
             <if test="update.shortName != null">
                 short_name = #{update.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.age != null">
+                age = #{update.age,jdbcType=INTEGER},
             </if>
             <if test="update.status != null">
                 status = #{update.status,jdbcType=INTEGER},
@@ -166,11 +166,11 @@
             <if test="condition.name != null">
                 and name = #{condition.name,jdbcType=VARCHAR}
             </if>
-            <if test="condition.age != null">
-                and age = #{condition.age,jdbcType=INTEGER}
-            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.age != null">
+                and age = #{condition.age,jdbcType=INTEGER}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -211,11 +211,11 @@
             <if test="condition.name != null">
                 and name = #{condition.name,jdbcType=VARCHAR}
             </if>
-            <if test="condition.age != null">
-                and age = #{condition.age,jdbcType=INTEGER}
-            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.age != null">
+                and age = #{condition.age,jdbcType=INTEGER}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -298,11 +298,11 @@
             <if test="condition.name != null">
                 and name = #{condition.name}
             </if>
-            <if test="condition.age != null">
-                and age = #{condition.age}
-            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.age != null">
+                and age = #{condition.age}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -338,11 +338,11 @@
             <if test="condition.name != null">
                 and name = #{condition.name}
             </if>
-            <if test="condition.age != null">
-                and age = #{condition.age}
-            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.age != null">
+                and age = #{condition.age}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -377,11 +377,11 @@
             <if test="condition.name != null">
                 and name = #{condition.name}
             </if>            
-            <if test="condition.age != null">
-                and age = #{condition.age}
-            </if>            
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
+            </if>            
+            <if test="condition.age != null">
+                and age = #{condition.age}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -425,11 +425,11 @@
             <if test="condition.name != null">
                 and name like concat('%', #{condition.name} , '%')
             </if>
-            <if test="condition.age != null">
-                and age like concat('%', #{condition.age} , '%')
-            </if>
             <if test="condition.shortName != null">
                 and short_name like concat('%', #{condition.shortName} , '%')
+            </if>
+            <if test="condition.age != null">
+                and age like concat('%', #{condition.age} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')

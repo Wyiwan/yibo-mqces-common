@@ -1,37 +1,17 @@
 /*
- * {*****************************************************************************
- * {  医博 - 底层基础框架 v1.0
- * {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
- * {  创建人：  高云
- * {  审查人：
- * {  模块：工具类模块
- * {  功能描述:
- * {
- * {  ---------------------------------------------------------------------------
- * {  维护历史:
- * {  日期        维护人        维护类型
- * {  ---------------------------------------------------------------------------
- * {  2018-10-10  高云        新建
- * {
- * {  ---------------------------------------------------------------------------
- * {  注：本模块代码为底层基础框架封装的common包
- * {*****************************************************************************
- */
-
-/*
 {*****************************************************************************
-{  南海医管局-综合评价 v1.0													
+{  广州医博-基础框架 v1.0													
 {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.					
 {  创建人：  高云
 {  审查人：
-{  模块：测试模块										
+{  模块：安全控制模块										
 {  功能描述:										
 {		 													
 {  ---------------------------------------------------------------------------	
 {  维护历史:													
 {  日期        维护人        维护类型						
 {  ---------------------------------------------------------------------------	
-{  2018-12-03  高云        新建	
+{  2018-12-12  高云        新建	
 { 	                                                                     
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
@@ -59,17 +39,17 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+    
 /**
  * 测试数据实体控制器层类(TestData)
  * @author 高云
- * @since 2018-12-03
+ * @since 2018-12-12
  * @version v1.0
  */
 @RestController
 @RequestMapping("/api/data")
 @Api(tags = "测试数据接口")
-public class TestDataController extends BaseController {
+public class TestDataController extends BaseController{
    @Autowired
    private TestDataService testDataService;
    
@@ -123,8 +103,8 @@ public class TestDataController extends BaseController {
      */
     @ApiOperation("单个查询")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/retrieved-one")
-    public TestData retrievedOne(String id){
+    @GetMapping("/fetched")
+    public TestData fetched(String id){
         TestData vo = testDataService.fetch(id);
         return vo == null ? new TestData() : vo;
     }
@@ -134,8 +114,8 @@ public class TestDataController extends BaseController {
      * @return
      */
     @ApiOperation("模糊查询")
-    @GetMapping("/retrieved-match")
-    public List retrievedMatch(TestData testData){
+    @GetMapping("/matched")
+    public List matched(TestData testData){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         return testDataService.like(conditionMap);
     }
@@ -145,8 +125,8 @@ public class TestDataController extends BaseController {
      * @return
      */
     @ApiOperation("列表查询")
-    @GetMapping("/retrieved")
-    public List retrieved(TestData testData){
+    @GetMapping("/list")
+    public List list(TestData testData){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         return testDataService.queryList(conditionMap);
     }
