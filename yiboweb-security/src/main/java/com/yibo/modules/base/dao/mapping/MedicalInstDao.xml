@@ -1,120 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yibo.modules.base.dao.RoleDao">
+<mapper namespace="com.yibo.modules.base.dao.MedicalInstDao">
     <sql id="Base_Column_List">
         id,
-        role_name,
-        role_sort,
-        is_built,
-        user_type,
+        inst_name,
+        short_name,
+        cqd_id,
+        slogan,
+        introduction,
+        phone,
+        address,
         status,
         create_by,
         create_date,
         update_by,
         update_date,
-        comments,
-        tenant_id
+        comments
     </sql>
     
     <!-- 新增相关 -->
-    <insert id="insert" parameterType="com.yibo.modules.base.entity.Role">
+    <insert id="insert" parameterType="com.yibo.modules.base.entity.MedicalInst">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
             select replace(UUID(),'-','')
         </selectKey>
-        insert into sys_role
+        insert into sys_medical_inst
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
-            role_name,
-            role_sort,
-            is_built,
-            user_type,
+            inst_name,
+            short_name,
+            cqd_id,
+            slogan,
+            introduction,
+            phone,
+            address,
             status,
             create_by,
             create_date,
             update_by,
             update_date,
             comments,
-            tenant_id,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #{id,jdbcType=VARCHAR},
-            #{roleName,jdbcType=VARCHAR},
-            #{roleSort,jdbcType=NUMERIC},
-            #{isBuilt,jdbcType=VARCHAR},
-            #{userType,jdbcType=VARCHAR},
+            #{instName,jdbcType=VARCHAR},
+            #{shortName,jdbcType=VARCHAR},
+            #{cqdId,jdbcType=VARCHAR},
+            #{slogan,jdbcType=VARCHAR},
+            #{introduction,jdbcType=VARCHAR},
+            #{phone,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
             #{updateBy,jdbcType=VARCHAR},
             #{updateDate,jdbcType=TIMESTAMP},
             #{comments,jdbcType=VARCHAR},
-            #{tenantId,jdbcType=VARCHAR},
         </trim>
     </insert>
     
     <insert id="insertMap">
-        insert into sys_role 
+        insert into sys_medical_inst 
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
-            role_name,
-            role_sort,
-            is_built,
-            user_type,
+            inst_name,
+            short_name,
+            cqd_id,
+            slogan,
+            introduction,
+            phone,
+            address,
             status,
             create_by,
             create_date,
             update_by,
             update_date,
             comments,
-            tenant_id,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             replace(UUID(),'-',''),
-            #{map.roleName,jdbcType=VARCHAR},
-            #{map.roleSort,jdbcType=NUMERIC},
-            #{map.isBuilt,jdbcType=VARCHAR},
-            #{map.userType,jdbcType=VARCHAR},
+            #{map.instName,jdbcType=VARCHAR},
+            #{map.shortName,jdbcType=VARCHAR},
+            #{map.cqdId,jdbcType=VARCHAR},
+            #{map.slogan,jdbcType=VARCHAR},
+            #{map.introduction,jdbcType=VARCHAR},
+            #{map.phone,jdbcType=VARCHAR},
+            #{map.address,jdbcType=VARCHAR},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
             #{map.updateBy,jdbcType=VARCHAR},
             #{map.updateDate,jdbcType=TIMESTAMP},
             #{map.comments,jdbcType=VARCHAR},
-            #{map.tenantId,jdbcType=VARCHAR},
         </trim>
     </insert>
     
     <!-- 更新相关 -->
-    <update id="update" parameterType="com.yibo.modules.base.entity.Role">
-        update sys_role
+    <update id="update" parameterType="com.yibo.modules.base.entity.MedicalInst">
+        update sys_medical_inst
         <trim prefix="set" suffixOverrides=",">
-            role_name = #{roleName,jdbcType=VARCHAR},
-            role_sort = #{roleSort,jdbcType=NUMERIC},
-            is_built = #{isBuilt,jdbcType=VARCHAR},
-            user_type = #{userType,jdbcType=VARCHAR},
+            inst_name = #{instName,jdbcType=VARCHAR},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            cqd_id = #{cqdId,jdbcType=VARCHAR},
+            slogan = #{slogan,jdbcType=VARCHAR},
+            introduction = #{introduction,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
             comments = #{comments,jdbcType=VARCHAR},
-            tenant_id = #{tenantId,jdbcType=VARCHAR},
        </trim>
        <where>
             id = #{id}
        </where>
     </update>
     
-    <update id="updateNull" parameterType="com.yibo.modules.base.entity.Role">
-        update sys_role
+    <update id="updateNull" parameterType="com.yibo.modules.base.entity.MedicalInst">
+        update sys_medical_inst
         <trim prefix="set" suffixOverrides=",">
-            role_name = #{roleName,jdbcType=VARCHAR},
-            role_sort = #{roleSort,jdbcType=NUMERIC},
-            is_built = #{isBuilt,jdbcType=VARCHAR},
-            user_type = #{userType,jdbcType=VARCHAR},
+            inst_name = #{instName,jdbcType=VARCHAR},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            cqd_id = #{cqdId,jdbcType=VARCHAR},
+            slogan = #{slogan,jdbcType=VARCHAR},
+            introduction = #{introduction,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
             comments = #{comments,jdbcType=VARCHAR},
-            tenant_id = #{tenantId,jdbcType=VARCHAR},
         </trim>
         <where>
             id = #{id}
@@ -122,19 +136,28 @@
     </update>
     
     <update id="updateMap">
-        update sys_role
+        update sys_medical_inst
         <trim prefix="set" suffixOverrides=",">
-            <if test="map.roleName != null">
-                role_name = #{map.roleName,jdbcType=VARCHAR},
+            <if test="map.instName != null">
+                inst_name = #{map.instName,jdbcType=VARCHAR},
             </if>
-            <if test="map.roleSort != null">
-                role_sort = #{map.roleSort,jdbcType=NUMERIC},
+            <if test="map.shortName != null">
+                short_name = #{map.shortName,jdbcType=VARCHAR},
             </if>
-            <if test="map.isBuilt != null">
-                is_built = #{map.isBuilt,jdbcType=VARCHAR},
+            <if test="map.cqdId != null">
+                cqd_id = #{map.cqdId,jdbcType=VARCHAR},
             </if>
-            <if test="map.userType != null">
-                user_type = #{map.userType,jdbcType=VARCHAR},
+            <if test="map.slogan != null">
+                slogan = #{map.slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="map.introduction != null">
+                introduction = #{map.introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="map.phone != null">
+                phone = #{map.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="map.address != null">
+                address = #{map.address,jdbcType=VARCHAR},
             </if>
             <if test="map.status != null">
                 status = #{map.status,jdbcType=INTEGER},
@@ -148,9 +171,6 @@
             <if test="map.comments != null">
                 comments = #{map.comments,jdbcType=VARCHAR},
             </if>
-            <if test="map.tenantId != null">
-                tenant_id = #{map.tenantId,jdbcType=VARCHAR},
-            </if>
         </trim>
         <where>
             id = #{map.id}
@@ -158,19 +178,28 @@
     </update>
     
     <update id="updateByCondition">
-        update sys_role
+        update sys_medical_inst
         <trim prefix="set" suffixOverrides=",">
-            <if test="update.roleName != null">
-                role_name = #{update.roleName,jdbcType=VARCHAR},
+            <if test="update.instName != null">
+                inst_name = #{update.instName,jdbcType=VARCHAR},
             </if>
-            <if test="update.roleSort != null">
-                role_sort = #{update.roleSort,jdbcType=NUMERIC},
+            <if test="update.shortName != null">
+                short_name = #{update.shortName,jdbcType=VARCHAR},
             </if>
-            <if test="update.isBuilt != null">
-                is_built = #{update.isBuilt,jdbcType=VARCHAR},
+            <if test="update.cqdId != null">
+                cqd_id = #{update.cqdId,jdbcType=VARCHAR},
             </if>
-            <if test="update.userType != null">
-                user_type = #{update.userType,jdbcType=VARCHAR},
+            <if test="update.slogan != null">
+                slogan = #{update.slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="update.introduction != null">
+                introduction = #{update.introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="update.phone != null">
+                phone = #{update.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="update.address != null">
+                address = #{update.address,jdbcType=VARCHAR},
             </if>
             <if test="update.status != null">
                 status = #{update.status,jdbcType=INTEGER},
@@ -184,22 +213,28 @@
             <if test="update.comments != null">
                 comments = #{update.comments,jdbcType=VARCHAR},
             </if>
-            <if test="update.tenantId != null">
-                tenant_id = #{update.tenantId,jdbcType=VARCHAR},
-            </if>
         </trim>
         <trim prefix="where" prefixOverrides="and | or">
-            <if test="condition.roleName != null">
-                and role_name = #{condition.roleName,jdbcType=VARCHAR}
+            <if test="condition.instName != null">
+                and inst_name = #{condition.instName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort,jdbcType=NUMERIC}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt,jdbcType=VARCHAR}
+            <if test="condition.cqdId != null">
+                and cqd_id = #{condition.cqdId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.userType != null">
-                and user_type = #{condition.userType,jdbcType=VARCHAR}
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -218,39 +253,45 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
             </if>
         </trim>  
     </update>
     
     <!-- 删除相关 -->
     <delete id="deleteById" parameterType="java.lang.String">
-        update sys_role set status = 0 where id = #{id}
+        update sys_medical_inst set status = 0 where id = #{id}
     </delete>
 
     <delete id="deleteByIds">
-       update sys_role set status = 0
+       update sys_medical_inst set status = 0
        <trim prefix="where" prefixOverrides="and | or">
            and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
        </trim>
     </delete>
 
     <delete id="deleteByCondition">
-        update sys_role set status = 0
+        update sys_medical_inst set status = 0
         <trim prefix="where" prefixOverrides="and | or">
-            <if test="condition.roleName != null">
-                and role_name = #{condition.roleName,jdbcType=VARCHAR}
+            <if test="condition.instName != null">
+                and inst_name = #{condition.instName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort,jdbcType=NUMERIC}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt,jdbcType=VARCHAR}
+            <if test="condition.cqdId != null">
+                and cqd_id = #{condition.cqdId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.userType != null">
-                and user_type = #{condition.userType,jdbcType=VARCHAR}
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -270,31 +311,28 @@
             <if test="condition.comments != null">
                 and comments = #{condition.comments,jdbcType=VARCHAR}
             </if>
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
-            </if>
         </trim>
     </delete>
 
     <delete id="deleteByProperty">
-       update sys_role set status = 0 where ${property} = #{value}
+       update sys_medical_inst set status = 0 where ${property} = #{value}
     </delete>
     
     <!-- 查询相关 -->
-    <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.Role">
+    <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
             and id = #{id}
         </where>
     </select>
 
-    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
             and ${property} = #{value}
@@ -302,10 +340,10 @@
         limit 0,1
     </select>
 
-    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
             and ${property} = #{value}
@@ -315,10 +353,10 @@
         </if>
     </select>
 
-    <select id="findAll" resultType="com.yibo.modules.base.entity.Role">
+    <select id="findAll" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
         </where>
@@ -327,23 +365,32 @@
         </if>
     </select>
 
-    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
-            <if test="condition.roleName != null">
-                and role_name = #{condition.roleName}
+            <if test="condition.instName != null">
+                and inst_name = #{condition.instName}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.cqdId != null">
+                and cqd_id = #{condition.cqdId}
             </if>
-            <if test="condition.userType != null">
-                and user_type = #{condition.userType}
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -362,9 +409,6 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
-            </if>
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId}
             </if>
         </where>
         <if test="orderBy!=null">
@@ -373,23 +417,32 @@
         limit 0,1
     </select>
 
-    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
-            <if test="condition.roleName != null">
-                and role_name = #{condition.roleName}
+            <if test="condition.instName != null">
+                and inst_name = #{condition.instName}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.cqdId != null">
+                and cqd_id = #{condition.cqdId}
             </if>
-            <if test="condition.userType != null">
-                and user_type = #{condition.userType}
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -408,9 +461,6 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
-            </if>
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId}
             </if>
         </where>
         <if test="orderBy!=null">
@@ -418,23 +468,32 @@
         </if>
     </select>
 
-    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
-            <if test="condition.roleName != null">
-                and role_name = #{condition.roleName}
+            <if test="condition.instName != null">
+                and inst_name = #{condition.instName}
             </if>            
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>            
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.cqdId != null">
+                and cqd_id = #{condition.cqdId}
             </if>            
-            <if test="condition.userType != null">
-                and user_type = #{condition.userType}
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>            
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>            
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>            
+            <if test="condition.address != null">
+                and address = #{condition.address}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -453,9 +512,6 @@
             </if>            
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
-            </if>            
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId}
             </if>            
         </where>
         <choose>
@@ -472,23 +528,32 @@
 	    ${executeSql}
     </select>
 
-    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Role">
+    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.MedicalInst">
         select
             <include refid="Base_Column_List" />
-        from sys_role
+        from sys_medical_inst
         <where>
             and status != 0
-            <if test="condition.roleName != null">
-                and role_name like concat('%', #{condition.roleName} , '%')
+            <if test="condition.instName != null">
+                and inst_name like concat('%', #{condition.instName} , '%')
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort like concat('%', #{condition.roleSort} , '%')
+            <if test="condition.shortName != null">
+                and short_name like concat('%', #{condition.shortName} , '%')
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built like concat('%', #{condition.isBuilt} , '%')
+            <if test="condition.cqdId != null">
+                and cqd_id like concat('%', #{condition.cqdId} , '%')
             </if>
-            <if test="condition.userType != null">
-                and user_type like concat('%', #{condition.userType} , '%')
+            <if test="condition.slogan != null">
+                and slogan like concat('%', #{condition.slogan} , '%')
+            </if>
+            <if test="condition.introduction != null">
+                and introduction like concat('%', #{condition.introduction} , '%')
+            </if>
+            <if test="condition.phone != null">
+                and phone like concat('%', #{condition.phone} , '%')
+            </if>
+            <if test="condition.address != null">
+                and address like concat('%', #{condition.address} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')
@@ -507,9 +572,6 @@
             </if>
             <if test="condition.comments != null">
                 and comments like concat('%', #{condition.comments} , '%')
-            </if>
-            <if test="condition.tenantId != null">
-                and tenant_id like concat('%', #{condition.tenantId} , '%')
             </if>
         </where>
         <if test="orderBy!=null">

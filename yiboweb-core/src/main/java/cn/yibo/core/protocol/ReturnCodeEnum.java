@@ -29,7 +29,7 @@ package cn.yibo.core.protocol;
  *  版本: v1.0
  */
 public enum ReturnCodeEnum {
-    SUCCESS("000000", "请求成功"),
+    SUCCESS("000000", "success"),
 
     UNKNOW("100001", "未知异常"),
 

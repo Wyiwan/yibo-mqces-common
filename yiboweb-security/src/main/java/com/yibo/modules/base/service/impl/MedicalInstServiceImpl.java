@@ -21,26 +21,20 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
-import com.yibo.modules.base.dao.RoleDao;
-import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.service.RoleService;
+import com.yibo.modules.base.dao.MedicalInstDao;
+import com.yibo.modules.base.entity.MedicalInst;
+import com.yibo.modules.base.service.MedicalInstService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
- * 角色表实体服务实现层类(Role)
+ * 医疗机构表实体服务实现层类(MedicalInst)
  * @author 高云
  * @since 2018-12-03
  * @version v1.0
  */
 @Service
 @Transactional(readOnly=true)
-public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
-    @Override
-    public List<Role> findByUserId(String userId) {
-        return dao.findByUserId(userId);
-    }
+public class MedicalInstServiceImpl extends AbstractBaseService<MedicalInstDao, MedicalInst> implements MedicalInstService {
 
 }

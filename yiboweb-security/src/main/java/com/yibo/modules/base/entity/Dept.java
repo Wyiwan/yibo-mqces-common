@@ -27,26 +27,47 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 角色表实体类(Role)
+ * 科室表实体类(Dept)
  * @author 高云
  * @since 2018-12-03
  * @version v1.0
  */
 @Data
-@ApiModel(value = "角色表实体类(Role)")
-public class Role extends DataEntity<String>{
-    @NotEmpty(message="角色名称不能为空")
-    @ApiModelProperty(value = "角色名称")
-    private String roleName;
+@ApiModel(value = "科室表实体类(Dept)")
+public class Dept extends DataEntity<String>{
+    @ApiModelProperty(value = "父级ID")
+    private String parentId;
     
-    @ApiModelProperty(value = "角色排序")
-    private Double roleSort;
+    @ApiModelProperty(value = "所有父级ID")
+    private String ancestorId;
     
-    @ApiModelProperty(value = "系统内置（0否  1是）")
-    private String isBuilt;
+    @ApiModelProperty(value = "所有父级名称")
+    private String ancestorName;
     
-    @ApiModelProperty(value = "用户类型")
-    private String userType;
+    @NotEmpty(message="科室名称不能为空")
+    @ApiModelProperty(value = "科室名称")
+    private String deptName;
+    
+    @ApiModelProperty(value = "科室简称")
+    private String shortName;
+    
+    @ApiModelProperty(value = "科室编码")
+    private String deptCode;
+    
+    @ApiModelProperty(value = "科室类型")
+    private String deptType;
+    
+    @ApiModelProperty(value = "层级")
+    private Double deptLevel;
+    
+    @ApiModelProperty(value = "排序（升序）")
+    private Double deptSort;
+    
+    @ApiModelProperty(value = "科室负责人ID")
+    private String leaderId;
+    
+    @ApiModelProperty(value = "联系电话")
+    private String phone;
     
     @ApiModelProperty(value = "租户ID")
     private String tenantId;

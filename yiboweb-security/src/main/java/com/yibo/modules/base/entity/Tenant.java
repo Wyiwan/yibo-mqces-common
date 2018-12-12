@@ -15,32 +15,29 @@
 { 	                                                                     
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
-{*****************************************************************************	
+{*****************************************************************************
 */
 
-package com.yibo.modules.base.service.impl;
+package com.yibo.modules.base.entity;
 
-import cn.yibo.base.service.impl.AbstractBaseService;
-import com.yibo.modules.base.dao.RoleDao;
-import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.service.RoleService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import cn.yibo.base.entity.DataEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
- * 角色表实体服务实现层类(Role)
+ * 租户表实体类(Tenant)
  * @author 高云
  * @since 2018-12-03
  * @version v1.0
  */
-@Service
-@Transactional(readOnly=true)
-public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
-    @Override
-    public List<Role> findByUserId(String userId) {
-        return dao.findByUserId(userId);
-    }
-
+@Data
+@ApiModel(value = "租户表实体类(Tenant)")
+public class Tenant extends DataEntity<String>{
+    @ApiModelProperty(value = "租户代码")
+    private String tenantCode;
+    
+    @ApiModelProperty(value = "租户名称")
+    private String tenantName;
+    
 }

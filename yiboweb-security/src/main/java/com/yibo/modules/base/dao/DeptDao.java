@@ -18,29 +18,17 @@
 {*****************************************************************************	
 */
 
-package com.yibo.modules.base.service.impl;
+package com.yibo.modules.base.dao;
 
-import cn.yibo.base.service.impl.AbstractBaseService;
-import com.yibo.modules.base.dao.RoleDao;
-import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.service.RoleService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import cn.yibo.base.dao.CrudDao;
+import com.yibo.modules.base.entity.Dept;
 
 /**
- * 角色表实体服务实现层类(Role)
+ * 科室表实体数据访问层类(Dept)
  * @author 高云
  * @since 2018-12-03
  * @version v1.0
  */
-@Service
-@Transactional(readOnly=true)
-public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
-    @Override
-    public List<Role> findByUserId(String userId) {
-        return dao.findByUserId(userId);
-    }
+public interface DeptDao extends CrudDao<Dept>{
 
 }

@@ -18,29 +18,43 @@
 {*****************************************************************************	
 */
 
-package com.yibo.modules.base.service.impl;
+package com.yibo.modules.base.entity;
 
-import cn.yibo.base.service.impl.AbstractBaseService;
-import com.yibo.modules.base.dao.RoleDao;
-import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.service.RoleService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import cn.yibo.base.entity.DataEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import javax.validation.constraints.NotEmpty;
 
 /**
- * 角色表实体服务实现层类(Role)
+ * 医疗机构表实体类(MedicalInst)
  * @author 高云
  * @since 2018-12-03
  * @version v1.0
  */
-@Service
-@Transactional(readOnly=true)
-public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
-    @Override
-    public List<Role> findByUserId(String userId) {
-        return dao.findByUserId(userId);
-    }
-
+@Data
+@ApiModel(value = "医疗机构表实体类(MedicalInst)")
+public class MedicalInst extends DataEntity<String>{
+    @NotEmpty(message="机构名称不能为空")
+    @ApiModelProperty(value = "机构名称")
+    private String instName;
+    
+    @ApiModelProperty(value = "机构简称")
+    private String shortName;
+    
+    @ApiModelProperty(value = "质量总监ID")
+    private String cqdId;
+    
+    @ApiModelProperty(value = "口号")
+    private String slogan;
+    
+    @ApiModelProperty(value = "简介")
+    private String introduction;
+    
+    @ApiModelProperty(value = "联系电话")
+    private String phone;
+    
+    @ApiModelProperty(value = "地址")
+    private String address;
+    
 }

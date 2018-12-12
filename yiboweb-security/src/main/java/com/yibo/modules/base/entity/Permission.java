@@ -1,92 +1,88 @@
 /*
 {*****************************************************************************
-{  广州医博-基础框架 v1.0
-{  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
+{  广州医博-基础框架 v1.0													
+{  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.					
 {  创建人：  高云
 {  审查人：
-{  模块：安全控制模块
-{  功能描述:
-{
+{  模块：系统管理模块
+{  功能描述:										
+{		 													
+{  ---------------------------------------------------------------------------	
+{  维护历史:													
+{  日期        维护人        维护类型						
+{  ---------------------------------------------------------------------------	
+{  2018-12-04  高云        新建	
+{ 	                                                                     
 {  ---------------------------------------------------------------------------
-{  维护历史:
-{  日期        维护人        维护类型
-{  ---------------------------------------------------------------------------
-{  2018-08-01  高云        新建
-{
-{  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的security包
-{*****************************************************************************
+{  注：本模块代码由医博代码生成工具辅助生成
+{*****************************************************************************	
 */
 
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 描述: 菜单/权限
- * 作者：高云
- * 邮箱: gogo163gao@163.com
- * 时间: 2018-09-16
- * 版本: v1.0
+ * 菜单权限表实体类(Permission)
+ * @author 高云
+ * @since 2018-12-04
+ * @version v1.0
  */
-@Getter
-@Setter
-public class Permission extends DataEntity<String> {
-    @ApiModelProperty(value = "菜单/权限名称")
-    private String name;
-
-    @ApiModelProperty(value = "层级")
-    private Integer level;
-
-    @ApiModelProperty(value = "类型 0页面 1具体操作")
-    private Integer type;
-
-    @ApiModelProperty(value = "菜单标题")
-    private String title; // 操作按钮名称不能重复（相当于权限标识）
-
-    @ApiModelProperty(value = "页面路径/资源链接url")
-    private String path;
-
-    @ApiModelProperty(value = "图标")
-    private String icon;
-
-    @ApiModelProperty(value = "父id")
+@Data
+@ApiModel(value = "菜单权限表实体类(Permission)")
+public class Permission extends DataEntity<String>{
+    @ApiModelProperty(value = "父级ID")
     private String parentId;
+    
+    @ApiModelProperty(value = "所有父级ID")
+    private String ancestorId;
+    
+    @ApiModelProperty(value = "权限类型（0菜单页面 1操作权限 ）")
+    @NotEmpty(message="类型不能为空")
+    private String permsType;
 
-    @ApiModelProperty(value = "排序值")
-    private BigDecimal sortOrder;
+    @ApiModelProperty(value = "权限名称")
+    @NotEmpty(message="名称不能为空")
+    private String permsName;
+    
+    @ApiModelProperty(value = "路径地址")
+    private String permsUrl;
+    
+    @ApiModelProperty(value = "排序(升序)")
+    private Integer permsSort;
+    
+    @ApiModelProperty(value = "图标")
+    private String permsIcon;
+    
+    @ApiModelProperty(value = "层级")
+    private Integer permsLevel;
+    
+    @ApiModelProperty(value = "权重")
+    private Integer permsWeight;
 
-    @ApiModelProperty(value = "网页链接")
-    private String url;
-
+    //------------------------------------------------------------------------------------------------------------------
+    // 以下为扩展属性
+    //------------------------------------------------------------------------------------------------------------------
     @ApiModelProperty(value = "子菜单/权限")
     private List<Permission> children;
 
+    /*
     @ApiModelProperty(value = "节点展开 前端所需")
-    private Boolean expand = true;
+    private Boolean expand = false;
 
     @ApiModelProperty(value = "是否勾选 前端所需")
     private Boolean checked = false;
 
     @ApiModelProperty(value = "是否选中 前端所需")
     private Boolean selected = false;
+    */
 
-    public Permission(){
-        super();
-    }
-
-    public Permission(String id, String name, String title, Integer type, String path){
-        this.setId(id);
-        this.setName(name);
-        this.setTitle(title);
-        this.setType(type);
-        this.setPath(path);
-    }
-
+    @ApiModelProperty(value = "是否叶子节点 前端所需")
+    private Boolean isLeaf = false;
 }

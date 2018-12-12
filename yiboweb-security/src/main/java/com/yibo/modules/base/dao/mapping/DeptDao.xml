@@ -1,148 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yibo.modules.base.dao.PermissionDao">
+<mapper namespace="com.yibo.modules.base.dao.DeptDao">
     <sql id="Base_Column_List">
         id,
         parent_id,
         ancestor_id,
-        perms_name,
-        perms_type,
-        perms_url,
-        perms_sort,
-        perms_icon,
-        perms_level,
-        perms_weight,
+        ancestor_name,
+        dept_name,
+        short_name,
+        dept_code,
+        dept_type,
+        dept_level,
+        dept_sort,
+        leader_id,
+        phone,
         status,
         create_by,
         create_date,
         update_by,
         update_date,
-        comments
+        comments,
+        tenant_id
     </sql>
     
     <!-- 新增相关 -->
-    <insert id="insert" parameterType="com.yibo.modules.base.entity.Permission">
+    <insert id="insert" parameterType="com.yibo.modules.base.entity.Dept">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
             select replace(UUID(),'-','')
         </selectKey>
-        insert into sys_permission
+        insert into sys_dept
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             parent_id,
             ancestor_id,
-            perms_name,
-            perms_type,
-            perms_url,
-            perms_sort,
-            perms_icon,
-            perms_level,
-            perms_weight,
+            ancestor_name,
+            dept_name,
+            short_name,
+            dept_code,
+            dept_type,
+            dept_level,
+            dept_sort,
+            leader_id,
+            phone,
             status,
             create_by,
             create_date,
             update_by,
             update_date,
             comments,
+            tenant_id,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #{id,jdbcType=VARCHAR},
             #{parentId,jdbcType=VARCHAR},
             #{ancestorId,jdbcType=VARCHAR},
-            #{permsName,jdbcType=VARCHAR},
-            #{permsType,jdbcType=VARCHAR},
-            #{permsUrl,jdbcType=VARCHAR},
-            #{permsSort,jdbcType=NUMERIC},
-            #{permsIcon,jdbcType=VARCHAR},
-            #{permsLevel,jdbcType=NUMERIC},
-            #{permsWeight,jdbcType=NUMERIC},
+            #{ancestorName,jdbcType=VARCHAR},
+            #{deptName,jdbcType=VARCHAR},
+            #{shortName,jdbcType=VARCHAR},
+            #{deptCode,jdbcType=VARCHAR},
+            #{deptType,jdbcType=VARCHAR},
+            #{deptLevel,jdbcType=NUMERIC},
+            #{deptSort,jdbcType=NUMERIC},
+            #{leaderId,jdbcType=VARCHAR},
+            #{phone,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
             #{updateBy,jdbcType=VARCHAR},
             #{updateDate,jdbcType=TIMESTAMP},
             #{comments,jdbcType=VARCHAR},
+            #{tenantId,jdbcType=VARCHAR},
         </trim>
     </insert>
     
     <insert id="insertMap">
-        insert into sys_permission 
+        insert into sys_dept 
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             parent_id,
             ancestor_id,
-            perms_name,
-            perms_type,
-            perms_url,
-            perms_sort,
-            perms_icon,
-            perms_level,
-            perms_weight,
+            ancestor_name,
+            dept_name,
+            short_name,
+            dept_code,
+            dept_type,
+            dept_level,
+            dept_sort,
+            leader_id,
+            phone,
             status,
             create_by,
             create_date,
             update_by,
             update_date,
             comments,
+            tenant_id,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             replace(UUID(),'-',''),
             #{map.parentId,jdbcType=VARCHAR},
             #{map.ancestorId,jdbcType=VARCHAR},
-            #{map.permsName,jdbcType=VARCHAR},
-            #{map.permsType,jdbcType=VARCHAR},
-            #{map.permsUrl,jdbcType=VARCHAR},
-            #{map.permsSort,jdbcType=NUMERIC},
-            #{map.permsIcon,jdbcType=VARCHAR},
-            #{map.permsLevel,jdbcType=NUMERIC},
-            #{map.permsWeight,jdbcType=NUMERIC},
+            #{map.ancestorName,jdbcType=VARCHAR},
+            #{map.deptName,jdbcType=VARCHAR},
+            #{map.shortName,jdbcType=VARCHAR},
+            #{map.deptCode,jdbcType=VARCHAR},
+            #{map.deptType,jdbcType=VARCHAR},
+            #{map.deptLevel,jdbcType=NUMERIC},
+            #{map.deptSort,jdbcType=NUMERIC},
+            #{map.leaderId,jdbcType=VARCHAR},
+            #{map.phone,jdbcType=VARCHAR},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
             #{map.updateBy,jdbcType=VARCHAR},
             #{map.updateDate,jdbcType=TIMESTAMP},
             #{map.comments,jdbcType=VARCHAR},
+            #{map.tenantId,jdbcType=VARCHAR},
         </trim>
     </insert>
     
     <!-- 更新相关 -->
-    <update id="update" parameterType="com.yibo.modules.base.entity.Permission">
-        update sys_permission
+    <update id="update" parameterType="com.yibo.modules.base.entity.Dept">
+        update sys_dept
         <trim prefix="set" suffixOverrides=",">
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            perms_name = #{permsName,jdbcType=VARCHAR},
-            perms_type = #{permsType,jdbcType=VARCHAR},
-            perms_url = #{permsUrl,jdbcType=VARCHAR},
-            perms_sort = #{permsSort,jdbcType=NUMERIC},
-            perms_icon = #{permsIcon,jdbcType=VARCHAR},
-            perms_level = #{permsLevel,jdbcType=NUMERIC},
-            perms_weight = #{permsWeight,jdbcType=NUMERIC},
+            ancestor_name = #{ancestorName,jdbcType=VARCHAR},
+            dept_name = #{deptName,jdbcType=VARCHAR},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            dept_code = #{deptCode,jdbcType=VARCHAR},
+            dept_type = #{deptType,jdbcType=VARCHAR},
+            dept_level = #{deptLevel,jdbcType=NUMERIC},
+            dept_sort = #{deptSort,jdbcType=NUMERIC},
+            leader_id = #{leaderId,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
             comments = #{comments,jdbcType=VARCHAR},
+            tenant_id = #{tenantId,jdbcType=VARCHAR},
        </trim>
        <where>
             id = #{id}
        </where>
     </update>
     
-    <update id="updateNull" parameterType="com.yibo.modules.base.entity.Permission">
-        update sys_permission
+    <update id="updateNull" parameterType="com.yibo.modules.base.entity.Dept">
+        update sys_dept
         <trim prefix="set" suffixOverrides=",">
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            perms_name = #{permsName,jdbcType=VARCHAR},
-            perms_type = #{permsType,jdbcType=VARCHAR},
-            perms_url = #{permsUrl,jdbcType=VARCHAR},
-            perms_sort = #{permsSort,jdbcType=NUMERIC},
-            perms_icon = #{permsIcon,jdbcType=VARCHAR},
-            perms_level = #{permsLevel,jdbcType=NUMERIC},
-            perms_weight = #{permsWeight,jdbcType=NUMERIC},
+            ancestor_name = #{ancestorName,jdbcType=VARCHAR},
+            dept_name = #{deptName,jdbcType=VARCHAR},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            dept_code = #{deptCode,jdbcType=VARCHAR},
+            dept_type = #{deptType,jdbcType=VARCHAR},
+            dept_level = #{deptLevel,jdbcType=NUMERIC},
+            dept_sort = #{deptSort,jdbcType=NUMERIC},
+            leader_id = #{leaderId,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
             comments = #{comments,jdbcType=VARCHAR},
+            tenant_id = #{tenantId,jdbcType=VARCHAR},
         </trim>
         <where>
             id = #{id}
@@ -150,7 +171,7 @@
     </update>
     
     <update id="updateMap">
-        update sys_permission
+        update sys_dept
         <trim prefix="set" suffixOverrides=",">
             <if test="map.parentId != null">
                 parent_id = #{map.parentId,jdbcType=VARCHAR},
@@ -158,26 +179,32 @@
             <if test="map.ancestorId != null">
                 ancestor_id = #{map.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsName != null">
-                perms_name = #{map.permsName,jdbcType=VARCHAR},
+            <if test="map.ancestorName != null">
+                ancestor_name = #{map.ancestorName,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsType != null">
-                perms_type = #{map.permsType,jdbcType=VARCHAR},
+            <if test="map.deptName != null">
+                dept_name = #{map.deptName,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsUrl != null">
-                perms_url = #{map.permsUrl,jdbcType=VARCHAR},
+            <if test="map.shortName != null">
+                short_name = #{map.shortName,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsSort != null">
-                perms_sort = #{map.permsSort,jdbcType=NUMERIC},
+            <if test="map.deptCode != null">
+                dept_code = #{map.deptCode,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsIcon != null">
-                perms_icon = #{map.permsIcon,jdbcType=VARCHAR},
+            <if test="map.deptType != null">
+                dept_type = #{map.deptType,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsLevel != null">
-                perms_level = #{map.permsLevel,jdbcType=NUMERIC},
+            <if test="map.deptLevel != null">
+                dept_level = #{map.deptLevel,jdbcType=NUMERIC},
             </if>
-            <if test="map.permsWeight != null">
-                perms_weight = #{map.permsWeight,jdbcType=NUMERIC},
+            <if test="map.deptSort != null">
+                dept_sort = #{map.deptSort,jdbcType=NUMERIC},
+            </if>
+            <if test="map.leaderId != null">
+                leader_id = #{map.leaderId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.phone != null">
+                phone = #{map.phone,jdbcType=VARCHAR},
             </if>
             <if test="map.status != null">
                 status = #{map.status,jdbcType=INTEGER},
@@ -191,6 +218,9 @@
             <if test="map.comments != null">
                 comments = #{map.comments,jdbcType=VARCHAR},
             </if>
+            <if test="map.tenantId != null">
+                tenant_id = #{map.tenantId,jdbcType=VARCHAR},
+            </if>
         </trim>
         <where>
             id = #{map.id}
@@ -198,7 +228,7 @@
     </update>
     
     <update id="updateByCondition">
-        update sys_permission
+        update sys_dept
         <trim prefix="set" suffixOverrides=",">
             <if test="update.parentId != null">
                 parent_id = #{update.parentId,jdbcType=VARCHAR},
@@ -206,26 +236,32 @@
             <if test="update.ancestorId != null">
                 ancestor_id = #{update.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsName != null">
-                perms_name = #{update.permsName,jdbcType=VARCHAR},
+            <if test="update.ancestorName != null">
+                ancestor_name = #{update.ancestorName,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsType != null">
-                perms_type = #{update.permsType,jdbcType=VARCHAR},
+            <if test="update.deptName != null">
+                dept_name = #{update.deptName,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsUrl != null">
-                perms_url = #{update.permsUrl,jdbcType=VARCHAR},
+            <if test="update.shortName != null">
+                short_name = #{update.shortName,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsSort != null">
-                perms_sort = #{update.permsSort,jdbcType=NUMERIC},
+            <if test="update.deptCode != null">
+                dept_code = #{update.deptCode,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsIcon != null">
-                perms_icon = #{update.permsIcon,jdbcType=VARCHAR},
+            <if test="update.deptType != null">
+                dept_type = #{update.deptType,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsLevel != null">
-                perms_level = #{update.permsLevel,jdbcType=NUMERIC},
+            <if test="update.deptLevel != null">
+                dept_level = #{update.deptLevel,jdbcType=NUMERIC},
             </if>
-            <if test="update.permsWeight != null">
-                perms_weight = #{update.permsWeight,jdbcType=NUMERIC},
+            <if test="update.deptSort != null">
+                dept_sort = #{update.deptSort,jdbcType=NUMERIC},
+            </if>
+            <if test="update.leaderId != null">
+                leader_id = #{update.leaderId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.phone != null">
+                phone = #{update.phone,jdbcType=VARCHAR},
             </if>
             <if test="update.status != null">
                 status = #{update.status,jdbcType=INTEGER},
@@ -239,6 +275,9 @@
             <if test="update.comments != null">
                 comments = #{update.comments,jdbcType=VARCHAR},
             </if>
+            <if test="update.tenantId != null">
+                tenant_id = #{update.tenantId,jdbcType=VARCHAR},
+            </if>
         </trim>
         <trim prefix="where" prefixOverrides="and | or">
             <if test="condition.parentId != null">
@@ -247,26 +286,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsName != null">
-                and perms_name = #{condition.permsName,jdbcType=VARCHAR}
+            <if test="condition.ancestorName != null">
+                and ancestor_name = #{condition.ancestorName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsType != null">
-                and perms_type = #{condition.permsType,jdbcType=VARCHAR}
+            <if test="condition.deptName != null">
+                and dept_name = #{condition.deptName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsUrl != null">
-                and perms_url = #{condition.permsUrl,jdbcType=VARCHAR}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsSort != null">
-                and perms_sort = #{condition.permsSort,jdbcType=NUMERIC}
+            <if test="condition.deptCode != null">
+                and dept_code = #{condition.deptCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsIcon != null">
-                and perms_icon = #{condition.permsIcon,jdbcType=VARCHAR}
+            <if test="condition.deptType != null">
+                and dept_type = #{condition.deptType,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsLevel != null">
-                and perms_level = #{condition.permsLevel,jdbcType=NUMERIC}
+            <if test="condition.deptLevel != null">
+                and dept_level = #{condition.deptLevel,jdbcType=NUMERIC}
             </if>
-            <if test="condition.permsWeight != null">
-                and perms_weight = #{condition.permsWeight,jdbcType=NUMERIC}
+            <if test="condition.deptSort != null">
+                and dept_sort = #{condition.deptSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.leaderId != null">
+                and leader_id = #{condition.leaderId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -285,24 +330,27 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
             </if>
         </trim>  
     </update>
     
     <!-- 删除相关 -->
     <delete id="deleteById" parameterType="java.lang.String">
-        update sys_permission set status = 0 where id = #{id}
+        update sys_dept set status = 0 where id = #{id}
     </delete>
 
     <delete id="deleteByIds">
-       update sys_permission set status = 0
+       update sys_dept set status = 0
        <trim prefix="where" prefixOverrides="and | or">
            and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
        </trim>
     </delete>
 
     <delete id="deleteByCondition">
-        update sys_permission set status = 0
+        update sys_dept set status = 0
         <trim prefix="where" prefixOverrides="and | or">
             <if test="condition.parentId != null">
                 and parent_id = #{condition.parentId,jdbcType=VARCHAR}
@@ -310,26 +358,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsName != null">
-                and perms_name = #{condition.permsName,jdbcType=VARCHAR}
+            <if test="condition.ancestorName != null">
+                and ancestor_name = #{condition.ancestorName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsType != null">
-                and perms_type = #{condition.permsType,jdbcType=VARCHAR}
+            <if test="condition.deptName != null">
+                and dept_name = #{condition.deptName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsUrl != null">
-                and perms_url = #{condition.permsUrl,jdbcType=VARCHAR}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsSort != null">
-                and perms_sort = #{condition.permsSort,jdbcType=NUMERIC}
+            <if test="condition.deptCode != null">
+                and dept_code = #{condition.deptCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsIcon != null">
-                and perms_icon = #{condition.permsIcon,jdbcType=VARCHAR}
+            <if test="condition.deptType != null">
+                and dept_type = #{condition.deptType,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsLevel != null">
-                and perms_level = #{condition.permsLevel,jdbcType=NUMERIC}
+            <if test="condition.deptLevel != null">
+                and dept_level = #{condition.deptLevel,jdbcType=NUMERIC}
             </if>
-            <if test="condition.permsWeight != null">
-                and perms_weight = #{condition.permsWeight,jdbcType=NUMERIC}
+            <if test="condition.deptSort != null">
+                and dept_sort = #{condition.deptSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.leaderId != null">
+                and leader_id = #{condition.leaderId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -349,28 +403,31 @@
             <if test="condition.comments != null">
                 and comments = #{condition.comments,jdbcType=VARCHAR}
             </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
         </trim>
     </delete>
 
     <delete id="deleteByProperty">
-       update sys_permission set status = 0 where ${property} = #{value}
+       update sys_dept set status = 0 where ${property} = #{value}
     </delete>
     
     <!-- 查询相关 -->
-    <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             and id = #{id}
         </where>
     </select>
 
-    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             and ${property} = #{value}
@@ -378,10 +435,10 @@
         limit 0,1
     </select>
 
-    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             and ${property} = #{value}
@@ -391,10 +448,10 @@
         </if>
     </select>
 
-    <select id="findAll" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="findAll" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
         </where>
@@ -403,10 +460,10 @@
         </if>
     </select>
 
-    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -415,26 +472,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.permsName != null">
-                and perms_name = #{condition.permsName}
+            <if test="condition.ancestorName != null">
+                and ancestor_name = #{condition.ancestorName}
             </if>
-            <if test="condition.permsType != null">
-                and perms_type = #{condition.permsType}
+            <if test="condition.deptName != null">
+                and dept_name = #{condition.deptName}
             </if>
-            <if test="condition.permsUrl != null">
-                and perms_url = #{condition.permsUrl}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>
-            <if test="condition.permsSort != null">
-                and perms_sort = #{condition.permsSort}
+            <if test="condition.deptCode != null">
+                and dept_code = #{condition.deptCode}
             </if>
-            <if test="condition.permsIcon != null">
-                and perms_icon = #{condition.permsIcon}
+            <if test="condition.deptType != null">
+                and dept_type = #{condition.deptType}
             </if>
-            <if test="condition.permsLevel != null">
-                and perms_level = #{condition.permsLevel}
+            <if test="condition.deptLevel != null">
+                and dept_level = #{condition.deptLevel}
             </if>
-            <if test="condition.permsWeight != null">
-                and perms_weight = #{condition.permsWeight}
+            <if test="condition.deptSort != null">
+                and dept_sort = #{condition.deptSort}
+            </if>
+            <if test="condition.leaderId != null">
+                and leader_id = #{condition.leaderId}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -453,6 +516,9 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
             </if>
         </where>
         <if test="orderBy!=null">
@@ -461,10 +527,10 @@
         limit 0,1
     </select>
 
-    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -473,26 +539,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.permsName != null">
-                and perms_name = #{condition.permsName}
+            <if test="condition.ancestorName != null">
+                and ancestor_name = #{condition.ancestorName}
             </if>
-            <if test="condition.permsType != null">
-                and perms_type = #{condition.permsType}
+            <if test="condition.deptName != null">
+                and dept_name = #{condition.deptName}
             </if>
-            <if test="condition.permsUrl != null">
-                and perms_url = #{condition.permsUrl}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>
-            <if test="condition.permsSort != null">
-                and perms_sort = #{condition.permsSort}
+            <if test="condition.deptCode != null">
+                and dept_code = #{condition.deptCode}
             </if>
-            <if test="condition.permsIcon != null">
-                and perms_icon = #{condition.permsIcon}
+            <if test="condition.deptType != null">
+                and dept_type = #{condition.deptType}
             </if>
-            <if test="condition.permsLevel != null">
-                and perms_level = #{condition.permsLevel}
+            <if test="condition.deptLevel != null">
+                and dept_level = #{condition.deptLevel}
             </if>
-            <if test="condition.permsWeight != null">
-                and perms_weight = #{condition.permsWeight}
+            <if test="condition.deptSort != null">
+                and dept_sort = #{condition.deptSort}
+            </if>
+            <if test="condition.leaderId != null">
+                and leader_id = #{condition.leaderId}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -511,6 +583,9 @@
             </if>
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
             </if>
         </where>
         <if test="orderBy!=null">
@@ -518,10 +593,10 @@
         </if>
     </select>
 
-    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -530,26 +605,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>            
-            <if test="condition.permsName != null">
-                and perms_name = #{condition.permsName}
+            <if test="condition.ancestorName != null">
+                and ancestor_name = #{condition.ancestorName}
             </if>            
-            <if test="condition.permsType != null">
-                and perms_type = #{condition.permsType}
+            <if test="condition.deptName != null">
+                and dept_name = #{condition.deptName}
             </if>            
-            <if test="condition.permsUrl != null">
-                and perms_url = #{condition.permsUrl}
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
             </if>            
-            <if test="condition.permsSort != null">
-                and perms_sort = #{condition.permsSort}
+            <if test="condition.deptCode != null">
+                and dept_code = #{condition.deptCode}
             </if>            
-            <if test="condition.permsIcon != null">
-                and perms_icon = #{condition.permsIcon}
+            <if test="condition.deptType != null">
+                and dept_type = #{condition.deptType}
             </if>            
-            <if test="condition.permsLevel != null">
-                and perms_level = #{condition.permsLevel}
+            <if test="condition.deptLevel != null">
+                and dept_level = #{condition.deptLevel}
             </if>            
-            <if test="condition.permsWeight != null">
-                and perms_weight = #{condition.permsWeight}
+            <if test="condition.deptSort != null">
+                and dept_sort = #{condition.deptSort}
+            </if>            
+            <if test="condition.leaderId != null">
+                and leader_id = #{condition.leaderId}
+            </if>            
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -568,6 +649,9 @@
             </if>            
             <if test="condition.comments != null">
                 and comments = #{condition.comments}
+            </if>            
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
             </if>            
         </where>
         <choose>
@@ -584,10 +668,10 @@
 	    ${executeSql}
     </select>
 
-    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Dept">
         select
             <include refid="Base_Column_List" />
-        from sys_permission
+        from sys_dept
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -596,26 +680,32 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id like concat('%', #{condition.ancestorId} , '%')
             </if>
-            <if test="condition.permsName != null">
-                and perms_name like concat('%', #{condition.permsName} , '%')
+            <if test="condition.ancestorName != null">
+                and ancestor_name like concat('%', #{condition.ancestorName} , '%')
             </if>
-            <if test="condition.permsType != null">
-                and perms_type like concat('%', #{condition.permsType} , '%')
+            <if test="condition.deptName != null">
+                and dept_name like concat('%', #{condition.deptName} , '%')
             </if>
-            <if test="condition.permsUrl != null">
-                and perms_url like concat('%', #{condition.permsUrl} , '%')
+            <if test="condition.shortName != null">
+                and short_name like concat('%', #{condition.shortName} , '%')
             </if>
-            <if test="condition.permsSort != null">
-                and perms_sort like concat('%', #{condition.permsSort} , '%')
+            <if test="condition.deptCode != null">
+                and dept_code like concat('%', #{condition.deptCode} , '%')
             </if>
-            <if test="condition.permsIcon != null">
-                and perms_icon like concat('%', #{condition.permsIcon} , '%')
+            <if test="condition.deptType != null">
+                and dept_type like concat('%', #{condition.deptType} , '%')
             </if>
-            <if test="condition.permsLevel != null">
-                and perms_level like concat('%', #{condition.permsLevel} , '%')
+            <if test="condition.deptLevel != null">
+                and dept_level like concat('%', #{condition.deptLevel} , '%')
             </if>
-            <if test="condition.permsWeight != null">
-                and perms_weight like concat('%', #{condition.permsWeight} , '%')
+            <if test="condition.deptSort != null">
+                and dept_sort like concat('%', #{condition.deptSort} , '%')
+            </if>
+            <if test="condition.leaderId != null">
+                and leader_id like concat('%', #{condition.leaderId} , '%')
+            </if>
+            <if test="condition.phone != null">
+                and phone like concat('%', #{condition.phone} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')
@@ -634,6 +724,9 @@
             </if>
             <if test="condition.comments != null">
                 and comments like concat('%', #{condition.comments} , '%')
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id like concat('%', #{condition.tenantId} , '%')
             </if>
         </where>
         <if test="orderBy!=null">
