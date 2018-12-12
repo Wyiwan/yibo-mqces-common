@@ -22,10 +22,7 @@ package cn.yibo.base.tree;
 
 import cn.yibo.common.lang.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 基础树服务实现类
@@ -60,7 +57,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         // 根节点
         List<N> treeList = new ArrayList<N>();
         // 节点列表
-        Map<K, N> nodeMap = getAllNodeSelfMap(nodeList);
+        LinkedHashMap<K, N> nodeMap = getAllNodeSelfMap(nodeList);
         // 构建树结构
         nodeMap.forEach((key, node) -> {
             N pNode = nodeMap.get(getParentKey(node));
@@ -95,11 +92,11 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
     }
 
     @Override
-    public Map<K, N> getAllNodeSelfMap(List<N> nodeList) {
+    public LinkedHashMap<K, N> getAllNodeSelfMap(List<N> nodeList) {
         //map初始化容量
         int initialCapacity = Math.max((int) (nodeList.size()/.75f) + 1, 16);
         //新建一个map
-        Map<K, N> selfMap = new HashMap<>(initialCapacity);
+        LinkedHashMap<K, N> selfMap = new LinkedHashMap<>(initialCapacity);
         //遍历所有
         nodeList.forEach(node -> {
             selfMap.put(getKey(node), (N)ObjectUtils.cloneBean(node));
