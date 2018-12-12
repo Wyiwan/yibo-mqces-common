@@ -13,7 +13,7 @@ jasypt:
 webapp:
   name: 医博基础技术框架V1.1.0
   swagger-open: true
-  token-save-redis: true  # token是否存储在redis上
+  token-save-redis: false # token是否存储在redis上
   token-expire-time: 60   # token过期时间（分钟）
   save-login-time: 7      # 用户选择保存登录状态对应token过期时间（天）
   login-time-limit: 5     # 限制用户登陆错误次数（次）
