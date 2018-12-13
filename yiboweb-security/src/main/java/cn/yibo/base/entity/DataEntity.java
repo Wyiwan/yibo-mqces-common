@@ -23,7 +23,7 @@ package cn.yibo.base.entity;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -43,27 +43,27 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     protected Integer status;
 
     @ApiModelProperty(value = "创建人")
-    @JsonIgnore
+    @JSONField(serialize = false)
     protected String createBy;
 
     @ApiModelProperty(value = "创建人名称")
-    @JsonIgnore
+    @JSONField(serialize = false)
     protected String createByName;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonIgnore
+    @JSONField(format="yyyy-MM-dd HH:mm")
     protected Date createDate;
 
     @ApiModelProperty(value = "修改人")
-    @JsonIgnore
+    @JSONField(serialize = false)
     protected String updateBy;
 
     @ApiModelProperty(value = "修改人名称")
-    @JsonIgnore
+    @JSONField(serialize = false)
     protected String updateByName;
 
     @ApiModelProperty(value = "修改时间")
-    @JsonIgnore
+    @JSONField(format="yyyy-MM-dd HH:mm")
     protected Date updateDate;
 
     @ApiModelProperty(value = "备注")
