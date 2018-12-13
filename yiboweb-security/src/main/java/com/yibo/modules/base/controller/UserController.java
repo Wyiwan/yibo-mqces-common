@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -72,6 +73,7 @@ public class UserController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
+    @CacheEvict(key = "#user.username")
     public String updated(@RequestBody User user){
         User vo = userService.fetch(user.getId());
         BeanUtils.copyProperties(user, vo, ObjectUtils.getNullPropertyNames(user));

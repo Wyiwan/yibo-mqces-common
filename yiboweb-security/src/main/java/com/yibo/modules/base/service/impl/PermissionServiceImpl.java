@@ -21,6 +21,7 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.constant.CommonConstant;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.dao.PermissionDao;
@@ -41,12 +42,6 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
-    @Override
-    @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
-        return dao.deleteCascade(list);
-    }
-
     /**
      * 重新新增方法
      * @param entity
@@ -61,6 +56,21 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
+     * 重新删除方法
+     * @param list
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public int deleteByIds(List list) {
+        int result = dao.deleteCascade(list);
+
+        // 清除用户缓存
+        CacheUtils.removeAll(CommonConstant.USER_CACHE_NAME);
+        return result;
+    }
+
+    /**
      * 重写修改方法
      * @param entity
      * @return
@@ -70,6 +80,9 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public int update(Permission entity) {
         int result = super.update(entity);
         dao.updateAncestor(entity);
+
+        // 清除用户缓存
+        CacheUtils.removeAll(CommonConstant.USER_CACHE_NAME);
         return result;
     }
 

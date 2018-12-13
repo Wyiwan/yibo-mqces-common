@@ -29,6 +29,11 @@ package cn.yibo.security.constant;
  */
 public interface CommonConstant {
     /**
+     * 用户缓存名称
+     */
+    String USER_CACHE_NAME = "userCache";
+
+    /**
      * 超级管理员默认账号
      */
     String SUPER_ADMIN_ACCOUNT = "system";
