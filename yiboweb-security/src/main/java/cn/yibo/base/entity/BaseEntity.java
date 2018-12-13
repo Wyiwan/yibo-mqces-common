@@ -21,6 +21,9 @@
 package cn.yibo.base.entity;
 
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.security.context.UserContext;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.yibo.modules.base.entity.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -39,6 +42,14 @@ public abstract class BaseEntity<T> implements Serializable {
     @ApiModelProperty(value = "唯一标识")
     protected T id;
 
+    @ApiModelProperty(value = "租户ID")
+    @JSONField(serialize = false)
+    protected String tenantId;
+
+    @ApiModelProperty(value = "当前登录用户")
+    @JSONField(serialize = false)
+    protected User currentUser;
+
     public BaseEntity(){
     }
 
@@ -46,6 +57,20 @@ public abstract class BaseEntity<T> implements Serializable {
         if( id != null ){
             this.setId(id);
         }
+    }
+
+    public String getTenantId(){
+        if( ObjectUtils.isEmpty(tenantId) && UserContext.getUser() != null ){
+            this.tenantId = UserContext.getUser().getTenantId();
+        }
+        return tenantId;
+    }
+
+    public User getCurrentUser(){
+        if( this.currentUser == null ){
+            this.currentUser = UserContext.getUser();
+        }
+        return currentUser;
     }
 
     public abstract void preInsert();

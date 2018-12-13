@@ -31,7 +31,7 @@ public interface CommonConstant {
     /**
      * 用户缓存名称
      */
-    String USER_CACHE_NAME = "userCache";
+    String USER_CACHE = "userCache";
 
     /**
      * 超级管理员默认账号

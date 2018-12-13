@@ -68,7 +68,9 @@ public class PermissionController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Permission permission) throws Exception{
-        verifyUnique(permission);
+        if( !verifyUnique(permission) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+        }
         permissionService.insert(permission);
         return permission.getId();
     }
@@ -81,10 +83,12 @@ public class PermissionController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody Permission permission) throws Exception{
-        verifyUnique(permission);
+        if( !verifyUnique(permission) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+        }
+
         Permission vo = permissionService.fetch(permission.getId());
         BeanUtils.copyProperties(permission, vo, ObjectUtils.getNullPropertyNames(permission));
-
         permissionService.update(vo);
         return UPDATE_SUCCEED;
     }
@@ -119,6 +123,19 @@ public class PermissionController extends BaseController{
     }
 
     /**
+     * 单个查询
+     * @param id
+     * @return
+     */
+    @ApiOperation("单个查询")
+    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
+    @GetMapping("/fetched")
+    public Permission fetched(String id){
+        Permission vo = permissionService.fetch(id);
+        return vo == null ? new Permission() : vo;
+    }
+
+    /**
      * 查询树结构数据
      * @return
      */
@@ -134,48 +151,29 @@ public class PermissionController extends BaseController{
      * @return
      */
     @ApiOperation("列表查询")
-    @GetMapping("/tree-list")
-    public List treeList(Permission permission){
+    @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", required = true, dataType = "String")
+    @GetMapping("/list-tree")
+    public List treeList(){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         List result = permissionService.queryList(conditionMap);
         return new PermissionTree(result).getTreeList();
     }
 
     /**
-     * 单个查询
-     * @param id
-     * @return
-     */
-    @ApiOperation("单个实体")
-    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/fetched")
-    public Permission fetched(String id){
-        Permission vo = permissionService.fetch(id);
-        return vo == null ? new Permission() : vo;
-    }
-
-    /**
      * 唯一性校验
      * @return
      */
-    @ApiOperation("菜单名称唯一性验证")
+    @ApiOperation("菜单名称校验")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String"),
             @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", dataType = "String")
     })
     @GetMapping("/verify")
-    public Boolean verifyUnique(){
-        Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
-        int result = permissionService.count(conditionMap);
-        return result > 0 ? false : true;
-    }
-
-    private void verifyUnique(Permission permission) throws Exception{
+    private Boolean verifyUnique(Permission permission) throws Exception{
         if( permission != null ){
             Map conditionMap = MapUtils.toMap(permission);
-            if( permissionService.count(conditionMap) > 0 ){
-                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称‘"+permission.getPermsName()+"’");
-            }
+            return permissionService.count(conditionMap) > 0 ? false : true;
         }
+        return false;
     }
 }

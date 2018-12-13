@@ -43,7 +43,7 @@ import java.util.Map;
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
     /**
-     * 重新新增方法
+     * 重写新增方法
      * @param entity
      * @return
      */
@@ -56,7 +56,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 重新删除方法
+     * 重写删除方法
      * @param list
      * @return
      */
@@ -66,7 +66,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         int result = dao.deleteCascade(list);
 
         // 清除用户缓存
-        CacheUtils.removeAll(CommonConstant.USER_CACHE_NAME);
+        CacheUtils.removeAll(CommonConstant.USER_CACHE);
         return result;
     }
 
@@ -82,7 +82,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         dao.updateAncestor(entity);
 
         // 清除用户缓存
-        CacheUtils.removeAll(CommonConstant.USER_CACHE_NAME);
+        CacheUtils.removeAll(CommonConstant.USER_CACHE);
         return result;
     }
 

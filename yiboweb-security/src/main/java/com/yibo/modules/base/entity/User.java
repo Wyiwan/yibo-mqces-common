@@ -117,9 +117,6 @@ public class User extends DataEntity<String>{
     
     @ApiModelProperty(value = "允许访问结束时间")
     private Date allowEndTime;
-    
-    @ApiModelProperty(value = "租户ID")
-    private String tenantId;
 
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性

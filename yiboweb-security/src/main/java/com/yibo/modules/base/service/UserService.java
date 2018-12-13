@@ -33,7 +33,7 @@ import org.springframework.cache.annotation.Cacheable;
  * @since 2018-12-03
  * @version v1.0
  */
-@CacheConfig(cacheNames = CommonConstant.USER_CACHE_NAME)
+@CacheConfig(cacheNames = CommonConstant.USER_CACHE)
 public interface UserService extends IBaseService<UserDao, User>{
     /**
      * 通过用户名查询用户
