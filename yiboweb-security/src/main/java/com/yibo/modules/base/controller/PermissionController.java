@@ -69,7 +69,7 @@ public class PermissionController extends BaseController{
     @PostMapping("/created")
     public String created(@Valid @RequestBody Permission permission) throws Exception{
         if( !verifyUnique(permission) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的菜单名称");
         }
         permissionService.insert(permission);
         return permission.getId();
@@ -84,7 +84,7 @@ public class PermissionController extends BaseController{
     @PostMapping("/updated")
     public String updated(@RequestBody Permission permission) throws Exception{
         if( !verifyUnique(permission) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的菜单名称");
         }
 
         Permission vo = permissionService.fetch(permission.getId());

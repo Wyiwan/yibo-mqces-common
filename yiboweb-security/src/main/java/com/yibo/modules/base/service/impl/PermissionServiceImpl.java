@@ -71,7 +71,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 重写修改方法
+     * 重写更新方法
      * @param entity
      * @return
      */

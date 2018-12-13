@@ -5,7 +5,6 @@
         id,
         parent_id,
         ancestor_id,
-        ancestor_name,
         dept_name,
         short_name,
         dept_code,
@@ -33,7 +32,6 @@
             id,
             parent_id,
             ancestor_id,
-            ancestor_name,
             dept_name,
             short_name,
             dept_code,
@@ -54,7 +52,6 @@
             #{id,jdbcType=VARCHAR},
             #{parentId,jdbcType=VARCHAR},
             #{ancestorId,jdbcType=VARCHAR},
-            #{ancestorName,jdbcType=VARCHAR},
             #{deptName,jdbcType=VARCHAR},
             #{shortName,jdbcType=VARCHAR},
             #{deptCode,jdbcType=VARCHAR},
@@ -79,7 +76,6 @@
             id,
             parent_id,
             ancestor_id,
-            ancestor_name,
             dept_name,
             short_name,
             dept_code,
@@ -100,7 +96,6 @@
             replace(UUID(),'-',''),
             #{map.parentId,jdbcType=VARCHAR},
             #{map.ancestorId,jdbcType=VARCHAR},
-            #{map.ancestorName,jdbcType=VARCHAR},
             #{map.deptName,jdbcType=VARCHAR},
             #{map.shortName,jdbcType=VARCHAR},
             #{map.deptCode,jdbcType=VARCHAR},
@@ -125,7 +120,6 @@
         <trim prefix="set" suffixOverrides=",">
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            ancestor_name = #{ancestorName,jdbcType=VARCHAR},
             dept_name = #{deptName,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
             dept_code = #{deptCode,jdbcType=VARCHAR},
@@ -138,10 +132,9 @@
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
             comments = #{comments,jdbcType=VARCHAR},
-            tenant_id = #{tenantId,jdbcType=VARCHAR},
        </trim>
        <where>
-            id = #{id}
+            and id = #{id}
        </where>
     </update>
     
@@ -150,7 +143,6 @@
         <trim prefix="set" suffixOverrides=",">
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            ancestor_name = #{ancestorName,jdbcType=VARCHAR},
             dept_name = #{deptName,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
             dept_code = #{deptCode,jdbcType=VARCHAR},
@@ -178,9 +170,6 @@
             </if>
             <if test="map.ancestorId != null">
                 ancestor_id = #{map.ancestorId,jdbcType=VARCHAR},
-            </if>
-            <if test="map.ancestorName != null">
-                ancestor_name = #{map.ancestorName,jdbcType=VARCHAR},
             </if>
             <if test="map.deptName != null">
                 dept_name = #{map.deptName,jdbcType=VARCHAR},
@@ -236,9 +225,6 @@
             <if test="update.ancestorId != null">
                 ancestor_id = #{update.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="update.ancestorName != null">
-                ancestor_name = #{update.ancestorName,jdbcType=VARCHAR},
-            </if>
             <if test="update.deptName != null">
                 dept_name = #{update.deptName,jdbcType=VARCHAR},
             </if>
@@ -285,9 +271,6 @@
             </if>
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.ancestorName != null">
-                and ancestor_name = #{condition.ancestorName,jdbcType=VARCHAR}
             </if>
             <if test="condition.deptName != null">
                 and dept_name = #{condition.deptName,jdbcType=VARCHAR}
@@ -357,9 +340,6 @@
             </if>
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.ancestorName != null">
-                and ancestor_name = #{condition.ancestorName,jdbcType=VARCHAR}
             </if>
             <if test="condition.deptName != null">
                 and dept_name = #{condition.deptName,jdbcType=VARCHAR}
@@ -472,9 +452,6 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.ancestorName != null">
-                and ancestor_name = #{condition.ancestorName}
-            </if>
             <if test="condition.deptName != null">
                 and dept_name = #{condition.deptName}
             </if>
@@ -539,9 +516,6 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.ancestorName != null">
-                and ancestor_name = #{condition.ancestorName}
-            </if>
             <if test="condition.deptName != null">
                 and dept_name = #{condition.deptName}
             </if>
@@ -604,9 +578,6 @@
             </if>            
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
-            </if>            
-            <if test="condition.ancestorName != null">
-                and ancestor_name = #{condition.ancestorName}
             </if>            
             <if test="condition.deptName != null">
                 and dept_name = #{condition.deptName}
@@ -679,9 +650,6 @@
             </if>
             <if test="condition.ancestorId != null">
                 and ancestor_id like concat('%', #{condition.ancestorId} , '%')
-            </if>
-            <if test="condition.ancestorName != null">
-                and ancestor_name like concat('%', #{condition.ancestorName} , '%')
             </if>
             <if test="condition.deptName != null">
                 and dept_name like concat('%', #{condition.deptName} , '%')
