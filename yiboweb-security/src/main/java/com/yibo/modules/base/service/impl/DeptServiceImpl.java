@@ -21,13 +21,16 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.security.constant.CommonConstant;
 import com.yibo.modules.base.dao.DeptDao;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.service.DeptService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 科室表实体服务实现层类(Dept)
@@ -39,20 +42,21 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implements DeptService {
     /**
-     * 重写新增方法
-     * @param entity
+     * 重写新增
+     * @param dept
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(Dept entity) {
-        int result = super.insert(entity);
-        dao.updateAncestor(entity);
+    public int insert(Dept dept) {
+        dept.setDeptCode(RandomStringUtils.randomNumeric(CommonConstant.DEPT_CODE_NUM));
+        int result = super.insert(dept);
+        dao.updateAncestor(dept);
         return result;
     }
 
     /**
-     * 重写删除方法
+     * 重写删除
      * @param list
      * @return
      */
@@ -63,16 +67,26 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     }
 
     /**
-     * 重写更新方法
-     * @param entity
+     * 重写更新
+     * @param dept
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public int update(Dept entity) {
-        int result = super.update(entity);
-        dao.updateAncestor(entity);
+    public int update(Dept dept) {
+        int result = super.update(dept);
+        dao.updateAncestor(dept);
         return result;
+    }
+
+    /**
+     * 重写查询
+     * @param condition
+     * @return
+     */
+    @Override
+    public List queryList(Map<String, Object> condition) {
+        return dao.queryListExt(condition);
     }
 
     @Override

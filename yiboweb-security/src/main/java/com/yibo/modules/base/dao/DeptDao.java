@@ -25,6 +25,7 @@ import com.yibo.modules.base.entity.Dept;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 科室表实体数据访问层类(Dept)
@@ -33,6 +34,13 @@ import java.util.List;
  * @version v1.0
  */
 public interface DeptDao extends CrudDao<Dept>{
+    /**
+     * 列表查询扩展
+     * @param condition
+     * @return
+     */
+    List<Dept> queryListExt(@Param("condition") Map<String, Object> condition);
+
     /**
      * 查询树结构数据
      * @param dept

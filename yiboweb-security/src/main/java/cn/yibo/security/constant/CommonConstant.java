@@ -74,6 +74,11 @@ public interface CommonConstant {
     String PERMISSION_OPERATION = "1";
 
     /**
+     * 科室编码生成位数
+     */
+    Integer DEPT_CODE_NUM = 6;
+
+    /**
      * 正常状态
      */
     Integer STATUS_NORMAL = 1;

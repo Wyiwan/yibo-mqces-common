@@ -43,7 +43,7 @@ import java.util.Map;
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
     /**
-     * 重写新增方法
+     * 重写新增
      * @param entity
      * @return
      */
@@ -56,7 +56,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 重写删除方法
+     * 重写删除
      * @param list
      * @return
      */
@@ -71,7 +71,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 重写更新方法
+     * 重写更新
      * @param entity
      * @return
      */
