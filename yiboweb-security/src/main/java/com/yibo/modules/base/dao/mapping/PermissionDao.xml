@@ -513,7 +513,7 @@
                 and comments = #{condition.comments}
             </if>
         </where>
-        order by ancestor_id, perms_sort
+        order by perms_sort
     </select>
 
     <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Permission">
