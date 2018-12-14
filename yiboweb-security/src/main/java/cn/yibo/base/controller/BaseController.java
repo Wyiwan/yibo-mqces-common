@@ -39,6 +39,7 @@ public abstract class BaseController {
     protected String SAVE_SUCCEED   = "保存成功";
     protected String UPDATE_SUCCEED = "修改成功";
     protected String DEL_SUCCEED    = "删除成功";
+    protected String OPER_SUCCEED   = "操作成功";
 
     protected HttpServletRequest getHttpServletRequest() {
         return ServletUtils.getRequest();

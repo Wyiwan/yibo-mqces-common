@@ -102,6 +102,23 @@ public class OfficeController extends BaseController{
         return DEL_SUCCEED;
     }
 
+    /**
+     * 启用或停用
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用或停用")
+    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
+    @PostMapping("/disabled")
+    public String disabled(String id){
+        Office office = officeService.fetch(id);
+        if( office != null ){
+            office.statusToggle();
+            officeService.update(office);
+        }
+        return OPER_SUCCEED;
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // @查询相关
     //------------------------------------------------------------------------------------------------------------------

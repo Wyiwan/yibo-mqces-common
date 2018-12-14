@@ -86,4 +86,8 @@ public class Office extends DataEntity<String>{
         super.preInsert();
         this.officeCode = RandomStringUtils.randomNumeric(CommonConstant.OFFICE_CODE_NUM);
     }
+
+    public void statusToggle(){
+        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
+    }
 }
