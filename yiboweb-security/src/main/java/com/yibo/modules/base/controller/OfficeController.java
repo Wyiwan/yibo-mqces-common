@@ -50,7 +50,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/office")
-@Api(tags = "1003.医疗机构表接口")
+@Api(tags = "1003.机构管理")
 public class OfficeController extends BaseController{
    @Autowired
    private OfficeService officeService;

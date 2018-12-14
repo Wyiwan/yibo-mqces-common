@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.yibo</groupId>
-            <artifactId>yiboweb-test</artifactId>
+            <artifactId>yiboweb-security</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

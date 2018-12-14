@@ -48,7 +48,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/role")
-@Api(tags = "1004.角色表接口")
+@Api(tags = "1005.角色管理")
 public class RoleController extends BaseController{
    @Autowired
    private RoleService roleService;

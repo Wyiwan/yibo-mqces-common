@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/permission")
-@Api(tags = "1001.菜单权限表接口")
+@Api(tags = "1001.菜单管理")
 public class PermissionController extends BaseController{
    @Autowired
    private PermissionService permissionService;
