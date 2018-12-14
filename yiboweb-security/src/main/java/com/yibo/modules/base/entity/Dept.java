@@ -21,9 +21,11 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import cn.yibo.security.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -51,7 +53,7 @@ public class Dept extends DataEntity<String>{
     @ApiModelProperty(value = "科室简称")
     private String shortName;
     
-    @ApiModelProperty(value = "科室编码")
+    @ApiModelProperty(value = "科室编码（系统自动生成）")
     private String deptCode;
     
     @ApiModelProperty(value = "科室类型")
@@ -80,5 +82,10 @@ public class Dept extends DataEntity<String>{
 
     @ApiModelProperty(value = "科室负责人名称")
     private String leaderName;
-    
+
+    @Override
+    public void preInsert(){
+        super.preInsert();
+        this.deptCode = RandomStringUtils.randomNumeric(CommonConstant.DEPT_CODE_NUM);
+    }
 }

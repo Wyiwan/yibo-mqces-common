@@ -21,11 +21,9 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
-import cn.yibo.security.constant.CommonConstant;
 import com.yibo.modules.base.dao.DeptDao;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.service.DeptService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +47,6 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     @Override
     @Transactional(readOnly = false)
     public int insert(Dept dept) {
-        dept.setDeptCode(RandomStringUtils.randomNumeric(CommonConstant.DEPT_CODE_NUM));
         int result = super.insert(dept);
         dao.updateAncestor(dept);
         return result;

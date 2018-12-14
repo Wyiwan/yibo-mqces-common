@@ -79,6 +79,11 @@ public interface CommonConstant {
     Integer DEPT_CODE_NUM = 6;
 
     /**
+     * 机构编码生成位数
+     */
+    Integer OFFICE_CODE_NUM = 8;
+
+    /**
      * 正常状态
      */
     Integer STATUS_NORMAL = 1;
