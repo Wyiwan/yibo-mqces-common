@@ -22,6 +22,10 @@ package com.yibo.modules.base.dao;
 
 import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.User;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户表实体数据访问层类(User)
@@ -30,5 +34,5 @@ import com.yibo.modules.base.entity.User;
  * @version v1.0
  */
 public interface UserDao extends CrudDao<User>{
-
+    List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
 }

@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibo.modules.base.dao.UserDao">
-   <!-- 在这里存放用户自定义的映射配置（注：UserDAO.xml里各节点的ID不能在这里重复出现）  -->
-   
+    <!-- 在这里存放用户自定义的映射配置（注：UserDAO.xml里各节点的ID不能在这里重复出现）  -->
+    <select id="queryPageExt" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
+        select
+            u.id, u.username, u.password, u.name, u.dept_id, u.employee_no, u.short_name,
+            u.wubi_code, u.identity_no, u.native_place, u.sex, u.birthday, u.avatar,
+            u.email, u.mobile, u.telephone, u.user_type, u.user_weight, u.mgr_type,
+            u.first_visit_date, u.last_visit_ip, u.last_visit_date, u.allow_start_time, u.allow_end_time,
+            u.status, u.create_date, u.update_date, u.comments, u.tenant_id,
+            o.office_name, d.dept_name
+        from sys_user u
+        left join sys_dept d on d.id = u.dept_id and d.status = 1
+        left join sys_office o on o.id = u.tenant_id
+        where 1 = 1
+            and u.status != 0
+            <if test="condition.username != null">
+                and u.username like concat('%', #{condition.username} , '%')
+            </if>
+            <if test="condition.name != null">
+                and u.name like concat('%', #{condition.name} , '%')
+            </if>
+            <if test="condition.deptId != null">
+                and u.dept_id = #{condition.deptId}
+            </if>
+            <if test="condition.employeeNo != null">
+                and u.employee_no = #{condition.employeeNo}
+            </if>
+            <if test="condition.shortName != null">
+                and u.short_name like concat('%', #{condition.shortName} , '%')
+            </if>
+            <if test="condition.wubiCode != null">
+                and u.wubi_code = #{condition.wubiCode}
+            </if>
+            <if test="condition.sex != null">
+                and u.sex = #{condition.sex}
+            </if>
+            <if test="condition.userType != null">
+                and u.user_type = #{condition.userType}
+            </if>
+            <if test="condition.mgrType != null">
+                and u.mgr_type = #{condition.mgrType}
+            </if>
+            <if test="condition.status != null">
+                and u.status = #{condition.status}
+            </if>
+            <if test="condition.tenantId != null">
+                and u.tenant_id = #{condition.tenantId}
+            </if>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by user_weight
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 唯一性校验 -->
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from sys_user
+        where 1 = 1
+            <if test="condition.id != null and condition.id.length() > 0">
+                and id not in(select #{condition.id})
+            </if>
+            and username = #{condition.username,jdbcType=VARCHAR}
+            and status = 1
+    </select>
 </mapper>

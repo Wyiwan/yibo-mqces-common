@@ -11,7 +11,7 @@
 {  维护历史:
 {  日期        维护人        维护类型
 {  ---------------------------------------------------------------------------
-{  2018-08-01  高云        新建
+{  2018-12-10  高云        新建
 {
 {  ---------------------------------------------------------------------------
 {  注：本模块代码为底层基础框架封装的security包
@@ -24,7 +24,7 @@ package cn.yibo.security.constant;
  *  描述: 公共常量
  *  作者：高云
  *  邮箱: gogo163gao@163.com
- *  时间: 2018-09-16
+ *  时间: 2018-12-17
  *  版本: v1.0
  */
 public interface CommonConstant {
@@ -32,6 +32,11 @@ public interface CommonConstant {
      * 用户缓存名称
      */
     String USER_CACHE = "userCache";
+
+    /**
+     * 用户初始化密码
+     */
+    String USER_INIT_PASSWORD = "123456";
 
     /**
      * 超级管理员默认账号
@@ -74,12 +79,12 @@ public interface CommonConstant {
     String PERMISSION_OPERATION = "1";
 
     /**
-     * 科室编码生成位数
+     * 科室编码位数
      */
     Integer DEPT_CODE_NUM = 6;
 
     /**
-     * 机构编码生成位数
+     * 机构编码位数
      */
     Integer OFFICE_CODE_NUM = 8;
 

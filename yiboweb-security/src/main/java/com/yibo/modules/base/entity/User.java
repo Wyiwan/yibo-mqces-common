@@ -4,14 +4,14 @@
 {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.					
 {  创建人：  高云
 {  审查人：
-{  模块：系统管理模块
+{  模块：系统管理模块										
 {  功能描述:										
 {		 													
 {  ---------------------------------------------------------------------------	
 {  维护历史:													
 {  日期        维护人        维护类型						
 {  ---------------------------------------------------------------------------	
-{  2018-12-03  高云        新建	
+{  2018-12-17  高云        新建	
 { 	                                                                     
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
@@ -25,10 +25,11 @@ import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.security.constant.CommonConstant;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -37,23 +38,26 @@ import java.util.List;
 /**
  * 用户表实体类(User)
  * @author 高云
- * @since 2018-12-03
+ * @since 2018-12-17
  * @version v1.0
  */
 @Data
 @ApiModel(value = "用户表实体类(User)")
 public class User extends DataEntity<String>{
+    private static Object userPassword = PropertiesUtils.getInstance().getProperty("webapp.user-init-password");
     private static String superAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
+
+    public static final String INIT_PASSWORD = ObjectUtils.isEmpty(userPassword) ? CommonConstant.USER_INIT_PASSWORD : ObjectUtils.toString(userPassword);
     private static final String SUPER_ADMIN_CODE = StringUtils.isBlank(superAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : superAdminCode;
 
     @NotEmpty(message="用户姓名不能为空")
     @ApiModelProperty(value = "用户姓名")
     private String username;
-    
-    @NotEmpty(message="登录密码不能为空")
+
     @ApiModelProperty(value = "登录密码")
+    @JSONField(serialize = false)
     private String password;
-    
+
     @NotEmpty(message="用户姓名不能为空")
     @ApiModelProperty(value = "用户姓名")
     private String name;
@@ -100,8 +104,8 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户权重（倒序）")
     private Double userWeight;
     
-    @ApiModelProperty(value = "管理员类型（0非管理员  1系统管理员）")
-    private String managerType;
+    @ApiModelProperty(value = "管理员类型：0非管理员  1系统管理员")
+    private String mgrType;
     
     @ApiModelProperty(value = "首次登录时间")
     private Date firstVisitDate;
@@ -121,11 +125,14 @@ public class User extends DataEntity<String>{
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "用户所属科室")
-    private Dept dept;
+    @ApiModelProperty(value = "所属机构名称")
+    private String officeName;
 
     @ApiModelProperty(value = "所属科室名称")
     private String deptName;
+
+    @ApiModelProperty(value = "用户所属科室")
+    private Dept dept;
 
     @ApiModelProperty(value = "用户拥有的角色")
     private List<Role> roles;
@@ -133,18 +140,44 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户拥有的权限")
     private List<Permission> permissions;
 
-    @JsonIgnore
     public boolean isAdmin(){
-        return CommonConstant.USER_TYPE_ADMIN.equals(this.managerType);
+        return CommonConstant.USER_TYPE_ADMIN.equals(this.mgrType);
     }
 
-    @JsonIgnore
     public boolean isSuperAdmin(){
         return isSuperAdmin(this.username);
     }
 
-    @JsonIgnore
     public static boolean isSuperAdmin(String username){
         return SUPER_ADMIN_CODE.equals(username);
     }
+
+    @Override
+    public void preInsert(){
+        preInit();
+        super.preInsert();
+    }
+
+    @Override
+    public void preUpdate(){
+        preInit();
+        super.preUpdate();
+    }
+
+    public void statusSwitch(){
+        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
+    }
+
+    private void preInit(){
+        if( StringUtils.isBlank(this.userType) ){
+            this.userType = "none";
+        }
+        if( StringUtils.isBlank(this.mgrType) ){
+            this.mgrType = CommonConstant.USER_TYPE_NORMAL;
+        }
+        if( StringUtils.isBlank(this.password) ){
+            this.password = new BCryptPasswordEncoder().encode(INIT_PASSWORD);
+        }
+    }
+
 }

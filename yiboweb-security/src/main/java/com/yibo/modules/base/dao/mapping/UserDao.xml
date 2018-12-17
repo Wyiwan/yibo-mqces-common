@@ -20,7 +20,7 @@
         telephone,
         user_type,
         user_weight,
-        manager_type,
+        mgr_type,
         first_visit_date,
         last_visit_ip,
         last_visit_date,
@@ -60,7 +60,7 @@
             telephone,
             user_type,
             user_weight,
-            manager_type,
+            mgr_type,
             first_visit_date,
             last_visit_ip,
             last_visit_date,
@@ -93,7 +93,7 @@
             #{telephone,jdbcType=VARCHAR},
             #{userType,jdbcType=VARCHAR},
             #{userWeight,jdbcType=NUMERIC},
-            #{managerType,jdbcType=VARCHAR},
+            #{mgrType,jdbcType=VARCHAR},
             #{firstVisitDate,jdbcType=TIMESTAMP},
             #{lastVisitIp,jdbcType=VARCHAR},
             #{lastVisitDate,jdbcType=TIMESTAMP},
@@ -130,7 +130,7 @@
             telephone,
             user_type,
             user_weight,
-            manager_type,
+            mgr_type,
             first_visit_date,
             last_visit_ip,
             last_visit_date,
@@ -163,7 +163,7 @@
             #{map.telephone,jdbcType=VARCHAR},
             #{map.userType,jdbcType=VARCHAR},
             #{map.userWeight,jdbcType=NUMERIC},
-            #{map.managerType,jdbcType=VARCHAR},
+            #{map.mgrType,jdbcType=VARCHAR},
             #{map.firstVisitDate,jdbcType=TIMESTAMP},
             #{map.lastVisitIp,jdbcType=VARCHAR},
             #{map.lastVisitDate,jdbcType=TIMESTAMP},
@@ -200,7 +200,7 @@
             telephone = #{telephone,jdbcType=VARCHAR},
             user_type = #{userType,jdbcType=VARCHAR},
             user_weight = #{userWeight,jdbcType=NUMERIC},
-            manager_type = #{managerType,jdbcType=VARCHAR},
+            mgr_type = #{mgrType,jdbcType=VARCHAR},
             first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
             last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
             last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
@@ -237,7 +237,7 @@
             telephone = #{telephone,jdbcType=VARCHAR},
             user_type = #{userType,jdbcType=VARCHAR},
             user_weight = #{userWeight,jdbcType=NUMERIC},
-            manager_type = #{managerType,jdbcType=VARCHAR},
+            mgr_type = #{mgrType,jdbcType=VARCHAR},
             first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
             last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
             last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
@@ -308,8 +308,8 @@
             <if test="map.userWeight != null">
                 user_weight = #{map.userWeight,jdbcType=NUMERIC},
             </if>
-            <if test="map.managerType != null">
-                manager_type = #{map.managerType,jdbcType=VARCHAR},
+            <if test="map.mgrType != null">
+                mgr_type = #{map.mgrType,jdbcType=VARCHAR},
             </if>
             <if test="map.firstVisitDate != null">
                 first_visit_date = #{map.firstVisitDate,jdbcType=TIMESTAMP},
@@ -401,8 +401,8 @@
             <if test="update.userWeight != null">
                 user_weight = #{update.userWeight,jdbcType=NUMERIC},
             </if>
-            <if test="update.managerType != null">
-                manager_type = #{update.managerType,jdbcType=VARCHAR},
+            <if test="update.mgrType != null">
+                mgr_type = #{update.mgrType,jdbcType=VARCHAR},
             </if>
             <if test="update.firstVisitDate != null">
                 first_visit_date = #{update.firstVisitDate,jdbcType=TIMESTAMP},
@@ -487,8 +487,8 @@
             <if test="condition.userWeight != null">
                 and user_weight = #{condition.userWeight,jdbcType=NUMERIC}
             </if>
-            <if test="condition.managerType != null">
-                and manager_type = #{condition.managerType,jdbcType=VARCHAR}
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType,jdbcType=VARCHAR}
             </if>
             <if test="condition.firstVisitDate != null">
                 and first_visit_date = #{condition.firstVisitDate,jdbcType=TIMESTAMP}
@@ -595,8 +595,8 @@
             <if test="condition.userWeight != null">
                 and user_weight = #{condition.userWeight,jdbcType=NUMERIC}
             </if>
-            <if test="condition.managerType != null">
-                and manager_type = #{condition.managerType,jdbcType=VARCHAR}
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType,jdbcType=VARCHAR}
             </if>
             <if test="condition.firstVisitDate != null">
                 and first_visit_date = #{condition.firstVisitDate,jdbcType=TIMESTAMP}
@@ -745,8 +745,8 @@
             <if test="condition.userWeight != null">
                 and user_weight = #{condition.userWeight}
             </if>
-            <if test="condition.managerType != null">
-                and manager_type = #{condition.managerType}
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
             </if>
             <if test="condition.firstVisitDate != null">
                 and first_visit_date = #{condition.firstVisitDate}
@@ -848,8 +848,8 @@
             <if test="condition.userWeight != null">
                 and user_weight = #{condition.userWeight}
             </if>
-            <if test="condition.managerType != null">
-                and manager_type = #{condition.managerType}
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
             </if>
             <if test="condition.firstVisitDate != null">
                 and first_visit_date = #{condition.firstVisitDate}
@@ -950,8 +950,8 @@
             <if test="condition.userWeight != null">
                 and user_weight = #{condition.userWeight}
             </if>            
-            <if test="condition.managerType != null">
-                and manager_type = #{condition.managerType}
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
             </if>            
             <if test="condition.firstVisitDate != null">
                 and first_visit_date = #{condition.firstVisitDate}
@@ -995,7 +995,7 @@
                 order by ${condition.orderby}
             </when>
             <otherwise>
-                order by id
+                order by user_weight
             </otherwise>
         </choose>
     </select>
@@ -1061,8 +1061,8 @@
             <if test="condition.userWeight != null">
                 and user_weight like concat('%', #{condition.userWeight} , '%')
             </if>
-            <if test="condition.managerType != null">
-                and manager_type like concat('%', #{condition.managerType} , '%')
+            <if test="condition.mgrType != null">
+                and mgr_type like concat('%', #{condition.mgrType} , '%')
             </if>
             <if test="condition.firstVisitDate != null">
                 and first_visit_date like concat('%', #{condition.firstVisitDate} , '%')
