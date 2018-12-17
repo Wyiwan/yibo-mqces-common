@@ -110,7 +110,7 @@ public class OfficeController extends BaseController{
     @ApiOperation("启用或停用")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
-    public String disabled(String id){
+    public String disabled(@RequestBody String id){
         Office office = officeService.fetch(id);
         if( office != null ){
             office.statusToggle();
