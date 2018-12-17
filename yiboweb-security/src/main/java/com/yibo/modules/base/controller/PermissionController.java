@@ -22,13 +22,14 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
-import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -68,8 +69,8 @@ public class PermissionController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Permission permission) throws Exception{
-        if( !verifyUnique(permission) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的菜单名称");
+        if( !verifyUnique(null, permission.getPermsName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
         }
         permissionService.insert(permission);
         return permission.getId();
@@ -83,8 +84,8 @@ public class PermissionController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody Permission permission) throws Exception{
-        if( !verifyUnique(permission) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的菜单名称");
+        if( !verifyUnique(permission.getId(), permission.getPermsName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
         }
 
         Permission vo = permissionService.fetch(permission.getId());
@@ -163,17 +164,18 @@ public class PermissionController extends BaseController{
      * 唯一性校验
      * @return
      */
-    @ApiOperation("菜单名称校验")
+    @ApiOperation("验证菜单名称是否可用")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String"),
-            @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify")
-    private Boolean verifyUnique(Permission permission) throws Exception{
-        if( permission != null ){
-            Map conditionMap = MapUtils.toMap(permission);
-            return permissionService.count(conditionMap) > 0 ? false : true;
+    public Boolean verifyUnique(String id, String permsName){
+        Map conditionMap = Maps.newHashMap();
+        if( StringUtils.isNotBlank(id) ){
+            conditionMap.put("id", id);
         }
-        return false;
+        conditionMap.put("permsName", permsName);
+        return permissionService.count(conditionMap) > 0 ? false : true;
     }
 }

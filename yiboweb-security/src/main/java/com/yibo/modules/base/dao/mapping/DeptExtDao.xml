@@ -44,18 +44,18 @@
                 and d.tenant_id = #{condition.tenantId}
             </if>
         </where>
-        order by d.ancestor_id, d.dept_sort
+        order by d.dept_sort
     </select>
 
     <!-- 查询树结构数据 -->
     <select id="findTree" resultType="com.yibo.modules.base.entity.Dept">
         select
-            id, parent_id, ancestor_id, dept_name, dept_type, dept_sort, dept_level from sys_dept
-        <where>
+            id, parent_id, ancestor_id, dept_name, dept_type, dept_sort, dept_level
+        from sys_dept
+        where 1 = 1
             and status = 1
             and tenant_id = #{tenantId,jdbcType=VARCHAR}
-        </where>
-        order by ancestor_id, dept_sort
+        order by dept_sort
     </select>
 
     <!-- 调用存储过程更新父级ID -->
@@ -66,14 +66,13 @@
     <!-- 唯一性校验 -->
     <select id="count" resultType="java.lang.Integer">
         select count(1) from sys_dept
-        <where>
+        where 1 = 1
             <if test="condition.id != null and condition.id.length() > 0">
                 and id not in(select #{condition.id})
             </if>
             and dept_name = #{condition.deptName,jdbcType=VARCHAR}
             and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
             and status = 1
-        </where>
     </select>
 
     <!-- 级联删除 -->

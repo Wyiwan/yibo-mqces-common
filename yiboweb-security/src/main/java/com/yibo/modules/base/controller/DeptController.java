@@ -23,8 +23,10 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.DeptTree;
 import com.yibo.modules.base.service.DeptService;
@@ -61,9 +63,9 @@ public class DeptController extends BaseController{
      */
     @ApiOperation("新增")
     @PostMapping("/created")
-    public String created(@Valid @RequestBody Dept dept) throws Exception{
-        if( !verifyUnique(dept) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的科室名称");
+    public String created(@Valid @RequestBody Dept dept){
+        if( !verifyUnique(null, dept.getDeptName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
         deptService.insert(dept);
         return dept.getId();
@@ -76,9 +78,9 @@ public class DeptController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Dept dept) throws Exception{
-        if( !verifyUnique(dept) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的科室名称");
+    public String updated(@RequestBody Dept dept){
+        if( !verifyUnique(dept.getId(), dept.getDeptName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
 
         Dept vo = deptService.fetch(dept.getId());
@@ -143,17 +145,18 @@ public class DeptController extends BaseController{
      * 唯一性校验
      * @return
      */
-    @ApiOperation("科室名称校验")
+    @ApiOperation("验证科室名称是否可用")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String"),
-            @ApiImplicitParam(name = "deptName", value = "科室名称", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "deptName", value = "科室名称", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify")
-    private Boolean verifyUnique(Dept dept) throws Exception{
-        if( dept != null ){
-            Map conditionMap = MapUtils.toMap(dept);
-            return deptService.count(conditionMap) > 0 ? false : true;
+    public Boolean verifyUnique(String id, String deptName){
+        Map conditionMap = Maps.newHashMap();
+        if( StringUtils.isNotBlank(id) ){
+            conditionMap.put("id", id);
         }
-        return false;
+        conditionMap.put("deptName", deptName);
+        return deptService.count(conditionMap) > 0 ? false : true;
     }
 }

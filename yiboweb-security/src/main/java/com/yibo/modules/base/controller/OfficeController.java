@@ -22,10 +22,11 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
-import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
 import io.swagger.annotations.Api;
@@ -38,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
     
@@ -63,8 +63,8 @@ public class OfficeController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Office office) throws Exception{
-        if( !verifyUnique(office) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的机构名称");
+        if( !verifyUnique(null, office.getOfficeName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
 
         officeService.insert(office);
@@ -78,28 +78,15 @@ public class OfficeController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Office office) throws Exception{
-        if( !verifyUnique(office) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的机构名称");
+    public String updated(@RequestBody Office office){
+        if( !verifyUnique(office.getId(), office.getOfficeName()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
 
         Office vo = officeService.fetch(office.getId());
         BeanUtils.copyProperties(office, vo, ObjectUtils.getNullPropertyNames(office));
         officeService.update(vo);
         return UPDATE_SUCCEED;
-    }
-
-    /**
-     * 删除
-     * @param ids
-     * @return
-     */
-    @ApiOperation("删除")
-    @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/deleted")
-    public String deleted(@RequestBody String ids){
-        officeService.deleteByIds( Arrays.asList(ids.split(",")) );
-        return DEL_SUCCEED;
     }
 
     /**
@@ -112,8 +99,9 @@ public class OfficeController extends BaseController{
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
         Office office = officeService.fetch(id);
+
         if( office != null ){
-            office.statusToggle();
+            office.statusSwitch();
             officeService.update(office);
         }
         return OPER_SUCCEED;
@@ -150,18 +138,19 @@ public class OfficeController extends BaseController{
      * 唯一性校验
      * @return
      */
-    @ApiOperation("机构名称校验")
+    @ApiOperation("验证机构名称是否可用")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String"),
-            @ApiImplicitParam(name = "deptName", value = "机构名称", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "officeName", value = "机构名称", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify")
-    private Boolean verifyUnique(Office office) throws Exception{
-        if( office != null ){
-            Map conditionMap = MapUtils.toMap(office);
-            return officeService.count(conditionMap) > 0 ? false : true;
+    public Boolean verifyUnique(String id, String officeName){
+        Map conditionMap = Maps.newHashMap();
+        if( StringUtils.isNotBlank(id) ){
+            conditionMap.put("id", id);
         }
-        return false;
+        conditionMap.put("officeName", officeName);
+        return officeService.count(conditionMap) > 0 ? false : true;
     }
     
 }

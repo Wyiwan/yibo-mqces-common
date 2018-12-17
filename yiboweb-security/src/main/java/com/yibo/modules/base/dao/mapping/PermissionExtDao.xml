@@ -27,7 +27,7 @@
                 and p.perms_type = #{type}
             </if>
         </where>
-        order by p.ancestor_id, p.perms_sort asc
+        order by p.perms_sort asc
     </select>
 
     <!-- 根据权重查询权限 -->
@@ -56,7 +56,7 @@
                 and p.perms_type = #{type}
             </if>
             and p.status = 1
-        order by p.ancestor_id, p.perms_sort asc
+        order by p.perms_sort asc
     </select>
 
     <!-- 查询树结构数据 -->
@@ -72,13 +72,12 @@
     <!-- 唯一性校验 -->
     <select id="count" resultType="java.lang.Integer">
         select count(1) from sys_permission
-        <where>
+        where 1 = 1
             and perms_name = #{condition.permsName,jdbcType=VARCHAR}
             and status = 1
             <if test="condition.id != null and condition.id.length() > 0">
                 and id not in(select #{condition.id})
             </if>
-        </where>
     </select>
 
     <!-- 级联删除 -->
