@@ -43,7 +43,6 @@ public abstract class BaseEntity<T> implements Serializable {
     protected T id;
 
     @ApiModelProperty(value = "租户ID")
-    @JSONField(serialize = false)
     protected String tenantId;
 
     @ApiModelProperty(value = "当前登录用户")
