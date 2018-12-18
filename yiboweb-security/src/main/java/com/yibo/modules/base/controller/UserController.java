@@ -220,7 +220,7 @@ public class UserController extends BaseController{
      */
     @ApiOperation("重置密码（系统管理员）")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/ mgr-reseted")
+    @PostMapping("/mgr-reseted")
     public String mgrReseted(@RequestBody String id){
         User user = userService.fetch(id);
 
