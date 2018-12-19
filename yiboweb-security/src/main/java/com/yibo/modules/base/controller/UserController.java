@@ -24,6 +24,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
+import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.constant.CommonConstant;
@@ -38,7 +39,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,7 +65,8 @@ public class UserController extends BaseController{
      */
     @ApiOperation("新增")
     @PostMapping("/created")
-    public String created(@Valid User user){
+    public String created(@Valid @RequestBody User user){
+        user.setPassword(null);
         userService.insert(user);
         return user.getId();
     }
@@ -77,12 +78,20 @@ public class UserController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    @CacheEvict(key = "#user.username")
-    public String updated(User user){
-        User vo = userService.fetch(user.getId());
-        BeanUtils.copyProperties(user, vo, ObjectUtils.getNullPropertyNames(user));
+    public String updated(@RequestBody User user){
+        if( !verifyUnique(user.getId(), user.getUsername()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+        }
 
-        userService.update(vo);
+        User orgUser = userService.fetch(user.getId());
+        String orgUsername = orgUser.getUsername();
+
+        // 编辑时不允许修改密码
+        user.setPassword(null);
+        BeanUtils.copyProperties(user, orgUser, ObjectUtils.getNullPropertyNames(user));
+
+        userService.update(orgUser);
+        CacheUtils.remove(CommonConstant.USER_CACHE, orgUsername);
         return UPDATE_SUCCEED;
     }
 
@@ -94,9 +103,45 @@ public class UserController extends BaseController{
     @ApiOperation("删除")
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
     @PostMapping("/deleted")
-    public String deleted(String ids){
+    public String deleted(@RequestBody String ids){
         userService.deleteByIds( Arrays.asList(ids.split(",")) );
         return DEL_SUCCEED;
+    }
+
+    /**
+     * 启用或停用
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用或停用")
+    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
+    @PostMapping("/disabled")
+    public String disabled(@RequestBody String id){
+        User user = VerifyUser(id, false);
+
+        if( user != null ){
+            user.statusSwitch();
+            userService.update(user);
+        }
+        return OPER_SUCCEED;
+    }
+
+    /**
+     * 重置密码
+     * @param id
+     * @return
+     */
+    @ApiOperation("重置密码")
+    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
+    @PostMapping("/reseted")
+    public String reseted(@RequestBody String id){
+        User user = VerifyUser(id, false);
+
+        if( user != null ){
+            user.setPassword(null);
+            userService.update(user);
+        }
+        return OPER_SUCCEED;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -126,7 +171,9 @@ public class UserController extends BaseController{
         @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
     public PageInfo<T> paged(User user){
-        return userService.queryPage(new BaseForm<T>());
+        BaseForm<T> baseForm = new BaseForm<T>();
+        baseForm.set("mgrType", CommonConstant.USER_TYPE_NORMAL);
+        return userService.queryPage(baseForm);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -140,10 +187,8 @@ public class UserController extends BaseController{
     @ApiOperation("新增（系统管理员）")
     @PostMapping("/mgr-created")
     public String mgrCreated(@Valid @RequestBody User user){
-        user.setPassword(null);
         user.setMgrType(CommonConstant.USER_TYPE_ADMIN);
-        userService.insert(user);
-        return user.getId();
+        return created(user);
     }
 
     /**
@@ -154,17 +199,7 @@ public class UserController extends BaseController{
     @ApiOperation("编辑（系统管理员）")
     @PostMapping("/mgr-updated")
     public String mgrUpdated(@RequestBody User user){
-        if( !verifyUnique(user.getId(), user.getUsername()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在相同的机构名称");
-        }
-
-        // 编辑时不允许修改密码
-        user.setPassword(null);
-        User vo = userService.fetch(user.getId());
-        BeanUtils.copyProperties(user, vo, ObjectUtils.getNullPropertyNames(user));
-
-        userService.update(vo);
-        return UPDATE_SUCCEED;
+        return updated(user);
     }
 
     /**
@@ -204,7 +239,7 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-disabled")
     public String mgrDisabled(@RequestBody String id){
-        User user = userService.fetch(id);
+        User user = VerifyUser(id, true);
 
         if( user != null ){
             user.statusSwitch();
@@ -222,7 +257,7 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-reseted")
     public String mgrReseted(@RequestBody String id){
-        User user = userService.fetch(id);
+        User user = VerifyUser(id, true);
 
         if( user != null ){
             user.setPassword(null);
@@ -248,5 +283,26 @@ public class UserController extends BaseController{
         }
         conditionMap.put("username", username);
         return userService.count(conditionMap) > 0 ? false : true;
+    }
+
+    /**
+     * 验证用户有效性
+     * @param id
+     * @param isAdmin
+     * @return
+     */
+    private User VerifyUser(String id, boolean isAdmin){
+        User user = userService.fetch(id);
+
+        if( user != null ){
+            String mgrType = user.getMgrType();
+
+            if( isAdmin && CommonConstant.USER_TYPE_ADMIN.equals(mgrType) ){
+                return user;
+            }else if( !isAdmin && CommonConstant.USER_TYPE_NORMAL.equals(mgrType) ){
+                return user;
+            }
+        }
+        throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "非法数据");
     }
 }

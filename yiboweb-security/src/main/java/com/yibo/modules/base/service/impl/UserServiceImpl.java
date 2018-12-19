@@ -24,9 +24,11 @@ import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.constant.CommonConstant;
+import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
@@ -91,6 +93,24 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
+     * 重写删除
+     * @param list
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public int deleteByIds(List list) {
+        // 清除用户缓存
+        list.forEach(item -> {
+            User user = dao.fetch(item);
+            if( user != null ){
+                CacheUtils.remove(CommonConstant.USER_CACHE, user.getUsername());
+            }
+        });
+        return super.deleteByIds(list);
+    }
+
+    /**
      * 重写分页
      * @param baseForm
      * @param <T>
@@ -105,6 +125,18 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
         // 获取查询参数
         Map<String, Object> params = baseForm.getParameters();
+
+        // 管理员类型
+        String mgrType = ObjectUtils.toString(params.get("mgrType"));
+        if( ObjectUtils.isEmpty(mgrType) ){
+            params.put("mgrType", CommonConstant.USER_TYPE_NORMAL);
+        }
+
+        // 查询普通用户带上租户条件
+        if( CommonConstant.USER_TYPE_NORMAL.equals(mgrType) ){
+            User currUser = UserContext.getUser();
+            params.put("tenantId", currUser.getTenantId());
+        }
         logger.info("分页请求参数："+params);
 
         List list = dao.queryPageExt(params);

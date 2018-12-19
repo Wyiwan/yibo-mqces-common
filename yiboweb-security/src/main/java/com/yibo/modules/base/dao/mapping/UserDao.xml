@@ -7,7 +7,9 @@
         password,
         name,
         dept_id,
-        employee_no,
+        emp_code,
+        emp_status,
+        emp_posts,
         short_name,
         wubi_code,
         identity_no,
@@ -47,7 +49,9 @@
             password,
             name,
             dept_id,
-            employee_no,
+            emp_code,
+            emp_status,
+            emp_posts,
             short_name,
             wubi_code,
             identity_no,
@@ -80,7 +84,9 @@
             #{password,jdbcType=VARCHAR},
             #{name,jdbcType=VARCHAR},
             #{deptId,jdbcType=VARCHAR},
-            #{employeeNo,jdbcType=VARCHAR},
+            #{empCode,jdbcType=VARCHAR},
+            #{empStatus,jdbcType=VARCHAR},
+            #{empPosts,jdbcType=VARCHAR},
             #{shortName,jdbcType=VARCHAR},
             #{wubiCode,jdbcType=VARCHAR},
             #{identityNo,jdbcType=VARCHAR},
@@ -117,7 +123,9 @@
             password,
             name,
             dept_id,
-            employee_no,
+            emp_code,
+            emp_status,
+            emp_posts,
             short_name,
             wubi_code,
             identity_no,
@@ -150,7 +158,9 @@
             #{map.password,jdbcType=VARCHAR},
             #{map.name,jdbcType=VARCHAR},
             #{map.deptId,jdbcType=VARCHAR},
-            #{map.employeeNo,jdbcType=VARCHAR},
+            #{map.empCode,jdbcType=VARCHAR},
+            #{map.empStatus,jdbcType=VARCHAR},
+            #{map.empPosts,jdbcType=VARCHAR},
             #{map.shortName,jdbcType=VARCHAR},
             #{map.wubiCode,jdbcType=VARCHAR},
             #{map.identityNo,jdbcType=VARCHAR},
@@ -187,7 +197,9 @@
             password = #{password,jdbcType=VARCHAR},
             name = #{name,jdbcType=VARCHAR},
             dept_id = #{deptId,jdbcType=VARCHAR},
-            employee_no = #{employeeNo,jdbcType=VARCHAR},
+            emp_code = #{empCode,jdbcType=VARCHAR},
+            emp_status = #{empStatus,jdbcType=VARCHAR},
+            emp_posts = #{empPosts,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
             wubi_code = #{wubiCode,jdbcType=VARCHAR},
             identity_no = #{identityNo,jdbcType=VARCHAR},
@@ -224,7 +236,9 @@
             password = #{password,jdbcType=VARCHAR},
             name = #{name,jdbcType=VARCHAR},
             dept_id = #{deptId,jdbcType=VARCHAR},
-            employee_no = #{employeeNo,jdbcType=VARCHAR},
+            emp_code = #{empCode,jdbcType=VARCHAR},
+            emp_status = #{empStatus,jdbcType=VARCHAR},
+            emp_posts = #{empPosts,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
             wubi_code = #{wubiCode,jdbcType=VARCHAR},
             identity_no = #{identityNo,jdbcType=VARCHAR},
@@ -269,8 +283,14 @@
             <if test="map.deptId != null">
                 dept_id = #{map.deptId,jdbcType=VARCHAR},
             </if>
-            <if test="map.employeeNo != null">
-                employee_no = #{map.employeeNo,jdbcType=VARCHAR},
+            <if test="map.empCode != null">
+                emp_code = #{map.empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="map.empStatus != null">
+                emp_status = #{map.empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="map.empPosts != null">
+                emp_posts = #{map.empPosts,jdbcType=VARCHAR},
             </if>
             <if test="map.shortName != null">
                 short_name = #{map.shortName,jdbcType=VARCHAR},
@@ -362,8 +382,14 @@
             <if test="update.deptId != null">
                 dept_id = #{update.deptId,jdbcType=VARCHAR},
             </if>
-            <if test="update.employeeNo != null">
-                employee_no = #{update.employeeNo,jdbcType=VARCHAR},
+            <if test="update.empCode != null">
+                emp_code = #{update.empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="update.empStatus != null">
+                emp_status = #{update.empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="update.empPosts != null">
+                emp_posts = #{update.empPosts,jdbcType=VARCHAR},
             </if>
             <if test="update.shortName != null">
                 short_name = #{update.shortName,jdbcType=VARCHAR},
@@ -448,8 +474,14 @@
             <if test="condition.deptId != null">
                 and dept_id = #{condition.deptId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.employeeNo != null">
-                and employee_no = #{condition.employeeNo,jdbcType=VARCHAR}
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
@@ -556,8 +588,14 @@
             <if test="condition.deptId != null">
                 and dept_id = #{condition.deptId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.employeeNo != null">
-                and employee_no = #{condition.employeeNo,jdbcType=VARCHAR}
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
@@ -706,8 +744,14 @@
             <if test="condition.deptId != null">
                 and dept_id = #{condition.deptId}
             </if>
-            <if test="condition.employeeNo != null">
-                and employee_no = #{condition.employeeNo}
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -809,8 +853,14 @@
             <if test="condition.deptId != null">
                 and dept_id = #{condition.deptId}
             </if>
-            <if test="condition.employeeNo != null">
-                and employee_no = #{condition.employeeNo}
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -911,8 +961,14 @@
             <if test="condition.deptId != null">
                 and dept_id = #{condition.deptId}
             </if>            
-            <if test="condition.employeeNo != null">
-                and employee_no = #{condition.employeeNo}
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>            
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>            
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
             </if>            
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -995,7 +1051,7 @@
                 order by ${condition.orderby}
             </when>
             <otherwise>
-                order by user_weight
+                order by id
             </otherwise>
         </choose>
     </select>
@@ -1022,8 +1078,14 @@
             <if test="condition.deptId != null">
                 and dept_id like concat('%', #{condition.deptId} , '%')
             </if>
-            <if test="condition.employeeNo != null">
-                and employee_no like concat('%', #{condition.employeeNo} , '%')
+            <if test="condition.empCode != null">
+                and emp_code like concat('%', #{condition.empCode} , '%')
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status like concat('%', #{condition.empStatus} , '%')
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts like concat('%', #{condition.empPosts} , '%')
             </if>
             <if test="condition.shortName != null">
                 and short_name like concat('%', #{condition.shortName} , '%')

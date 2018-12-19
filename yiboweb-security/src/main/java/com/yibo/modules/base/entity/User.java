@@ -44,30 +44,36 @@ import java.util.List;
 @Data
 @ApiModel(value = "用户表实体类(User)")
 public class User extends DataEntity<String>{
-    private static Object userPassword = PropertiesUtils.getInstance().getProperty("webapp.user-init-password");
+    private static String userPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
     private static String superAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
 
-    public static final String INIT_PASSWORD = ObjectUtils.isEmpty(userPassword) ? CommonConstant.USER_INIT_PASSWORD : ObjectUtils.toString(userPassword);
-    private static final String SUPER_ADMIN_CODE = StringUtils.isBlank(superAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : superAdminCode;
+    public static final String INIT_PASSWORD = ObjectUtils.isEmpty(userPassword) ? CommonConstant.USER_INIT_PASSWORD : userPassword;
+    private static final String SUPER_ADMIN_CODE = ObjectUtils.isEmpty(superAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : superAdminCode;
 
-    @NotEmpty(message="用户姓名不能为空")
-    @ApiModelProperty(value = "用户姓名")
+    @NotEmpty(message="登录账号不能为空")
+    @ApiModelProperty(value = "登录账号")
     private String username;
 
     @ApiModelProperty(value = "登录密码")
     @JSONField(serialize = false)
     private String password;
 
+    @ApiModelProperty(value = "所属科室")
+    private String deptId;
+
     @NotEmpty(message="用户姓名不能为空")
     @ApiModelProperty(value = "用户姓名")
     private String name;
-    
-    @ApiModelProperty(value = "所属科室")
-    private String deptId;
-    
+
     @ApiModelProperty(value = "员工编号")
-    private String employeeNo;
-    
+    private String empCode;
+
+    @ApiModelProperty(value = "员工状态：1：在职  2：离职  3：退休")
+    private String empStatus;
+
+    @ApiModelProperty(value = "所在岗位（预留）")
+    private String empPosts;
+
     @ApiModelProperty(value = "姓名简称")
     private String shortName;
     
@@ -80,7 +86,7 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户籍贯")
     private String nativePlace;
     
-    @ApiModelProperty(value = "用户性别（0女  1男）")
+    @ApiModelProperty(value = "用户性别：0女  1男")
     private String sex;
     
     @ApiModelProperty(value = "用户生日")
