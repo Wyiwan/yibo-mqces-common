@@ -23,7 +23,7 @@
                 and u.name like concat('%', #{condition.name} , '%')
             </if>
             <if test="condition.deptId != null">
-                and u.dept_id = #{condition.deptId}
+                and d.ancestor_id like concat('%',#{condition.deptId}, '%')
             </if>
             <if test="condition.empCode != null">
                 and u.emp_code = #{condition.empCode}
