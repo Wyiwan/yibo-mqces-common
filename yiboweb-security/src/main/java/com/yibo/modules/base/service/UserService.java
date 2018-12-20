@@ -21,7 +21,7 @@
 package com.yibo.modules.base.service;
 
 import cn.yibo.base.service.IBaseService;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
 import org.springframework.cache.annotation.CacheConfig;

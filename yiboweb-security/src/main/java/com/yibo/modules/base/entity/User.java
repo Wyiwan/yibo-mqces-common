@@ -24,7 +24,7 @@ import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,11 +44,10 @@ import java.util.List;
 @Data
 @ApiModel(value = "用户表实体类(User)")
 public class User extends DataEntity<String>{
-    private static String userPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
-    private static String superAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
-
-    public static final String INIT_PASSWORD = ObjectUtils.isEmpty(userPassword) ? CommonConstant.USER_INIT_PASSWORD : userPassword;
-    private static final String SUPER_ADMIN_CODE = ObjectUtils.isEmpty(superAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : superAdminCode;
+    private static String configUserInitPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
+    private static String configSuperAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
+    public static final String USER_INIT_PASSWORD = ObjectUtils.isEmpty(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
+    private static final String SUPER_ADMIN_CODE = ObjectUtils.isEmpty(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
 
     @NotEmpty(message="登录账号不能为空")
     @ApiModelProperty(value = "登录账号")
@@ -68,10 +67,10 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "员工编号")
     private String empCode;
 
-    @ApiModelProperty(value = "员工状态：1：在职  2：离职  3：退休")
+    @ApiModelProperty(value = "员工状态(1在职 2离职 3退休)")
     private String empStatus;
 
-    @ApiModelProperty(value = "所在岗位（预留）")
+    @ApiModelProperty(value = "所在岗位(预留)")
     private String empPosts;
 
     @ApiModelProperty(value = "姓名简称")
@@ -86,10 +85,11 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户籍贯")
     private String nativePlace;
     
-    @ApiModelProperty(value = "用户性别：0女  1男")
+    @ApiModelProperty(value = "用户性别(0女 1男)")
     private String sex;
     
     @ApiModelProperty(value = "用户生日")
+    @JSONField(format="yyyy-MM-dd")
     private Date birthday;
     
     @ApiModelProperty(value = "用户头像")
@@ -106,11 +106,12 @@ public class User extends DataEntity<String>{
     
     @ApiModelProperty(value = "用户类型")
     private String userType;
-    
-    @ApiModelProperty(value = "用户权重（倒序）")
+
+    @NotEmpty(message="权重不能为空")
+    @ApiModelProperty(value = "权重(倒序)")
     private Double userWeight;
     
-    @ApiModelProperty(value = "管理员类型：0非管理员  1系统管理员")
+    @ApiModelProperty(value = "管理员类型(0非管理员 1系统管理员)")
     private String mgrType;
     
     @ApiModelProperty(value = "首次登录时间")
@@ -147,7 +148,7 @@ public class User extends DataEntity<String>{
     private List<Permission> permissions;
 
     public boolean isAdmin(){
-        return CommonConstant.USER_TYPE_ADMIN.equals(this.mgrType);
+        return CommonConstant.USER_MGR_TYPE_ADMIN.equals(this.mgrType);
     }
 
     public boolean isSuperAdmin(){
@@ -170,20 +171,20 @@ public class User extends DataEntity<String>{
         super.preUpdate();
     }
 
-    public void statusSwitch(){
-        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
-
     private void preInit(){
         if( StringUtils.isBlank(this.userType) ){
-            this.userType = "none";
+            this.userType = CommonConstant.USER_TYPE_NORMAL;
         }
         if( StringUtils.isBlank(this.mgrType) ){
-            this.mgrType = CommonConstant.USER_TYPE_NORMAL;
+            this.mgrType = CommonConstant.USER_MGR_TYPE_NORMAL;
         }
         if( StringUtils.isBlank(this.password) ){
-            this.password = new BCryptPasswordEncoder().encode(INIT_PASSWORD);
+            this.password = new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD);
         }
+    }
+
+    public void disabled(){
+        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
     }
 
 }

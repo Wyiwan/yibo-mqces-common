@@ -27,7 +27,7 @@ import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -57,8 +57,8 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class UserServiceImpl extends AbstractBaseService<UserDao, User> implements UserService {
-    private static Object superAdminMinWeight = PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight");
-    public static final Integer SUPER_WEIGHT = ObjectUtils.isEmpty(superAdminMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(superAdminMinWeight);
+    private static Object configMinWeight = PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight");
+    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = ObjectUtils.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
 
     @Autowired
     private DeptService deptService;
@@ -129,11 +129,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         // 管理员类型
         String mgrType = ObjectUtils.toString(params.get("mgrType"));
         if( ObjectUtils.isEmpty(mgrType) ){
-            params.put("mgrType", CommonConstant.USER_TYPE_NORMAL);
+            params.put("mgrType", CommonConstant.USER_MGR_TYPE_NORMAL);
         }
 
         // 查询普通用户带上租户条件
-        if( CommonConstant.USER_TYPE_NORMAL.equals(mgrType) ){
+        if( CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
             User currUser = UserContext.getUser();
             params.put("tenantId", currUser.getTenantId());
         }
@@ -169,7 +169,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             // 关联操作权限
             List<Permission> permissions;
             if( user.isSuperAdmin() ){
-                permissions = permsService.findByWeight(SUPER_WEIGHT, null, null);
+                permissions = permsService.findByWeight(SUPER_GET_PERMS_MIN_WEIGHT, null, null);
             }else if( user.isAdmin() ){
                 permissions = permsService.findByWeight(CommonConstant.ADMIN_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
             }else{

@@ -21,7 +21,7 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -53,7 +53,7 @@ public class Dept extends DataEntity<String>{
     @ApiModelProperty(value = "科室简称")
     private String shortName;
     
-    @ApiModelProperty(value = "科室编码（系统自动生成）")
+    @ApiModelProperty(value = "科室编码(系统自动生成)")
     private String deptCode;
     
     @ApiModelProperty(value = "科室类型")
@@ -62,7 +62,7 @@ public class Dept extends DataEntity<String>{
     @ApiModelProperty(value = "层级")
     private Double deptLevel;
     
-    @ApiModelProperty(value = "排序（升序）")
+    @ApiModelProperty(value = "排序(升序)")
     private Double deptSort;
     
     @ApiModelProperty(value = "科室负责人ID")

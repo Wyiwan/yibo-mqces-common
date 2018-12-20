@@ -43,7 +43,7 @@ public class Permission extends DataEntity<String>{
     @ApiModelProperty(value = "所有父级ID")
     private String ancestorId;
     
-    @ApiModelProperty(value = "权限类型：0菜单页面 1操作权限")
+    @ApiModelProperty(value = "权限类型(0菜单页面 1操作权限)")
     @NotEmpty(message="类型不能为空")
     private String permsType;
 

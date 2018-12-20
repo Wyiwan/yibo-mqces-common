@@ -21,7 +21,7 @@
 package cn.yibo.base.entity;
 
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,7 +39,7 @@ import java.util.Date;
 public abstract class DataEntity<T> extends BaseEntity<T> {
     private static final long serialVersionUID = 8724055578251954450L;
 
-    @ApiModelProperty(value = "状态：0删除 1启用 2禁用")
+    @ApiModelProperty(value = "状态(0删除 1启用 2禁用)")
     protected Integer status;
 
     @ApiModelProperty(value = "创建人")

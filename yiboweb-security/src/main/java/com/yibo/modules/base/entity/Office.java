@@ -21,7 +21,7 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -42,13 +42,13 @@ public class Office extends DataEntity<String>{
     @ApiModelProperty(value = "机构名称")
     private String officeName;
     
-    @ApiModelProperty(value = "机构编码（系统自动生成）")
+    @ApiModelProperty(value = "机构编码(系统自动生成)")
     private String officeCode;
     
-    @ApiModelProperty(value = "机构类型：1二甲 2三甲 3其他")
+    @ApiModelProperty(value = "机构类型(1二甲 2三甲 3其他)")
     private String officeType;
 
-    @ApiModelProperty(value = "排序（升序）")
+    @ApiModelProperty(value = "排序(升序)")
     private Double officeSort;
     
     @ApiModelProperty(value = "机构简称")
@@ -69,16 +69,16 @@ public class Office extends DataEntity<String>{
     @ApiModelProperty(value = "地址")
     private String address;
 
-    @ApiModelProperty(value = "图片（预留字段）")
+    @ApiModelProperty(value = "图片(预留字段)")
     private String avatar;
 
-    @ApiModelProperty(value = "父级ID（预留字段）")
+    @ApiModelProperty(value = "父级ID(预留字段)")
     private String parentId;
 
-    @ApiModelProperty(value = "所有父级ID（预留字段）")
+    @ApiModelProperty(value = "所有父级ID(预留字段)")
     private String ancestorId;
 
-    @ApiModelProperty(value = "层级（预留字段）")
+    @ApiModelProperty(value = "层级(预留字段)")
     private Double officeLevel;
 
     @Override

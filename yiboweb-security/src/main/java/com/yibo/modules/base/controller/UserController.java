@@ -27,7 +27,7 @@ import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.User;
@@ -117,10 +117,10 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
-        User user = VerifyUser(id, false);
+        User user = verifyUser(id, false);
 
         if( user != null ){
-            user.statusSwitch();
+            user.disabled();
             userService.update(user);
         }
         return OPER_SUCCEED;
@@ -135,7 +135,7 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/reseted")
     public String reseted(@RequestBody String id){
-        User user = VerifyUser(id, false);
+        User user = verifyUser(id, false);
 
         if( user != null ){
             user.setPassword(null);
@@ -172,7 +172,7 @@ public class UserController extends BaseController{
     })
     public PageInfo<T> paged(User user){
         BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("mgrType", CommonConstant.USER_TYPE_NORMAL);
+        baseForm.set("mgrType", CommonConstant.USER_MGR_TYPE_NORMAL);
         return userService.queryPage(baseForm);
     }
 
@@ -187,7 +187,7 @@ public class UserController extends BaseController{
     @ApiOperation("新增（系统管理员）")
     @PostMapping("/mgr-created")
     public String mgrCreated(@Valid @RequestBody User user){
-        user.setMgrType(CommonConstant.USER_TYPE_ADMIN);
+        user.setMgrType(CommonConstant.USER_MGR_TYPE_ADMIN);
         return created(user);
     }
 
@@ -226,7 +226,7 @@ public class UserController extends BaseController{
     })
     public PageInfo<T> mgrPaged(User user){
         BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("mgrType", CommonConstant.USER_TYPE_ADMIN);
+        baseForm.set("mgrType", CommonConstant.USER_MGR_TYPE_ADMIN);
         return userService.queryPage(baseForm);
     }
 
@@ -239,10 +239,10 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-disabled")
     public String mgrDisabled(@RequestBody String id){
-        User user = VerifyUser(id, true);
+        User user = verifyUser(id, true);
 
         if( user != null ){
-            user.statusSwitch();
+            user.disabled();
             userService.update(user);
         }
         return OPER_SUCCEED;
@@ -257,7 +257,7 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-reseted")
     public String mgrReseted(@RequestBody String id){
-        User user = VerifyUser(id, true);
+        User user = verifyUser(id, true);
 
         if( user != null ){
             user.setPassword(null);
@@ -291,15 +291,15 @@ public class UserController extends BaseController{
      * @param isAdmin
      * @return
      */
-    private User VerifyUser(String id, boolean isAdmin){
+    private User verifyUser(String id, boolean isAdmin){
         User user = userService.fetch(id);
 
         if( user != null ){
             String mgrType = user.getMgrType();
 
-            if( isAdmin && CommonConstant.USER_TYPE_ADMIN.equals(mgrType) ){
+            if( isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
                 return user;
-            }else if( !isAdmin && CommonConstant.USER_TYPE_NORMAL.equals(mgrType) ){
+            }else if( !isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
                 return user;
             }
         }

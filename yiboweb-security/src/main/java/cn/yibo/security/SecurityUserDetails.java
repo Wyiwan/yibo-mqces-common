@@ -22,7 +22,7 @@ package cn.yibo.security;
 
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.StringUtils;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.entity.User;

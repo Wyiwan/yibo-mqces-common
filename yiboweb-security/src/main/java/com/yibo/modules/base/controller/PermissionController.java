@@ -26,7 +26,7 @@ import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import cn.yibo.security.constant.CommonConstant;
+import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
