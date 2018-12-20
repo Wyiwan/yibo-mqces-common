@@ -4,14 +4,14 @@
 {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.					
 {  创建人：  高云
 {  审查人：
-{  模块：系统管理模块
+{  模块：系统管理模块										
 {  功能描述:										
 {		 													
 {  ---------------------------------------------------------------------------	
 {  维护历史:													
 {  日期        维护人        维护类型						
 {  ---------------------------------------------------------------------------	
-{  2018-12-03  高云        新建	
+{  2018-12-20  高云        新建	
 { 	                                                                     
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
@@ -21,6 +21,8 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import cn.yibo.common.lang.StringUtils;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,7 +31,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * 角色表实体类(Role)
  * @author 高云
- * @since 2018-12-03
+ * @since 2018-12-20
  * @version v1.0
  */
 @Data
@@ -39,16 +41,43 @@ public class Role extends DataEntity<String>{
     @ApiModelProperty(value = "角色名称")
     private String roleName;
     
-    @ApiModelProperty(value = "角色排序")
-    private Double roleSort;
+    @ApiModelProperty(value = "角色编码")
+    private String roleCode;
     
-    @ApiModelProperty(value = "系统内置（0否  1是）")
-    private String isBuilt;
+    @ApiModelProperty(value = "角色权重（倒序）")
+    private Double roleWeight;
     
-    @ApiModelProperty(value = "用户类型")
+    @ApiModelProperty(value = "角色分类（预留）")
+    private String roleType;
+    
+    @ApiModelProperty(value = "用户类型（normal普通用户 expert专家）")
     private String userType;
     
-    @ApiModelProperty(value = "租户ID")
-    private String tenantId;
-    
+    @ApiModelProperty(value = "系统内置（0否 1是）")
+    private String isSys;
+
+    @Override
+    public void preInsert(){
+        preInit();
+        super.preInsert();
+    }
+
+    @Override
+    public void preUpdate(){
+        preInit();
+        super.preUpdate();
+    }
+
+    private void preInit(){
+        if( StringUtils.isBlank(this.userType) ){
+            this.userType = CommonConstant.USER_TYPE_NORMAL;
+        }
+        if( StringUtils.isBlank(this.isSys) ){
+            this.isSys = CommonConstant.NO;
+        }
+    }
+
+    public void disabled(){
+        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
+    }
 }

@@ -4,9 +4,11 @@
     <sql id="Base_Column_List">
         id,
         role_name,
-        role_sort,
-        is_built,
+        role_code,
+        role_weight,
+        role_type,
         user_type,
+        is_sys,
         status,
         create_by,
         create_date,
@@ -25,9 +27,11 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             role_name,
-            role_sort,
-            is_built,
+            role_code,
+            role_weight,
+            role_type,
             user_type,
+            is_sys,
             status,
             create_by,
             create_date,
@@ -39,9 +43,11 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #{id,jdbcType=VARCHAR},
             #{roleName,jdbcType=VARCHAR},
-            #{roleSort,jdbcType=NUMERIC},
-            #{isBuilt,jdbcType=VARCHAR},
+            #{roleCode,jdbcType=VARCHAR},
+            #{roleWeight,jdbcType=NUMERIC},
+            #{roleType,jdbcType=VARCHAR},
             #{userType,jdbcType=VARCHAR},
+            #{isSys,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
@@ -57,9 +63,11 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             role_name,
-            role_sort,
-            is_built,
+            role_code,
+            role_weight,
+            role_type,
             user_type,
+            is_sys,
             status,
             create_by,
             create_date,
@@ -71,9 +79,11 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             replace(UUID(),'-',''),
             #{map.roleName,jdbcType=VARCHAR},
-            #{map.roleSort,jdbcType=NUMERIC},
-            #{map.isBuilt,jdbcType=VARCHAR},
+            #{map.roleCode,jdbcType=VARCHAR},
+            #{map.roleWeight,jdbcType=NUMERIC},
+            #{map.roleType,jdbcType=VARCHAR},
             #{map.userType,jdbcType=VARCHAR},
+            #{map.isSys,jdbcType=VARCHAR},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
@@ -89,9 +99,11 @@
         update sys_role
         <trim prefix="set" suffixOverrides=",">
             role_name = #{roleName,jdbcType=VARCHAR},
-            role_sort = #{roleSort,jdbcType=NUMERIC},
-            is_built = #{isBuilt,jdbcType=VARCHAR},
+            role_code = #{roleCode,jdbcType=VARCHAR},
+            role_weight = #{roleWeight,jdbcType=NUMERIC},
+            role_type = #{roleType,jdbcType=VARCHAR},
             user_type = #{userType,jdbcType=VARCHAR},
+            is_sys = #{isSys,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -107,9 +119,11 @@
         update sys_role
         <trim prefix="set" suffixOverrides=",">
             role_name = #{roleName,jdbcType=VARCHAR},
-            role_sort = #{roleSort,jdbcType=NUMERIC},
-            is_built = #{isBuilt,jdbcType=VARCHAR},
+            role_code = #{roleCode,jdbcType=VARCHAR},
+            role_weight = #{roleWeight,jdbcType=NUMERIC},
+            role_type = #{roleType,jdbcType=VARCHAR},
             user_type = #{userType,jdbcType=VARCHAR},
+            is_sys = #{isSys,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -127,14 +141,20 @@
             <if test="map.roleName != null">
                 role_name = #{map.roleName,jdbcType=VARCHAR},
             </if>
-            <if test="map.roleSort != null">
-                role_sort = #{map.roleSort,jdbcType=NUMERIC},
+            <if test="map.roleCode != null">
+                role_code = #{map.roleCode,jdbcType=VARCHAR},
             </if>
-            <if test="map.isBuilt != null">
-                is_built = #{map.isBuilt,jdbcType=VARCHAR},
+            <if test="map.roleWeight != null">
+                role_weight = #{map.roleWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="map.roleType != null">
+                role_type = #{map.roleType,jdbcType=VARCHAR},
             </if>
             <if test="map.userType != null">
                 user_type = #{map.userType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.isSys != null">
+                is_sys = #{map.isSys,jdbcType=VARCHAR},
             </if>
             <if test="map.status != null">
                 status = #{map.status,jdbcType=INTEGER},
@@ -163,14 +183,20 @@
             <if test="update.roleName != null">
                 role_name = #{update.roleName,jdbcType=VARCHAR},
             </if>
-            <if test="update.roleSort != null">
-                role_sort = #{update.roleSort,jdbcType=NUMERIC},
+            <if test="update.roleCode != null">
+                role_code = #{update.roleCode,jdbcType=VARCHAR},
             </if>
-            <if test="update.isBuilt != null">
-                is_built = #{update.isBuilt,jdbcType=VARCHAR},
+            <if test="update.roleWeight != null">
+                role_weight = #{update.roleWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="update.roleType != null">
+                role_type = #{update.roleType,jdbcType=VARCHAR},
             </if>
             <if test="update.userType != null">
                 user_type = #{update.userType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.isSys != null">
+                is_sys = #{update.isSys,jdbcType=VARCHAR},
             </if>
             <if test="update.status != null">
                 status = #{update.status,jdbcType=INTEGER},
@@ -192,14 +218,20 @@
             <if test="condition.roleName != null">
                 and role_name = #{condition.roleName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort,jdbcType=NUMERIC}
+            <if test="condition.roleCode != null">
+                and role_code = #{condition.roleCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt,jdbcType=VARCHAR}
+            <if test="condition.roleWeight != null">
+                and role_weight = #{condition.roleWeight,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.roleType != null">
+                and role_type = #{condition.roleType,jdbcType=VARCHAR}
             </if>
             <if test="condition.userType != null">
                 and user_type = #{condition.userType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -243,14 +275,20 @@
             <if test="condition.roleName != null">
                 and role_name = #{condition.roleName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort,jdbcType=NUMERIC}
+            <if test="condition.roleCode != null">
+                and role_code = #{condition.roleCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt,jdbcType=VARCHAR}
+            <if test="condition.roleWeight != null">
+                and role_weight = #{condition.roleWeight,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.roleType != null">
+                and role_type = #{condition.roleType,jdbcType=VARCHAR}
             </if>
             <if test="condition.userType != null">
                 and user_type = #{condition.userType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -336,14 +374,20 @@
             <if test="condition.roleName != null">
                 and role_name = #{condition.roleName}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.roleCode != null">
+                and role_code = #{condition.roleCode}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.roleWeight != null">
+                and role_weight = #{condition.roleWeight}
+            </if>
+            <if test="condition.roleType != null">
+                and role_type = #{condition.roleType}
             </if>
             <if test="condition.userType != null">
                 and user_type = #{condition.userType}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -382,14 +426,20 @@
             <if test="condition.roleName != null">
                 and role_name = #{condition.roleName}
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.roleCode != null">
+                and role_code = #{condition.roleCode}
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.roleWeight != null">
+                and role_weight = #{condition.roleWeight}
+            </if>
+            <if test="condition.roleType != null">
+                and role_type = #{condition.roleType}
             </if>
             <if test="condition.userType != null">
                 and user_type = #{condition.userType}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -427,14 +477,20 @@
             <if test="condition.roleName != null">
                 and role_name = #{condition.roleName}
             </if>            
-            <if test="condition.roleSort != null">
-                and role_sort = #{condition.roleSort}
+            <if test="condition.roleCode != null">
+                and role_code = #{condition.roleCode}
             </if>            
-            <if test="condition.isBuilt != null">
-                and is_built = #{condition.isBuilt}
+            <if test="condition.roleWeight != null">
+                and role_weight = #{condition.roleWeight}
+            </if>            
+            <if test="condition.roleType != null">
+                and role_type = #{condition.roleType}
             </if>            
             <if test="condition.userType != null">
                 and user_type = #{condition.userType}
+            </if>            
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -463,7 +519,7 @@
                 order by ${condition.orderby}
             </when>
             <otherwise>
-                order by id
+                order by role_weight desc
             </otherwise>
         </choose>
     </select>
@@ -481,14 +537,20 @@
             <if test="condition.roleName != null">
                 and role_name like concat('%', #{condition.roleName} , '%')
             </if>
-            <if test="condition.roleSort != null">
-                and role_sort like concat('%', #{condition.roleSort} , '%')
+            <if test="condition.roleCode != null">
+                and role_code like concat('%', #{condition.roleCode} , '%')
             </if>
-            <if test="condition.isBuilt != null">
-                and is_built like concat('%', #{condition.isBuilt} , '%')
+            <if test="condition.roleWeight != null">
+                and role_weight like concat('%', #{condition.roleWeight} , '%')
+            </if>
+            <if test="condition.roleType != null">
+                and role_type like concat('%', #{condition.roleType} , '%')
             </if>
             <if test="condition.userType != null">
                 and user_type like concat('%', #{condition.userType} , '%')
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys like concat('%', #{condition.isSys} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')
