@@ -111,7 +111,6 @@ public class RoleController extends BaseController{
      * @return
      */
     @ApiOperation("启用或停用")
-    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
     public String disabled(@RequestBody Role role){
         Role entity = VerifyRole(role);
@@ -153,6 +152,9 @@ public class RoleController extends BaseController{
         return roleService.queryPage(new BaseForm<T>());
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // @验证相关
+    //------------------------------------------------------------------------------------------------------------------
     /**
      * 唯一性校验
      * @return

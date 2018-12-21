@@ -107,9 +107,8 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户类型")
     private String userType;
 
-    @NotEmpty(message="权重不能为空")
     @ApiModelProperty(value = "权重(倒序)")
-    private Double userWeight;
+    private Integer userWeight;
     
     @ApiModelProperty(value = "管理员类型(0非管理员 1系统管理员)")
     private String mgrType;

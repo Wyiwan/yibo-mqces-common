@@ -45,7 +45,7 @@ public class Role extends DataEntity<String>{
     private String roleCode;
     
     @ApiModelProperty(value = "角色权重（倒序）")
-    private Double roleWeight;
+    private Integer roleWeight;
     
     @ApiModelProperty(value = "角色分类（预留）")
     private String roleType;
