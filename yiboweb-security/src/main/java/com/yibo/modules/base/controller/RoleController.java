@@ -24,12 +24,16 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.Role;
+import com.yibo.modules.base.service.PermissionService;
 import com.yibo.modules.base.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,6 +46,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +61,9 @@ import java.util.Map;
 public class RoleController extends BaseController{
    @Autowired
    private RoleService roleService;
+
+    @Autowired
+    private PermissionService permissionService;
    
     /**
      * 新增
@@ -65,8 +73,8 @@ public class RoleController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Role role) throws Exception{
-        VerifyRole(role);
-        roleService.insert(role);
+        Role vo = VerifyRole(role, false);
+        roleService.insert(vo);
         return role.getId();
     }
     
@@ -78,8 +86,7 @@ public class RoleController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody Role role) throws Exception{
-        VerifyRole(role);
-        Role vo = fetchRole(role);
+        Role vo = VerifyRole(role, false);
         BeanUtils.copyProperties(role, vo, ObjectUtils.getNullPropertyNames(role));
 
         roleService.update(vo);
@@ -106,8 +113,8 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("启用或停用")
     @PostMapping("/disabled")
-    public String disabled(@RequestBody Role role){
-        Role entity = fetchRole(role);
+    public String disabled(@RequestBody Role role) throws Exception{
+        Role entity = VerifyRole(role, true);
 
         if( entity != null ){
             entity.disabled();
@@ -186,28 +193,37 @@ public class RoleController extends BaseController{
 
     /**
      * 内部方法：后端验证角色名称和角色编码
-     * @param role
+     * @param role 角色对象
+     * @param onlyVerifySys 是否只验证是否是内置角色
      * @return
      */
-    private void VerifyRole(Role role) throws Exception{
-        if( !verifyUniqueName(role) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
-        }else if( !verifyUniqueCode(role) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
+    private Role VerifyRole(Role role, boolean onlyVerifySys) throws Exception{
+        if( !onlyVerifySys ){
+            if( !verifyUniqueName(role) ){
+                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
+            }else if( !verifyUniqueCode(role) ){
+                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
+            }
+        }else if( StringUtils.isNotBlank(role.getId()) ){
+            role = roleService.fetch(role.getId());
         }
-    }
-
-    /**
-     * 内部方法：操作内置角色的权限验证
-     * @param role
-     * @return
-     */
-    private Role fetchRole(Role role){
-        Role vo = roleService.fetch(role.getId());
-
-        if( CommonConstant.YES.equals(vo.getIsSys()) && !role.getCurrentUser().isSuperAdmin() ){
+        if( CommonConstant.YES.equals(role.getIsSys()) && !role.getCurrentUser().isSuperAdmin() ){
             throw new BusinessException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
         }
-        return vo;
+        return role;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // @其他
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 获取菜单授权的树结构
+     * @return
+     */
+    @ApiOperation("获取菜单授权的树结构")
+    @GetMapping("/grant-permision-tree")
+    public List grantTree(){
+        List<Permission> treeData = permissionService.findGrantTreeData();
+        return new PermissionTree(treeData).getTreeList();
     }
 }

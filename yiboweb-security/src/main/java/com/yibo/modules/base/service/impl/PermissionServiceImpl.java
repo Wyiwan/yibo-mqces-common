@@ -21,11 +21,16 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
+import cn.yibo.security.context.UserContext;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +47,9 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
+    private static Object configMinWeight = PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight");
+    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = ObjectUtils.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
+
     /**
      * 重写新增
      * @param permission
@@ -129,6 +137,49 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Override
     public List<Permission> findByWeight(Integer min, Integer max, String type) {
         return dao.findByWeight(min, max, type);
+    }
+
+    /**
+     * 根据用户获取访问的权限
+     * @param user
+     * @return
+     */
+    @Override
+    public List<Permission> findAccessTreeData(User user) {
+        List<Permission> permissions = Lists.newArrayList();
+        user = user == null ? UserContext.getUser() : user;
+
+        if( user != null ){
+            if( user.isSuperAdmin() ){
+                permissions = this.findByWeight(SUPER_GET_PERMS_MIN_WEIGHT, null, null);
+            }else if( user.isAdmin() ){
+                permissions = this.findByWeight(CommonConstant.ADMIN_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
+            }else{
+                permissions = this.findByUserId(user.getId(), null);
+            }
+        }
+        return permissions;
+    }
+
+    /**
+     * 根据用户获取可授权的权限
+     * @return
+     */
+    @Override
+    public List<Permission> findGrantTreeData() {
+        User user = UserContext.getUser();
+        List<Permission> permissions = Lists.newArrayList();
+
+        if( user != null ){
+            if( user.isSuperAdmin() ){
+                permissions = this.findByWeight(CommonConstant.USER_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
+            }else if( user.isAdmin() ){
+                permissions = this.findByWeight(CommonConstant.USER_PERMS_WEIGHT, CommonConstant.ADMIN_PERMS_WEIGHT, null);
+            }else{
+                permissions = this.findByUserId(user.getId(), null);
+            }
+        }
+        return permissions;
     }
 
 }

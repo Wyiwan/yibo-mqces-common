@@ -23,6 +23,7 @@ package com.yibo.modules.base.service;
 import cn.yibo.base.service.IBaseService;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.entity.User;
 
 import java.util.List;
 
@@ -61,4 +62,17 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @return
      */
     List<Permission> findByWeight(Integer min, Integer max, String type);
+
+    /**
+     * 根据用户获取访问的权限
+     * @param user
+     * @return
+     */
+    List<Permission> findAccessTreeData(User user);
+
+    /**
+     * 根据用户获取可授权的权限
+     * @return
+     */
+    List<Permission> findGrantTreeData();
 }

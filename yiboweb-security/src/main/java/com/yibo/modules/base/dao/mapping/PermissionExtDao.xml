@@ -42,7 +42,7 @@
         from sys_user u
         left join sys_user_role m on u.id = m.user_id
         left join sys_role_permission n on m.role_id = n.role_id
-        left join sys_permission p on p.id = n.permission_id and p.status = 1
+        inner join sys_permission p on p.id = n.permission_id and p.status = 1
         <where>
             and u.id = #{userId}
             and u.status = 1

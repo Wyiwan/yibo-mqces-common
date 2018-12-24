@@ -26,7 +26,9 @@ import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * 角色表实体类(Role)
@@ -56,6 +58,12 @@ public class Role extends DataEntity<String>{
     
     @ApiModelProperty(value = "系统内置（0否 1是）")
     private String isSys;
+
+    @ApiModelProperty(value = "角色所对应的权限")
+    private List<RolePermission> rolePermissions;
+
+    @ApiModelProperty(value = "角色所对应的用户")
+    private List<UserRole> userRoles;
 
     @Override
     public void preInsert(){
