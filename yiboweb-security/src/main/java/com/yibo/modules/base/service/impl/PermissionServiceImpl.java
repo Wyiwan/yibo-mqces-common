@@ -22,8 +22,8 @@ package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.core.cache.CacheUtils;
-import com.yibo.modules.base.constant.CommonConstant;
 import com.google.common.collect.Maps;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.service.PermissionService;
@@ -44,14 +44,14 @@ import java.util.Map;
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
     /**
      * 重写新增
-     * @param entity
+     * @param permission
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(Permission entity) {
-        int result = super.insert(entity);
-        dao.updateAncestor(entity);
+    public int insert(Permission permission){
+        int result = super.insert(permission);
+        dao.updateAncestor(permission);
         return result;
     }
 
@@ -62,7 +62,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
+    public int deleteByIds(List list){
         int result = dao.deleteCascade(list);
 
         // 清除用户缓存
@@ -72,25 +72,34 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
 
     /**
      * 重写更新
-     * @param entity
+     * @param permission
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public int update(Permission entity) {
-        int result = super.update(entity);
-        dao.updateAncestor(entity);
+    public int update(Permission permission){
+        int result = super.update(permission);
+        dao.updateAncestor(permission);
 
         // 清除用户缓存
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
         return result;
     }
 
+    /**
+     * 查询树结构数据
+     * @return
+     */
     @Override
     public List<Permission> findTree() {
         return dao.findTree();
     }
 
+    /**
+     * 根据类型查询权限
+     * @param type
+     * @return
+     */
     @Override
     public List<Permission> findByType(String type){
         Map<String, Object> condition = Maps.newHashMap();
@@ -100,11 +109,23 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         return dao.queryList(condition, null, null);
     }
 
+    /**
+     * 根据用户ID查询权限
+     * @param userId
+     * @return
+     */
     @Override
     public List<Permission> findByUserId(String userId, String type){
         return dao.findByUserId(userId, type);
     }
 
+    /**
+     * 根据权重查询权限
+     * @param min
+     * @param max
+     * @param type
+     * @return
+     */
     @Override
     public List<Permission> findByWeight(Integer min, Integer max, String type) {
         return dao.findByWeight(min, max, type);

@@ -20,18 +20,24 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.collect.ListUtils;
+import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.security.context.UserContext;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
+import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色表实体服务实现层类(Role)
@@ -66,6 +72,34 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             return 0;
         }
         return super.deleteByIds(list);
+    }
+
+    /**
+     * 重写分页
+     * @param baseForm
+     * @param <T>
+     * @return
+     */
+    @Override
+    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm) {
+        // 设置分页参数
+        if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
+            PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
+        }
+
+        // 获取查询参数
+        Map<String, Object> params = baseForm.getParameters();
+
+        // 如果不是超级管理员
+        User currUser = UserContext.getUser();
+        if( !currUser.isSuperAdmin() ){
+            params.put("userWeight", currUser.getUserWeight());
+        }
+        params.put("tenantId", currUser.getTenantId());
+        logger.info("分页请求参数："+params);
+
+        List list = dao.queryPageExt(params);
+        return new PageInfo<T>(list);
     }
 
     @Override

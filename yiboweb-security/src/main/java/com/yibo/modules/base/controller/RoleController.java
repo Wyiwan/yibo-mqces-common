@@ -22,13 +22,12 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;
@@ -65,10 +64,8 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("新增")
     @PostMapping("/created")
-    public String created(@Valid @RequestBody Role role){
-        if( !verifyUnique(role.getId(), role.getRoleCode()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
-        }
+    public String created(@Valid @RequestBody Role role) throws Exception{
+        VerifyRole(role);
         roleService.insert(role);
         return role.getId();
     }
@@ -80,12 +77,9 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Role role){
-        if( !verifyUnique(role.getId(), role.getRoleCode()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
-        }
-
-        Role vo = VerifyRole(role);
+    public String updated(@RequestBody Role role) throws Exception{
+        VerifyRole(role);
+        Role vo = fetchRole(role);
         BeanUtils.copyProperties(role, vo, ObjectUtils.getNullPropertyNames(role));
 
         roleService.update(vo);
@@ -113,7 +107,7 @@ public class RoleController extends BaseController{
     @ApiOperation("启用或停用")
     @PostMapping("/disabled")
     public String disabled(@RequestBody Role role){
-        Role entity = VerifyRole(role);
+        Role entity = fetchRole(role);
 
         if( entity != null ){
             entity.disabled();
@@ -164,22 +158,51 @@ public class RoleController extends BaseController{
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
             @ApiImplicitParam(name = "roleCode", value = "角色编码", paramType = "query", dataType = "String", required = true)
     })
-    @GetMapping("/verify")
-    public Boolean verifyUnique(String id, String roleCode){
-        Map conditionMap = Maps.newHashMap();
-        if( StringUtils.isNotBlank(id) ){
-            conditionMap.put("id", id);
+    @GetMapping("/verify-code")
+    public Boolean verifyUniqueCode(Role role) throws Exception{
+        if( role != null ){
+            Map conditionMap = MapUtils.toMap(role);
+            conditionMap.remove("tenantId");
+            conditionMap.remove("roleName");
+            return roleService.count(conditionMap) > 0 ? false : true;
         }
-        conditionMap.put("roleCode", roleCode);
-        return roleService.count(conditionMap) > 0 ? false : true;
+        return false;
+    }
+
+    @ApiOperation("验证角色名称是否可用")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String", required = true)
+    })
+    @GetMapping("/verify-name")
+    public Boolean verifyUniqueName(Role role) throws Exception{
+        if( role != null ){
+            Map conditionMap = MapUtils.toMap(role);
+            conditionMap.remove("roleCode");
+            return roleService.count(conditionMap) > 0 ? false : true;
+        }
+        return false;
     }
 
     /**
-     * 操作内置角色的权限验证
+     * 内部方法：后端验证角色名称和角色编码
      * @param role
      * @return
      */
-    private Role VerifyRole(Role role){
+    private void VerifyRole(Role role) throws Exception{
+        if( !verifyUniqueName(role) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
+        }else if( !verifyUniqueCode(role) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
+        }
+    }
+
+    /**
+     * 内部方法：操作内置角色的权限验证
+     * @param role
+     * @return
+     */
+    private Role fetchRole(Role role){
         Role vo = roleService.fetch(role.getId());
 
         if( CommonConstant.YES.equals(vo.getIsSys()) && !role.getCurrentUser().isSuperAdmin() ){

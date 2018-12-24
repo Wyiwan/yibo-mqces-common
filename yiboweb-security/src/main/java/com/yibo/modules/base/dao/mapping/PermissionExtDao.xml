@@ -2,20 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibo.modules.base.dao.PermissionDao">
     <!-- 在这里存放用户自定义的映射配置（注：PermissionDAO.xml里各节点的ID不能在这里重复出现）  -->
+    <sql id="Base_Column_List_Ext">
+        p.id,
+        p.parent_id,
+        p.ancestor_id,
+        p.perms_name,
+        p.perms_type,
+        p.perms_url,
+        p.perms_sort,
+        p.perms_icon,
+        p.perms_level,
+        p.perms_weight,
+        p.status
+    </sql>
+
+    <!-- 根据权重查询权限 -->
+    <select id="findByWeight" resultType="com.yibo.modules.base.entity.Permission">
+        select
+            <include refid="Base_Column_List_Ext" />
+        from sys_permission p
+        where 1 = 1
+        <if test="minWeight != null and minWeight !=''">
+            and p.perms_weight >= #{minWeight}
+        </if>
+        <if test="maxWeight != null and maxWeight !=''">
+            and #{maxWeight} > p.perms_weight
+        </if>
+        <if test="type != null and type !=''">
+            and p.perms_type = #{type}
+        </if>
+        and p.status = 1
+        order by p.perms_sort asc
+    </select>
+
     <!-- 根据用户ID查询权限 -->
     <select id="findByUserId" resultType="com.yibo.modules.base.entity.Permission">
         select distinct
-            p.id,
-            p.parent_id,
-            p.ancestor_id,
-            p.perms_name,
-            p.perms_type,
-            p.perms_url,
-            p.perms_sort,
-            p.perms_icon,
-            p.perms_level,
-            p.perms_weight,
-            p.status
+            <include refid="Base_Column_List_Ext" />
         from sys_user u
         left join sys_user_role m on u.id = m.user_id
         left join sys_role_permission n on m.role_id = n.role_id
@@ -30,41 +53,17 @@
         order by p.perms_sort asc
     </select>
 
-    <!-- 根据权重查询权限 -->
-    <select id="findByWeight" resultType="com.yibo.modules.base.entity.Permission">
-        select
-            p.id,
-            p.parent_id,
-            p.ancestor_id,
-            p.perms_name,
-            p.perms_type,
-            p.perms_url,
-            p.perms_sort,
-            p.perms_icon,
-            p.perms_level,
-            p.perms_weight,
-            p.status
-        from sys_permission p
-        where 1 = 1
-            <if test="minWeight != null and minWeight !=''">
-                and p.perms_weight >= #{minWeight}
-            </if>
-            <if test="maxWeight != null and maxWeight !=''">
-                and #{maxWeight} > p.perms_weight
-            </if>
-            <if test="type != null and type !=''">
-                and p.perms_type = #{type}
-            </if>
-            and p.status = 1
-        order by p.perms_sort asc
-    </select>
-
     <!-- 查询树结构数据 -->
     <select id="findTree" resultType="com.yibo.modules.base.entity.Permission">
-        select id, parent_id, ancestor_id, perms_name, perms_type, perms_sort, perms_level from sys_permission where status = 1 order by ancestor_id, perms_sort;
+        select
+            <include refid="Base_Column_List_Ext" />
+        from sys_permission p
+        where 1 = 1
+          and p.status = 1
+        order by p.perms_sort
     </select>
 
-    <!-- 调用存储过程更新父级ID -->
+    <!-- 调用存储过程更新祖先ID字段 -->
     <select id="updateAncestor" parameterType="com.yibo.modules.base.entity.Permission" statementType="CALLABLE" resultType="java.util.Map">
 	    {call sp_deal_perms_ancestor(#{id,jdbcType=VARCHAR,mode=IN})}
     </select>

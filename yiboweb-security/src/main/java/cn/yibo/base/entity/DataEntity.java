@@ -75,8 +75,8 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
         this.createDate = this.updateDate;
 
         if( UserContext.getUser() != null ){
-            this.createBy = UserContext.getUser().getId();
-            this.updateBy = this.createBy;
+            this.updateBy = UserContext.getUser().getId();
+            this.createBy = this.updateBy;
         }
         this.status = ObjectUtils.isEmpty(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }

@@ -27,11 +27,11 @@ import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.Permission;
@@ -132,10 +132,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             params.put("mgrType", CommonConstant.USER_MGR_TYPE_NORMAL);
         }
 
-        // 查询普通用户带上租户条件
+        // 普通用户查询关联租户
         if( CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
-            User currUser = UserContext.getUser();
-            params.put("tenantId", currUser.getTenantId());
+            params.put("tenantId", UserContext.getUser().getTenantId());
         }
         logger.info("分页请求参数："+params);
 

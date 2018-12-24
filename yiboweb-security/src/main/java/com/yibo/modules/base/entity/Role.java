@@ -40,7 +40,8 @@ public class Role extends DataEntity<String>{
     @NotEmpty(message="角色名称不能为空")
     @ApiModelProperty(value = "角色名称")
     private String roleName;
-    
+
+    @NotEmpty(message="角色编码不能为空")
     @ApiModelProperty(value = "角色编码")
     private String roleCode;
     
