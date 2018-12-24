@@ -49,6 +49,33 @@ import java.util.Map;
 @Transactional(readOnly=true)
 public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
     /**
+     * 重写新增
+     * @param role
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public int insert(Role role){
+        int result = super.insert(role);
+
+        if( !ListUtils.isEmpty(role.getRolePermissions()) ){
+            this.grantPermission(role);
+        }
+        return result;
+    }
+
+    /**
+     * 重写更新
+     * @param role
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public int update(Role role){
+        return super.update(role);
+    }
+
+    /**
      * 重写删除
      * @param list
      * @return
@@ -75,7 +102,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     }
 
     /**
-     * 重写分页
+     * 重写分页查询
      * @param baseForm
      * @param <T>
      * @return
@@ -102,8 +129,23 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
         return new PageInfo<T>(list);
     }
 
+    /**
+     * 根据用户ID查询角色
+     * @param userId
+     * @return
+     */
     @Override
     public List<Role> findByUserId(String userId) {
         return dao.findByUserId(userId);
+    }
+
+    /**
+     * 角色菜单权限授权
+     * @param role
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void grantPermission(Role role) {
+        dao.grantPermission(role);
     }
 }

@@ -21,13 +21,17 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.StringUtils;
+import cn.yibo.common.mapper.JsonMapper;
+import com.fasterxml.jackson.databind.JavaType;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,5 +92,17 @@ public class Role extends DataEntity<String>{
 
     public void disabled(){
         this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 以下为扩展属性
+    //------------------------------------------------------------------------------------------------------------------
+    public void setRolePermissionsJson(String jsonString){
+        JavaType javaType = JsonMapper.getInstance().createCollectionType(ArrayList.class, RolePermission.class);
+        List<RolePermission> rolePermissions = JsonMapper.getInstance().fromJsonString(jsonString, javaType);
+
+        if( !ListUtils.isEmpty(rolePermissions) ){
+            this.setRolePermissions(rolePermissions);
+        }
     }
 }

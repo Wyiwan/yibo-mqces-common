@@ -34,19 +34,6 @@ import java.util.List;
  */
 public interface PermissionDao extends CrudDao<Permission>{
     /**
-     * 级联删除
-     * @param list
-     * @return
-     */
-    int deleteCascade(List list);
-
-    /**
-     * 更新Ancestor字段信息
-     * @param permission
-     */
-    void updateAncestor(Permission permission);
-
-    /**
      * 查询树结构数据
      * @return
      */
@@ -60,6 +47,13 @@ public interface PermissionDao extends CrudDao<Permission>{
     List<Permission> findByUserId(@Param("userId") String userId, @Param("type") String type);
 
     /**
+     * 根据角色ID查询权限
+     * @param roleId
+     * @return
+     */
+    List<Permission> findByRoleId(@Param("roleId") String roleId);
+
+    /**
      * 根据权重查询权限
      * @param minWeight
      * @param maxWeight
@@ -67,4 +61,18 @@ public interface PermissionDao extends CrudDao<Permission>{
      * @return
      */
     List<Permission> findByWeight(@Param("minWeight") Integer minWeight, @Param("maxWeight") Integer maxWeight, @Param("type") String type);
+
+    /**
+     * 级联删除
+     * @param list
+     * @return
+     */
+    int deleteCascade(List list);
+
+    /**
+     * 更新Ancestor字段信息
+     * @param permission
+     */
+    void updateAncestor(Permission permission);
+
 }

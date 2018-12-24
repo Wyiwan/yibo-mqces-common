@@ -108,7 +108,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 重写分页
+     * 重写分页查询
      * @param baseForm
      * @param <T>
      * @return

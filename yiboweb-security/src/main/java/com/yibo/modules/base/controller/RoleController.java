@@ -22,6 +22,7 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
@@ -221,9 +222,33 @@ public class RoleController extends BaseController{
      * @return
      */
     @ApiOperation("获取菜单授权的树结构")
-    @GetMapping("/grant-permision-tree")
+    @GetMapping("/get-grant-permission")
     public List grantTree(){
         List<Permission> treeData = permissionService.findGrantTreeData();
         return new PermissionTree(treeData).getTreeList();
+    }
+
+    /**
+     * 获取已授权的菜单权限
+     * @return
+     */
+    @ApiOperation("获取已授权的菜单权限")
+    @GetMapping("/get-granted-permission")
+    public List getGrantedPermision(String roleId){
+        List<Permission> permissionList = permissionService.findByRoleId(roleId);
+        return ListUtils.extractToList(permissionList, "id");
+    }
+
+    /**
+     * 授权菜单权限
+     * @param role
+     * @return
+     */
+    @ApiOperation("授权菜单权限")
+    @PostMapping("/granted-permission")
+    public String grantedPermision(@RequestBody Role role) throws Exception{
+        VerifyRole(role, true);
+        roleService.grantPermission(role);
+        return "菜单授权成功";
     }
 }

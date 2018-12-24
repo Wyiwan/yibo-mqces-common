@@ -34,5 +34,10 @@ import java.util.Map;
  * @version v1.0
  */
 public interface UserDao extends CrudDao<User>{
+    /**
+     * 分页查询扩展
+     * @param condition
+     * @return
+     */
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
 }

@@ -35,7 +35,23 @@ import java.util.Map;
  * @version v1.0
  */
 public interface RoleDao extends CrudDao<Role>{
+    /**
+     * 分页查询扩展
+     * @param condition
+     * @return
+     */
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
 
+    /**
+     * 根据用户ID查询角色
+     * @param userId
+     * @return
+     */
     List<Role> findByUserId(String userId);
+
+    /**
+     * 角色菜单权限授权
+     * @param role
+     */
+    void grantPermission(Role role);
 }

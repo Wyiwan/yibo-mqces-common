@@ -77,7 +77,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     }
 
     /**
-     * 重写查询
+     * 重写列表查询
      * @param condition
      * @return
      */
@@ -86,6 +86,10 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
         return dao.queryListExt(condition);
     }
 
+    /**
+     * 查询树结构数据
+     * @return
+     */
     @Override
     public List<Dept> findTree(Dept dept) {
         return dao.findTree(dept);

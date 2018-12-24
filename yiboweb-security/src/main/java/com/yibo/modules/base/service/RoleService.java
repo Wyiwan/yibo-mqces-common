@@ -21,8 +21,8 @@
 package com.yibo.modules.base.service;
 
 import cn.yibo.base.service.IBaseService;
-import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.dao.RoleDao;
+import com.yibo.modules.base.entity.Role;
 
 import java.util.List;
 
@@ -39,4 +39,10 @@ public interface RoleService extends IBaseService<RoleDao, Role>{
      * @return
      */
     List<Role> findByUserId(String userId);
+
+    /**
+     * 菜单权限授权
+     * @param role
+     */
+    void grantPermission(Role role);
 }

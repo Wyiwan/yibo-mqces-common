@@ -128,6 +128,16 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
+     * 根据角色ID查询权限
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Permission> findByRoleId(String roleId) {
+        return dao.findByRoleId(roleId);
+    }
+
+    /**
      * 根据权重查询权限
      * @param min
      * @param max

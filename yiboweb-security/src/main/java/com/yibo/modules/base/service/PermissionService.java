@@ -55,6 +55,13 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
     List<Permission> findByUserId(String userId, String type);
 
     /**
+     * 根据角色ID查询权限
+     * @param roleId
+     * @return
+     */
+    List<Permission> findByRoleId(String roleId);
+
+    /**
      * 根据权重查询权限
      * @param min
      * @param max

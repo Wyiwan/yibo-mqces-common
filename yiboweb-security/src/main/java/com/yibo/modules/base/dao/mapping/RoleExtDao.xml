@@ -83,4 +83,14 @@
         </if>
         and status = 1
     </select>
+
+    <!-- 角色菜单授权 -->
+    <update id="grantPermission" parameterType="com.yibo.modules.base.entity.Role">
+        delete from sys_role_permission where role_id = #{id};
+        <if test="rolePermissions != null">
+            <foreach collection="rolePermissions" item="vo">
+                insert into sys_role_permission(role_id, permission_id) values(#{id},#{vo.permissionId});
+            </foreach>
+        </if>
+    </update>
 </mapper>
