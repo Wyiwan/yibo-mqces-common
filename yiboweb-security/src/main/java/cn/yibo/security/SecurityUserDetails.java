@@ -54,6 +54,8 @@ public class SecurityUserDetails extends User implements UserDetails{
             this.setDeptId(user.getDeptId());
             this.setTenantId(user.getTenantId());
             this.setUserWeight(user.getUserWeight());
+            this.setMgrType(user.getMgrType());
+            this.setDept(user.getDept());
             this.setRoles(user.getRoles());
             this.setPermissions(user.getPermissions());
         }

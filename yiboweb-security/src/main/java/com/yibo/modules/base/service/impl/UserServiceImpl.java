@@ -22,7 +22,7 @@ package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
-import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
@@ -57,9 +57,6 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class UserServiceImpl extends AbstractBaseService<UserDao, User> implements UserService {
-    private static Object configMinWeight = PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight");
-    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = ObjectUtils.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
-
     @Autowired
     private DeptService deptService;
 
@@ -152,29 +149,23 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         User user = dao.findOne("username", username);
 
         if( user != null ){
-            String userId = user.getId();
-
             // 关联科室
             Dept dept = deptService.fetch(user.getDeptId());
             if( dept != null ){
                 user.setDept(dept);
-                user.setDeptName(dept.getDeptName());
             }
 
             // 关联角色
-            List<Role> roles = roleService.findByUserId(userId);
-            user.setRoles(roles);
+            List<Role> roles = roleService.findByUserId(user.getId());
+            if( !ListUtils.isEmpty(roles) ){
+                user.setRoles(roles);
+            }
 
             // 关联操作权限
-            List<Permission> permissions;
-            if( user.isSuperAdmin() ){
-                permissions = permsService.findByWeight(SUPER_GET_PERMS_MIN_WEIGHT, null, null);
-            }else if( user.isAdmin() ){
-                permissions = permsService.findByWeight(CommonConstant.ADMIN_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
-            }else{
-                permissions = permsService.findByUserId(userId, null);
+            List<Permission> permissions = permsService.findAccessTreeData(user);
+            if( !ListUtils.isEmpty(permissions) ){
+                user.setPermissions(permissions);
             }
-            user.setPermissions(permissions);
         }
         return user;
     }

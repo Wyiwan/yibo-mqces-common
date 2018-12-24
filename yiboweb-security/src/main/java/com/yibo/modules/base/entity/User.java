@@ -134,9 +134,6 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "所属机构名称")
     private String officeName;
 
-    @ApiModelProperty(value = "所属科室名称")
-    private String deptName;
-
     @ApiModelProperty(value = "用户所属科室")
     private Dept dept;
 

@@ -23,13 +23,12 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import com.yibo.modules.base.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.UserService;
 import io.swagger.annotations.Api;
@@ -278,9 +277,7 @@ public class UserController extends BaseController{
     @GetMapping("/verify")
     public Boolean verifyUnique(String id, String username){
         Map conditionMap = Maps.newHashMap();
-        if( StringUtils.isNotBlank(id) ){
-            conditionMap.put("id", id);
-        }
+        conditionMap.put("id", id);
         conditionMap.put("username", username);
         return userService.count(conditionMap) > 0 ? false : true;
     }
