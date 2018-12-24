@@ -23,13 +23,12 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -111,19 +110,6 @@ public class PermissionController extends BaseController{
     // @查询相关
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 查询用户菜单权限
-     * @return
-     */
-    @ApiOperation("用户菜单权限查询")
-    @GetMapping("/user-menu")
-    public List userMenu(){
-        List<String> condition = Lists.newArrayList(CommonConstant.PERMISSION_PAGE);
-        List<Permission> result = UserContext.getUser().getPermissions()
-                .stream().filter((Permission p) -> condition.contains(p.getPermsType())).collect(Collectors.toList());
-        return new PermissionTree(result).getTreeList();
-    }
-
-    /**
      * 单个查询
      * @param id
      * @return
@@ -140,7 +126,7 @@ public class PermissionController extends BaseController{
      * 查询树结构数据
      * @return
      */
-    @ApiOperation("树结构查询")
+    @ApiOperation("查询新增或编辑的树结构")
     @GetMapping("/tree")
     public List tree(){
         List result = permissionService.findTree();
@@ -151,7 +137,7 @@ public class PermissionController extends BaseController{
      * 查询列表数据
      * @return
      */
-    @ApiOperation("列表查询")
+    @ApiOperation("查询列表树结构")
     @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", required = true, dataType = "String")
     @GetMapping("/list-tree")
     public List treeList(){
@@ -160,6 +146,9 @@ public class PermissionController extends BaseController{
         return new PermissionTree(result).getTreeList();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // @验证相关
+    //------------------------------------------------------------------------------------------------------------------
     /**
      * 唯一性校验
      * @return
@@ -172,10 +161,24 @@ public class PermissionController extends BaseController{
     @GetMapping("/verify")
     public Boolean verifyUnique(String id, String permsName){
         Map conditionMap = Maps.newHashMap();
-        if( StringUtils.isNotBlank(id) ){
-            conditionMap.put("id", id);
-        }
+        conditionMap.put("id", id);
         conditionMap.put("permsName", permsName);
         return permissionService.count(conditionMap) > 0 ? false : true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // @其他
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 查询用户菜单权限
+     * @return
+     */
+    @ApiOperation("查询用户菜单权限")
+    @GetMapping("/user-menu")
+    public List userMenu(){
+        List<String> condition = Lists.newArrayList(CommonConstant.PERMISSION_PAGE);
+        List<Permission> result = UserContext.getUser().getPermissions()
+                .stream().filter((Permission p) -> condition.contains(p.getPermsType())).collect(Collectors.toList());
+        return new PermissionTree(result).getTreeList();
     }
 }

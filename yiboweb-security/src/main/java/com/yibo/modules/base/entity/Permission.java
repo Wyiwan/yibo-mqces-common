@@ -21,6 +21,9 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
+import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -66,6 +69,27 @@ public class Permission extends DataEntity<String>{
     @ApiModelProperty(value = "权重")
     private Integer permsWeight;
 
+    @Override
+    public void preInsert(){
+        preInit();
+        super.preInsert();
+    }
+
+    @Override
+    public void preUpdate(){
+        preInit();
+        super.preUpdate();
+    }
+
+    private void preInit(){
+        if( StringUtils.isBlank(this.permsType) ){
+            this.permsType = CommonConstant.PERMISSION_OPERATION;
+        }
+        if( ObjectUtils.isEmpty(this.permsWeight) ){
+            this.permsWeight = CommonConstant.USER_PERMS_WEIGHT;
+        }
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // 扩展属性
     //------------------------------------------------------------------------------------------------------------------
@@ -74,5 +98,6 @@ public class Permission extends DataEntity<String>{
 
     @ApiModelProperty(value = "是否叶子节点 前端所需")
     private Boolean isLeaf = false;
+
 
 }

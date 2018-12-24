@@ -23,7 +23,6 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import com.google.common.collect.Maps;
@@ -146,9 +145,7 @@ public class OfficeController extends BaseController{
     @GetMapping("/verify")
     public Boolean verifyUnique(String id, String officeName){
         Map conditionMap = Maps.newHashMap();
-        if( StringUtils.isNotBlank(id) ){
-            conditionMap.put("id", id);
-        }
+        conditionMap.put("id", id);
         conditionMap.put("officeName", officeName);
         return officeService.count(conditionMap) > 0 ? false : true;
     }
