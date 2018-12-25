@@ -43,6 +43,7 @@ import com.yibo.modules.base.service.RoleService;
 import com.yibo.modules.base.service.UserService;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,6 +87,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     @Transactional(readOnly = false)
+    @CacheEvict(key = "#user.username")
     public int update(User user){
         return super.update(user);
     }
@@ -98,7 +100,6 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Override
     @Transactional(readOnly = false)
     public int deleteByIds(List list){
-        // 清除用户缓存
         list.forEach(item -> {
             User user = dao.fetch(item);
             if( user != null ){

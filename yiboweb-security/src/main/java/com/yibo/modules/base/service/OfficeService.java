@@ -23,6 +23,7 @@ package com.yibo.modules.base.service;
 import cn.yibo.base.service.IBaseService;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.dao.OfficeDao;
+import org.apache.poi.ss.formula.functions.T;
 
 /**
  * 医疗机构表实体服务接口层类(Office)
@@ -31,5 +32,10 @@ import com.yibo.modules.base.dao.OfficeDao;
  * @version v1.0
  */
 public interface OfficeService extends IBaseService<OfficeDao, Office>{
-    
+    /**
+     * 启用或停用
+     * @param office
+     * @return
+     */
+    int disabled(Office office);
 }

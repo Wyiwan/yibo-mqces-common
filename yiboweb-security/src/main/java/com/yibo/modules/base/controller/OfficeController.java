@@ -98,11 +98,7 @@ public class OfficeController extends BaseController{
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
         Office office = officeService.fetch(id);
-
-        if( office != null ){
-            office.statusSwitch();
-            officeService.update(office);
-        }
+        officeService.disabled(office);
         return OPER_SUCCEED;
     }
 

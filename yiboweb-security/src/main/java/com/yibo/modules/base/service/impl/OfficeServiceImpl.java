@@ -21,11 +21,16 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.dao.OfficeDao;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
+import com.yibo.modules.base.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * 医疗机构表实体服务实现层类(Office)
@@ -36,5 +41,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> implements OfficeService {
+    @Autowired
+    UserService userService;
 
+    @Override
+    @Transactional(readOnly = false)
+    public int disabled(Office office){
+        if( office != null ){
+            office.disabled();
+            int result = dao.update(office);
+
+            // 更新参数
+            Map updateMap = Maps.newHashMap();
+            updateMap.put("status", office.getStatus());
+            Map conditionMap = Maps.newHashMap();
+            conditionMap.put("tenantId", office.getId());
+
+            // 更新机构下所有用户状态
+            userService.updateByCondition(updateMap, conditionMap);
+            return result;
+        }
+        return 0;
+    }
 }
