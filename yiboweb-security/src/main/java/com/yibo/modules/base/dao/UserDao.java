@@ -40,4 +40,11 @@ public interface UserDao extends CrudDao<User>{
      * @return
      */
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
+
+    /**
+     * 根据角色查询用户
+     * @param condition
+     * @return
+     */
+    List<User> queryPageByRole(@Param("condition") Map<String, Object> condition);
 }

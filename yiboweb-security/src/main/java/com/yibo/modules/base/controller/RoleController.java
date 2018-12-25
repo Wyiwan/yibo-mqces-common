@@ -34,8 +34,10 @@ import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.Role;
+import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import com.yibo.modules.base.service.RoleService;
+import com.yibo.modules.base.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -65,6 +67,9 @@ public class RoleController extends BaseController{
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private UserService userService;
    
     /**
      * 新增
@@ -255,4 +260,26 @@ public class RoleController extends BaseController{
     //------------------------------------------------------------------------------------------------------------------
     // @分配用户相关
     //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 获取已授权的用户
+     * @return
+     */
+    @ApiOperation("获取已授权用户的分页列表")
+    @GetMapping("/get-granted-user")
+    public PageInfo<T> getGrantedUser(User user){
+        return userService.queryPageByRole(new BaseForm<T>());
+    }
+
+    /**
+     * 获取未授权的用户
+     * @return
+     */
+    @ApiOperation("获取未授权用户的分页列表")
+    @GetMapping("/get-grant-user")
+    public PageInfo<T> getGrantUser(User user){
+        BaseForm<T> baseForm = new BaseForm<T>();
+        baseForm.set("ungrant", "1");
+        return userService.queryPage(baseForm);
+    }
+
 }

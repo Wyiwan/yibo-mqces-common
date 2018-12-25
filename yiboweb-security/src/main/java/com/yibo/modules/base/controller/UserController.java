@@ -143,9 +143,6 @@ public class UserController extends BaseController{
         return OPER_SUCCEED;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @查询相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 单个查询
      * @param id
@@ -170,9 +167,7 @@ public class UserController extends BaseController{
         @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
     public PageInfo<T> paged(User user){
-        BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("mgrType", CommonConstant.USER_MGR_TYPE_NORMAL);
-        return userService.queryPage(baseForm);
+        return userService.queryPage(new BaseForm<T>());
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -265,6 +260,9 @@ public class UserController extends BaseController{
         return OPER_SUCCEED;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // @验证相关
+    //------------------------------------------------------------------------------------------------------------------
     /**
      * 唯一性校验
      * @return

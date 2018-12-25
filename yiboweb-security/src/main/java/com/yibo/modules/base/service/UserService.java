@@ -20,10 +20,13 @@
 
 package com.yibo.modules.base.service;
 
+import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.IBaseService;
+import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 
@@ -43,4 +46,10 @@ public interface UserService extends IBaseService<UserDao, User>{
     @Cacheable(key = "#username", unless = "#result == null")
     User findByUsername(String username);
 
+    /**
+     * 根据角色查询用户
+     * @param baseForm
+     * @return
+     */
+    PageInfo<T> queryPageByRole(BaseForm<T> baseForm);
 }

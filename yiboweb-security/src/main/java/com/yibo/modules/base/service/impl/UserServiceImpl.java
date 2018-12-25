@@ -41,6 +41,7 @@ import com.yibo.modules.base.service.DeptService;
 import com.yibo.modules.base.service.PermissionService;
 import com.yibo.modules.base.service.RoleService;
 import com.yibo.modules.base.service.UserService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +97,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
+    public int deleteByIds(List list){
         // 清除用户缓存
         list.forEach(item -> {
             User user = dao.fetch(item);
@@ -114,7 +115,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * @return
      */
     @Override
-    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm) {
+    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm){
         // 设置分页参数
         if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
             PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
@@ -130,7 +131,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         }
 
         // 普通用户查询关联租户
-        if( CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
+        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
         logger.info("分页请求参数："+params);
@@ -140,12 +141,33 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
+     * 根据角色查询用户
+     * @param baseForm
+     * @return
+     */
+    @Override
+    public PageInfo<T> queryPageByRole(BaseForm<T> baseForm){
+        // 设置分页参数
+        if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
+            PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
+        }
+
+        // 获取查询参数
+        Map<String, Object> params = baseForm.getParameters();
+        params.put("tenantId", UserContext.getUser().getTenantId());
+        logger.info("分页请求参数："+params);
+
+        List list = dao.queryPageByRole(params);
+        return new PageInfo<T>(list);
+    }
+
+    /**
      * 通过用户名查询
      * @param username
      * @return
      */
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(String username){
         User user = dao.findOne("username", username);
 
         if( user != null ){

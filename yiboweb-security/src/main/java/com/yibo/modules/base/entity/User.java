@@ -24,8 +24,8 @@ import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
-import com.yibo.modules.base.constant.CommonConstant;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -134,7 +134,10 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "所属机构名称")
     private String officeName;
 
-    @ApiModelProperty(value = "用户所属科室")
+    @ApiModelProperty(value = "所属科室名称")
+    private String deptName;
+
+    @ApiModelProperty(value = "所属科室对象")
     private Dept dept;
 
     @ApiModelProperty(value = "用户拥有的角色")
