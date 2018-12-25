@@ -161,8 +161,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                 user.setRoles(roles);
             }
 
-            // 关联操作权限
-            List<Permission> permissions = permsService.findAccessTreeData(user);
+            // 关联权限
+            List<Permission> permissions = permsService.getAccessPermission(user);
             if( !ListUtils.isEmpty(permissions) ){
                 user.setPermissions(permissions);
             }

@@ -75,11 +75,11 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @param user
      * @return
      */
-    List<Permission> findAccessTreeData(User user);
+    List<Permission> getAccessPermission(User user);
 
     /**
      * 根据用户获取可授权的权限
      * @return
      */
-    List<Permission> findGrantTreeData();
+    List<Permission> getGrantPermission();
 }

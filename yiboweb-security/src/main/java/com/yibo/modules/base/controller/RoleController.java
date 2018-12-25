@@ -224,7 +224,7 @@ public class RoleController extends BaseController{
     @ApiOperation("获取菜单授权的树结构")
     @GetMapping("/get-grant-permission")
     public List grantTree(){
-        List<Permission> treeData = permissionService.findGrantTreeData();
+        List<Permission> treeData = permissionService.getGrantPermission();
         return new PermissionTree(treeData).getTreeList();
     }
 

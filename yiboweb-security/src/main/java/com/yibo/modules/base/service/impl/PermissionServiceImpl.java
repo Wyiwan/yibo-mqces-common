@@ -155,7 +155,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> findAccessTreeData(User user) {
+    public List<Permission> getAccessPermission(User user) {
         List<Permission> permissions = Lists.newArrayList();
         user = user == null ? UserContext.getUser() : user;
 
@@ -176,7 +176,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> findGrantTreeData() {
+    public List<Permission> getGrantPermission() {
         User user = UserContext.getUser();
         List<Permission> permissions = Lists.newArrayList();
 
