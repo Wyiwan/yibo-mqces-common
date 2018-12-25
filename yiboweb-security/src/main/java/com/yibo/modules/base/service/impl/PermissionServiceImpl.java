@@ -150,7 +150,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 根据用户获取访问的权限
+     * 获取访问的权限
      * @param user
      * @return
      */
@@ -172,7 +172,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 根据用户获取可授权的权限
+     * 获取可授权的权限
      * @return
      */
     @Override

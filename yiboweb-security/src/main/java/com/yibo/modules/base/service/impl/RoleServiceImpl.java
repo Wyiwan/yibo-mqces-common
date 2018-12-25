@@ -58,7 +58,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     public int insert(Role role){
         int result = super.insert(role);
 
-        if( !ListUtils.isEmpty(role.getRolePermissions()) ){
+        if( !ListUtils.isEmpty(role.getPermissionIdList()) ){
             this.grantPermission(role);
         }
         return result;
@@ -82,7 +82,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
+    public int deleteByIds(List list){
         // 删除内置角色的权限验证
         if( !UserContext.getUser().isSuperAdmin() ){
             List tmpList = Lists.newArrayList();
@@ -108,7 +108,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      * @return
      */
     @Override
-    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm) {
+    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm){
         // 设置分页参数
         if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
             PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
@@ -135,17 +135,37 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      * @return
      */
     @Override
-    public List<Role> findByUserId(String userId) {
+    public List<Role> findByUserId(String userId){
         return dao.findByUserId(userId);
     }
 
     /**
-     * 角色菜单权限授权
+     * 菜单授权
      * @param role
      */
     @Override
     @Transactional(readOnly = false)
-    public void grantPermission(Role role) {
+    public void grantPermission(Role role){
         dao.grantPermission(role);
+    }
+
+    /**
+     * 用户授权
+     * @param role
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void grantUser(Role role){
+        dao.grantUser(role);
+    }
+
+    /**
+     * 取消用户授权
+     * @param role
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void unGrantUser(Role role){
+        dao.unGrantUser(role);
     }
 }

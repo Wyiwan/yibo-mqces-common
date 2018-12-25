@@ -41,8 +41,20 @@ public interface RoleService extends IBaseService<RoleDao, Role>{
     List<Role> findByUserId(String userId);
 
     /**
-     * 菜单权限授权
+     * 菜单授权
      * @param role
      */
     void grantPermission(Role role);
+
+    /**
+     * 用户授权
+     * @param role
+     */
+    void grantUser(Role role);
+
+    /**
+     * 取消用户授权
+     * @param role
+     */
+    void unGrantUser(Role role);
 }

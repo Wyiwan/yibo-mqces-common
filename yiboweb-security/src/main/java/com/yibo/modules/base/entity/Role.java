@@ -21,17 +21,14 @@
 package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
-import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.StringUtils;
-import cn.yibo.common.mapper.JsonMapper;
-import com.fasterxml.jackson.databind.JavaType;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -97,16 +94,24 @@ public class Role extends DataEntity<String>{
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
-    private String rolePermissionsJson;
+    private String permissionIds;
 
-    public void setRolePermissionsJson(String jsonString){
-        if( StringUtils.isNotBlank(jsonString) || !"[]".equals(jsonString) ){
-            JavaType javaType = JsonMapper.getInstance().createCollectionType(ArrayList.class, RolePermission.class);
-            List<RolePermission> rolePermissions = JsonMapper.getInstance().fromJsonString(jsonString, javaType);
+    private List<String> permissionIdList;
 
-            if( !ListUtils.isEmpty(rolePermissions) ){
-                this.setRolePermissions(rolePermissions);
-            }
+    private String userIds;
+
+    private List<String> userIdList;
+
+    public void setPermissionIds(String permissionIds){
+        if( StringUtils.isNotBlank(permissionIds) ){
+            this.setPermissionIdList( Arrays.asList(permissionIds.split(",")) );
         }
     }
+
+    public void setUserIds(String userIds){
+        if( StringUtils.isNotBlank(userIds) ){
+            this.setUserIdList( Arrays.asList(userIds.split(",")) );
+        }
+    }
+
 }

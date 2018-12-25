@@ -71,14 +71,14 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
     List<Permission> findByWeight(Integer min, Integer max, String type);
 
     /**
-     * 根据用户获取访问的权限
+     * 获取访问的权限
      * @param user
      * @return
      */
     List<Permission> getAccessPermission(User user);
 
     /**
-     * 根据用户获取可授权的权限
+     * 获取可授权的权限
      * @return
      */
     List<Permission> getGrantPermission();
