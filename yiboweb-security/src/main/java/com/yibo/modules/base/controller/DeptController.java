@@ -25,6 +25,8 @@ import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.security.context.UserContext;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.DeptTree;
 import com.yibo.modules.base.service.DeptService;
@@ -62,7 +64,7 @@ public class DeptController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Dept dept) throws Exception{
-        if( !verifyUnique(dept) ){
+        if( !verifyUnique(null, dept.getDeptName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
         deptService.insert(dept);
@@ -77,7 +79,7 @@ public class DeptController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody Dept dept) throws Exception{
-        if( !verifyUnique(dept) ){
+        if( !verifyUnique(dept.getId(), dept.getDeptName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
 
@@ -149,11 +151,12 @@ public class DeptController extends BaseController{
             @ApiImplicitParam(name = "deptName", value = "科室名称", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify")
-    private Boolean verifyUnique(Dept dept) throws Exception{
-        if( dept != null ){
-            Map conditionMap = MapUtils.toMap(dept);
-            return deptService.count(conditionMap) > 0 ? false : true;
-        }
-        return false;
+    public Boolean verifyUnique(String id, String deptName){
+        Map conditionMap = Maps.newHashMap();
+        conditionMap.put("id", id);
+        conditionMap.put("deptName", deptName);
+        conditionMap.put("tenantId", UserContext.getUser().getTenantId());
+        return deptService.count(conditionMap) > 0 ? false : true;
     }
+
 }

@@ -23,13 +23,14 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.collect.MapUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
@@ -78,8 +79,8 @@ public class RoleController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Role role) throws Exception{
-        Role vo = VerifyRole(role, false);
-        roleService.insert(vo);
+        VerifyRole(role, null);
+        roleService.insert(role);
         return role.getId();
     }
     
@@ -91,10 +92,10 @@ public class RoleController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody Role role) throws Exception{
-        Role vo = VerifyRole(role, false);
-        BeanUtils.copyProperties(role, vo, ObjectUtils.getNullPropertyNames(role));
+        Role fetchRole = VerifyRole(role, role.getId());
+        BeanUtils.copyProperties(role, fetchRole, ObjectUtils.getNullPropertyNames(role));
 
-        roleService.update(vo);
+        roleService.update(fetchRole);
         return UPDATE_SUCCEED;
     }
 
@@ -113,17 +114,18 @@ public class RoleController extends BaseController{
 
     /**
      * 启用或停用
-     * @param role
+     * @param id
      * @return
      */
     @ApiOperation("启用或停用")
     @PostMapping("/disabled")
-    public String disabled(@RequestBody Role role) throws Exception{
-        Role entity = VerifyRole(role, true);
+    @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", required = true, dataType = "String")
+    public String disabled(@RequestBody String id) throws Exception{
+        Role fetchRole = VerifyRole(null, id);
 
-        if( entity != null ){
-            entity.disabled();
-            roleService.update(entity);
+        if( fetchRole != null ){
+            fetchRole.disabled();
+            roleService.update(fetchRole);
         }
         return OPER_SUCCEED;
     }
@@ -171,14 +173,12 @@ public class RoleController extends BaseController{
             @ApiImplicitParam(name = "roleCode", value = "角色编码", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify-code")
-    public Boolean verifyUniqueCode(Role role) throws Exception{
-        if( role != null ){
-            Map conditionMap = MapUtils.toMap(role);
-            conditionMap.remove("tenantId");
-            conditionMap.remove("roleName");
-            return roleService.count(conditionMap) > 0 ? false : true;
-        }
-        return false;
+    public Boolean verifyUniqueCode(String id, String roleCode){
+        Map conditionMap = Maps.newHashMap();
+        conditionMap.put("id", id);
+        conditionMap.put("roleCode", roleCode);
+        conditionMap.put("tenantId", UserContext.getUser().getTenantId());
+        return roleService.count(conditionMap) > 0 ? false : true;
     }
 
     @ApiOperation("验证角色名称是否可用")
@@ -187,35 +187,36 @@ public class RoleController extends BaseController{
             @ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify-name")
-    public Boolean verifyUniqueName(Role role) throws Exception{
-        if( role != null ){
-            Map conditionMap = MapUtils.toMap(role);
-            conditionMap.remove("roleCode");
-            return roleService.count(conditionMap) > 0 ? false : true;
-        }
-        return false;
+    public Boolean verifyUniqueName(String id, String roleName){
+        Map conditionMap = Maps.newHashMap();
+        conditionMap.put("id", id);
+        conditionMap.put("roleName", roleName);
+        return roleService.count(conditionMap) > 0 ? false : true;
     }
 
     /**
      * 内部方法：后端验证角色名称和角色编码
      * @param role 角色对象
-     * @param onlyVerifySys 是否只验证是否是内置角色
+     * @param roleId 角色ID，验证内置角色操作权限
      * @return
      */
-    private Role VerifyRole(Role role, boolean onlyVerifySys) throws Exception{
-        if( !onlyVerifySys ){
-            if( !verifyUniqueName(role) ){
+    private Role VerifyRole(Role role, String roleId) throws Exception{
+        Role fetchRole = null;
+        if( role != null ){
+            if( !verifyUniqueName(role.getId(), role.getRoleName()) ){
                 throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
-            }else if( !verifyUniqueCode(role) ){
+            }else if( !verifyUniqueCode(role.getId(), role.getRoleCode()) ){
                 throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
             }
-        }else if( StringUtils.isNotBlank(role.getId()) ){
-            role = roleService.fetch(role.getId());
         }
-        if( CommonConstant.YES.equals(role.getIsSys()) && !role.getCurrentUser().isSuperAdmin() ){
-            throw new BusinessException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+        if( StringUtils.isNotBlank(roleId) ){
+            fetchRole = roleService.fetch(roleId);
+
+            if( !UserContext.getUser().isSuperAdmin() && fetchRole != null && CommonConstant.YES.equals(fetchRole.getIsSys()) ){
+                throw new BusinessException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+            }
         }
-        return role;
+        return fetchRole;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -256,7 +257,7 @@ public class RoleController extends BaseController{
             @ApiImplicitParam(name = "permissionIds", value = "菜单ID以逗号隔开的字符串", paramType = "query", dataType = "String")
     })
     public String grantedPermision(@RequestBody Role role) throws Exception{
-        VerifyRole(role, true);
+        VerifyRole(null, role.getId());
         roleService.grantPermission(role);
         return "菜单授权成功";
     }
