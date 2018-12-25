@@ -97,12 +97,16 @@ public class Role extends DataEntity<String>{
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
-    public void setRolePermissionsJson(String jsonString){
-        JavaType javaType = JsonMapper.getInstance().createCollectionType(ArrayList.class, RolePermission.class);
-        List<RolePermission> rolePermissions = JsonMapper.getInstance().fromJsonString(jsonString, javaType);
+    private String rolePermissionsJson;
 
-        if( !ListUtils.isEmpty(rolePermissions) ){
-            this.setRolePermissions(rolePermissions);
+    public void setRolePermissionsJson(String jsonString){
+        if( StringUtils.isNotBlank(jsonString) || !"[]".equals(jsonString) ){
+            JavaType javaType = JsonMapper.getInstance().createCollectionType(ArrayList.class, RolePermission.class);
+            List<RolePermission> rolePermissions = JsonMapper.getInstance().fromJsonString(jsonString, javaType);
+
+            if( !ListUtils.isEmpty(rolePermissions) ){
+                this.setRolePermissions(rolePermissions);
+            }
         }
     }
 }

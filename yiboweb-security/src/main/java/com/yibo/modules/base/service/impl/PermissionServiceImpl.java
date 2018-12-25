@@ -114,7 +114,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         condition.put("status", CommonConstant.STATUS_NORMAL);
         condition.put("permsType", type);
 
-        return dao.queryList(condition, null, null);
+        return dao.queryList(condition, "perms_sort", null);
     }
 
     /**

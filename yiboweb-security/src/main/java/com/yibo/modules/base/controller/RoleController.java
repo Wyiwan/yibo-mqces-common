@@ -215,7 +215,7 @@ public class RoleController extends BaseController{
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // @其他
+    // @菜单授权相关
     //------------------------------------------------------------------------------------------------------------------
     /**
      * 获取菜单授权的树结构
@@ -223,7 +223,7 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("获取菜单授权的树结构")
     @GetMapping("/get-grant-permission")
-    public List grantTree(){
+    public List getGrantPermision(){
         List<Permission> treeData = permissionService.getGrantPermission();
         return new PermissionTree(treeData).getTreeList();
     }
@@ -251,4 +251,8 @@ public class RoleController extends BaseController{
         roleService.grantPermission(role);
         return "菜单授权成功";
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // @分配用户相关
+    //------------------------------------------------------------------------------------------------------------------
 }
