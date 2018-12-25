@@ -34,7 +34,6 @@ import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import com.yibo.modules.base.service.RoleService;
 import com.yibo.modules.base.service.UserService;
@@ -226,7 +225,7 @@ public class RoleController extends BaseController{
      * 获取菜单授权的树结构
      * @return
      */
-    @ApiOperation("获取菜单授权的树结构")
+    @ApiOperation("获取当前角色：菜单授权的树结构")
     @GetMapping("/get-grant-permission")
     public List getGrantPermision(){
         List<Permission> treeData = permissionService.getGrantPermission();
@@ -237,8 +236,9 @@ public class RoleController extends BaseController{
      * 获取已授权的菜单权限
      * @return
      */
-    @ApiOperation("获取已授权的菜单权限")
+    @ApiOperation("获取当前角色：已授权的菜单权限")
     @GetMapping("/get-granted-permission")
+    @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", required = true, dataType = "String")
     public List getGrantedPermision(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
         return ListUtils.extractToList(permissionList, "id");
@@ -251,6 +251,10 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("授权菜单权限")
     @PostMapping("/granted-permission")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "rolePermissionsJson", value = "菜单权限JSON字符串[{'roleId':'','permissionId':''}]", paramType = "query", dataType = "String")
+    })
     public String grantedPermision(@RequestBody Role role) throws Exception{
         VerifyRole(role, true);
         roleService.grantPermission(role);
@@ -264,9 +268,14 @@ public class RoleController extends BaseController{
      * 获取已授权的用户
      * @return
      */
-    @ApiOperation("获取已授权用户的分页列表")
+    @ApiOperation("获取当前角色：已授权用户的分页列表")
     @GetMapping("/get-granted-user")
-    public PageInfo<T> getGrantedUser(User user){
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
+            @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String")
+    })
+    public PageInfo<T> getGrantedUser(){
         return userService.queryPageByRole(new BaseForm<T>());
     }
 
@@ -274,9 +283,14 @@ public class RoleController extends BaseController{
      * 获取未授权的用户
      * @return
      */
-    @ApiOperation("获取未授权用户的分页列表")
+    @ApiOperation("获取当前角色：未授权用户的分页列表")
     @GetMapping("/get-grant-user")
-    public PageInfo<T> getGrantUser(User user){
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
+            @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String")
+    })
+    public PageInfo<T> getGrantUser(){
         BaseForm<T> baseForm = new BaseForm<T>();
         baseForm.set("ungrant", "1");
         return userService.queryPage(baseForm);
