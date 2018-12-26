@@ -177,7 +177,6 @@ public class RoleController extends BaseController{
         Map conditionMap = Maps.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("roleCode", roleCode);
-        conditionMap.put("tenantId", UserContext.getUser().getTenantId());
         return roleService.count(conditionMap) > 0 ? false : true;
     }
 
@@ -191,6 +190,7 @@ public class RoleController extends BaseController{
         Map conditionMap = Maps.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("roleName", roleName);
+        conditionMap.put("tenantId", UserContext.getUser().getTenantId());
         return roleService.count(conditionMap) > 0 ? false : true;
     }
 

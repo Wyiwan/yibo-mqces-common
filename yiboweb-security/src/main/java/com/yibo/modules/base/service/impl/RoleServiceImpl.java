@@ -31,7 +31,6 @@ import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,11 +117,10 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
         Map<String, Object> params = baseForm.getParameters();
 
         // 如果不是超级管理员
-        User currUser = UserContext.getUser();
-        if( !currUser.isSuperAdmin() ){
-            params.put("userWeight", currUser.getUserWeight());
+        if( !UserContext.getUser().isSuperAdmin() ){
+            params.put("userWeight", UserContext.getUser().getUserWeight());
         }
-        params.put("tenantId", currUser.getTenantId());
+        params.put("tenantId", UserContext.getUser().getTenantId());
         logger.info("分页请求参数："+params);
 
         List list = dao.queryPageExt(params);
