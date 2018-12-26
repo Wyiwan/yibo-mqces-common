@@ -173,7 +173,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
-    public PageInfo<T> paged(User user){
+    public PageInfo<T> paged(){
         return userService.queryPage(new BaseForm<T>());
     }
 
@@ -225,7 +225,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
-    public PageInfo<T> mgrPaged(User user){
+    public PageInfo<T> mgrPaged(){
         BaseForm<T> baseForm = new BaseForm<T>();
         baseForm.set("mgrType", CommonConstant.USER_MGR_TYPE_ADMIN);
         return userService.queryPage(baseForm);

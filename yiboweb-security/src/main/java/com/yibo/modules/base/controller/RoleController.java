@@ -156,7 +156,7 @@ public class RoleController extends BaseController{
         @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
         @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
-    public PageInfo<T> paged(Role role){
+    public PageInfo<T> paged(){
         return roleService.queryPage(new BaseForm<T>());
     }
 
