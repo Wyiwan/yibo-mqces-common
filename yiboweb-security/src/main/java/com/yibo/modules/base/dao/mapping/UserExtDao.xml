@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yibo.modules.base.dao.UserDao">
     <!-- 在这里存放用户自定义的映射配置（注：UserDAO.xml里各节点的ID不能在这里重复出现）  -->
+    <!-- 分页查询扩展 -->
     <select id="queryPageExt" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
         select
             u.id, u.username, u.name, u.short_name,
@@ -62,6 +63,7 @@
         </choose>
     </select>
 
+    <!-- 角色管理用户授权分页查询 -->
     <select id="queryPageByRole" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
         select
             u.id, u.username, u.name, u.short_name,
@@ -129,4 +131,14 @@
             and username = #{condition.username,jdbcType=VARCHAR}
             and status = 1
     </select>
+
+    <!-- 角色授权 -->
+    <update id="grantRole" parameterType="com.yibo.modules.base.entity.User">
+        delete from sys_user_role where user_id = #{id};
+        <if test="roleIdList != null">
+            <foreach collection="roleIdList" item="roleId">
+                insert into sys_user_role(role_id, user_id, tenant_id) values(#{roleId}, #{id}, #{tenantId});
+            </foreach>
+        </if>
+    </update>
 </mapper>

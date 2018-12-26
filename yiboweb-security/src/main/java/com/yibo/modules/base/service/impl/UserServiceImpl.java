@@ -77,7 +77,12 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public int insert(User user){
         verifyUnique(user.getUsername());
-        return super.insert(user);
+
+        int result = super.insert(user);
+        if( !ListUtils.isEmpty(user.getRoleIdList()) ){
+            this.grantRole(user);
+        }
+        return result;
     }
 
     /**
@@ -107,6 +112,16 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
         });
         return super.deleteByIds(list);
+    }
+
+    /**
+     * 角色授权
+     * @param user
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void grantRole(User user){
+        dao.grantRole(user);
     }
 
     /**

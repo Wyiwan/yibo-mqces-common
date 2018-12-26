@@ -239,7 +239,7 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("获取已授权的菜单权限")
     @GetMapping("/get-granted-permission")
-    @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", required = true, dataType = "String")
+    @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     public List getGrantedPermision(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
         return ListUtils.extractToList(permissionList, "id");
@@ -253,8 +253,8 @@ public class RoleController extends BaseController{
     @ApiOperation("菜单授权")
     @PostMapping("/granted-permission")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "permissionIds", value = "菜单ID以逗号隔开的字符串", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "permissionIds", value = "菜单ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String grantedPermision(@RequestBody Role role) throws Exception{
         VerifyRole(null, role.getId());
@@ -274,7 +274,7 @@ public class RoleController extends BaseController{
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     })
     public PageInfo<T> getGrantedUser(){
         return userService.queryPageByRole(new BaseForm<T>());
@@ -289,7 +289,7 @@ public class RoleController extends BaseController{
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     })
     public PageInfo<T> getGrantUser(){
         BaseForm<T> baseForm = new BaseForm<T>();
@@ -305,8 +305,8 @@ public class RoleController extends BaseController{
     @ApiOperation("用户授权")
     @PostMapping("/granted-user")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String grantedUser(@RequestBody Role role){
         roleService.grantUser(role);
@@ -321,8 +321,8 @@ public class RoleController extends BaseController{
     @ApiOperation("取消用户授权")
     @PostMapping("/un-granted-user")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String unGrantedUser(@RequestBody Role role){
         roleService.unGrantUser(role);

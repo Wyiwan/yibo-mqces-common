@@ -52,4 +52,10 @@ public interface UserService extends IBaseService<UserDao, User>{
      * @return
      */
     PageInfo<T> queryPageByRole(BaseForm<T> baseForm);
+
+    /**
+     * 角色授权
+     * @param user
+     */
+    void grantRole(User user);
 }

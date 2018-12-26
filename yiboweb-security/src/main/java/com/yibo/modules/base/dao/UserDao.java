@@ -47,4 +47,10 @@ public interface UserDao extends CrudDao<User>{
      * @return
      */
     List<User> queryPageByRole(@Param("condition") Map<String, Object> condition);
+
+    /**
+     * 角色授权
+     * @param user
+     */
+    void grantRole(User user);
 }

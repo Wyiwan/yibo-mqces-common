@@ -22,6 +22,7 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
@@ -29,7 +30,9 @@ import cn.yibo.core.web.exception.BusinessException;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.entity.User;
+import com.yibo.modules.base.service.RoleService;
 import com.yibo.modules.base.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,6 +45,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,10 +57,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/user")
 @Api(tags = "1004.用户管理")
-public class UserController extends BaseController{
-   @Autowired
-   private UserService userService;
-   
+public class UserController extends BaseController {
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
     /**
      * 新增
      * @param user
@@ -69,7 +76,7 @@ public class UserController extends BaseController{
         userService.insert(user);
         return user.getId();
     }
-    
+
     /**
      * 修改
      * @param user
@@ -78,7 +85,7 @@ public class UserController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@RequestBody User user){
-        if( !verifyUnique(user.getId(), user.getUsername()) ){
+        if (!verifyUnique(user.getId(), user.getUsername())) {
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
 
@@ -103,7 +110,7 @@ public class UserController extends BaseController{
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
     @PostMapping("/deleted")
     public String deleted(@RequestBody String ids){
-        userService.deleteByIds( Arrays.asList(ids.split(",")) );
+        userService.deleteByIds(Arrays.asList(ids.split(",")));
         return DEL_SUCCEED;
     }
 
@@ -118,7 +125,7 @@ public class UserController extends BaseController{
     public String disabled(@RequestBody String id){
         User user = verifyUser(id, false);
 
-        if( user != null ){
+        if (user != null) {
             user.disabled();
             userService.update(user);
         }
@@ -136,7 +143,7 @@ public class UserController extends BaseController{
     public String reseted(@RequestBody String id){
         User user = verifyUser(id, false);
 
-        if( user != null ){
+        if (user != null) {
             user.setPassword(null);
             userService.update(user);
         }
@@ -155,7 +162,7 @@ public class UserController extends BaseController{
         User vo = userService.fetch(id);
         return vo == null ? new User() : vo;
     }
-    
+
     /**
      * 分页查询
      * @return
@@ -163,8 +170,8 @@ public class UserController extends BaseController{
     @ApiOperation("分页查询")
     @GetMapping("/paged")
     @ApiImplicitParams(value = {
-        @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
-        @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
+            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
+            @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
     public PageInfo<T> paged(User user){
         return userService.queryPage(new BaseForm<T>());
@@ -215,7 +222,7 @@ public class UserController extends BaseController{
     @ApiOperation("分页查询（系统管理员）")
     @GetMapping("/mgr-paged")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
+            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
     public PageInfo<T> mgrPaged(User user){
@@ -235,7 +242,7 @@ public class UserController extends BaseController{
     public String mgrDisabled(@RequestBody String id){
         User user = verifyUser(id, true);
 
-        if( user != null ){
+        if (user != null) {
             user.disabled();
             userService.update(user);
         }
@@ -253,7 +260,7 @@ public class UserController extends BaseController{
     public String mgrReseted(@RequestBody String id){
         User user = verifyUser(id, true);
 
-        if( user != null ){
+        if (user != null) {
             user.setPassword(null);
             userService.update(user);
         }
@@ -269,7 +276,7 @@ public class UserController extends BaseController{
      */
     @ApiOperation("验证登录账号是否可用")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", dataType = "String", required = false),
             @ApiImplicitParam(name = "username", value = "登录账号", paramType = "query", dataType = "String", required = true)
     })
     @GetMapping("/verify")
@@ -289,15 +296,48 @@ public class UserController extends BaseController{
     private User verifyUser(String id, boolean isAdmin){
         User user = userService.fetch(id);
 
-        if( user != null ){
+        if (user != null) {
             String mgrType = user.getMgrType();
 
-            if( isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
+            if (isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType)) {
                 return user;
-            }else if( !isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
+            } else if (!isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType)) {
                 return user;
             }
         }
         throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "非法数据");
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // @角色授权相关
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 获取已授权的角色
+     * @return
+     */
+    @ApiOperation("获取已授权的角色")
+    @GetMapping("/get-granted-role")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true)
+    })
+    public List getGrantedUser(String id){
+        List<Role> roleList = roleService.findByUserId(id);
+        return ListUtils.extractToList(roleList, "id");
+    }
+
+    /**
+     * 角色授权
+     * @param user
+     * @return
+     */
+    @ApiOperation("角色授权")
+    @PostMapping("/granted-role")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
+    })
+    public String grantedUser(@RequestBody User user){
+        userService.grantRole(user);
+        return "角色授权成功";
     }
 }

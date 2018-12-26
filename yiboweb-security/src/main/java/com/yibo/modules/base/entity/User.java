@@ -32,6 +32,7 @@ import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -146,6 +147,10 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户拥有的权限")
     private List<Permission> permissions;
 
+    private String roleIds;
+
+    private List<String> roleIdList;
+
     public boolean isAdmin(){
         return CommonConstant.USER_MGR_TYPE_ADMIN.equals(this.mgrType);
     }
@@ -156,6 +161,12 @@ public class User extends DataEntity<String>{
 
     public static boolean isSuperAdmin(String username){
         return SUPER_ADMIN_CODE.equals(username);
+    }
+
+    public void setRoleIds(String roleIds){
+        if( StringUtils.isNotBlank(roleIds) ){
+            this.setRoleIdList( Arrays.asList(roleIds.split(",")) );
+        }
     }
 
     @Override

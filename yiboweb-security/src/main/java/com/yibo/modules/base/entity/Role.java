@@ -66,6 +66,29 @@ public class Role extends DataEntity<String>{
     @ApiModelProperty(value = "角色所对应的用户")
     private List<UserRole> userRoles;
 
+    //------------------------------------------------------------------------------------------------------------------
+    // 以下为扩展属性
+    //------------------------------------------------------------------------------------------------------------------
+    private String permissionIds;
+
+    private List<String> permissionIdList;
+
+    private String userIds;
+
+    private List<String> userIdList;
+
+    public void setPermissionIds(String permissionIds){
+        if( StringUtils.isNotBlank(permissionIds) ){
+            this.setPermissionIdList( Arrays.asList(permissionIds.split(",")) );
+        }
+    }
+
+    public void setUserIds(String userIds){
+        if( StringUtils.isNotBlank(userIds) ){
+            this.setUserIdList( Arrays.asList(userIds.split(",")) );
+        }
+    }
+
     @Override
     public void preInsert(){
         preInit();
@@ -89,29 +112,6 @@ public class Role extends DataEntity<String>{
 
     public void disabled(){
         this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // 以下为扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    private String permissionIds;
-
-    private List<String> permissionIdList;
-
-    private String userIds;
-
-    private List<String> userIdList;
-
-    public void setPermissionIds(String permissionIds){
-        if( StringUtils.isNotBlank(permissionIds) ){
-            this.setPermissionIdList( Arrays.asList(permissionIds.split(",")) );
-        }
-    }
-
-    public void setUserIds(String userIds){
-        if( StringUtils.isNotBlank(userIds) ){
-            this.setUserIdList( Arrays.asList(userIds.split(",")) );
-        }
     }
 
 }
