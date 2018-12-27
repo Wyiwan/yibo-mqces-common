@@ -22,7 +22,6 @@ package com.yibo.modules.test.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
-import cn.yibo.common.lang.ObjectUtils;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.test.entity.TestData;
 import com.yibo.modules.test.service.TestDataService;
@@ -31,7 +30,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +59,7 @@ public class TestDataController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody TestData testData){
-        testDataService.insert(testData);
+        testDataService.save(testData);
         return testData.getId();
     }
     
@@ -72,11 +70,8 @@ public class TestDataController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody TestData testData){
-        TestData vo = testDataService.fetch(testData.getId());
-        BeanUtils.copyProperties(testData, vo, ObjectUtils.getNullPropertyNames(testData));
-
-        testDataService.update(vo);
+    public String updated(@Valid @RequestBody TestData testData){
+        testDataService.save(testData);
         return UPDATE_SUCCEED;
     }
 
