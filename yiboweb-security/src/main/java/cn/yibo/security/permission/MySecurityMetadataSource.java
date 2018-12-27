@@ -20,6 +20,7 @@
 
 package cn.yibo.security.permission;
 
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.StringUtils;
 import com.google.common.collect.Lists;
 import com.yibo.modules.base.entity.Permission;
@@ -96,19 +97,21 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
      * 加载所有的操作权限
      */
     public void loadResourceDefine(){
-        // 获取启用的操作权限
+        // 获取所有启用的操作权限
         List<Permission> permissions = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
 
         map = new HashMap<>(16);
-        permissions.forEach(item -> {
-            String permsName = item.getPermsName();
-            String permsUrl = item.getPermsUrl();
+        if( !ListUtils.isEmpty(permissions) ){
+            for(int i = 0; i < permissions.size(); i++){
+                String permsName = permissions.get(i).getPermsName();
+                String permsUrl = permissions.get(i).getPermsUrl();
 
-            if( StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
-                ConfigAttribute configAttribute = new SecurityConfig(permsName);
-                Collection<ConfigAttribute> configAttributes = Lists.newArrayList(configAttribute);
-                map.put(permsUrl, configAttributes);
+                if( StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
+                    ConfigAttribute configAttribute = new SecurityConfig(permsName.trim());
+                    Collection<ConfigAttribute> configAttributes = Lists.newArrayList(configAttribute);
+                    map.put(permsUrl.trim(), configAttributes);
+                }
             }
-        });
+        }
     }
 }

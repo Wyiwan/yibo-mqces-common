@@ -24,10 +24,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import cn.yibo.security.context.UserContext;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -43,7 +40,6 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 菜单权限表实体控制器层类(Permission)
@@ -155,19 +151,4 @@ public class PermissionController extends BaseController{
         return permissionService.count(conditionMap) > 0 ? false : true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @其他
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * 查询用户菜单权限
-     * @return
-     */
-    @ApiOperation("查询用户菜单权限")
-    @GetMapping("/user-menu")
-    public List userMenu(){
-        List<String> condition = Lists.newArrayList(CommonConstant.PERMISSION_PAGE);
-        List<Permission> result = UserContext.getUser().getPermissions()
-                .stream().filter((Permission p) -> condition.contains(p.getPermsType())).collect(Collectors.toList());
-        return new PermissionTree(result).getTreeList();
-    }
 }

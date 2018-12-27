@@ -24,20 +24,17 @@ import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.ObjectUtils;
+import cn.yibo.common.lang.StringUtils;
+import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
-import com.yibo.modules.base.entity.Dept;
-import com.yibo.modules.base.entity.Permission;
-import com.yibo.modules.base.entity.Role;
-import com.yibo.modules.base.entity.User;
-import com.yibo.modules.base.service.DeptService;
-import com.yibo.modules.base.service.PermissionService;
-import com.yibo.modules.base.service.RoleService;
-import com.yibo.modules.base.service.UserService;
+import com.yibo.modules.base.entity.*;
+import com.yibo.modules.base.service.*;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,6 +61,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
     @Autowired
     private PermissionService permsService;
+
+    @Autowired
+    private OfficeService officeService;
 
     /**
      * 重写新增
@@ -177,6 +177,12 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         User user = dao.findOne("username", username);
 
         if( user != null ){
+            // 关联机构
+            Office office = officeService.fetch(user.getTenantId());
+            if( office != null ){
+                user.setOfficeName(office.getOfficeName());
+            }
+
             // 关联科室
             Dept dept = deptService.fetch(user.getDeptId());
             if( dept != null ){
@@ -192,9 +198,65 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             // 关联权限
             List<Permission> permissions = permsService.getAccessPermission(user);
             if( !ListUtils.isEmpty(permissions) ){
+                List<Permission> operPermissions = Lists.newArrayList();
+                List<Permission> menuPermissions = Lists.newArrayList();
+
+                for(int i = 0; i < permissions.size(); i++){
+                    String permsUrl = permissions.get(i).getPermsUrl();
+                    String permsType = permissions.get(i).getPermsType();
+
+                    if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StringUtils.isNotBlank(permsUrl) ){
+                        operPermissions.add(permissions.get(i));
+                    }else{
+                        menuPermissions.add(permissions.get(i));
+                    }
+                }
                 user.setPermissions(permissions);
+                user.setOperPermissions(operPermissions);
+                user.setMenuPermissions(menuPermissions);
             }
         }
         return user;
+    }
+
+    /**
+     * 用户登录信息
+     * @return
+     */
+    @Override
+    public Map<String, Object> loginUser(){
+        Map<String, Object> map = Maps.newHashMap();
+
+        User user = UserContext.getUser();
+        if( user != null ){
+            map.put("userId", user.getId());
+            map.put("userName", user.getUsername());
+            map.put("name", user.getName());
+
+            map.put("officeId", user.getTenantId());
+            map.put("officeName", user.getOfficeName());
+            map.put("deptId", user.getId());
+            map.put("deptName", user.getDeptName());
+
+            map.put("admin", user.isAdmin());
+            map.put("superAdmin", user.isSuperAdmin());
+            map.put("userWeight", user.getUserWeight());
+
+            map.put("empCode", user.getEmpCode());
+            map.put("empStatus", user.getEmpStatus());
+            map.put("sex", user.getSex());
+            map.put("avatar", user.getAvatar());
+            map.put("lastVisitDate", user.getLastVisitDate());
+
+            map.put("menuAuthorities", new PermissionTree(user.getMenuPermissions()).getTreeList());
+            map.put("authorities", ((SecurityUserDetails)user).getAuthorities());
+
+            List<Role> roles = user.getRoles();
+            if( !ListUtils.isEmpty(roles) ){
+                map.put("currRole", roles.get(0));
+                map.put("roles", ListUtils.extractToList(roles, "roleName"));
+            }
+        }
+        return map;
     }
 }

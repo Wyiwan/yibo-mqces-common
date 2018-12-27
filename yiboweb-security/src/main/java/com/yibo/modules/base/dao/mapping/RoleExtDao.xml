@@ -63,6 +63,7 @@
         <where>
             and a.user_id = #{userId}
         </where>
+        order by b.role_weight desc
     </select>
 
     <!-- 唯一性校验 -->

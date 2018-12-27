@@ -21,7 +21,6 @@
 package cn.yibo.security;
 
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.StringUtils;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.User;
@@ -48,20 +47,35 @@ public class SecurityUserDetails extends User implements UserDetails{
         if( user != null ) {
             this.setId(user.getId());
             this.setUsername(user.getUsername());
+            this.setName(user.getName());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
-            this.setDeptId(user.getDeptId());
+
             this.setTenantId(user.getTenantId());
-            this.setUserWeight(user.getUserWeight());
+            this.setOfficeName(user.getOfficeName());
+            this.setDeptId(user.getDeptId());
+            this.setDeptId(user.getDeptName());
+
             this.setMgrType(user.getMgrType());
+            this.setUserWeight(user.getUserWeight());
+
+            this.setEmpCode(user.getEmpCode());
+            this.setEmpStatus(user.getEmpStatus());
+            this.setSex(user.getSex());
+            this.setAvatar(user.getAvatar());
+            this.setLastVisitDate(user.getLastVisitDate());
+
             this.setDept(user.getDept());
             this.setRoles(user.getRoles());
+
             this.setPermissions(user.getPermissions());
+            this.setMenuPermissions(user.getMenuPermissions());
+            this.setOperPermissions(user.getOperPermissions());
         }
     }
 
     /**
-     * 获取用户拥有的权限和角色
+     * 获取用户拥有的权限
      * @return
      */
     @Override
@@ -69,32 +83,13 @@ public class SecurityUserDetails extends User implements UserDetails{
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
         // 添加请求权限
-        List<Permission> permissions = this.getPermissions();
+        List<Permission> permissions = this.getOperPermissions();
         if( !ListUtils.isEmpty(permissions) ){
-            permissions.forEach(item -> {
-                String permsUrl = item.getPermsUrl();
-                String permsName = item.getPermsName();
-                String permsType = item.getPermsType();
-
-                // 如果是操作权限
-                if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
-                    authorityList.add(new SimpleGrantedAuthority(permsName));
-                }
-            });
+            for(int i = 0; i < permissions.size(); i++){
+                authorityList.add(new SimpleGrantedAuthority(permissions.get(i).getPermsName()));
+            }
         }
-
-        // 添加角色
-        /*
-        List<Role> roles = this.getRoles();
-        if( !ListUtils.isEmpty(roles) ){
-            roles.forEach(item -> {
-                String roleName = item.getRoleName();
-                if( StringUtils.isNotBlank(roleName) ){
-                    authorityList.add(new SimpleGrantedAuthority(roleName));
-                }
-            });
-        }
-        */
+        // log.info("添加的请求权限：\n" + authorityList);
         return authorityList;
     }
 

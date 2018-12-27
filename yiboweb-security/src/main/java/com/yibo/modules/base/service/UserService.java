@@ -30,6 +30,8 @@ import org.apache.poi.ss.formula.functions.T;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.Map;
+
 /**
  * 用户表实体服务接口层类(User)
  * @author 高云
@@ -58,4 +60,10 @@ public interface UserService extends IBaseService<UserDao, User>{
      * @param user
      */
     void grantRole(User user);
+
+    /**
+     * 用户登录信息
+     * @return
+     */
+    Map<String, Object> loginUser();
 }

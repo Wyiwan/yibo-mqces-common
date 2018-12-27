@@ -339,4 +339,17 @@ public class UserController extends BaseController {
         userService.grantRole(user);
         return "角色授权成功";
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // @其他
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 查询用户菜单权限
+     * @return
+     */
+    @ApiOperation("查询用户登录信息")
+    @GetMapping("/login-info")
+    public Map<String, Object> loginUser(){
+        return userService.loginUser();
+    }
 }

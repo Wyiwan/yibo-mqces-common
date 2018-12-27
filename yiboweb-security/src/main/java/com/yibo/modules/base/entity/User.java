@@ -141,11 +141,18 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "所属科室对象")
     private Dept dept;
 
+    @ApiModelProperty(value = "用户当前角色")
+    private Role currRole;
+
     @ApiModelProperty(value = "用户拥有的角色")
     private List<Role> roles;
 
     @ApiModelProperty(value = "用户拥有的权限")
     private List<Permission> permissions;
+
+    private List<Permission> operPermissions;
+
+    private List<Permission> menuPermissions;
 
     private String roleIds;
 
