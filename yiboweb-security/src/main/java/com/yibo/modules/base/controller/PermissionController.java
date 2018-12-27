@@ -22,7 +22,6 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
-import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
@@ -37,7 +36,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +69,7 @@ public class PermissionController extends BaseController{
         if( !verifyUnique(null, permission.getPermsName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
         }
-        permissionService.insert(permission);
+        permissionService.save(permission);
         return permission.getId();
     }
     
@@ -82,14 +80,11 @@ public class PermissionController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Permission permission) throws Exception{
+    public String updated(@Valid @RequestBody Permission permission) throws Exception{
         if( !verifyUnique(permission.getId(), permission.getPermsName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
         }
-
-        Permission vo = permissionService.fetch(permission.getId());
-        BeanUtils.copyProperties(permission, vo, ObjectUtils.getNullPropertyNames(permission));
-        permissionService.update(vo);
+        permissionService.save(permission);
         return UPDATE_SUCCEED;
     }
 
@@ -106,9 +101,6 @@ public class PermissionController extends BaseController{
         return DEL_SUCCEED;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @查询相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 单个查询
      * @param id
@@ -146,9 +138,6 @@ public class PermissionController extends BaseController{
         return new PermissionTree(result).getTreeList();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @验证相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 唯一性校验
      * @return

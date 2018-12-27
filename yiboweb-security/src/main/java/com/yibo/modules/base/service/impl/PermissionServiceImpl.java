@@ -57,10 +57,9 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(Permission permission){
-        int result = super.insert(permission);
+    public void insert(Permission permission){
+        super.insert(permission);
         dao.updateAncestor(permission);
-        return result;
     }
 
     /**
@@ -70,12 +69,9 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list){
-        int result = dao.deleteCascade(list);
-
-        // 清除用户缓存
+    public void deleteByIds(List list){
+        dao.deleteCascade(list);
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
-        return result;
     }
 
     /**
@@ -85,13 +81,10 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     @Transactional(readOnly = false)
-    public int update(Permission permission){
-        int result = super.update(permission);
+    public void update(Permission permission){
+        super.update(permission);
         dao.updateAncestor(permission);
-
-        // 清除用户缓存
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
-        return result;
     }
 
     /**

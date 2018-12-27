@@ -24,7 +24,6 @@ import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.StringUtils;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
-import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -85,16 +84,17 @@ public class SecurityUserDetails extends User implements UserDetails{
         }
 
         // 添加角色
+        /*
         List<Role> roles = this.getRoles();
         if( !ListUtils.isEmpty(roles) ){
             roles.forEach(item -> {
                 String roleName = item.getRoleName();
-
                 if( StringUtils.isNotBlank(roleName) ){
                     authorityList.add(new SimpleGrantedAuthority(roleName));
                 }
             });
         }
+        */
         return authorityList;
     }
 

@@ -21,6 +21,7 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.security.context.UserContext;
 import com.yibo.modules.base.dao.DeptDao;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.service.DeptService;
@@ -46,10 +47,9 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(Dept dept) {
-        int result = super.insert(dept);
+    public void insert(Dept dept) {
+        super.insert(dept);
         dao.updateAncestor(dept);
-        return result;
     }
 
     /**
@@ -59,8 +59,9 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
-        return dao.deleteCascade(list);
+    public void deleteByIds(List list){
+        dao.deleteCascade(list);
+        this.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
     }
 
     /**
@@ -70,10 +71,10 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int update(Dept dept) {
-        int result = super.update(dept);
+    public void update(Dept dept){
+        super.update(dept);
         dao.updateAncestor(dept);
-        return result;
+        this.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
     }
 
     /**
@@ -94,4 +95,5 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     public List<Dept> findTree(Dept dept) {
         return dao.findTree(dept);
     }
+
 }

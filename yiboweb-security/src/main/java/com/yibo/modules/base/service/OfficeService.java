@@ -37,5 +37,5 @@ public interface OfficeService extends IBaseService<OfficeDao, Office>{
      * @param office
      * @return
      */
-    int disabled(Office office);
+    void disabled(Office office);
 }

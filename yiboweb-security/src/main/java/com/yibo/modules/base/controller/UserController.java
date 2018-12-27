@@ -23,11 +23,10 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Role;
@@ -39,7 +38,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,8 +70,12 @@ public class UserController extends BaseController {
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody User user){
+        if( !verifyUnique(null, user.getUsername()) ){
+            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+        }
+
         user.setPassword(null);
-        userService.insert(user);
+        userService.save(user);
         return user.getId();
     }
 
@@ -84,20 +86,14 @@ public class UserController extends BaseController {
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody User user){
-        if (!verifyUnique(user.getId(), user.getUsername())) {
+    public String updated(@Valid @RequestBody User user){
+        if( !verifyUnique(user.getId(), user.getUsername()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
 
-        User orgUser = userService.fetch(user.getId());
-        String orgUsername = orgUser.getUsername();
-
-        // 编辑时不允许修改密码
-        user.setPassword(null);
-        BeanUtils.copyProperties(user, orgUser, ObjectUtils.getNullPropertyNames(user));
-
-        userService.update(orgUser);
-        CacheUtils.remove(CommonConstant.USER_CACHE, orgUsername);
+        User oldUser = userService.fetch(user.getId());
+        user.setPassword(oldUser.getPassword());
+        userService.save(user);
         return UPDATE_SUCCEED;
     }
 
@@ -125,7 +121,7 @@ public class UserController extends BaseController {
     public String disabled(@RequestBody String id){
         User user = verifyUser(id, false);
 
-        if (user != null) {
+        if( user != null ){
             user.disabled();
             userService.update(user);
         }
@@ -199,7 +195,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation("编辑（系统管理员）")
     @PostMapping("/mgr-updated")
-    public String mgrUpdated(@RequestBody User user){
+    public String mgrUpdated(@Valid @RequestBody User user){
         return updated(user);
     }
 
@@ -320,9 +316,12 @@ public class UserController extends BaseController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true)
     })
-    public List getGrantedUser(String id){
+    public List getGrantedRole(String id){
         List<Role> roleList = roleService.findByUserId(id);
-        return ListUtils.extractToList(roleList, "id");
+        if( !ListUtils.isEmpty(roleList) ){
+            return ListUtils.extractToList(roleList, "id");
+        }
+        return Lists.newArrayList();
     }
 
     /**
@@ -336,7 +335,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
-    public String grantedUser(@RequestBody User user){
+    public String grantedRole(@RequestBody User user){
         userService.grantRole(user);
         return "角色授权成功";
     }

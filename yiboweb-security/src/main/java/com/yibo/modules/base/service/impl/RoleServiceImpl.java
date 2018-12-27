@@ -54,13 +54,12 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(Role role){
-        int result = super.insert(role);
+    public void insert(Role role){
+        super.insert(role);
 
         if( !ListUtils.isEmpty(role.getPermissionIdList()) ){
             this.grantPermission(role);
         }
-        return result;
     }
 
     /**
@@ -70,34 +69,37 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int update(Role role){
-        return super.update(role);
+    public void update(Role role){
+        super.update(role);
+        this.clearUsersCacheByRoleId( Lists.newArrayList(role.getId()) );
     }
 
     /**
      * 重写删除
+     * 操作内置角色的权限验证
      * @param list
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list){
-        // 删除内置角色的权限验证
-        if( !UserContext.getUser().isSuperAdmin() ){
-            List tmpList = Lists.newArrayList();
+    public void deleteByIds(List list){
+        List tmpList = Lists.newArrayList();
 
-            list.forEach(item -> {
-                Role role = dao.fetch(item);
+        if( !UserContext.getUser().isSuperAdmin() && !ListUtils.isEmpty(list)){
+            for(int i = 0 ; i < list.size() ; i++){
+                String roleId = ObjectUtils.toString(list.get(i));
+                Role role = dao.fetch(list.get(i));
+
                 if( role != null && CommonConstant.NO.equals(role.getIsSys()) ){
-                    tmpList.add(item);
+                    tmpList.add(roleId);
                 }
-            });
-            if( !ListUtils.isEmpty(tmpList) ){
-                return super.deleteByIds(tmpList);
             }
-            return 0;
+        }else{
+            tmpList = list;
         }
-        return super.deleteByIds(list);
+
+        super.deleteByIds(tmpList);
+        this.clearUsersCacheByRoleId(tmpList);
     }
 
     /**
@@ -145,6 +147,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantPermission(Role role){
         dao.grantPermission(role);
+        this.clearUsersCacheByRoleId( Lists.newArrayList(role.getId()) );
     }
 
     /**
@@ -155,6 +158,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantUser(Role role){
         dao.grantUser(role);
+        this.clearUsersCacheByUserId(role.getUserIdList());
     }
 
     /**
@@ -165,5 +169,19 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void unGrantUser(Role role){
         dao.unGrantUser(role);
+        this.clearUsersCacheByUserId(role.getUserIdList());
     }
+
+    /**
+     * 根据角色ID清除用户缓存
+     * @param roleIdList
+     */
+    private void clearUsersCacheByRoleId(List roleIdList){
+        if( !ListUtils.isEmpty(roleIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setRoleIdList(roleIdList);
+            clearUserCacheThread.start();
+        }
+    }
+
 }

@@ -22,7 +22,6 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
-import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import com.google.common.collect.Maps;
@@ -33,7 +32,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +64,7 @@ public class OfficeController extends BaseController{
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
 
-        officeService.insert(office);
+        officeService.save(office);
         return office.getId();
     }
     
@@ -77,14 +75,11 @@ public class OfficeController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Office office){
+    public String updated(@Valid @RequestBody Office office){
         if( !verifyUnique(office.getId(), office.getOfficeName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
-
-        Office vo = officeService.fetch(office.getId());
-        BeanUtils.copyProperties(office, vo, ObjectUtils.getNullPropertyNames(office));
-        officeService.update(vo);
+        officeService.save(office);
         return UPDATE_SUCCEED;
     }
 
@@ -102,9 +97,6 @@ public class OfficeController extends BaseController{
         return OPER_SUCCEED;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @查询相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 单个查询
      * @param id

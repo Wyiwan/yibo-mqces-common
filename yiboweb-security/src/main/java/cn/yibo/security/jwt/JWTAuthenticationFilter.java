@@ -83,7 +83,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
             if( exception instanceof LoginFailLimitException || exception instanceof SignatureException || exception instanceof ExpiredJwtException ){
                 ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getCode(), LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc()));
             }else{
-                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), LoginFailEnum.LOGIN_FAIL_ERROR.getDesc()));
+                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), exception.getMessage()));
             }
             return;
         }

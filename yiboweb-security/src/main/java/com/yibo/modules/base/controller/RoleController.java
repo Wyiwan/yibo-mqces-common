@@ -23,13 +23,13 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
@@ -43,7 +43,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +79,7 @@ public class RoleController extends BaseController{
     @PostMapping("/created")
     public String created(@Valid @RequestBody Role role) throws Exception{
         VerifyRole(role, null);
-        roleService.insert(role);
+        roleService.save(role);
         return role.getId();
     }
     
@@ -91,11 +90,9 @@ public class RoleController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Role role) throws Exception{
-        Role fetchRole = VerifyRole(role, role.getId());
-        BeanUtils.copyProperties(role, fetchRole, ObjectUtils.getNullPropertyNames(role));
-
-        roleService.update(fetchRole);
+    public String updated(@Valid @RequestBody Role role) throws Exception{
+        VerifyRole(role, role.getId());
+        roleService.save(role);
         return UPDATE_SUCCEED;
     }
 
@@ -130,9 +127,6 @@ public class RoleController extends BaseController{
         return OPER_SUCCEED;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @查询相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 单个查询
      * @param id
@@ -242,7 +236,10 @@ public class RoleController extends BaseController{
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     public List getGrantedPermision(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
-        return ListUtils.extractToList(permissionList, "id");
+        if( !ListUtils.isEmpty(permissionList) ){
+            return ListUtils.extractToList(permissionList, "id");
+        }
+        return Lists.newArrayList();
     }
 
     /**

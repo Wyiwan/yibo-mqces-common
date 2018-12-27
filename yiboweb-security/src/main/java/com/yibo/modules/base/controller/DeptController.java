@@ -22,7 +22,6 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.common.collect.MapUtils;
-import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
@@ -34,7 +33,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +65,7 @@ public class DeptController extends BaseController{
         if( !verifyUnique(null, dept.getDeptName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
-        deptService.insert(dept);
+        deptService.save(dept);
         return dept.getId();
     }
     
@@ -78,14 +76,11 @@ public class DeptController extends BaseController{
      */
     @ApiOperation("修改")
     @PostMapping("/updated")
-    public String updated(@RequestBody Dept dept) throws Exception{
+    public String updated(@Valid @RequestBody Dept dept) throws Exception{
         if( !verifyUnique(dept.getId(), dept.getDeptName()) ){
             throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
-
-        Dept vo = deptService.fetch(dept.getId());
-        BeanUtils.copyProperties(dept, vo, ObjectUtils.getNullPropertyNames(dept));
-        deptService.update(vo);
+        deptService.save(dept);
         return UPDATE_SUCCEED;
     }
 
@@ -102,9 +97,6 @@ public class DeptController extends BaseController{
         return DEL_SUCCEED;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    // @查询相关
-    //------------------------------------------------------------------------------------------------------------------
     /**
      * 单个查询
      * @param id

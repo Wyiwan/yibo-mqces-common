@@ -24,13 +24,10 @@ import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.core.cache.CacheUtils;
-import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.Dept;
@@ -75,14 +72,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int insert(User user){
-        verifyUnique(user.getUsername());
-
-        int result = super.insert(user);
+    public void insert(User user){
+        super.insert(user);
         if( !ListUtils.isEmpty(user.getRoleIdList()) ){
             this.grantRole(user);
         }
-        return result;
     }
 
     /**
@@ -93,8 +87,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Override
     @Transactional(readOnly = false)
     @CacheEvict(key = "#user.username")
-    public int update(User user){
-        return super.update(user);
+    public void update(User user){
+        super.update(user);
     }
 
     /**
@@ -104,14 +98,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list){
-        list.forEach(item -> {
-            User user = dao.fetch(item);
-            if( user != null ){
-                CacheUtils.remove(CommonConstant.USER_CACHE, user.getUsername());
-            }
-        });
-        return super.deleteByIds(list);
+    public void deleteByIds(List list){
+        super.deleteByIds(list);
+        this.clearUsersCacheByUserId(list);
     }
 
     /**
@@ -122,6 +111,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void grantRole(User user){
         dao.grantRole(user);
+        this.clearUsersCacheByUserId( Lists.newArrayList(user.getId()) );
     }
 
     /**
@@ -206,18 +196,5 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
         }
         return user;
-    }
-
-    /**
-     * 验证登录账号是否可用
-     * @param username
-     */
-    private void verifyUnique(String username){
-        Map conditionMap = Maps.newHashMap();
-        conditionMap.put("username", username);
-
-        if( dao.count(conditionMap) > 0 ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
-        }
     }
 }

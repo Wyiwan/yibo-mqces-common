@@ -46,10 +46,10 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
 
     @Override
     @Transactional(readOnly = false)
-    public int disabled(Office office){
+    public void disabled(Office office){
         if( office != null ){
             office.disabled();
-            int result = dao.update(office);
+            dao.update(office);
 
             // 更新参数
             Map updateMap = Maps.newHashMap();
@@ -57,10 +57,9 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
             Map conditionMap = Maps.newHashMap();
             conditionMap.put("tenantId", office.getId());
 
-            // 更新机构下所有用户状态
+            // 同步更新机构下用户状态
             userService.updateByCondition(updateMap, conditionMap);
-            return result;
+            this.clearUsersCacheByTenantId(office.getId());
         }
-        return 0;
     }
 }
