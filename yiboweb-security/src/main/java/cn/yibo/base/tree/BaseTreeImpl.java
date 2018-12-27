@@ -20,6 +20,7 @@
 
 package cn.yibo.base.tree;
 
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.lang.ObjectUtils;
 
 import java.util.*;
@@ -59,14 +60,19 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         // 节点列表
         LinkedHashMap<K, N> nodeMap = getAllNodeSelfMap(nodeList);
         // 构建树结构
-        nodeMap.forEach((key, node) -> {
-            N pNode = nodeMap.get(getParentKey(node));
+        Set<K> keySet = nodeMap.keySet();
+        Iterator<K> it = keySet.iterator();//迭代器
+        while( it.hasNext() ){
+            N node = nodeMap.get(it.next());
+            N pNode = nodeMap.get( getParentKey(node) );
+
             if( pNode != null ){
                 setChildren(pNode, node);
             }else{
                 treeList.add(node);
             }
-        });
+        }
+
         return treeList;
     }
 
@@ -77,7 +83,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         //建一个map来存放 父节点no到子节点列表 的映射
         Map<K, List<N>> childMap = new HashMap<>(initialCapacity);
         //遍历一遍
-        for (N node : nodeList) {
+        for( N node : nodeList ){
             //取出它父节点的子节点列表
             List<N> childList = childMap.get(getParentKey(node));
             //如果还没有子节点列表，就新建一个
@@ -98,9 +104,13 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         //新建一个map
         LinkedHashMap<K, N> selfMap = new LinkedHashMap<>(initialCapacity);
         //遍历所有
-        nodeList.forEach(node -> {
-            selfMap.put(getKey(node), (N)ObjectUtils.cloneBean(node));
-        });
+        if( !ListUtils.isEmpty(nodeList) ){
+            for(int i = 0; i < nodeList.size(); i++){
+                N node = nodeList.get(i);
+                selfMap.put(getKey(node), (N)ObjectUtils.cloneBean(node));
+            }
+
+        }
         return selfMap;
     }
 
