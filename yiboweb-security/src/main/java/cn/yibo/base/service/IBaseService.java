@@ -54,18 +54,18 @@ public interface IBaseService<D extends BaseDAO, T extends BaseEntity> {
     public <T>PageInfo<T> queryPage(BaseForm<T> baseForm);
     public List<T> queryBySql(@Param("executeSql") String executeSql);
 
-    public int deleteById(Object id);
-    public int deleteByIds(List list);
-    public int deleteByCondition(Map<String, Object> condition);
-    public int deleteByProperty(String property, Object value);
+    public void deleteById(Object id);
+    public void deleteByIds(List list);
+    public void deleteByCondition(Map<String, Object> condition);
+    public void deleteByProperty(String property, Object value);
 
-    public int insert(T entity);
-    public int insertMap(Map<String, Object> entityMap);
+    public void insert(T entity);
+    public void insertMap(Map<String, Object> entityMap);
 
-    public int update(T entity);
-    public int updateNull(T entity);
-    public int updateMap(Map<String, Object> entityMap);
-    public int updateByCondition(Map<String, Object> updateMap, Map<String, Object> conditionMap);
+    public void update(T entity);
+    public void updateNull(T entity);
+    public void updateMap(Map<String, Object> entityMap);
+    public void updateByCondition(Map<String, Object> updateMap, Map<String, Object> conditionMap);
 
     public void save(T t);
     public int count(Map<String, Object> condition);

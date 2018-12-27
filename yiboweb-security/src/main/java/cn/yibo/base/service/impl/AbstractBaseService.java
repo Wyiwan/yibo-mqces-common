@@ -22,11 +22,11 @@ package cn.yibo.base.service.impl;
 
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.dao.BaseDAO;
+import cn.yibo.base.entity.BaseEntity;
 import cn.yibo.base.service.IBaseService;
 import cn.yibo.common.lang.ObjectUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import cn.yibo.base.entity.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,67 +49,67 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     protected D dao;
 
     @Override
-    public T fetch(Object id) {
+    public T fetch(Object id){
         return (T)dao.fetch(id);
     }
 
     @Override
-    public List like(Map<String, Object> condition) {
+    public List like(Map<String, Object> condition){
         return dao.like(condition, null, null);
     }
 
     @Override
-    public List like(Map<String, Object> condition, String orderBy, String sortBy) {
+    public List like(Map<String, Object> condition, String orderBy, String sortBy){
         return dao.like(condition, orderBy, sortBy);
     }
 
     @Override
-    public T findOne(String property, Object value) {
+    public T findOne(String property, Object value){
         return (T)dao.findOne(property, value);
     }
 
     @Override
-    public List findList(String property, Object value) {
+    public List findList(String property, Object value){
         return dao.findList(property, value,null, null);
     }
 
     @Override
-    public List findList(String property, Object value, String orderBy, String sortBy) {
+    public List findList(String property, Object value, String orderBy, String sortBy){
         return dao.findList(property, value,orderBy, sortBy);
     }
 
     @Override
-    public List findAll() {
+    public List findAll(){
         return dao.findAll(null, null);
     }
 
     @Override
-    public List findAll(String orderBy, String sortBy) {
+    public List findAll(String orderBy, String sortBy){
         return dao.findAll(orderBy, sortBy);
     }
 
     @Override
-    public T queryOne(Map<String, Object> condition) {
+    public T queryOne(Map<String, Object> condition){
         return (T)dao.queryOne(condition, null, null);
     }
 
     @Override
-    public T queryOne(Map<String, Object> condition, String orderBy, String sortBy) {
+    public T queryOne(Map<String, Object> condition, String orderBy, String sortBy){
         return (T)dao.queryOne(condition, orderBy, sortBy);
     }
 
     @Override
-    public List queryList(Map<String, Object> condition) {
+    public List queryList(Map<String, Object> condition){
         return dao.queryList(condition, null, null);
     }
 
     @Override
-    public List queryList(Map<String, Object> condition, String orderBy, String sortBy) {
+    public List queryList(Map<String, Object> condition, String orderBy, String sortBy){
         return dao.queryList(condition, orderBy, sortBy);
     }
 
     @Override
-    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm) {
+    public <T>PageInfo<T> queryPage(BaseForm<T> baseForm){
         // 设置分页参数
         if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
             PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
@@ -124,76 +124,76 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     }
 
     @Override
-    public List queryBySql(String executeSql) {
+    public List queryBySql(String executeSql){
         return dao.queryBySql(executeSql);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int deleteById(Object id) {
-        return dao.deleteById(id);
+    public void deleteById(Object id){
+        dao.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int deleteByIds(List list) {
-        return dao.deleteByIds(list);
+    public void deleteByIds(List list){
+        dao.deleteByIds(list);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int deleteByCondition(Map<String, Object> condition) {
-        return dao.deleteByCondition(condition);
+    public void deleteByCondition(Map<String, Object> condition){
+        dao.deleteByCondition(condition);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int deleteByProperty(String property, Object value) {
-        return dao.deleteByProperty(property, value);
+    public void deleteByProperty(String property, Object value){
+        dao.deleteByProperty(property, value);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int insert(T entity) {
+    public void insert(T entity){
         entity.preInsert();
-        return dao.insert(entity);
+        dao.insert(entity);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int insertMap(Map<String, Object> entityMap) {
-        return dao.insertMap(entityMap);
+    public void insertMap(Map<String, Object> entityMap){
+        dao.insertMap(entityMap);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int update(T entity) {
+    public void update(T entity){
         entity.preUpdate();
-        return dao.update(entity);
+        dao.update(entity);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int updateNull(T entity) {
+    public void updateNull(T entity){
         entity.preUpdate();
-        return dao.updateNull(entity);
+        dao.updateNull(entity);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int updateMap(Map<String, Object> entityMap) {
-        return dao.updateMap(entityMap);
+    public void updateMap(Map<String, Object> entityMap){
+        dao.updateMap(entityMap);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public int updateByCondition(Map<String, Object> updateMap, Map<String, Object> conditionMap) {
-        return dao.updateByCondition(updateMap, conditionMap);
+    public void updateByCondition(Map<String, Object> updateMap, Map<String, Object> conditionMap){
+        dao.updateByCondition(updateMap, conditionMap);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void save(T t) {
+    public void save(T t){
         if( t.getId() != null ){
             t.preUpdate();
             dao.update(t);
@@ -204,12 +204,12 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     }
 
     @Override
-    public int count(Map<String, Object> condition) {
+    public int count(Map<String, Object> condition){
         return dao.count(condition);
     }
 
     @Override
-    public Object selectMaxId() {
+    public Object selectMaxId(){
         return dao.selectMaxId();
     }
 }
