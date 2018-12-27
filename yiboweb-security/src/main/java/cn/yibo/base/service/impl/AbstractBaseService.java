@@ -197,12 +197,12 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     @Override
     @Transactional(readOnly = false)
     public void save(T t){
-        if( t.getId() != null ){
+        if( !ObjectUtils.isEmpty(t.getId()) ){
             t.preUpdate();
-            dao.update(t);
+            this.update(t);
         }else{
             t.preInsert();
-            dao.insert(t);
+            this.insert(t);
         }
     }
 
