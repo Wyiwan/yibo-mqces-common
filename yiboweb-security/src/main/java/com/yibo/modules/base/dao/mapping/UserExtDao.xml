@@ -13,8 +13,16 @@
             u.status, u.create_date, u.update_date, u.comments, u.tenant_id,
             o.office_name, d.dept_name
         from sys_user u
-        inner join sys_office o on o.id = u.tenant_id and o.status = 1
+        left join sys_office o on o.id = u.tenant_id and o.status = 1
         left join sys_dept d on d.id = u.dept_id and d.status = 1
+        <!-- 未授权用户 -->
+        <if test='condition.queryType=="grantUser"'>
+            left join sys_user_role r on u.id = r.user_id and r.role_id = #{condition.roleId}
+        </if>
+        <!-- 已授权用户 -->
+        <if test='condition.queryType=="grantedUser"'>
+            inner join sys_user_role r on u.id = r.user_id and r.role_id = #{condition.roleId}
+        </if>
         where 1 = 1
             and u.status != 0
             <if test="condition.username != null">
@@ -50,67 +58,9 @@
             <if test="condition.tenantId != null">
                 and u.tenant_id = #{condition.tenantId}
             </if>
-            <if test="condition.ungrant == 1">
-                and u.id not in(select r.user_id from sys_user_role r where r.role_id = #{condition.roleId} and r.tenant_id = #{condition.tenantId})
+            <if test='condition.queryType=="grantUser"'>
+                and r.user_id is null
             </if>
-        <choose>
-            <when test="condition.sort != null">
-                order by ${condition.orderby}
-            </when>
-            <otherwise>
-                order by u.dept_id, u.user_weight desc
-            </otherwise>
-        </choose>
-    </select>
-
-    <!-- 角色管理用户授权分页查询 -->
-    <select id="queryPageByRole" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
-        select
-            u.id, u.username, u.name, u.short_name,
-            u.dept_id, u.emp_code, u.emp_posts, u.emp_status,
-            u.wubi_code, u.identity_no, u.native_place, u.sex, u.birthday, u.avatar,
-            u.email, u.mobile, u.telephone, u.user_type, u.user_weight, u.mgr_type,
-            u.first_visit_date, u.last_visit_ip, u.last_visit_date, u.allow_start_time, u.allow_end_time,
-            u.status, u.create_date, u.update_date, u.comments, u.tenant_id,
-            o.office_name, d.dept_name
-        from sys_user u
-        inner join sys_office o on o.id = u.tenant_id and o.status = 1
-        inner join sys_user_role r on u.id = r.user_id
-            and r.role_id = #{condition.roleId}
-            and r.tenant_id = #{condition.tenantId}
-        left join sys_dept d on d.id = u.dept_id and d.status = 1
-        where 1 = 1
-            and u.status != 0
-        <if test="condition.username != null">
-            and u.username like concat('%', #{condition.username} , '%')
-        </if>
-        <if test="condition.name != null">
-            and u.name like concat('%', #{condition.name} , '%')
-        </if>
-        <if test="condition.deptId != null">
-            and d.ancestor_id like concat('%',#{condition.deptId}, '%')
-        </if>
-        <if test="condition.empCode != null">
-            and u.emp_code = #{condition.empCode}
-        </if>
-        <if test="condition.shortName != null">
-            and u.short_name like concat('%', #{condition.shortName} , '%')
-        </if>
-        <if test="condition.wubiCode != null">
-            and u.wubi_code = #{condition.wubiCode}
-        </if>
-        <if test="condition.sex != null">
-            and u.sex = #{condition.sex}
-        </if>
-        <if test="condition.userType != null">
-            and u.user_type = #{condition.userType}
-        </if>
-        <if test="condition.mgrType != null">
-            and u.mgr_type = #{condition.mgrType}
-        </if>
-        <if test="condition.status != null">
-            and u.status = #{condition.status}
-        </if>
         <choose>
             <when test="condition.sort != null">
                 order by ${condition.orderby}

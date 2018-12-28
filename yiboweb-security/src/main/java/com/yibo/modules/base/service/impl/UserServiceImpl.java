@@ -35,7 +35,6 @@ import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.*;
 import com.yibo.modules.base.service.*;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -137,33 +136,13 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         }
 
         // 普通用户查询关联租户
-        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
+        String queryType = ObjectUtils.toString(params.get("queryType"));
+        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StringUtils.isNotBlank(queryType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
         logger.info("分页请求参数："+params);
 
         List list = dao.queryPageExt(params);
-        return new PageInfo<T>(list);
-    }
-
-    /**
-     * 根据角色查询用户
-     * @param baseForm
-     * @return
-     */
-    @Override
-    public PageInfo<T> queryPageByRole(BaseForm<T> baseForm){
-        // 设置分页参数
-        if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
-            PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
-        }
-
-        // 获取查询参数
-        Map<String, Object> params = baseForm.getParameters();
-        params.put("tenantId", UserContext.getUser().getTenantId());
-        logger.info("分页请求参数："+params);
-
-        List list = dao.queryPageByRole(params);
         return new PageInfo<T>(list);
     }
 
@@ -211,7 +190,6 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                         menuPermissions.add(permissions.get(i));
                     }
                 }
-                user.setPermissions(permissions);
                 user.setOperPermissions(operPermissions);
                 user.setMenuPermissions(menuPermissions);
             }
@@ -254,7 +232,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             List<Role> roles = user.getRoles();
             if( !ListUtils.isEmpty(roles) ){
                 map.put("currRole", roles.get(0));
-                map.put("roles", ListUtils.extractToList(roles, "roleName"));
+                map.put("roles", roles);
             }
         }
         return map;

@@ -266,23 +266,25 @@ public class RoleController extends BaseController{
      * 获取已授权的用户
      * @return
      */
-    @ApiOperation("获取已授权用户的分页数据")
-    @GetMapping("/get-granted-user")
+    @ApiOperation("已授权用户的分页查询")
+    @GetMapping("/granted-user-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     })
     public PageInfo<T> getGrantedUser(){
-        return userService.queryPageByRole(new BaseForm<T>());
+        BaseForm<T> baseForm = new BaseForm<T>();
+        baseForm.set("queryType", "grantedUser");
+        return userService.queryPage(baseForm);
     }
 
     /**
      * 获取未授权的用户
      * @return
      */
-    @ApiOperation("获取未授权用户的分页数据")
-    @GetMapping("/get-grant-user")
+    @ApiOperation("未授权用户的分页查询")
+    @GetMapping("/grant-user-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
@@ -290,7 +292,7 @@ public class RoleController extends BaseController{
     })
     public PageInfo<T> getGrantUser(){
         BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("ungrant", "1");
+        baseForm.set("queryType", "grantUser");
         return userService.queryPage(baseForm);
     }
 
