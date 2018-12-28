@@ -76,6 +76,8 @@ public abstract class BaseEntity<T> implements Serializable {
 
     public abstract void preUpdate();
 
+    public abstract void enabled();
+
     public Object clone(){
         return ObjectUtils.cloneBean(this);
     }

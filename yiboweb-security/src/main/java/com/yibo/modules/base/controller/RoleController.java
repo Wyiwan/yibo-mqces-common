@@ -121,7 +121,7 @@ public class RoleController extends BaseController{
         Role fetchRole = VerifyRole(null, id);
 
         if( fetchRole != null ){
-            fetchRole.disabled();
+            fetchRole.enabled();
             roleService.update(fetchRole);
         }
         return OPER_SUCCEED;

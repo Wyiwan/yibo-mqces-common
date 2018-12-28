@@ -109,9 +109,4 @@ public class Role extends DataEntity<String>{
             this.isSys = CommonConstant.NO;
         }
     }
-
-    public void disabled(){
-        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
-
 }

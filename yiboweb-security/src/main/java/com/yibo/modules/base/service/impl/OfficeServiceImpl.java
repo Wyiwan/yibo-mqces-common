@@ -48,7 +48,7 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
     @Transactional(readOnly = false)
     public void disabled(Office office){
         if( office != null ){
-            office.disabled();
+            office.enabled();
             dao.update(office);
 
             // 更新参数

@@ -200,8 +200,4 @@ public class User extends DataEntity<String>{
         }
     }
 
-    public void disabled(){
-        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
-
 }

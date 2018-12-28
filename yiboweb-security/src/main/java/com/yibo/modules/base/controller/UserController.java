@@ -122,7 +122,7 @@ public class UserController extends BaseController {
         User user = verifyUser(id, false);
 
         if( user != null ){
-            user.disabled();
+            user.enabled();
             userService.update(user);
         }
         return OPER_SUCCEED;
@@ -239,7 +239,7 @@ public class UserController extends BaseController {
         User user = verifyUser(id, true);
 
         if (user != null) {
-            user.disabled();
+            user.enabled();
             userService.update(user);
         }
         return OPER_SUCCEED;

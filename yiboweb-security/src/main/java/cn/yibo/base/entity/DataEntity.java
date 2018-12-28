@@ -21,9 +21,9 @@
 package cn.yibo.base.entity;
 
 import cn.yibo.common.lang.ObjectUtils;
-import com.yibo.modules.base.constant.CommonConstant;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -90,4 +90,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
         }
     }
 
+    public void enabled(){
+        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
+    }
 }

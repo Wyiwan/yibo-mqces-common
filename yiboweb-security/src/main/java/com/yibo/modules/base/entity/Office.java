@@ -87,10 +87,6 @@ public class Office extends DataEntity<String>{
         this.officeCode = RandomStringUtils.randomNumeric(CommonConstant.OFFICE_CODE_NUM);
     }
 
-    public void disabled(){
-        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
-
     //------------------------------------------------------------------------------------------------------------------
     // 扩展属性
     //------------------------------------------------------------------------------------------------------------------
