@@ -80,6 +80,12 @@ public class Dept extends DataEntity<String>{
     @ApiModelProperty(value = "是否叶子节点 前端所需")
     private Boolean isLeaf = false;
 
+    @ApiModelProperty(value = "是否选中 前端所需")
+    private Boolean selected = false;
+
+    @ApiModelProperty(value = "是否禁用 前端所需")
+    private Boolean disabled = false;
+
     @ApiModelProperty(value = "科室负责人名称")
     private String leaderName;
 

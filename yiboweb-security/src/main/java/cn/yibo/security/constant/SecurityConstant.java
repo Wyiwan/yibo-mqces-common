@@ -44,9 +44,9 @@ public interface SecurityConstant {
     String HEADER = "accessToken";
 
     /**
-     * 权限参数头
+     * 切换租户接收参数名称
      */
-    String AUTHORITIES = "authorities";
+    String TENANT_KEY = "officeId";
 
     /**
      * JWT签名用户ID参数名称

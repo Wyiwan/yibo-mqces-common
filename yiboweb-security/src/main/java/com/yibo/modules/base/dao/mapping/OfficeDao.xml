@@ -638,7 +638,9 @@
                 and comments = #{condition.comments}
             </if>
         </where>
-        order by office_sort
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
     </select>
 
     <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Office">

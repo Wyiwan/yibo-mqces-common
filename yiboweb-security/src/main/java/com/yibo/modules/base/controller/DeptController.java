@@ -49,7 +49,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/dept")
-@Api(tags = "1002.科室管理")
+@Api(tags = "9001.科室管理")
 public class DeptController extends BaseController{
    @Autowired
    private DeptService deptService;

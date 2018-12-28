@@ -75,7 +75,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
         }
 
         try{
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(headToken);
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(headToken, request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }catch(Exception exception){
             log.error(exception.getMessage());
@@ -95,11 +95,16 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
      * @param headToken
      * @return
      */
-    private UsernamePasswordAuthenticationToken getAuthentication(String headToken){
+    private UsernamePasswordAuthenticationToken getAuthentication(String headToken, HttpServletRequest request){
         String username = jwtUtil.validateToken(headToken);
 
         if( StringUtils.isNotBlank(username) ) {
             SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
+
+            String tenantId = request.getParameter(SecurityConstant.TENANT_KEY);
+            if( userDetails != null && userDetails.isSuperAdmin() && StringUtils.isNotBlank(tenantId)){
+                userDetails.setTenantId(tenantId);
+            }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             return authentication;
         }

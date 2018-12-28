@@ -54,7 +54,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/user")
-@Api(tags = "1004.用户管理")
+@Api(tags = "9002.用户管理")
 public class UserController extends BaseController {
     @Autowired
     private UserService userService;

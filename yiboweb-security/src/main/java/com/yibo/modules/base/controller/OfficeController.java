@@ -47,7 +47,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/office")
-@Api(tags = "1003.机构管理")
+@Api(tags = "9005.机构管理")
 public class OfficeController extends BaseController{
    @Autowired
    private OfficeService officeService;
@@ -118,7 +118,7 @@ public class OfficeController extends BaseController{
     @GetMapping("/list")
     public List list(Office office){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
-        return officeService.queryList(conditionMap);
+        return officeService.queryList(conditionMap, "office_sort", null);
     }
 
     /**

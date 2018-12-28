@@ -90,4 +90,13 @@ public class Office extends DataEntity<String>{
     public void disabled(){
         this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 扩展属性
+    //------------------------------------------------------------------------------------------------------------------
+    @ApiModelProperty(value = "是否选中 前端所需")
+    private Boolean selected = false;
+
+    @ApiModelProperty(value = "是否禁用 前端所需")
+    private Boolean disabled = false;
 }

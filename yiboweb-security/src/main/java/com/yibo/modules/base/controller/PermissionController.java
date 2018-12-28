@@ -49,7 +49,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/permission")
-@Api(tags = "1001.菜单管理")
+@Api(tags = "9004.菜单管理")
 public class PermissionController extends BaseController{
    @Autowired
    private PermissionService permissionService;
