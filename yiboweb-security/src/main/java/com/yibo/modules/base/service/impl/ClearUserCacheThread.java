@@ -1,7 +1,8 @@
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
 import com.yibo.modules.base.constant.CommonConstant;
@@ -49,20 +50,20 @@ public class ClearUserCacheThread extends Thread{
             long startTime = System.currentTimeMillis();
             logger.info("清除用户缓存中...");
 
-            if( !ListUtils.isEmpty(userIdList) ){
+            if( !CollUtil.isEmpty(userIdList) ){
                 List<String> list = userDao.findUsernameByIds(userIdList);
                 this.clearCaches(list);
             }
 
-            if( !ListUtils.isEmpty(roleIdList) ){
+            if( !CollUtil.isEmpty(roleIdList) ){
                 List<String> list = userDao.findUsernameByRoleIds(roleIdList);
                 this.clearCaches(list);
             }
 
-            if( StringUtils.isNotBlank(tenantId) ){
+            if( StrUtil.isNotBlank(tenantId) ){
                 List<User> userList = userDao.findList("tenant_id",tenantId, null, null);
 
-                if( !ListUtils.isEmpty(userList) ){
+                if( !CollUtil.isEmpty(userList) ){
                     List<String> list = ListUtils.extractToList(userList, "username");
                     this.clearCaches(list);
                 }
@@ -74,7 +75,7 @@ public class ClearUserCacheThread extends Thread{
     }
 
     private void clearCaches(List<String> list){
-        if( !ListUtils.isEmpty(list) ){
+        if( !CollUtil.isEmpty(list) ){
             for(int i = 0 ; i < list.size() ; i++){
                 CacheUtils.remove(CommonConstant.USER_CACHE, list.get(i));
                 logger.info("清除用户[ "+list.get(i)+" ]缓存...");

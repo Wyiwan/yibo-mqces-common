@@ -20,7 +20,9 @@
 
 package cn.yibo.common.io;
 
-import cn.yibo.common.lang.ExceptionUtils;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.io.IoUtil;
+import org.apache.poi.util.IOUtils;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -85,9 +87,9 @@ public class ResourceUtils extends org.springframework.util.ResourceUtils {
 		InputStream is = null;
 		try{
 			is = ResourceUtils.getResourceFileStream(location);
-			return IOUtils.toString(is, "UTF-8");
+			return IoUtil.read(is, "UTF-8");
 		}catch (IOException e) {
-			throw ExceptionUtils.unchecked(e);
+			throw ExceptionUtil.wrapRuntime(e);
 		}finally{
 			IOUtils.closeQuietly(is);
 		}
@@ -103,7 +105,7 @@ public class ResourceUtils extends org.springframework.util.ResourceUtils {
 			Resource[] resources = resourceResolver.getResources(locationPattern);
 			return resources;
 		} catch (IOException e) {
-			throw ExceptionUtils.unchecked(e);
+			throw ExceptionUtil.wrapRuntime(e);
 		}
 	}
 	

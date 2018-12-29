@@ -20,7 +20,7 @@
 
 package cn.yibo.core.web.context;
 
-import org.apache.commons.lang3.Validate;
+import cn.hutool.core.lang.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -98,6 +98,6 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	 * 检查ApplicationContext不为空.
 	 */
 	private static void assertContextInjected() {
-		Validate.validState(applicationContext != null, "applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.");
+		Assert.isNull(applicationContext,"applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.", "");
 	}
 }

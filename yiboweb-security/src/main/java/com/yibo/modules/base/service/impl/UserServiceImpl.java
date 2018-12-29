@@ -20,11 +20,12 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
-import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
@@ -39,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -73,7 +75,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void insert(User user){
         super.insert(user);
-        if( !ListUtils.isEmpty(user.getRoleIdList()) ){
+        if( !CollUtil.isEmpty(user.getRoleIdList()) ){
             this.grantRole(user);
         }
     }
@@ -130,14 +132,12 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         Map<String, Object> params = baseForm.getParameters();
 
         // 管理员类型
-        String mgrType = ObjectUtils.toString(params.get("mgrType"));
-        if( ObjectUtils.isEmpty(mgrType) ){
-            params.put("mgrType", CommonConstant.USER_MGR_TYPE_NORMAL);
-        }
+        String mgrType = Convert.toStr(params.get("mgrType"));
+        params.put("mgrType", StrUtil.emptyToDefault(mgrType, CommonConstant.USER_MGR_TYPE_NORMAL));
 
         // 普通用户查询关联租户
-        String queryType = ObjectUtils.toString(params.get("queryType"));
-        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StringUtils.isNotBlank(queryType) ){
+        String queryType = ObjectUtil.toString(params.get("queryType"));
+        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(queryType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
         logger.info("分页请求参数："+params);
@@ -170,13 +170,13 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
             // 关联角色
             List<Role> roles = roleService.findByUserId(user.getId());
-            if( !ListUtils.isEmpty(roles) ){
+            if( !CollUtil.isEmpty(roles) ){
                 user.setRoles(roles);
             }
 
             // 关联权限
             List<Permission> permissions = permsService.getAccessPermission(user);
-            if( !ListUtils.isEmpty(permissions) ){
+            if( !CollUtil.isEmpty(permissions) ){
                 List<Permission> operPermissions = Lists.newArrayList();
                 List<Permission> menuPermissions = Lists.newArrayList();
 
@@ -184,9 +184,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                     String permsUrl = permissions.get(i).getPermsUrl();
                     String permsType = permissions.get(i).getPermsType();
 
-                    if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StringUtils.isNotBlank(permsUrl) ){
+                    if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StrUtil.isNotBlank(permsUrl) ){
                         operPermissions.add(permissions.get(i));
-                    }else{
+                    }else if( CommonConstant.PERMISSION_PAGE.equals(permsType) ){
                         menuPermissions.add(permissions.get(i));
                     }
                 }
@@ -230,7 +230,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             map.put("authorities", ((SecurityUserDetails)user).getAuthorities());
 
             List<Role> roles = user.getRoles();
-            if( !ListUtils.isEmpty(roles) ){
+            if( !CollUtil.isEmpty(roles) ){
                 map.put("currRole", roles.get(0));
                 map.put("roles", roles);
             }

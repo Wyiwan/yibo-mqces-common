@@ -20,17 +20,16 @@
 
 package cn.yibo.common.io;
 
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.collect.SetUtils;
-import cn.yibo.common.lang.StringUtils;
-import org.apache.commons.io.IOUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -46,12 +45,11 @@ import java.util.regex.Pattern;
  * @version 2018-08-01
  */
 public class PropertiesUtils {
-	
 	// 默认加载的文件，可通过继承覆盖（若有相同Key，优先加载后面的）
 	public static final String[] DEFAULT_CONFIG_FILE = new String[]{"classpath:config/application.yml", "classpath:application.yml"};
 
-	private static Logger logger = PropertiesUtils.initLogger();
-	
+	private static  Logger logger = LoggerFactory.getLogger(PropertiesUtils.class);
+
 	private final Properties properties = new Properties();
 	
 	/**
@@ -64,20 +62,20 @@ public class PropertiesUtils {
 		}
 		public static void releadInstance(){
 			// 获取平台及模块相关的配置文件
-			Set<String> configSet = SetUtils.newLinkedHashSet();
+			Set<String> configSet = CollUtil.newLinkedHashSet();
 			Resource[] resources = ResourceUtils.getResources("classpath*:/config/yibo-*.*");
 			for(Resource resource : resources){
 				configSet.add("classpath:config/"+resource.getFilename());
 			}
 			configSet.add("classpath:config/yibo.yml");
 			// 获取全局设置默认的配置文件（以下是支持环境配置的属性文件）
-			Set<String> set = SetUtils.newLinkedHashSet();
+			Set<String> set = CollUtil.newLinkedHashSet();
 			for (String configFile : DEFAULT_CONFIG_FILE){
 				set.add(configFile);
 			}
 			// 获取 spring.config.location 外部自定义的配置文件
 			String customConfigs = System.getProperty("spring.config.location");
-			if (StringUtils.isNotBlank(customConfigs)){
+			if( StrUtil.isNotBlank(customConfigs) ){
 				for (String customConfig : StringUtils.split(customConfigs, ",")){
 					if (!customConfig.contains("$")){
 						customConfig = org.springframework.util.StringUtils.cleanPath(customConfig);
@@ -91,19 +89,17 @@ public class PropertiesUtils {
 			// 获取 spring.profiles.active 活动环境名称的配置文件
 			String[] configFiles = set.toArray(new String[set.size()]);
 			String profiles = System.getProperty("spring.profiles.active");
-			if (StringUtils.isBlank(profiles)){
+			if (StrUtil.isBlank(profiles)){
 				PropertiesUtils propsTemp = new PropertiesUtils(configFiles);
 				profiles = propsTemp.getProperty("spring.profiles.active");
 			}
 			for (String location : configFiles){
 				configSet.add(location);
-				if (StringUtils.isNotBlank(profiles) && !StringUtils.equals(profiles, "default")){
+				if (StrUtil.isNotBlank(profiles) && !StrUtil.equals(profiles, "default")){
 					if (location.endsWith(".properties")){
-						configSet.add(StringUtils.substringBeforeLast(location, ".properties")
-								+ "-" + profiles + ".properties");
+						configSet.add(StrUtil.subBefore(location, ".properties", true) + "-" + profiles + ".properties");
 					}else if (location.endsWith(".yml")){
-						configSet.add(StringUtils.substringBeforeLast(location, ".yml")
-								+ "-" + profiles + ".yml");
+						configSet.add(StrUtil.subBefore(location, ".yml", true) + "-" + profiles + ".yml");
 					}
 				}
 			}
@@ -136,8 +132,7 @@ public class PropertiesUtils {
         				YamlPropertiesFactoryBean bean = new YamlPropertiesFactoryBean();
         				bean.setResources(resource);
         				for (Map.Entry<Object,Object> entry : bean.getObject().entrySet()){
-        					properties.put(ObjectUtils.toString(entry.getKey()),
-        							ObjectUtils.toString(entry.getValue()));
+        					properties.put(ObjectUtil.toString(entry.getKey()), ObjectUtil.toString(entry.getValue()));
         				}
         			}
 				}
@@ -145,7 +140,7 @@ public class PropertiesUtils {
     			logger.error("Load " + location + " failure. ", e);
 			}
 			// 存储当前加载的配置文件路径和名称
-			properties.setProperty("configFiles", StringUtils.join(configFiles, ","));
+			properties.setProperty("configFiles", StrUtil.join(",",configFiles));
 		}
 	}
 	
@@ -203,26 +198,5 @@ public class PropertiesUtils {
 		String value = getProperty(key);
 		return value != null ? value : defaultValue;
 	}
-	
-	/**
-	 * 初始化日志路径
-	 */
-	private static Logger initLogger(){
-		String logPath = null;
-		try {
-			// 获取当前classes目录
-			logPath = new DefaultResourceLoader().getResource("/").getFile().getPath();
-		} catch (Exception e) {
-			// 取不到，取当前工作路径
-			logPath = System.getProperty("user.dir");
-		}
-		// 取当前日志路径下有classes目录，则使用classes目录
-		String classesLogPath = FileUtils.path(logPath + "/WEB-INF/classes");
-		if (new File(classesLogPath).exists()){
-			logPath = classesLogPath;
-		}
-		System.setProperty("logPath", FileUtils.path(logPath));
-		return LoggerFactory.getLogger(PropertiesUtils.class);
-	}
-	
+
 }

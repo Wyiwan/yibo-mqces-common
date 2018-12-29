@@ -18,13 +18,14 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.web.http;
+package cn.yibo.common.web;
 
-import cn.yibo.common.lang.StringUtils;
-import cn.yibo.common.mapper.JsonMapper;
-import cn.yibo.common.collect.MapUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import cn.yibo.common.io.PropertiesUtils;
-import org.apache.commons.lang3.Validate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -44,7 +45,7 @@ import java.util.Map.Entry;
  */
 public class ServletUtils {
 
-	public static final String DEFAULT_PARAMS_PARAM = "params";			// 登录扩展参数（JSON字符串）优先级高于扩展参数前缀
+	public static final String DEFAULT_PARAMS_PARAM = "params";		// 登录扩展参数（JSON字符串）优先级高于扩展参数前缀
 	public static final String DEFAULT_PARAM_PREFIX_PARAM = "param_";	// 扩展参数前缀
 	
 	// 定义静态文件后缀；静态文件排除URI地址
@@ -106,12 +107,12 @@ public class ServletUtils {
 		}
 		
 		String uri = request.getRequestURI();
-		if (StringUtils.inStringIgnoreCase(uri, ".json", ".xml")){
+		if (StrUtil.containsAnyIgnoreCase(uri, ".json", ".xml")){
 			return true;
 		}
 		
 		String ajax = request.getParameter("__ajax");
-		if (StringUtils.inStringIgnoreCase(ajax, "json", "xml")){
+		if (StrUtil.containsAnyIgnoreCase(ajax, "json", "xml")){
 			return true;
 		}
 		
@@ -143,12 +144,12 @@ public class ServletUtils {
 		}
 		if (staticFileExcludeUri != null){
 			for (String s : staticFileExcludeUri){
-				if (StringUtils.contains(uri, s)){
+				if (StrUtil.containsAny(uri, s)){
 					return false;
 				}
 			}
 		}
-		if (StringUtils.endsWithAny(uri, staticFiles)){
+		if (StrUtil.endWithAny(uri, staticFiles)){
 			return true;
 		}
 		return false;
@@ -205,7 +206,7 @@ public class ServletUtils {
 	 */
 	public static Map<String, Object> getParameters(ServletRequest request) {
 		if (request == null){
-			return MapUtils.newHashMap();
+			return CollUtil.newHashMap();
 		}
 		return getParametersStartingWith(request, "");
 	}
@@ -216,7 +217,6 @@ public class ServletUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
-		Validate.notNull(request, "Request must not be null");
 		Enumeration paramNames = request.getParameterNames();
 		Map<String, Object> params = new TreeMap<String, Object>();
 		String pre = prefix;
@@ -268,9 +268,9 @@ public class ServletUtils {
 	 */
 	public static Map<String, Object> getExtParams(ServletRequest request) {
 		Map<String, Object> paramMap = null;
-		String params =  StringUtils.trim(request.getParameter(DEFAULT_PARAMS_PARAM));
-		if (StringUtils.isNotBlank(params) && StringUtils.startsWith(params, "{")) {
-			paramMap = JsonMapper.fromJson(params, Map.class);
+		String params =  StrUtil.trim(request.getParameter(DEFAULT_PARAMS_PARAM));
+		if (StrUtil.isNotBlank(params) && StrUtil.startWith(params, "{")) {
+			paramMap = (Map)JSONUtil.parseObj(params);
 		} else {
 			paramMap = getParametersStartingWith(ServletUtils.getRequest(), DEFAULT_PARAM_PREFIX_PARAM);
 		}

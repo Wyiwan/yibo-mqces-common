@@ -20,7 +20,7 @@
 
 package cn.yibo.base.entity;
 
-import cn.yibo.common.lang.ObjectUtils;
+import cn.hutool.core.util.ObjectUtil;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.yibo.modules.base.constant.CommonConstant;
@@ -78,7 +78,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
             this.updateBy = UserContext.getUser().getId();
             this.createBy = this.updateBy;
         }
-        this.status = ObjectUtils.isEmpty(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
+        this.status = ObjectUtil.isNull(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
     @Override

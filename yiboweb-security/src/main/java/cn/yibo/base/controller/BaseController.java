@@ -20,7 +20,7 @@
 
 package cn.yibo.base.controller;
 
-import cn.yibo.common.web.http.ServletUtils;
+import cn.yibo.common.web.ServletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,11 @@ public abstract class BaseController {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected String SAVE_SUCCEED   = "保存成功";
+
     protected String UPDATE_SUCCEED = "修改成功";
+
     protected String DEL_SUCCEED    = "删除成功";
+
     protected String OPER_SUCCEED   = "操作成功";
 
     protected HttpServletRequest getHttpServletRequest() {

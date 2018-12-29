@@ -20,17 +20,20 @@
 
 package cn.yibo.core.web.restful;
 
-import cn.yibo.common.codec.AES128Utils;
-import cn.yibo.common.codec.HexUtils;
-import cn.yibo.common.lang.StringGZIPUtils;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import cn.yibo.core.protocol.*;
+import cn.yibo.core.protocol.filter.ExtPropertyFilter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.base.Strings;
-import cn.yibo.core.protocol.filter.ExtPropertyFilter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -64,6 +67,8 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
     private ITypeReference iTypeReference;
 
     private String dataStyleType;
+
+    private SymmetricCrypto AesUtils = new SymmetricCrypto(SymmetricAlgorithm.AES, SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
 
     public FastJsonHttpMessageConverter(){
         super(new MediaType("application", "json", UTF8), new MediaType("application", "*+json", UTF8));
@@ -176,16 +181,19 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
      * 请求中的数据解密并设置到业务对象<br/>
      */
     private T resetRequestData(String url, T t){
-        if(t instanceof RequestT){
+        if( t instanceof RequestT ){
             RequestT requestT = (RequestT)t;
-            if(requestT.getStyle() != null && !StyleEnum.PLAIN.equals(requestT.getStyle())){
+
+            if( requestT.getStyle() != null && !StyleEnum.PLAIN.equals(requestT.getStyle()) ){
                 Type[] types = ((ParameterizedTypeImpl)iTypeReference.getTypeReference(url).getType()).getActualTypeArguments();
-                Type type = ArrayUtils.isNotEmpty(types) ? types[0] : null;
-                if(type != null){
+                Type type = ArrayUtil.isNotEmpty(types) ? types[0] : null;
+
+                if( type != null ){
                     Object data = requestT.getData();
-                    if(requestT.getData() instanceof JSONObject){
+                    if( requestT.getData() instanceof JSONObject ){
                         data = JSON.parseObject(((JSONObject) requestT.getData()).toJSONString(), type);
                     }
+
                     StyleEnum style = requestT.getStyle();
                     requestT.setStyle(StyleEnum.PLAIN);
                     requestT.setData(data);
@@ -213,14 +221,11 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
                 String styledData = null;
 
                 if( StyleEnum.GZIP.equals(style) ){
-                    styledData = HexUtils.Bytes2HexString(StringGZIPUtils.compressToByte(jsonData));
+                    styledData = HexUtil.encodeHexStr(ZipUtil.gzip(jsonData,"utf-8"));
                 }else if( StyleEnum.AES.equals(style) ){
-                    try{
-                        styledData = AES128Utils.encrypt2str(jsonData);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
+                    styledData = StrUtil.str(AesUtils.encrypt(jsonData),"uft-8");
                 }
+
                 if( !Strings.isNullOrEmpty(styledData) ){
                     response.setStyledata(styledData);
                     response.setBizdata(null);

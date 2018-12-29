@@ -20,10 +20,10 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.io.PropertiesUtils;
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
@@ -45,10 +45,10 @@ import java.util.List;
 @Data
 @ApiModel(value = "用户表实体类(User)")
 public class User extends DataEntity<String>{
-    private static String configUserInitPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
-    private static String configSuperAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
-    public static final String USER_INIT_PASSWORD = ObjectUtils.isEmpty(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
-    private static final String SUPER_ADMIN_CODE = ObjectUtils.isEmpty(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
+    private static String configUserInitPassword = ObjectUtil.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
+    private static String configSuperAdminCode = ObjectUtil.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
+    public static final String USER_INIT_PASSWORD = StrUtil.isBlank(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
+    private static final String SUPER_ADMIN_CODE = StrUtil.isBlank(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
 
     @NotEmpty(message="登录账号不能为空")
     @ApiModelProperty(value = "登录账号")
@@ -171,7 +171,7 @@ public class User extends DataEntity<String>{
     }
 
     public void setRoleIds(String roleIds){
-        if( StringUtils.isNotBlank(roleIds) ){
+        if( StrUtil.isNotBlank(roleIds) ){
             this.setRoleIdList( Arrays.asList(roleIds.split(",")) );
         }
     }
@@ -189,15 +189,9 @@ public class User extends DataEntity<String>{
     }
 
     private void preInit(){
-        if( StringUtils.isBlank(this.userType) ){
-            this.userType = CommonConstant.USER_TYPE_NORMAL;
-        }
-        if( StringUtils.isBlank(this.mgrType) ){
-            this.mgrType = CommonConstant.USER_MGR_TYPE_NORMAL;
-        }
-        if( StringUtils.isBlank(this.password) ){
-            this.password = new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD);
-        }
+        this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
+        this.mgrType = StrUtil.emptyToDefault(this.mgrType, CommonConstant.USER_MGR_TYPE_NORMAL);
+        this.password = StrUtil.emptyToDefault(this.password, new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD));
     }
 
 }

@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.yibo.common.tree.Tree;
 import com.google.common.collect.Lists;
-import cn.yibo.base.tree.Tree;
 
 import java.util.List;
 

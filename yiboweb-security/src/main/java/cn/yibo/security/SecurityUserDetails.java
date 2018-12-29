@@ -20,7 +20,7 @@
 
 package cn.yibo.security;
 
-import cn.yibo.common.collect.ListUtils;
+import cn.hutool.core.collection.CollUtil;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.User;
@@ -83,7 +83,7 @@ public class SecurityUserDetails extends User implements UserDetails{
 
         // 添加请求权限
         List<Permission> permissions = this.getOperPermissions();
-        if( !ListUtils.isEmpty(permissions) ){
+        if( !CollUtil.isEmpty(permissions) ){
             for(int i = 0; i < permissions.size(); i++){
                 authorityList.add(new SimpleGrantedAuthority(permissions.get(i).getPermsName()));
             }

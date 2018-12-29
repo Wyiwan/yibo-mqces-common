@@ -20,9 +20,12 @@
 
 package cn.yibo.core.protocol;
 
-import cn.yibo.common.codec.AES128Utils;
-import cn.yibo.common.codec.HexUtils;
-import cn.yibo.common.lang.StringGZIPUtils;
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import cn.yibo.core.web.exception.BusinessException;
 import com.alibaba.fastjson.JSON;
 
@@ -59,6 +62,9 @@ public class ResponseT<T> implements Serializable {
 
     /* style处理后的返回数据 */
     private String styledata;
+
+    /* 构建加密工具 */
+    private SymmetricCrypto AesUtils = new SymmetricCrypto(SymmetricAlgorithm.AES, SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
 
     public ResponseT(){
         this.style = StyleEnum.PLAIN;
@@ -155,25 +161,23 @@ public class ResponseT<T> implements Serializable {
         return bizdata;
     }
 
-    public void setBizdata(T bizdata) {
+    public void setBizdata(T bizdata){
         if( StyleEnum.PLAIN.equals(style) ){
             this.bizdata = bizdata;
-        }else {
+        }else{
             if( bizdata == null || "".equals(bizdata.toString()) ){
                 this.bizdata = bizdata;
-            }else {
-                //wrapper data with style
+            }else{
+                // wrapper data with style
                 String jsonData = JSON.toJSONString(bizdata);
                 String hexData = null;
-                if(StyleEnum.GZIP.equals(style)){
-                    hexData = HexUtils.Bytes2HexString(StringGZIPUtils.compressToByte(jsonData));
-                }else if(StyleEnum.AES.equals(style)){
-                    try {
-                        hexData = AES128Utils.encrypt2str(jsonData);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+
+                if( StyleEnum.GZIP.equals(style) ){
+                    hexData = HexUtil.encodeHexStr(ZipUtil.gzip(jsonData,"utf-8"));
+                }else if( StyleEnum.AES.equals(style) ){
+                    hexData = StrUtil.str(AesUtils.encrypt(jsonData),"uft-8");
                 }
+
                 if( hexData != null && !"".equals(hexData) ){
                     this.styledata = hexData;
                     this.bizdata = null;

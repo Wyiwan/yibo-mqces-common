@@ -1,4 +1,4 @@
-package cn.yibo.common.utils.word;
+package cn.yibo.common.word;
 
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;

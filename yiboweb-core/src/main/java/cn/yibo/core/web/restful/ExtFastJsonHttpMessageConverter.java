@@ -20,10 +20,9 @@
 
 package cn.yibo.core.web.restful;
 
-import cn.yibo.common.web.http.ServletUtils;
+import cn.yibo.common.web.ServletUtils;
 import cn.yibo.core.protocol.ResponseMap;
 import com.alibaba.fastjson.JSON;
-import org.apache.http.HttpStatus;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -66,7 +65,7 @@ public class ExtFastJsonHttpMessageConverter<T> extends FastJsonHttpMessageConve
 
     protected void writeInternal(T t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
         String uri = ServletUtils.getRequest().getRequestURL().toString();
-        ServletUtils.getResponse().setStatus(HttpStatus.SC_OK);
+        ServletUtils.getResponse().setStatus(200);
 
         if( (t != null && (t instanceof ResponseMap)) || (uri.contains("swagger-resources") || uri.contains("api-docs")) ){
             OutputStream out = outputMessage.getBody();

@@ -20,12 +20,12 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.yibo.base.entity.DataEntity;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -92,6 +92,6 @@ public class Dept extends DataEntity<String>{
     @Override
     public void preInsert(){
         super.preInsert();
-        this.deptCode = RandomStringUtils.randomNumeric(CommonConstant.DEPT_CODE_NUM);
+        this.deptCode = RandomUtil.randomNumbers(CommonConstant.DEPT_CODE_NUM);
     }
 }

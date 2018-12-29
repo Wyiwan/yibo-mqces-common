@@ -20,9 +20,9 @@
 
 package cn.yibo.core.protocol;
 
-import cn.yibo.common.lang.StringUtils;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.core.web.exception.BusinessException;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
 
@@ -72,7 +72,7 @@ public class ResponseTs {
      * @return
      */
     public static <T> ResponseT<T> newResponseException(BusinessException ex){
-        return new ResponseT<T>(ex, StringUtils.isNotBlank(ex.getDevops()));
+        return new ResponseT<T>(ex, StrUtil.isNotBlank(ex.getDevops()));
     }
 
     /**

@@ -20,10 +20,12 @@
 
 package cn.yibo.core.protocol;
 
-import cn.yibo.common.codec.AES128Utils;
-import cn.yibo.common.codec.HexUtils;
-import cn.yibo.common.lang.StringGZIPUtils;
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
@@ -40,29 +42,22 @@ import java.util.Map;
 public class RequestT<T> implements Serializable {
     private static final long serialVersionUID = -2044372424437191905L;
 
-    /**
-     * style!=plain时用FastJson转换json串时用到
-     */
+    // style!=plain时用FastJson转换json串时用到
     public static SimplePropertyPreFilter FILTER = new SimplePropertyPreFilter(RequestT.class, "style", "styledData", "clientInfo");
 
-    /*
-    data的处理方式
-     */
+    // 构建加密工具
+    private SymmetricCrypto AesUtils = new SymmetricCrypto(SymmetricAlgorithm.AES, SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
+
+    // data的处理方式
     private StyleEnum style;
 
-    /*
-    请求数据，明文
-     */
+    // 请求数据，明文
     private T data;
 
-    /*
-    请求数据，style处理后的
-     */
+    // 请求数据，style处理后的
     private String styledData;
 
-    /*
-    请求头
-     */
+    // 请求头
     private Map<String, Object> clientInfo;
 
     public RequestT() {
@@ -81,27 +76,25 @@ public class RequestT<T> implements Serializable {
         this.style = style;
     }
 
-    public T getData() {
-        if(StyleEnum.PLAIN.equals(style)){
+    public T getData(){
+        if( StyleEnum.PLAIN.equals(style) ){
             return data;
-        }else {
-            if (data != null && !"".equals(data.toString())) {
+        }else{
+            if( data != null && !"".equals(data.toString()) ){
                 return data;
-            } else {
-                //unwrapper data with styled data
-                if( !StringUtils.isEmpty(styledData) ){
+            }else{
+                // unwrapper data with styled data
+                if( !StrUtil.isEmpty(styledData) ){
                     String jsonData = null;
-                    if(StyleEnum.GZIP.equals(style)){
-                        jsonData = StringGZIPUtils.uncompressToString(HexUtils.HexString2Bytes(styledData));
+
+                    if( StyleEnum.GZIP.equals(style) ){
+                        jsonData = ZipUtil.unGzip(HexUtil.decodeHex(styledData),"utf-8");
                     }else if(StyleEnum.AES.equals(style)){
-                        try {
-                            jsonData = AES128Utils.decrypt(styledData);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+                        jsonData = AesUtils.decryptStr(styledData);
                     }
-                    if(jsonData != null){
-                        data = (T) JSON.parse(jsonData);
+
+                    if( jsonData != null ){
+                        data = (T)JSON.parse(jsonData);
                         styledData = null;
                         return data;
                     }
@@ -111,26 +104,24 @@ public class RequestT<T> implements Serializable {
         return null;
     }
 
-    public void setData(T data) {
-        if(StyleEnum.PLAIN.equals(style)){
+    public void setData(T data){
+        if( StyleEnum.PLAIN.equals(style) ){
             this.data = data;
-        }else {
-            if(data == null || "".equals(data.toString())){
+        }else{
+            if( data == null || "".equals(data.toString()) ){
                 this.data = data;
-            }else {
-                //wrapper data with style
+            }else{
+                // wrapper data with style
                 String jsonData = JSON.toJSONString(data);
                 String hexData = null;
-                if(StyleEnum.GZIP.equals(style)){
-                    hexData = HexUtils.Bytes2HexString(StringGZIPUtils.compressToByte(jsonData));
+
+                if( StyleEnum.GZIP.equals(style) ){
+                    hexData = HexUtil.encodeHexStr(ZipUtil.gzip(jsonData,"utf-8"));
                 }else if(StyleEnum.AES.equals(style)){
-                    try {
-                        hexData = AES128Utils.encrypt2str(jsonData);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    hexData = StrUtil.str(AesUtils.encrypt(jsonData),"uft-8");
                 }
-                if(hexData != null && !"".equals(hexData)){
+
+                if( hexData != null && !"".equals(hexData) ){
                     this.styledData = hexData;
                     this.data = null;
                 }

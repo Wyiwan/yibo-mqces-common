@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.yibo.base.controller.BaseController;
-import cn.yibo.common.collect.MapUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
@@ -128,7 +128,7 @@ public class DeptController extends BaseController{
     @ApiOperation("列表查询")
     @GetMapping("/list-tree")
     public List treeList(Dept dept) throws Exception{
-        Map conditionMap = MapUtils.toMap(dept);
+        Map conditionMap = BeanUtil.beanToMap(dept, false, true);
         List result = deptService.queryList(conditionMap);
         return new DeptTree(result).getTreeList();
     }

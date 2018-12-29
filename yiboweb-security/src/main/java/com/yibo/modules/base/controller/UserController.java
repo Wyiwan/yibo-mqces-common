@@ -20,6 +20,7 @@
 
 package com.yibo.modules.base.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
@@ -318,7 +319,7 @@ public class UserController extends BaseController {
     })
     public List getGrantedRole(String id){
         List<Role> roleList = roleService.findByUserId(id);
-        if( !ListUtils.isEmpty(roleList) ){
+        if( !CollUtil.isEmpty(roleList) ){
             return ListUtils.extractToList(roleList, "id");
         }
         return Lists.newArrayList();

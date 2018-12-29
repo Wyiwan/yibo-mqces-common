@@ -20,13 +20,13 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -82,9 +82,7 @@ public class Permission extends DataEntity<String>{
     }
 
     private void preInit(){
-        if( StringUtils.isBlank(this.permsType) ){
-            this.permsType = CommonConstant.PERMISSION_OPERATION;
-        }
+        this.permsType = StrUtil.emptyToDefault(this.permsType, CommonConstant.PERMISSION_OPERATION);
         if( ObjectUtils.isEmpty(this.permsWeight) ){
             this.permsWeight = CommonConstant.USER_PERMS_WEIGHT;
         }

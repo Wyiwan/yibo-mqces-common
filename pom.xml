@@ -39,7 +39,6 @@
         <swagger.version>2.9.2</swagger.version>
         <ehcache.version>3.3.1</ehcache.version>
         <ehcache.core.version>2.6.11</ehcache.core.version>
-        <poi.version>3.14</poi.version>
     </properties>
 
     <dependencyManagement>

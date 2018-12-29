@@ -20,8 +20,8 @@
 
 package cn.yibo.common.network;
 
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,7 +49,7 @@ public class IpUtils {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
-		return StringUtils.split(ObjectUtils.toString(ip), ",")[0];
+		return StrUtil.split(ObjectUtil.toString(ip),",")[0];
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class IpUtils {
 	 * @return
 	 */
 	public static boolean isLocalAddr(String ip){
-		return StringUtils.inString(ip, "127.0.0.1", "0:0:0:0:0:0:0:1");
+		return StrUtil.containsAny(ip, "127.0.0.1", "0:0:0:0:0:0:0:1");
 	}
 
 	/**

@@ -20,12 +20,12 @@
 
 package cn.yibo.security.permission;
 
-import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
+import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.service.PermissionService;
-import com.yibo.modules.base.constant.CommonConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -75,7 +75,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
             Iterator<String> iterator = map.keySet().iterator();
             while( iterator.hasNext() ){
                 String permUrl = iterator.next();
-                if( StringUtils.isNotBlank(permUrl) && pathMatcher.match(permUrl, requestUrl) ){
+                if( StrUtil.isNotBlank(permUrl) && pathMatcher.match(permUrl, requestUrl) ){
                     return map.get(permUrl);
                 }
             }
@@ -101,12 +101,12 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         List<Permission> permissions = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
 
         map = new HashMap<>(16);
-        if( !ListUtils.isEmpty(permissions) ){
+        if( !CollUtil.isEmpty(permissions) ){
             for(int i = 0; i < permissions.size(); i++){
                 String permsName = permissions.get(i).getPermsName();
                 String permsUrl = permissions.get(i).getPermsUrl();
 
-                if( StringUtils.isNotBlank(permsName) && StringUtils.isNotBlank(permsUrl) ){
+                if( StrUtil.isNotBlank(permsName) && StrUtil.isNotBlank(permsUrl) ){
                     ConfigAttribute configAttribute = new SecurityConfig(permsName.trim());
                     Collection<ConfigAttribute> configAttributes = Lists.newArrayList(configAttribute);
                     map.put(permsUrl.trim(), configAttributes);

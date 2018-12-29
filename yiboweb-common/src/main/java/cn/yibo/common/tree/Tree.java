@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.base.tree;
+package cn.yibo.common.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;

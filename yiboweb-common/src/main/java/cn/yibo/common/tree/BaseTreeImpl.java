@@ -18,10 +18,10 @@
 {*****************************************************************************
 */
 
-package cn.yibo.base.tree;
+package cn.yibo.common.tree;
 
-import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 
 import java.util.*;
 
@@ -104,10 +104,10 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         //新建一个map
         LinkedHashMap<K, N> selfMap = new LinkedHashMap<>(initialCapacity);
         //遍历所有
-        if( !ListUtils.isEmpty(nodeList) ){
+        if( !CollUtil.isEmpty(nodeList) ){
             for(int i = 0; i < nodeList.size(); i++){
                 N node = nodeList.get(i);
-                selfMap.put(getKey(node), (N)ObjectUtils.cloneBean(node));
+                selfMap.put(getKey(node), (N)ObjectUtil.clone(node));
             }
 
         }

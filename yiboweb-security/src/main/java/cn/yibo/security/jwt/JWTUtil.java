@@ -20,9 +20,9 @@
 
 package cn.yibo.security.jwt;
 
-import cn.yibo.common.idgen.IdGenerate;
-import cn.yibo.common.lang.StringUtils;
-import cn.yibo.common.web.http.ServletUtils;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.yibo.common.web.ServletUtils;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.constant.SecurityConstant;
 import cn.yibo.security.exception.LoginFailEnum;
@@ -82,7 +82,7 @@ public class JWTUtil {
         }else{
             // 保存登录的过期时间
             String saveLogin = ServletUtils.getRequest().getParameter(SecurityConstant.SAVE_LOGIN);
-            if( StringUtils.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin) ){
+            if( StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin) ){
                 tokenExpireTime = saveLoginTime * 60 * 24;
             }
 
@@ -109,9 +109,9 @@ public class JWTUtil {
      * @return
      */
     private String generateRedisToken(String username){
-        String token = IdGenerate.uuid();
+        String token = IdUtil.simpleUUID();
         String saveLogin = ServletUtils.getRequest().getParameter(SecurityConstant.SAVE_LOGIN);
-        boolean saved = StringUtils.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin);
+        boolean saved = StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin);
 
         saveRedisToken(token, new TokenUser(username, null, saved));
         return token;
@@ -187,7 +187,7 @@ public class JWTUtil {
     public String validateToken(String headToken) throws LoginFailLimitException {
         if( tokenRedis ){
             String redisTokenPre = getRedisTokenPre(headToken);
-            if( StringUtils.isBlank(redisTokenPre) ){
+            if( StrUtil.isBlank(redisTokenPre) ){
                 throw new LoginFailLimitException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc());
             }
 
@@ -208,7 +208,7 @@ public class JWTUtil {
 
         // 使之前登录的token失效
         String oldToken = getRedisUserToken(username);
-        if( StringUtils.isNotBlank(oldToken) ){
+        if( StrUtil.isNotBlank(oldToken) ){
             redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
         }
         setRedisToken(token, tokenUser);

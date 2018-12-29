@@ -20,7 +20,7 @@
 
 package cn.yibo.security;
 
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.UserService;
@@ -57,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         Long timeRest = redisTemplate.getExpire(flagKey, TimeUnit.MINUTES);
 
         // 超过限制次数
-        if( StringUtils.isNotBlank(value) ){
+        if( StrUtil.isNotBlank(value) ){
             throw new LoginFailLimitException("登录错误次数超过限制，请"+timeRest+"分钟后再试");
         }
 

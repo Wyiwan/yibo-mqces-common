@@ -20,12 +20,12 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.yibo.base.entity.DataEntity;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -84,7 +84,7 @@ public class Office extends DataEntity<String>{
     @Override
     public void preInsert(){
         super.preInsert();
-        this.officeCode = RandomStringUtils.randomNumeric(CommonConstant.OFFICE_CODE_NUM);
+        this.officeCode = RandomUtil.randomNumbers(CommonConstant.OFFICE_CODE_NUM);
     }
 
     //------------------------------------------------------------------------------------------------------------------

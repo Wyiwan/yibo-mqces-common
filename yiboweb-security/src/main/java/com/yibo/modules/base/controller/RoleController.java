@@ -20,10 +20,11 @@
 
 package com.yibo.modules.base.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.StringUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
@@ -203,7 +204,7 @@ public class RoleController extends BaseController{
                 throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
             }
         }
-        if( StringUtils.isNotBlank(roleId) ){
+        if( StrUtil.isNotBlank(roleId) ){
             fetchRole = roleService.fetch(roleId);
 
             if( !UserContext.getUser().isSuperAdmin() && fetchRole != null && CommonConstant.YES.equals(fetchRole.getIsSys()) ){
@@ -236,7 +237,7 @@ public class RoleController extends BaseController{
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     public List getGrantedPermision(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
-        if( !ListUtils.isEmpty(permissionList) ){
+        if( !CollUtil.isEmpty(permissionList) ){
             return ListUtils.extractToList(permissionList, "id");
         }
         return Lists.newArrayList();

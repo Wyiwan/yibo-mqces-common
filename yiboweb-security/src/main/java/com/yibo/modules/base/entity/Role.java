@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
-import cn.yibo.common.lang.StringUtils;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -78,13 +78,13 @@ public class Role extends DataEntity<String>{
     private List<String> userIdList;
 
     public void setPermissionIds(String permissionIds){
-        if( StringUtils.isNotBlank(permissionIds) ){
+        if( StrUtil.isNotBlank(permissionIds) ){
             this.setPermissionIdList( Arrays.asList(permissionIds.split(",")) );
         }
     }
 
     public void setUserIds(String userIds){
-        if( StringUtils.isNotBlank(userIds) ){
+        if( StrUtil.isNotBlank(userIds) ){
             this.setUserIdList( Arrays.asList(userIds.split(",")) );
         }
     }
@@ -102,11 +102,7 @@ public class Role extends DataEntity<String>{
     }
 
     private void preInit(){
-        if( StringUtils.isBlank(this.userType) ){
-            this.userType = CommonConstant.USER_TYPE_NORMAL;
-        }
-        if( StringUtils.isBlank(this.isSys) ){
-            this.isSys = CommonConstant.NO;
-        }
+        this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
+        this.isSys = StrUtil.emptyToDefault(this.isSys, CommonConstant.NO);
     }
 }

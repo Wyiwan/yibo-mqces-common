@@ -20,13 +20,12 @@
 
 package cn.yibo.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.dao.BaseDAO;
 import cn.yibo.base.entity.BaseEntity;
 import cn.yibo.base.service.IBaseService;
-import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.service.impl.ClearUserCacheThread;
@@ -34,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -221,7 +221,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
      * @param userIdList
      */
     public void clearUsersCacheByUserId(List userIdList){
-        if( !ListUtils.isEmpty(userIdList) ){
+        if( !CollUtil.isEmpty(userIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setUserIdList(userIdList);
             clearUserCacheThread.start();
@@ -232,7 +232,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
      * 根据租户ID清除用户缓存
      */
     public void clearUsersCacheByTenantId(String tenantId){
-        if( StringUtils.isNotBlank(tenantId) ){
+        if( StrUtil.isNotBlank(tenantId) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setTenantId(tenantId);
             clearUserCacheThread.start();

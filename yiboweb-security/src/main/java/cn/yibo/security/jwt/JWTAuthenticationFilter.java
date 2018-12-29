@@ -20,7 +20,7 @@
 
 package cn.yibo.security.jwt;
 
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.SecurityUserDetails;
@@ -65,11 +65,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
         String headToken = request.getHeader(SecurityConstant.HEADER);
 
-        if( StringUtils.isBlank(headToken) ){
+        if( StrUtil.isBlank(headToken) ){
             headToken = request.getParameter(SecurityConstant.HEADER);
         }
 
-        if( StringUtils.isBlank(headToken) || (!jwtUtil.isTokenRedis() && !headToken.startsWith(SecurityConstant.TOKEN_SPLIT)) ){
+        if( StrUtil.isBlank(headToken) || (!jwtUtil.isTokenRedis() && !headToken.startsWith(SecurityConstant.TOKEN_SPLIT)) ){
             chain.doFilter(request, response);
             return;
         }
@@ -98,11 +98,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
     private UsernamePasswordAuthenticationToken getAuthentication(String headToken, HttpServletRequest request){
         String username = jwtUtil.validateToken(headToken);
 
-        if( StringUtils.isNotBlank(username) ) {
+        if( StrUtil.isNotBlank(username) ) {
             SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
 
             String tenantId = request.getParameter(SecurityConstant.TENANT_KEY);
-            if( userDetails != null && userDetails.isSuperAdmin() && StringUtils.isNotBlank(tenantId)){
+            if( userDetails != null && userDetails.isSuperAdmin() && StrUtil.isNotBlank(tenantId)){
                 userDetails.setTenantId(tenantId);
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

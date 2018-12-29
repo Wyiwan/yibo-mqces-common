@@ -20,9 +20,10 @@
 
 package cn.yibo.base.controller;
 
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
-import cn.yibo.common.web.http.ServletUtils;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.yibo.common.web.ServletUtils;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,9 +82,9 @@ public class BaseForm<T>{
 	 * @return
 	 */
 	public int getPageNo(){
-		String page = ObjectUtils.toString( this.get("page") );
+		String page = ObjectUtil.toString( this.get("page") );
 		
-		if( !StringUtils.isEmpty(page) && StringUtils.isNumeric(page) ){
+		if( !StrUtil.isEmpty(page) && NumberUtil.isNumber(page) ){
 			this.pageNo = Integer.parseInt(page);
 		}
 		return this.pageNo;
@@ -94,9 +95,9 @@ public class BaseForm<T>{
 	 * @return
 	 */
 	public int getPageSize(){
-		String rows = ObjectUtils.toString( this.get("rows") );
+		String rows = ObjectUtil.toString( this.get("rows") );
 		
-		if( !StringUtils.isEmpty(rows) || StringUtils.isNumeric(rows) ){
+		if( !StrUtil.isEmpty(rows) || NumberUtil.isNumber(rows) ){
 			this.pageSize = Integer.parseInt(rows);
 		}
 		return this.pageSize;
@@ -143,7 +144,7 @@ public class BaseForm<T>{
 	 * @return String
 	 */
     public String getString(String key) {
-		return ObjectUtils.toString( get(key) );
+		return ObjectUtil.toString( get(key) );
 	}
     
     /**
@@ -151,7 +152,7 @@ public class BaseForm<T>{
      * @return
      */
     public String getSort(){
-    	return ObjectUtils.toString( this.values.get("sort") );
+    	return ObjectUtil.toString( this.values.get("sort") );
     }
     
     /**
@@ -159,7 +160,7 @@ public class BaseForm<T>{
      * @return
      */
     public String getOrder(){
-    	return ObjectUtils.toString( this.values.get("order") );
+    	return ObjectUtil.toString( this.values.get("order") );
     }
     
     /**
@@ -167,7 +168,7 @@ public class BaseForm<T>{
      * @return
      */
     public String getOrderby(){
-    	return ObjectUtils.toString( this.values.get("orderby") );
+    	return ObjectUtil.toString( this.values.get("orderby") );
     }
 
 	/**
@@ -175,10 +176,11 @@ public class BaseForm<T>{
 	 */
 	public void parsePagingQueryParams(){
 		// 排序字段解析
-		String orderby = ObjectUtils.toString( this.get("orderby") ).trim();
-		String sortName = ObjectUtils.toString( this.get("sort") ).trim();
-		String sortOrder = ObjectUtils.toString( this.get("order") ).trim().toLowerCase();
-		if( StringUtils.isEmpty(orderby) && !StringUtils.isEmpty(sortName) ){
+		String orderby = ObjectUtil.toString( this.get("orderby") ).trim();
+		String sortName = ObjectUtil.toString( this.get("sort") ).trim();
+		String sortOrder = ObjectUtil.toString( this.get("order") ).trim().toLowerCase();
+
+		if( StrUtil.isEmpty(orderby) && !StrUtil.isEmpty(sortName) ){
 			if ( !sortOrder.equals("asc") && !sortOrder.equals("desc") ) {
 				sortOrder = "asc";
 			}
@@ -192,7 +194,7 @@ public class BaseForm<T>{
      * @param value 参数值
      */
 	public void set(String name, Object value){
-		if( !ObjectUtils.isEmpty(value) ){
+		if( ObjectUtil.isNotNull(value) ){
 			this.values.put(name, value);
 		}
 	}

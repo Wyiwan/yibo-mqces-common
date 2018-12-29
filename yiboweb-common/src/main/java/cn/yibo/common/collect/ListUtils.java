@@ -20,11 +20,9 @@
 
 package cn.yibo.common.collect;
 
-import cn.yibo.common.lang.ObjectUtils;
-import cn.yibo.common.lang.StringUtils;
-import cn.yibo.common.reflect.ReflectUtils;
-import cn.yibo.common.collect.callback.MethodCallback;
-import org.apache.commons.beanutils.PropertyUtils;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,8 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @version 2018-08-01
  */
 @SuppressWarnings("rawtypes")
-public class ListUtils extends org.apache.commons.collections.ListUtils {
-
+public class ListUtils{
 	/**
      * 是否包含字符串
      * @param str 验证字符串
@@ -45,7 +42,7 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
     public static boolean inString(String str, List<String> strs){
 		if (str != null && strs != null){
         	for (String s : strs){
-        		if (str.equals(StringUtils.trim(s))){
+        		if (str.equals(StrUtil.trim(s))){
         			return true;
         		}
         	}
@@ -127,11 +124,10 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 		Map map = new HashMap(collection.size());
 		try {
 			for (Object obj : collection) {
-				map.put(PropertyUtils.getProperty(obj, keyPropertyName),
-						PropertyUtils.getProperty(obj, valuePropertyName));
+				map.put(BeanUtil.getProperty(obj, keyPropertyName), BeanUtil.getProperty(obj, valuePropertyName));
 			}
 		} catch (Exception e) {
-			throw ReflectUtils.convertReflectionExceptionToUnchecked("", e);
+			throw ExceptionUtil.wrapRuntime(e);
 		}
 		return map;
 	}
@@ -149,10 +145,10 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 		List list = new ArrayList(collection.size());
 		try {
 			for (Object obj : collection) {
-				list.add(PropertyUtils.getProperty(obj, propertyName));
+				list.add(BeanUtil.getProperty(obj, propertyName));
 			}
 		} catch (Exception e) {
-			throw ReflectUtils.convertReflectionExceptionToUnchecked("", e);
+			throw ExceptionUtil.wrapRuntime(e);
 		}
 		return list;
 	}
@@ -169,10 +165,10 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 		List<String> list = new ArrayList<String>(collection.size());
 		try {
 			for (Object obj : collection) {
-				String value = (String)PropertyUtils.getProperty(obj, propertyName);
-				if (StringUtils.isBlank(prefix) || StringUtils.startsWith(value, prefix)){
+				String value = (String)BeanUtil.getProperty(obj, propertyName);
+				if (StrUtil.isBlank(prefix) || StrUtil.startWith(value, prefix)){
 					if (isNotBlank){
-						if (StringUtils.isNotBlank(value)){
+						if (StrUtil.isNotBlank(value)){
 							list.add(value);
 						}
 					}else{
@@ -181,7 +177,7 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 				}				
 			}
 		} catch (Exception e) {
-			throw ReflectUtils.convertReflectionExceptionToUnchecked("", e);
+			throw ExceptionUtil.wrapRuntime(e);
 		}
 		return list;
 	}
@@ -195,14 +191,14 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 	 */
 	public static String extractToString(final Collection collection, final String propertyName, final String separator) {
 		List list = extractToList(collection, propertyName);
-		return StringUtils.join(list, separator);
+		return StrUtil.join(separator, list);
 	}
 
 	/**
 	 * 转换Collection所有元素(通过toString())为String, 中间以 separator分隔。
 	 */
 	public static String convertToString(final Collection collection, final String separator) {
-		return StringUtils.join(collection, separator);
+		return StrUtil.join(separator, collection);
 	}
 
 	/**
@@ -294,94 +290,5 @@ public class ListUtils extends org.apache.commons.collections.ListUtils {
 		}
 		return list;
 	}
-	
-	/**
-	 * 列表分页方法
-	 * @param list 数据源
-	 * @param pageSize 每页大小
-	 * @param pageCallback 分页回调，返回当前页的数据及分页信息（pageList, pageNo, pageSize）
-	 * @author ThinkGem
-	 */
-	public static <T> void pageList(List<T> list, int pageSize, MethodCallback pageCallback){
-		if (list != null && list.size() > 0){
 
-			int count = list.size(), pageNo = 1;
-			int totalPage = (count + pageSize - 1) / pageSize;
-			
-			while(true){
-
-				// 执行回调，分页后的数据
-				List<T> pageList = getPageList(list, pageNo, pageSize, totalPage);
-				if (pageList.size() > 0){
-					pageCallback.execute(pageList, pageNo, pageSize, totalPage);
-				}
-				
-				// 如果为最后一页，则跳出循环
-				if (pageNo >= totalPage){
-					break;
-				}
-				
-				// 页数加一继续下一页
-				pageNo++;
-			}
-		}
-	}
-	
-	/**
-	 * 列表分页方法
-	 * @param list 源数据
-	 * @param pageNo 当前页码
-	 * @param pageSize 每页显示条数
-	 * @param totalPage 总页码数
-	 * @author ThinkGem
-	 */
-	private static <T> List<T> getPageList(List<T> list, int pageNo, int pageSize, int totalPage) {
-		int fromIndex = 0; // 从哪里开始截取
-		int toIndex = 0; // 截取几个
-		if (list == null || list.size() == 0){
-			return new ArrayList<T>();
-		}
-		// 当前页小于或等于总页数时执行
-		if (pageNo <= totalPage && pageNo != 0) {
-			fromIndex = (pageNo - 1) * pageSize;
-			if (pageNo == totalPage) {
-				toIndex = list.size();
-			} else {
-				toIndex = pageNo * pageSize;
-			}
-		}
-		return list.subList(fromIndex, toIndex);
-	}
-	
-	/**
-	 * 本地列表排序
-	 * @param list 需要排序的列表
-	 * @param orderBy 排序的键值（如：id desc）
-	 * @author ThinkGem
-	 */
-	public static <T> List<T> listOrderBy(List<T> list, String orderBy){
-		if (list != null && StringUtils.isNotBlank(orderBy)){
-			final String[] ss = orderBy.trim().split(" ");
-			if (ss != null && ss.length == 2){
-				Collections.sort(list, new Comparator<T>() {
-					@Override
-					public int compare(T o1, T o2) {
-						String s1 = StringUtils.EMPTY, s2 = StringUtils.EMPTY;
-						if (o1 instanceof Map){
-							s1 = ObjectUtils.toString(((Map)o1).get(ss[0]));
-							s2 = ObjectUtils.toString(((Map)o2).get(ss[0]));
-						}else{
-							s1 = ObjectUtils.toString(ReflectUtils.invokeGetter(o1, ss[0]));
-							s2 = ObjectUtils.toString(ReflectUtils.invokeGetter(o2, ss[0]));
-						}
-						if ("asc".equals(ss[1])){
-							return s1.compareTo(s2);
-						}else{
-							return s2.compareTo(s1);
-						}
-					}});
-			}
-		}
-		return list;
-	}
 }

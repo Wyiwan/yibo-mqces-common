@@ -20,7 +20,7 @@
 
 package cn.yibo.security.jwt;
 
-import cn.yibo.common.lang.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
@@ -70,11 +70,7 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
             String username = request.getParameter("username");
             recordLoginTime(username);
             String key = "loginTimeLimit:" + username;
-            String value = redisTemplate.opsForValue().get(key);
-
-            if( StringUtils.isBlank(value) ){
-                value = "0";
-            }
+            String value = StrUtil.emptyToDefault(redisTemplate.opsForValue().get(key), "0");
 
             //获取已登录错误次数
             int loginFailTime = Integer.parseInt(value);
@@ -106,10 +102,7 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
     public boolean recordLoginTime(String username) {
         String key = "loginTimeLimit:" + username;
         String flagKey = "loginFailFlag:" + username;
-        String value = redisTemplate.opsForValue().get(key);
-        if( StringUtils.isBlank(value) ){
-            value = "0";
-        }
+        String value = StrUtil.emptyToDefault(redisTemplate.opsForValue().get(key),"0");
 
         // 获取已登录错误次数
         int loginFailTime = Integer.parseInt(value) + 1;

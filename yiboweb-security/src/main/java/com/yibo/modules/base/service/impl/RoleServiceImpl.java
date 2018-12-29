@@ -20,10 +20,10 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
-import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.lang.ObjectUtils;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -34,6 +34,7 @@ import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     public void insert(Role role){
         super.insert(role);
 
-        if( !ListUtils.isEmpty(role.getPermissionIdList()) ){
+        if( !CollUtil.isEmpty(role.getPermissionIdList()) ){
             this.grantPermission(role);
         }
     }
@@ -85,9 +86,9 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     public void deleteByIds(List list){
         List tmpList = Lists.newArrayList();
 
-        if( !UserContext.getUser().isSuperAdmin() && !ListUtils.isEmpty(list)){
+        if( !UserContext.getUser().isSuperAdmin() && !CollUtil.isEmpty(list)){
             for(int i = 0 ; i < list.size() ; i++){
-                String roleId = ObjectUtils.toString(list.get(i));
+                String roleId = ObjectUtil.toString(list.get(i));
                 Role role = dao.fetch(list.get(i));
 
                 if( role != null && CommonConstant.NO.equals(role.getIsSys()) ){
@@ -177,7 +178,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      * @param roleIdList
      */
     private void clearUsersCacheByRoleId(List roleIdList){
-        if( !ListUtils.isEmpty(roleIdList) ){
+        if( !CollUtil.isEmpty(roleIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setRoleIdList(roleIdList);
             clearUserCacheThread.start();

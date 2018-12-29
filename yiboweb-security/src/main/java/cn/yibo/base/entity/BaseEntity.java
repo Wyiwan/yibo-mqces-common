@@ -20,7 +20,8 @@
 
 package cn.yibo.base.entity;
 
-import cn.yibo.common.lang.ObjectUtils;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.yibo.modules.base.entity.User;
@@ -59,7 +60,7 @@ public abstract class BaseEntity<T> implements Serializable {
     }
 
     public String getTenantId(){
-        if( ObjectUtils.isEmpty(tenantId) && UserContext.getUser() != null ){
+        if( StrUtil.isEmpty(tenantId) && UserContext.getUser() != null ){
             this.tenantId = UserContext.getUser().getTenantId();
         }
         return tenantId;
@@ -79,6 +80,6 @@ public abstract class BaseEntity<T> implements Serializable {
     public abstract void enabled();
 
     public Object clone(){
-        return ObjectUtils.cloneBean(this);
+        return ObjectUtil.clone(this);
     }
 }
