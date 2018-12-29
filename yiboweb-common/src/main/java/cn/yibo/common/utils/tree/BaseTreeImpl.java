@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.tree;
+package cn.yibo.common.utils.tree;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;

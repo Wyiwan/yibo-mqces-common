@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.tree;
+package cn.yibo.common.utils.tree;
 
 /**
  * 自定义树搜索器

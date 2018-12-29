@@ -20,7 +20,7 @@
 
 package com.yibo.modules.base.entity;
 
-import cn.yibo.common.tree.Tree;
+import cn.yibo.common.utils.tree.Tree;
 import com.google.common.collect.Lists;
 
 import java.util.List;
