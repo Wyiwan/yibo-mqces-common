@@ -181,7 +181,7 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @ApiOperation("新增（系统管理员）")
+    @ApiOperation("系统管理员-新增")
     @PostMapping("/mgr-created")
     public String mgrCreated(@Valid @RequestBody User user){
         user.setMgrType(CommonConstant.USER_MGR_TYPE_ADMIN);
@@ -193,7 +193,7 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @ApiOperation("编辑（系统管理员）")
+    @ApiOperation("系统管理员/编辑")
     @PostMapping("/mgr-updated")
     public String mgrUpdated(@Valid @RequestBody User user){
         return updated(user);
@@ -204,7 +204,7 @@ public class UserController extends BaseController {
      * @param ids
      * @return
      */
-    @ApiOperation("删除（系统管理员）")
+    @ApiOperation("系统管理员/删除")
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-deleted")
     public String mgrDeleted(@RequestBody String ids){
@@ -215,7 +215,7 @@ public class UserController extends BaseController {
      * 分页查询
      * @return
      */
-    @ApiOperation("分页查询（系统管理员）")
+    @ApiOperation("系统管理员/分页查询")
     @GetMapping("/mgr-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
@@ -232,7 +232,7 @@ public class UserController extends BaseController {
      * @param id
      * @return
      */
-    @ApiOperation("启用或停用（系统管理员）")
+    @ApiOperation("系统管理员/启用或停用")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-disabled")
     public String mgrDisabled(@RequestBody String id){
@@ -250,7 +250,7 @@ public class UserController extends BaseController {
      * @param id
      * @return
      */
-    @ApiOperation("重置密码（系统管理员）")
+    @ApiOperation("系统管理员/重置密码")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/mgr-reseted")
     public String mgrReseted(@RequestBody String id){
