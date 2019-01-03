@@ -18,6 +18,23 @@ webapp:
   save-login-time: 7      # 用户选择保存登录状态对应token过期时间（天）
   login-time-limit: 5     # 限制用户登陆错误次数（次）
   login-after-time: 10    # 错误超过次数后多少分钟后才能继续登录（分钟）
+  #日志记录相关
+  log:
+    enabled: true
+    addPathPatterns:
+      - /**
+    excludePathPatterns:
+      - /common/**
+      - /druid/**
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /webjars/springfox-swagger-ui/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
 
 #Srping相关配置
 spring:
@@ -26,7 +43,7 @@ spring:
 
   #Redis配置
   redis:
-      host: 192.168.1.244
+      host: 192.168.1.31
       port: 8379
       password: ENC(108NCrFBdhsxAwdjy36x4g==)
 

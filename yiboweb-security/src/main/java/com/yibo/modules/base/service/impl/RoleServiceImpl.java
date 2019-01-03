@@ -34,6 +34,7 @@ import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;
 import com.yibo.modules.base.utils.ClearUserCacheThread;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ import java.util.Map;
  * @since 2018-12-20
  * @version v1.0
  */
+@Slf4j
 @Service
 @Transactional(readOnly=true)
 public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implements RoleService {
@@ -125,7 +127,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             params.put("userWeight", UserContext.getUser().getUserWeight());
         }
         params.put("tenantId", UserContext.getUser().getTenantId());
-        logger.info("分页请求参数："+params);
+        log.info("分页请求参数："+params);
 
         List list = dao.queryPageExt(params);
         return new PageInfo<T>(list);
