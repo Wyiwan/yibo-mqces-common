@@ -182,7 +182,7 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @ApiOperation("系统管理员-新增")
+    @ApiOperation("系统管理员/新增")
     @PostMapping("/mgr-created")
     public String mgrCreated(@Valid @RequestBody User user){
         user.setMgrType(CommonConstant.USER_MGR_TYPE_ADMIN);
@@ -239,7 +239,7 @@ public class UserController extends BaseController {
     public String mgrDisabled(@RequestBody String id){
         User user = verifyUser(id, true);
 
-        if (user != null) {
+        if( user != null ){
             user.enabled();
             userService.update(user);
         }
@@ -257,7 +257,7 @@ public class UserController extends BaseController {
     public String mgrReseted(@RequestBody String id){
         User user = verifyUser(id, true);
 
-        if (user != null) {
+        if( user != null ){
             user.setPassword(null);
             userService.update(user);
         }
@@ -293,12 +293,12 @@ public class UserController extends BaseController {
     private User verifyUser(String id, boolean isAdmin){
         User user = userService.fetch(id);
 
-        if (user != null) {
+        if( user != null ){
             String mgrType = user.getMgrType();
 
-            if (isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType)) {
+            if( isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
                 return user;
-            } else if (!isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType)) {
+            }else if( !isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
                 return user;
             }
         }

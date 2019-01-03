@@ -1,6 +1,8 @@
-package com.yibo.modules.base.service.impl;
+package com.yibo.modules.base.utils;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
@@ -47,8 +49,8 @@ public class ClearUserCacheThread extends Thread{
     public void run(){
         UserDao userDao = SpringContextHolder.getBean("userDao");
         if( userDao != null ){
-            long startTime = System.currentTimeMillis();
-            logger.info("清除用户缓存中...");
+            TimeInterval timer = DateUtil.timer();
+            logger.info("用户缓存清除中...");
 
             if( !CollUtil.isEmpty(userIdList) ){
                 List<String> list = userDao.findUsernameByIds(userIdList);
@@ -68,9 +70,7 @@ public class ClearUserCacheThread extends Thread{
                     this.clearCaches(list);
                 }
             }
-
-            long endTime = System.currentTimeMillis();
-            logger.info("清除用户缓存完成，耗时：" + (endTime-startTime)+ "ms.");
+            logger.info("清除用户缓存完成，耗时：" + timer.interval()+ "ms");
         }
     }
 

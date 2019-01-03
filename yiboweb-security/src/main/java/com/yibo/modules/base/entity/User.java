@@ -20,10 +20,10 @@
 
 package com.yibo.modules.base.entity;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.utils.ObjectUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.yibo.modules.base.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
@@ -45,10 +45,10 @@ import java.util.List;
 @Data
 @ApiModel(value = "用户表实体类(User)")
 public class User extends DataEntity<String>{
-    private static String configUserInitPassword = ObjectUtil.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
-    private static String configSuperAdminCode = ObjectUtil.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
-    public static final String USER_INIT_PASSWORD = StrUtil.isBlank(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
-    private static final String SUPER_ADMIN_CODE = StrUtil.isBlank(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
+    private static String configUserInitPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
+    private static String configSuperAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
+    public static final String USER_INIT_PASSWORD = StrUtil.isEmpty(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
+    private static final String SUPER_ADMIN_CODE = StrUtil.isEmpty(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
 
     @NotEmpty(message="登录账号不能为空")
     @ApiModelProperty(value = "登录账号")

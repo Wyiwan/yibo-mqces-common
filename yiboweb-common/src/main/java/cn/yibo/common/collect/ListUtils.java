@@ -166,7 +166,7 @@ public class ListUtils{
 		try {
 			for (Object obj : collection) {
 				String value = (String)BeanUtil.getProperty(obj, propertyName);
-				if (StrUtil.isBlank(prefix) || StrUtil.startWith(value, prefix)){
+				if( StrUtil.isEmpty(prefix) || StrUtil.startWith(value, prefix) ){
 					if (isNotBlank){
 						if (StrUtil.isNotBlank(value)){
 							list.add(value);

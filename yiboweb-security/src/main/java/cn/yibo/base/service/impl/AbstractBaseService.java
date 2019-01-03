@@ -26,14 +26,15 @@ import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.dao.BaseDAO;
 import cn.yibo.base.entity.BaseEntity;
 import cn.yibo.base.service.IBaseService;
+import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.common.utils.ThreadPoolUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yibo.modules.base.service.impl.ClearUserCacheThread;
+import com.yibo.modules.base.utils.ClearUserCacheThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -224,7 +225,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( !CollUtil.isEmpty(userIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setUserIdList(userIdList);
-            clearUserCacheThread.start();
+            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
         }
     }
 
@@ -235,7 +236,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( StrUtil.isNotBlank(tenantId) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setTenantId(tenantId);
-            clearUserCacheThread.start();
+            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
         }
     }
 }

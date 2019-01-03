@@ -21,11 +21,10 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
@@ -40,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -132,11 +130,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         Map<String, Object> params = baseForm.getParameters();
 
         // 管理员类型
-        String mgrType = Convert.toStr(params.get("mgrType"));
+        String mgrType = ObjectUtils.toString(params.get("mgrType"));
         params.put("mgrType", StrUtil.emptyToDefault(mgrType, CommonConstant.USER_MGR_TYPE_NORMAL));
 
         // 普通用户查询关联租户
-        String queryType = ObjectUtil.toString(params.get("queryType"));
+        String queryType = ObjectUtils.toString(params.get("queryType"));
         if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(queryType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
@@ -226,7 +224,10 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             map.put("avatar", user.getAvatar());
             map.put("lastVisitDate", user.getLastVisitDate());
 
-            map.put("menuAuthorities", new PermissionTree(user.getMenuPermissions()).getTreeList());
+            List<Permission> permissionList = user.getMenuPermissions();
+            if( !CollUtil.isEmpty(permissionList) ){
+                map.put("menuAuthorities", new PermissionTree(user.getMenuPermissions()).getTreeList());
+            }
             map.put("authorities", ((SecurityUserDetails)user).getAuthorities());
 
             List<Role> roles = user.getRoles();

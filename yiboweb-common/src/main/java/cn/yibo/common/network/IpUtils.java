@@ -20,8 +20,8 @@
 
 package cn.yibo.common.network;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.yibo.common.utils.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,7 +49,7 @@ public class IpUtils {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
-		return StrUtil.split(ObjectUtil.toString(ip),",")[0];
+		return StrUtil.split(ObjectUtils.toString(ip),",")[0];
 	}
 	
 	/**

@@ -65,11 +65,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException{
         String headToken = request.getHeader(SecurityConstant.HEADER);
 
-        if( StrUtil.isBlank(headToken) ){
+        if( StrUtil.isEmpty(headToken) ){
             headToken = request.getParameter(SecurityConstant.HEADER);
         }
 
-        if( StrUtil.isBlank(headToken) || (!jwtUtil.isTokenRedis() && !headToken.startsWith(SecurityConstant.TOKEN_SPLIT)) ){
+        if( StrUtil.isEmpty(headToken) || (!jwtUtil.isTokenRedis() && !headToken.startsWith(SecurityConstant.TOKEN_SPLIT)) ){
             chain.doFilter(request, response);
             return;
         }

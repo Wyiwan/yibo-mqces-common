@@ -187,7 +187,7 @@ public class JWTUtil {
     public String validateToken(String headToken) throws LoginFailLimitException {
         if( tokenRedis ){
             String redisTokenPre = getRedisTokenPre(headToken);
-            if( StrUtil.isBlank(redisTokenPre) ){
+            if( StrUtil.isEmpty(redisTokenPre) ){
                 throw new LoginFailLimitException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc());
             }
 

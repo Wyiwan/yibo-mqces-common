@@ -20,11 +20,10 @@
 
 package com.yibo.modules.base.service.impl;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
@@ -49,8 +48,8 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
-    private static String configMinWeight = ObjectUtil.toString( PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight") );
-    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = StrUtil.isBlank(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : Convert.toInt(configMinWeight);
+    private static String configMinWeight = ObjectUtils.toString( PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight") );
+    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = StrUtil.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
 
     /**
      * 重写新增

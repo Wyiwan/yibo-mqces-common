@@ -114,7 +114,7 @@ public class PermissionController extends BaseController{
      * 查询树结构数据
      * @return
      */
-    @ApiOperation("查询新增或编辑的树结构")
+    @ApiOperation("树结构查询")
     @GetMapping("/tree")
     public List tree(){
         List result = permissionService.findTree();
@@ -125,7 +125,7 @@ public class PermissionController extends BaseController{
      * 查询列表数据
      * @return
      */
-    @ApiOperation("查询列表树结构")
+    @ApiOperation("列表树结构查询")
     @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", required = true, dataType = "String")
     @GetMapping("/list-tree")
     public List treeList(){

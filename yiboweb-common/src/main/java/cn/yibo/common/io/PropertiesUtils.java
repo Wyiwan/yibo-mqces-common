@@ -21,8 +21,8 @@
 package cn.yibo.common.io;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.yibo.common.utils.ObjectUtils;
 import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,11 +89,11 @@ public class PropertiesUtils {
 			// 获取 spring.profiles.active 活动环境名称的配置文件
 			String[] configFiles = set.toArray(new String[set.size()]);
 			String profiles = System.getProperty("spring.profiles.active");
-			if (StrUtil.isBlank(profiles)){
+			if( StrUtil.isEmpty(profiles) ){
 				PropertiesUtils propsTemp = new PropertiesUtils(configFiles);
 				profiles = propsTemp.getProperty("spring.profiles.active");
 			}
-			for (String location : configFiles){
+			for( String location : configFiles ){
 				configSet.add(location);
 				if (StrUtil.isNotBlank(profiles) && !StrUtil.equals(profiles, "default")){
 					if (location.endsWith(".properties")){
@@ -132,7 +132,7 @@ public class PropertiesUtils {
         				YamlPropertiesFactoryBean bean = new YamlPropertiesFactoryBean();
         				bean.setResources(resource);
         				for (Map.Entry<Object,Object> entry : bean.getObject().entrySet()){
-        					properties.put(ObjectUtil.toString(entry.getKey()), ObjectUtil.toString(entry.getValue()));
+        					properties.put(ObjectUtils.toString(entry.getKey()), ObjectUtils.toString(entry.getValue()));
         				}
         			}
 				}
