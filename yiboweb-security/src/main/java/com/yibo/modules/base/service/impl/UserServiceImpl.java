@@ -50,7 +50,6 @@ import java.util.Map;
  * @since 2018-12-03
  * @version v1.0
  */
-@Slf4j
 @Service
 @Transactional(readOnly=true)
 public class UserServiceImpl extends AbstractBaseService<UserDao, User> implements UserService {
@@ -140,7 +139,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(queryType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
-        log.info("分页请求参数："+params);
+        this.logger.info("分页请求参数："+params);
 
         List list = dao.queryPageExt(params);
         return new PageInfo<T>(list);

@@ -31,7 +31,8 @@ import cn.yibo.common.utils.ThreadPoolUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.utils.ClearUserCacheThread;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,9 +45,10 @@ import java.util.Map;
  *  时间: 2018-08-07
  *  版本: v1.0
  */
-@Slf4j
 @Transactional(readOnly=true)
 public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntity> implements IBaseService<D, T> {
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     protected D dao;
 
@@ -119,7 +121,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
 
         // 获取查询参数
         Map<String, Object> params = baseForm.getParameters();
-        log.info("分页请求参数："+params);
+        logger.info("分页请求参数："+params);
 
         List<T> list = dao.queryPage(params);
         return new PageInfo<T>(list);
