@@ -25,6 +25,7 @@ import cn.yibo.security.exception.LoginFailEnum;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.UserService;
 import cn.yibo.security.exception.LoginFailLimitException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit;
  *  时间: 2018-09-16
  *  版本: v1.0
  */
+@Slf4j
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService{
 
@@ -52,6 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info(">>>>>>>>>>>>>>> loadUserByUsername >>>>>>>>>>>>>>> login name：" + username);
         String flagKey = "loginFailFlag:"+username;
         String value = redisTemplate.opsForValue().get(flagKey);
         Long timeRest = redisTemplate.getExpire(flagKey, TimeUnit.MINUTES);
