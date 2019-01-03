@@ -21,8 +21,7 @@
 package cn.yibo.base.controller;
 
 import cn.yibo.common.web.ServletUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +32,8 @@ import javax.servlet.http.HttpServletResponse;
  *  时间: 2018-08-07
  *  版本: v1.0
  */
+@Log
 public abstract class BaseController {
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
     protected String SAVE_SUCCEED   = "保存成功";
 
     protected String UPDATE_SUCCEED = "修改成功";

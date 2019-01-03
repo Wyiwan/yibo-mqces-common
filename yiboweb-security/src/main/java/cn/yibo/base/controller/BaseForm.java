@@ -26,8 +26,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -39,12 +38,8 @@ import java.util.Map;
  * @author kfzx-gaoyun
  * @version 2016-05-12
  */
+@Slf4j
 public class BaseForm<T>{
-	/**
-	 * 日志对象
-	 */
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
 	/**
 	 * 查询参数对象
 	 */
@@ -74,7 +69,7 @@ public class BaseForm<T>{
 			this.parsePagingQueryParams();
 		}catch(Exception e){
 			e.printStackTrace();
-			logger.error("BaseControlForm initialize parameters setting error：" +e);
+			log.error("BaseControlForm initialize parameters setting error：" +e);
 		}
 	}
 	

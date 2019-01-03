@@ -10,8 +10,7 @@ import cn.yibo.core.web.context.SpringContextHolder;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -22,9 +21,8 @@ import java.util.List;
  * 时间: 2018-12-26
  * 版本: v1.0
  */
+@Slf4j
 public class ClearUserCacheThread extends Thread{
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private String tenantId;
     private List userIdList;
     private List roleIdList;
@@ -50,7 +48,7 @@ public class ClearUserCacheThread extends Thread{
         UserDao userDao = SpringContextHolder.getBean("userDao");
         if( userDao != null ){
             TimeInterval timer = DateUtil.timer();
-            logger.info("用户缓存清除中...");
+            log.info("清除用户缓存中...");
 
             if( !CollUtil.isEmpty(userIdList) ){
                 List<String> list = userDao.findUsernameByIds(userIdList);
@@ -70,7 +68,7 @@ public class ClearUserCacheThread extends Thread{
                     this.clearCaches(list);
                 }
             }
-            logger.info("清除用户缓存完成，耗时：" + timer.interval()+ "ms");
+            log.info("清除用户缓存完成，耗时：" + timer.interval()+ "ms");
         }
     }
 
@@ -78,7 +76,7 @@ public class ClearUserCacheThread extends Thread{
         if( !CollUtil.isEmpty(list) ){
             for(int i = 0 ; i < list.size() ; i++){
                 CacheUtils.remove(CommonConstant.USER_CACHE, list.get(i));
-                logger.info("清除用户[ "+list.get(i)+" ]缓存...");
+                log.info("清除用户[ "+list.get(i)+" ]缓存...");
             }
         }
     }

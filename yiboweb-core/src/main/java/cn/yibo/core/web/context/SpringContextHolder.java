@@ -21,8 +21,7 @@
 package cn.yibo.core.web.context;
 
 import cn.hutool.core.lang.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -36,11 +35,10 @@ import org.springframework.stereotype.Service;
  *  时间: 2018-08-13
  *  版本: v1.0
  */
+@Slf4j
 @Service
 @Lazy(false)
 public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
-	private static Logger logger = LoggerFactory.getLogger(SpringContextHolder.class);
-
 	private static ApplicationContext applicationContext = null;
 
 	/**
@@ -72,8 +70,8 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	 * 清除SpringContextHolder中的ApplicationContext为Null.
 	 */
 	public static void clearHolder() {
-		if( logger.isDebugEnabled() ){
-			logger.debug("清除SpringUtils中的ApplicationContext:" + applicationContext);
+		if( log.isDebugEnabled() ){
+			log.debug("清除SpringUtils中的ApplicationContext:" + applicationContext);
 		}
 		applicationContext = null;
 	}

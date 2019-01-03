@@ -20,11 +20,10 @@
 
 package cn.yibo.core.cache;
 
+import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -35,9 +34,8 @@ import java.util.List;
  *  时间: 2018-08-13
  *  版本: v1.0
  */
+@Slf4j
 public class EhcacheFactory extends BaseCacheFactory {
-    private static final Logger log = LoggerFactory.getLogger(EhcacheFactory.class);
-
 	private static CacheManager cacheManager;
 
 	private static volatile Object locker = new Object();
