@@ -43,7 +43,7 @@ spring:
 
   #Redis配置
   redis:
-      host: 192.168.1.31
+      host: 192.168.1.244
       port: 8379
       password: ENC(108NCrFBdhsxAwdjy36x4g==)
 
