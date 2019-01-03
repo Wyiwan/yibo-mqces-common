@@ -26,15 +26,6 @@ webapp:
     excludePathPatterns:
       - /common/**
       - /druid/**
-      - /swagger-ui.html
-      - /swagger-resources/**
-      - /swagger/**
-      - /webjars/springfox-swagger-ui/**
-      - /**/v2/api-docs
-      - /**/*.js
-      - /**/*.css
-      - /**/*.png
-      - /**/*.ico
 
 #Srping相关配置
 spring:
