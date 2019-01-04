@@ -44,6 +44,18 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
     @Autowired
     UserService userService;
 
+    /**
+     * 重写更新
+     * @param office
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updateNull(Office office){
+        super.updateNull(office);
+        this.clearUsersCacheByTenantId(office.getId());
+    }
+
     @Override
     @Transactional(readOnly = false)
     public void disabled(Office office){

@@ -108,23 +108,49 @@
     <update id="update" parameterType="com.yibo.modules.base.entity.Permission">
         update sys_permission
         <trim prefix="set" suffixOverrides=",">
-            parent_id = #{parentId,jdbcType=VARCHAR},
-            ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            perms_name = #{permsName,jdbcType=VARCHAR},
-            perms_type = #{permsType,jdbcType=VARCHAR},
-            perms_url = #{permsUrl,jdbcType=VARCHAR},
-            perms_sort = #{permsSort,jdbcType=NUMERIC},
-            perms_icon = #{permsIcon,jdbcType=VARCHAR},
-            perms_level = #{permsLevel,jdbcType=NUMERIC},
-            perms_weight = #{permsWeight,jdbcType=NUMERIC},
-            status = #{status,jdbcType=INTEGER},
-            update_by = #{updateBy,jdbcType=VARCHAR},
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-            comments = #{comments,jdbcType=VARCHAR},
-       </trim>
-       <where>
+            <if test="parentId!=null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="ancestorId!=null">
+                ancestor_id = #{ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="permsName!=null">
+                perms_name = #{permsName,jdbcType=VARCHAR},
+            </if>
+            <if test="permsType!=null">
+                perms_type = #{permsType,jdbcType=VARCHAR},
+            </if>
+            <if test="permsUrl!=null">
+                perms_url = #{permsUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="permsSort!=null">
+                perms_sort = #{permsSort,jdbcType=NUMERIC},
+            </if>
+            <if test="permsIcon!=null">
+                perms_icon = #{permsIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="permsLevel!=null">
+                perms_level = #{permsLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="permsWeight!=null">
+                perms_weight = #{permsWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
             id = #{id}
-       </where>
+        </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.Permission">

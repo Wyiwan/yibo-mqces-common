@@ -11,11 +11,11 @@
 {  维护历史:													
 {  日期        维护人        维护类型						
 {  ---------------------------------------------------------------------------	
-{  2018-12-20  高云        新建	
-{ 	                                                                     
+{  2018-12-20  高云        新建
+{
 {  ---------------------------------------------------------------------------
 {  注：本模块代码由医博代码生成工具辅助生成
-{*****************************************************************************	
+{*****************************************************************************
 */
 
 package com.yibo.modules.base.entity;
@@ -47,16 +47,16 @@ public class Role extends DataEntity<String>{
     @NotEmpty(message="角色编码不能为空")
     @ApiModelProperty(value = "角色编码")
     private String roleCode;
-    
+
     @ApiModelProperty(value = "角色权重（倒序）")
     private Integer roleWeight;
-    
+
     @ApiModelProperty(value = "角色分类（预留）")
     private String roleType;
-    
+
     @ApiModelProperty(value = "用户类型（normal普通用户 expert专家）")
     private String userType;
-    
+
     @ApiModelProperty(value = "系统内置（0否 1是）")
     private String isSys;
 
@@ -103,6 +103,8 @@ public class Role extends DataEntity<String>{
 
     private void preInit(){
         this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
-        this.isSys = StrUtil.emptyToDefault(this.isSys, CommonConstant.NO);
+        if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
+            this.isSys = CommonConstant.NO;
+        }
     }
 }

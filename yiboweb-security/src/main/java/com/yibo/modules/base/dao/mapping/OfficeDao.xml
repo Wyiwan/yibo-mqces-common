@@ -133,28 +133,64 @@
     <update id="update" parameterType="com.yibo.modules.base.entity.Office">
         update sys_office
         <trim prefix="set" suffixOverrides=",">
-            parent_id = #{parentId,jdbcType=VARCHAR},
-            ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            office_name = #{officeName,jdbcType=VARCHAR},
-            office_code = #{officeCode,jdbcType=VARCHAR},
-            office_type = #{officeType,jdbcType=VARCHAR},
-            office_level = #{officeLevel,jdbcType=NUMERIC},
-            office_sort = #{officeSort,jdbcType=NUMERIC},
-            short_name = #{shortName,jdbcType=VARCHAR},
-            director_id = #{directorId,jdbcType=VARCHAR},
-            avatar = #{avatar,jdbcType=VARCHAR},
-            slogan = #{slogan,jdbcType=VARCHAR},
-            introduction = #{introduction,jdbcType=VARCHAR},
-            phone = #{phone,jdbcType=VARCHAR},
-            address = #{address,jdbcType=VARCHAR},
-            status = #{status,jdbcType=INTEGER},
-            update_by = #{updateBy,jdbcType=VARCHAR},
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-            comments = #{comments,jdbcType=VARCHAR},
-       </trim>
-       <where>
+            <if test="parentId!=null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="ancestorId!=null">
+                ancestor_id = #{ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="officeName!=null">
+                office_name = #{officeName,jdbcType=VARCHAR},
+            </if>
+            <if test="officeCode!=null">
+                office_code = #{officeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="officeType!=null">
+                office_type = #{officeType,jdbcType=VARCHAR},
+            </if>
+            <if test="officeLevel!=null">
+                office_level = #{officeLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="officeSort!=null">
+                office_sort = #{officeSort,jdbcType=NUMERIC},
+            </if>
+            <if test="shortName!=null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="directorId!=null">
+                director_id = #{directorId,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar!=null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="slogan!=null">
+                slogan = #{slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction!=null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="phone!=null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address!=null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
             id = #{id}
-       </where>
+        </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.Office">

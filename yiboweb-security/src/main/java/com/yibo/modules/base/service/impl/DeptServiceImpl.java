@@ -61,7 +61,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
-        this.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
+        super.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
     }
 
     /**
@@ -71,10 +71,10 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public void update(Dept dept){
-        super.update(dept);
+    public void updateNull(Dept dept){
+        super.updateNull(dept);
         dao.updateAncestor(dept);
-        this.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
+        super.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
     }
 
     /**

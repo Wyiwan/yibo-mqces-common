@@ -71,8 +71,8 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public void update(Role role){
-        super.update(role);
+    public void updateNull(Role role){
+        super.updateNull(role);
         this.clearUsersCacheByRoleId( Lists.newArrayList(role.getId()) );
     }
 

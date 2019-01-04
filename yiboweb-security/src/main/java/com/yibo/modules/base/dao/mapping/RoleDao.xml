@@ -98,21 +98,43 @@
     <update id="update" parameterType="com.yibo.modules.base.entity.Role">
         update sys_role
         <trim prefix="set" suffixOverrides=",">
-            role_name = #{roleName,jdbcType=VARCHAR},
-            role_code = #{roleCode,jdbcType=VARCHAR},
-            role_weight = #{roleWeight,jdbcType=NUMERIC},
-            role_type = #{roleType,jdbcType=VARCHAR},
-            user_type = #{userType,jdbcType=VARCHAR},
-            is_sys = #{isSys,jdbcType=VARCHAR},
-            status = #{status,jdbcType=INTEGER},
-            update_by = #{updateBy,jdbcType=VARCHAR},
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-            comments = #{comments,jdbcType=VARCHAR},
-            tenant_id = #{tenantId,jdbcType=VARCHAR},
-       </trim>
-       <where>
+            <if test="roleName!=null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleCode!=null">
+                role_code = #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roleWeight!=null">
+                role_weight = #{roleWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="roleType!=null">
+                role_type = #{roleType,jdbcType=VARCHAR},
+            </if>
+            <if test="userType!=null">
+                user_type = #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="isSys!=null">
+                is_sys = #{isSys,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
             id = #{id}
-       </where>
+        </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.Role">

@@ -193,40 +193,100 @@
     <update id="update" parameterType="com.yibo.modules.base.entity.User">
         update sys_user
         <trim prefix="set" suffixOverrides=",">
-            username = #{username,jdbcType=VARCHAR},
-            password = #{password,jdbcType=VARCHAR},
-            name = #{name,jdbcType=VARCHAR},
-            dept_id = #{deptId,jdbcType=VARCHAR},
-            emp_code = #{empCode,jdbcType=VARCHAR},
-            emp_status = #{empStatus,jdbcType=VARCHAR},
-            emp_posts = #{empPosts,jdbcType=VARCHAR},
-            short_name = #{shortName,jdbcType=VARCHAR},
-            wubi_code = #{wubiCode,jdbcType=VARCHAR},
-            identity_no = #{identityNo,jdbcType=VARCHAR},
-            native_place = #{nativePlace,jdbcType=VARCHAR},
-            sex = #{sex,jdbcType=VARCHAR},
-            birthday = #{birthday,jdbcType=TIMESTAMP},
-            avatar = #{avatar,jdbcType=VARCHAR},
-            email = #{email,jdbcType=VARCHAR},
-            mobile = #{mobile,jdbcType=VARCHAR},
-            telephone = #{telephone,jdbcType=VARCHAR},
-            user_type = #{userType,jdbcType=VARCHAR},
-            user_weight = #{userWeight,jdbcType=NUMERIC},
-            mgr_type = #{mgrType,jdbcType=VARCHAR},
-            first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
-            last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
-            last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
-            allow_start_time = #{allowStartTime,jdbcType=TIMESTAMP},
-            allow_end_time = #{allowEndTime,jdbcType=TIMESTAMP},
-            status = #{status,jdbcType=INTEGER},
-            update_by = #{updateBy,jdbcType=VARCHAR},
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-            comments = #{comments,jdbcType=VARCHAR},
-            tenant_id = #{tenantId,jdbcType=VARCHAR},
-       </trim>
-       <where>
+            <if test="username!=null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password!=null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name!=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="deptId!=null">
+                dept_id = #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="empCode!=null">
+                emp_code = #{empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="empStatus!=null">
+                emp_status = #{empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="empPosts!=null">
+                emp_posts = #{empPosts,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName!=null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="wubiCode!=null">
+                wubi_code = #{wubiCode,jdbcType=VARCHAR},
+            </if>
+            <if test="identityNo!=null">
+                identity_no = #{identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="nativePlace!=null">
+                native_place = #{nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="sex!=null">
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday!=null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="avatar!=null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="email!=null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile!=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone!=null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="userType!=null">
+                user_type = #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="userWeight!=null">
+                user_weight = #{userWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="mgrType!=null">
+                mgr_type = #{mgrType,jdbcType=VARCHAR},
+            </if>
+            <if test="firstVisitDate!=null">
+                first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastVisitIp!=null">
+                last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastVisitDate!=null">
+                last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="allowStartTime!=null">
+                allow_start_time = #{allowStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="allowEndTime!=null">
+                allow_end_time = #{allowEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
             id = #{id}
-       </where>
+        </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.User">

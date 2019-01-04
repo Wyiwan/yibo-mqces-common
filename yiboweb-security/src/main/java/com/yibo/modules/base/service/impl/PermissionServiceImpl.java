@@ -82,8 +82,8 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     @Transactional(readOnly = false)
-    public void update(Permission permission){
-        super.update(permission);
+    public void updateNull(Permission permission){
+        super.updateNull(permission);
         dao.updateAncestor(permission);
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
     }

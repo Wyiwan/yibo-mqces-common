@@ -87,8 +87,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Override
     @Transactional(readOnly = false)
     @CacheEvict(key = "#user.username")
-    public void update(User user){
-        super.update(user);
+    public void updateNull(User user){
+        super.updateNull(user);
     }
 
     /**

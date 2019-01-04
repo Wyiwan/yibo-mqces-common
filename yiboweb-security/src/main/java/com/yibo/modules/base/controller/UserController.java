@@ -93,7 +93,7 @@ public class UserController extends BaseController {
         }
 
         User oldUser = userService.fetch(user.getId());
-        user.setPassword(oldUser.getPassword());
+        user.preUpdateInfo(oldUser);
         userService.save(user);
         return UPDATE_SUCCEED;
     }

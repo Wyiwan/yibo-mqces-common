@@ -194,4 +194,19 @@ public class User extends DataEntity<String>{
         this.password = StrUtil.emptyToDefault(this.password, new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD));
     }
 
+    public void preUpdateInfo(User oldUser){
+        if( oldUser != null ){
+            this.password = oldUser.getPassword();
+            this.userType = oldUser.getUserType();
+            this.mgrType = oldUser.getMgrType();
+            this.firstVisitDate = oldUser.getFirstVisitDate();
+            this.lastVisitDate = oldUser.getLastVisitDate();
+            this.lastVisitIp = oldUser.getLastVisitIp();
+            this.allowStartTime = oldUser.getAllowStartTime();
+            this.allowEndTime = oldUser.getAllowEndTime();
+            this.status = oldUser.getStatus();
+            this.tenantId = oldUser.getTenantId();
+        }
+    }
+
 }

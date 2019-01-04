@@ -118,24 +118,55 @@
     <update id="update" parameterType="com.yibo.modules.base.entity.Dept">
         update sys_dept
         <trim prefix="set" suffixOverrides=",">
-            parent_id = #{parentId,jdbcType=VARCHAR},
-            ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            dept_name = #{deptName,jdbcType=VARCHAR},
-            short_name = #{shortName,jdbcType=VARCHAR},
-            dept_code = #{deptCode,jdbcType=VARCHAR},
-            dept_type = #{deptType,jdbcType=VARCHAR},
-            dept_level = #{deptLevel,jdbcType=NUMERIC},
-            dept_sort = #{deptSort,jdbcType=NUMERIC},
-            leader_id = #{leaderId,jdbcType=VARCHAR},
-            phone = #{phone,jdbcType=VARCHAR},
-            status = #{status,jdbcType=INTEGER},
-            update_by = #{updateBy,jdbcType=VARCHAR},
-            update_date = #{updateDate,jdbcType=TIMESTAMP},
-            comments = #{comments,jdbcType=VARCHAR},
-       </trim>
-       <where>
-            and id = #{id}
-       </where>
+            <if test="parentId!=null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="ancestorId!=null">
+                ancestor_id = #{ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName!=null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName!=null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptCode!=null">
+                dept_code = #{deptCode,jdbcType=VARCHAR},
+            </if>
+            <if test="deptType!=null">
+                dept_type = #{deptType,jdbcType=VARCHAR},
+            </if>
+            <if test="deptLevel!=null">
+                dept_level = #{deptLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="deptSort!=null">
+                dept_sort = #{deptSort,jdbcType=NUMERIC},
+            </if>
+            <if test="leaderId!=null">
+                leader_id = #{leaderId,jdbcType=VARCHAR},
+            </if>
+            <if test="phone!=null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.Dept">
