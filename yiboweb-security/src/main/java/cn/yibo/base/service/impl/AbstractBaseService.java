@@ -200,7 +200,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     public void save(T t){
         if( !ObjectUtils.isEmpty(t.getId()) ){
             t.preUpdate();
-            this.update(t);
+            this.updateNull(t);
         }else{
             t.preInsert();
             this.insert(t);
