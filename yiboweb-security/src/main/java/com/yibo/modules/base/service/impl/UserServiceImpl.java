@@ -21,11 +21,12 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,7 +36,6 @@ import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.*;
 import com.yibo.modules.base.service.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -191,6 +191,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                 }
                 user.setOperPermissions(operPermissions);
                 user.setMenuPermissions(menuPermissions);
+                user.setPermissions(permissions);
             }
         }
         return user;
@@ -225,15 +226,40 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             map.put("avatar", user.getAvatar());
             map.put("lastVisitDate", user.getLastVisitDate());
 
-            List<Permission> permissionList = user.getMenuPermissions();
-            if( !CollUtil.isEmpty(permissionList) ){
-                map.put("menuAuthorities", new PermissionTree(user.getMenuPermissions()).getTreeList());
+            // 菜单权限
+            List<Permission> menuPermissions = user.getMenuPermissions();
+            if( !CollUtil.isEmpty(menuPermissions) ){
+                map.put("menuAuthorities", new PermissionTree(menuPermissions).getTreeList());
             }
-            map.put("authorities", ((SecurityUserDetails)user).getAuthorities());
 
+            // 操作权限
+            List<Permission> operPermissions = user.getOperPermissions();
+            if( !CollUtil.isEmpty(operPermissions) ){
+                Map<String, List<String>> authorities = MapUtil.newHashMap();
+                PermissionTree permissionTree = new PermissionTree(user.getPermissions());
+
+                for(Permission permission : operPermissions){
+                    Permission parentNode = permissionTree.getParent(permission);
+
+                    if( parentNode != null && CommonConstant.PERMISSION_PAGE.equals(parentNode.getPermsType()) ){
+                        String urlKey = parentNode.getPermsUrl();
+                        String buttonType = permission.getButtonType();
+
+                        if( !CollUtil.isEmpty(authorities.get(urlKey)) ){
+                            authorities.get(urlKey).add(buttonType);
+                        }else{
+                            authorities.put(urlKey, ListUtils.newArrayList(buttonType));
+                        }
+                    }
+                }
+                if( !CollUtil.isEmpty(authorities) ){
+                    map.put("authorities", authorities);
+                }
+            }
+
+            // 所属角色
             List<Role> roles = user.getRoles();
             if( !CollUtil.isEmpty(roles) ){
-                map.put("currRole", roles.get(0));
                 map.put("roles", roles);
             }
         }

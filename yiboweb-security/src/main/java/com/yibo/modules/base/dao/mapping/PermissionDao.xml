@@ -8,10 +8,12 @@
         perms_name,
         perms_type,
         perms_url,
+        perms_href,
         perms_sort,
         perms_icon,
         perms_level,
         perms_weight,
+        button_type,
         status,
         create_by,
         create_date,
@@ -33,10 +35,12 @@
             perms_name,
             perms_type,
             perms_url,
+            perms_href,
             perms_sort,
             perms_icon,
             perms_level,
             perms_weight,
+            button_type,
             status,
             create_by,
             create_date,
@@ -51,10 +55,12 @@
             #{permsName,jdbcType=VARCHAR},
             #{permsType,jdbcType=VARCHAR},
             #{permsUrl,jdbcType=VARCHAR},
+            #{permsHref,jdbcType=VARCHAR},
             #{permsSort,jdbcType=NUMERIC},
             #{permsIcon,jdbcType=VARCHAR},
             #{permsLevel,jdbcType=NUMERIC},
             #{permsWeight,jdbcType=NUMERIC},
+            #{buttonType,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
@@ -73,10 +79,12 @@
             perms_name,
             perms_type,
             perms_url,
+            perms_href,
             perms_sort,
             perms_icon,
             perms_level,
             perms_weight,
+            button_type,
             status,
             create_by,
             create_date,
@@ -91,10 +99,12 @@
             #{map.permsName,jdbcType=VARCHAR},
             #{map.permsType,jdbcType=VARCHAR},
             #{map.permsUrl,jdbcType=VARCHAR},
+            #{map.permsHref,jdbcType=VARCHAR},
             #{map.permsSort,jdbcType=NUMERIC},
             #{map.permsIcon,jdbcType=VARCHAR},
             #{map.permsLevel,jdbcType=NUMERIC},
             #{map.permsWeight,jdbcType=NUMERIC},
+            #{map.buttonType,jdbcType=VARCHAR},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
@@ -123,6 +133,9 @@
             <if test="permsUrl!=null">
                 perms_url = #{permsUrl,jdbcType=VARCHAR},
             </if>
+            <if test="permsHref!=null">
+                perms_href = #{permsHref,jdbcType=VARCHAR},
+            </if>
             <if test="permsSort!=null">
                 perms_sort = #{permsSort,jdbcType=NUMERIC},
             </if>
@@ -134,6 +147,9 @@
             </if>
             <if test="permsWeight!=null">
                 perms_weight = #{permsWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="buttonType!=null">
+                button_type = #{buttonType,jdbcType=VARCHAR},
             </if>
             <if test="status!=null">
                 status = #{status,jdbcType=INTEGER},
@@ -147,10 +163,10 @@
             <if test="comments!=null">
                 comments = #{comments,jdbcType=VARCHAR},
             </if>
-        </trim>
-        <where>
+       </trim>
+       <where>
             id = #{id}
-        </where>
+       </where>
     </update>
     
     <update id="updateNull" parameterType="com.yibo.modules.base.entity.Permission">
@@ -161,10 +177,12 @@
             perms_name = #{permsName,jdbcType=VARCHAR},
             perms_type = #{permsType,jdbcType=VARCHAR},
             perms_url = #{permsUrl,jdbcType=VARCHAR},
+            perms_href = #{permsHref,jdbcType=VARCHAR},
             perms_sort = #{permsSort,jdbcType=NUMERIC},
             perms_icon = #{permsIcon,jdbcType=VARCHAR},
             perms_level = #{permsLevel,jdbcType=NUMERIC},
             perms_weight = #{permsWeight,jdbcType=NUMERIC},
+            button_type = #{buttonType,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -178,43 +196,49 @@
     <update id="updateMap">
         update sys_permission
         <trim prefix="set" suffixOverrides=",">
-            <if test="map.parentId != null">
+            <if test="map.parentId!=null">
                 parent_id = #{map.parentId,jdbcType=VARCHAR},
             </if>
-            <if test="map.ancestorId != null">
+            <if test="map.ancestorId!=null">
                 ancestor_id = #{map.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsName != null">
+            <if test="map.permsName!=null">
                 perms_name = #{map.permsName,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsType != null">
+            <if test="map.permsType!=null">
                 perms_type = #{map.permsType,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsUrl != null">
+            <if test="map.permsUrl!=null">
                 perms_url = #{map.permsUrl,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsSort != null">
+            <if test="map.permsHref!=null">
+                perms_href = #{map.permsHref,jdbcType=VARCHAR},
+            </if>
+            <if test="map.permsSort!=null">
                 perms_sort = #{map.permsSort,jdbcType=NUMERIC},
             </if>
-            <if test="map.permsIcon != null">
+            <if test="map.permsIcon!=null">
                 perms_icon = #{map.permsIcon,jdbcType=VARCHAR},
             </if>
-            <if test="map.permsLevel != null">
+            <if test="map.permsLevel!=null">
                 perms_level = #{map.permsLevel,jdbcType=NUMERIC},
             </if>
-            <if test="map.permsWeight != null">
+            <if test="map.permsWeight!=null">
                 perms_weight = #{map.permsWeight,jdbcType=NUMERIC},
             </if>
-            <if test="map.status != null">
+            <if test="map.buttonType!=null">
+                button_type = #{map.buttonType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.status!=null">
                 status = #{map.status,jdbcType=INTEGER},
             </if>
-            <if test="map.updateBy != null">
+            <if test="map.updateBy!=null">
                 update_by = #{map.updateBy,jdbcType=VARCHAR},
             </if>
-            <if test="map.updateDate != null">
+            <if test="map.updateDate!=null">
                 update_date = #{map.updateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="map.comments != null">
+            <if test="map.comments!=null">
                 comments = #{map.comments,jdbcType=VARCHAR},
             </if>
         </trim>
@@ -226,90 +250,102 @@
     <update id="updateByCondition">
         update sys_permission
         <trim prefix="set" suffixOverrides=",">
-            <if test="update.parentId != null">
+            <if test="update.parentId!=null">
                 parent_id = #{update.parentId,jdbcType=VARCHAR},
             </if>
-            <if test="update.ancestorId != null">
+            <if test="update.ancestorId!=null">
                 ancestor_id = #{update.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsName != null">
+            <if test="update.permsName!=null">
                 perms_name = #{update.permsName,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsType != null">
+            <if test="update.permsType!=null">
                 perms_type = #{update.permsType,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsUrl != null">
+            <if test="update.permsUrl!=null">
                 perms_url = #{update.permsUrl,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsSort != null">
+            <if test="update.permsHref!=null">
+                perms_href = #{update.permsHref,jdbcType=VARCHAR},
+            </if>
+            <if test="update.permsSort!=null">
                 perms_sort = #{update.permsSort,jdbcType=NUMERIC},
             </if>
-            <if test="update.permsIcon != null">
+            <if test="update.permsIcon!=null">
                 perms_icon = #{update.permsIcon,jdbcType=VARCHAR},
             </if>
-            <if test="update.permsLevel != null">
+            <if test="update.permsLevel!=null">
                 perms_level = #{update.permsLevel,jdbcType=NUMERIC},
             </if>
-            <if test="update.permsWeight != null">
+            <if test="update.permsWeight!=null">
                 perms_weight = #{update.permsWeight,jdbcType=NUMERIC},
             </if>
-            <if test="update.status != null">
+            <if test="update.buttonType!=null">
+                button_type = #{update.buttonType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.status!=null">
                 status = #{update.status,jdbcType=INTEGER},
             </if>
-            <if test="update.updateBy != null">
+            <if test="update.updateBy!=null">
                 update_by = #{update.updateBy,jdbcType=VARCHAR},
             </if>
-            <if test="update.updateDate != null">
+            <if test="update.updateDate!=null">
                 update_date = #{update.updateDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="update.comments != null">
+            <if test="update.comments!=null">
                 comments = #{update.comments,jdbcType=VARCHAR},
             </if>
         </trim>
         <trim prefix="where" prefixOverrides="and | or">
-            <if test="condition.parentId != null">
+            <if test="condition.parentId!=null">
                 and parent_id = #{condition.parentId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.ancestorId != null">
+            <if test="condition.ancestorId!=null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsName != null">
+            <if test="condition.permsName!=null">
                 and perms_name = #{condition.permsName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsType != null">
+            <if test="condition.permsType!=null">
                 and perms_type = #{condition.permsType,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsUrl != null">
+            <if test="condition.permsUrl!=null">
                 and perms_url = #{condition.permsUrl,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsSort != null">
+            <if test="condition.permsHref!=null">
+                and perms_href = #{condition.permsHref,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.permsSort!=null">
                 and perms_sort = #{condition.permsSort,jdbcType=NUMERIC}
             </if>
-            <if test="condition.permsIcon != null">
+            <if test="condition.permsIcon!=null">
                 and perms_icon = #{condition.permsIcon,jdbcType=VARCHAR}
             </if>
-            <if test="condition.permsLevel != null">
+            <if test="condition.permsLevel!=null">
                 and perms_level = #{condition.permsLevel,jdbcType=NUMERIC}
             </if>
-            <if test="condition.permsWeight != null">
+            <if test="condition.permsWeight!=null">
                 and perms_weight = #{condition.permsWeight,jdbcType=NUMERIC}
             </if>
-            <if test="condition.status != null">
+            <if test="condition.buttonType!=null">
+                and button_type = #{condition.buttonType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status!=null">
                 and status = #{condition.status,jdbcType=INTEGER}
             </if>
-            <if test="condition.createBy != null">
+            <if test="condition.createBy!=null">
                 and create_by = #{condition.createBy,jdbcType=VARCHAR}
             </if>
-            <if test="condition.createDate != null">
+            <if test="condition.createDate!=null">
                 and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
             </if>
-            <if test="condition.updateBy != null">
+            <if test="condition.updateBy!=null">
                 and update_by = #{condition.updateBy,jdbcType=VARCHAR}
             </if>
-            <if test="condition.updateDate != null">
+            <if test="condition.updateDate!=null">
                 and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
             </if>
-            <if test="condition.comments != null">
+            <if test="condition.comments!=null">
                 and comments = #{condition.comments,jdbcType=VARCHAR}
             </if>
         </trim>  
@@ -345,6 +381,9 @@
             <if test="condition.permsUrl != null">
                 and perms_url = #{condition.permsUrl,jdbcType=VARCHAR}
             </if>
+            <if test="condition.permsHref != null">
+                and perms_href = #{condition.permsHref,jdbcType=VARCHAR}
+            </if>
             <if test="condition.permsSort != null">
                 and perms_sort = #{condition.permsSort,jdbcType=NUMERIC}
             </if>
@@ -356,6 +395,9 @@
             </if>
             <if test="condition.permsWeight != null">
                 and perms_weight = #{condition.permsWeight,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.buttonType != null">
+                and button_type = #{condition.buttonType,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -450,6 +492,9 @@
             <if test="condition.permsUrl != null">
                 and perms_url = #{condition.permsUrl}
             </if>
+            <if test="condition.permsHref != null">
+                and perms_href = #{condition.permsHref}
+            </if>
             <if test="condition.permsSort != null">
                 and perms_sort = #{condition.permsSort}
             </if>
@@ -461,6 +506,9 @@
             </if>
             <if test="condition.permsWeight != null">
                 and perms_weight = #{condition.permsWeight}
+            </if>
+            <if test="condition.buttonType != null">
+                and button_type = #{condition.buttonType}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -508,6 +556,9 @@
             <if test="condition.permsUrl != null">
                 and perms_url = #{condition.permsUrl}
             </if>
+            <if test="condition.permsHref != null">
+                and perms_href = #{condition.permsHref}
+            </if>
             <if test="condition.permsSort != null">
                 and perms_sort = #{condition.permsSort}
             </if>
@@ -519,6 +570,9 @@
             </if>
             <if test="condition.permsWeight != null">
                 and perms_weight = #{condition.permsWeight}
+            </if>
+            <if test="condition.buttonType != null">
+                and button_type = #{condition.buttonType}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -565,6 +619,9 @@
             <if test="condition.permsUrl != null">
                 and perms_url = #{condition.permsUrl}
             </if>            
+            <if test="condition.permsHref != null">
+                and perms_href = #{condition.permsHref}
+            </if>            
             <if test="condition.permsSort != null">
                 and perms_sort = #{condition.permsSort}
             </if>            
@@ -576,6 +633,9 @@
             </if>            
             <if test="condition.permsWeight != null">
                 and perms_weight = #{condition.permsWeight}
+            </if>            
+            <if test="condition.buttonType != null">
+                and button_type = #{condition.buttonType}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -631,6 +691,9 @@
             <if test="condition.permsUrl != null">
                 and perms_url like concat('%', #{condition.permsUrl} , '%')
             </if>
+            <if test="condition.permsHref != null">
+                and perms_href like concat('%', #{condition.permsHref} , '%')
+            </if>
             <if test="condition.permsSort != null">
                 and perms_sort like concat('%', #{condition.permsSort} , '%')
             </if>
@@ -642,6 +705,9 @@
             </if>
             <if test="condition.permsWeight != null">
                 and perms_weight like concat('%', #{condition.permsWeight} , '%')
+            </if>
+            <if test="condition.buttonType != null">
+                and button_type like concat('%', #{condition.buttonType} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')

@@ -70,6 +70,7 @@ public class SecurityUserDetails extends User implements UserDetails{
 
             this.setMenuPermissions(user.getMenuPermissions());
             this.setOperPermissions(user.getOperPermissions());
+            this.setPermissions(user.getPermissions());
         }
     }
 

@@ -62,9 +62,7 @@ public class PermissionController extends BaseController{
     @ApiOperation("新增")
     @PostMapping("/created")
     public String created(@Valid @RequestBody Permission permission) throws Exception{
-        if( !verifyUnique(null, permission.getPermsName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
-        }
+        VerifyPermission(permission);
         permissionService.save(permission);
         return permission.getId();
     }
@@ -77,9 +75,7 @@ public class PermissionController extends BaseController{
     @ApiOperation("修改")
     @PostMapping("/updated")
     public String updated(@Valid @RequestBody Permission permission) throws Exception{
-        if( !verifyUnique(permission.getId(), permission.getPermsName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
-        }
+        VerifyPermission(permission);
         permissionService.save(permission);
         return UPDATE_SUCCEED;
     }
@@ -135,7 +131,7 @@ public class PermissionController extends BaseController{
     }
 
     /**
-     * 唯一性校验
+     * 菜单名称唯一性校验
      * @return
      */
     @ApiOperation("验证菜单名称是否可用")
@@ -143,12 +139,44 @@ public class PermissionController extends BaseController{
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
             @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", dataType = "String", required = true)
     })
-    @GetMapping("/verify")
-    public Boolean verifyUnique(String id, String permsName){
+    @GetMapping("/verify-name")
+    public Boolean verifyUniqueName(String id, String permsName){
         Map conditionMap = Maps.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("permsName", permsName);
         return permissionService.count(conditionMap) > 0 ? false : true;
+    }
+
+    /**
+     * 路径地址唯一性校验
+     * @return
+     */
+    @ApiOperation("验证路径地址是否可用")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
+            @ApiImplicitParam(name = "permsUrl", value = "路径地址", paramType = "query", dataType = "String", required = true)
+    })
+    @GetMapping("/verify-url")
+    public Boolean verifyUniqueUrl(String id, String permsUrl){
+        Map conditionMap = Maps.newHashMap();
+        conditionMap.put("id", id);
+        conditionMap.put("permsUrl", permsUrl);
+        return permissionService.count(conditionMap) > 0 ? false : true;
+    }
+
+    /**
+     * 内部方法：验证权限名称、地址是否可用
+     * @param permission
+     * @return
+     */
+    private void VerifyPermission(Permission permission) throws Exception{
+        if( permission != null ){
+            if( !verifyUniqueName(permission.getId(), permission.getPermsName()) ){
+                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+            }else if( !verifyUniqueUrl(permission.getId(), permission.getPermsUrl()) ){
+                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在路径地址");
+            }
+        }
     }
 
 }

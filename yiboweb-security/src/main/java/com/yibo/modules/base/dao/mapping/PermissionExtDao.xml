@@ -9,10 +9,12 @@
         p.perms_name,
         p.perms_type,
         p.perms_url,
+        p.perms_href,
         p.perms_sort,
         p.perms_icon,
         p.perms_level,
         p.perms_weight,
+        p.button_type,
         p.status
     </sql>
 
@@ -87,11 +89,16 @@
     <select id="count" resultType="java.lang.Integer">
         select count(1) from sys_permission
         where 1 = 1
-            and perms_name = #{condition.permsName,jdbcType=VARCHAR}
-            and status = 1
+            <if test="condition.permsName != null">
+                and perms_name = #{condition.permsName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.permsUrl != null">
+                and perms_url = #{condition.permsUrl,jdbcType=VARCHAR}
+            </if>
             <if test="condition.id != null and condition.id.length() > 0">
                 and id not in(select #{condition.id})
             </if>
+            and status = 1
     </select>
 
     <!-- 级联删除 -->

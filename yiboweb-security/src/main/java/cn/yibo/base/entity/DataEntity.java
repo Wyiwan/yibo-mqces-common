@@ -88,6 +88,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
         if( UserContext.getUser() != null ){
             this.updateBy = UserContext.getUser().getId();
         }
+        this.status = ObjectUtil.isNull(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
     public void enabled(){

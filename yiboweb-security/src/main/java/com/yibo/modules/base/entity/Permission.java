@@ -55,7 +55,11 @@ public class Permission extends DataEntity<String>{
     private String permsName;
     
     @ApiModelProperty(value = "路径地址")
+    @NotEmpty(message="路径地址不能为空")
     private String permsUrl;
+
+    @ApiModelProperty(value = "链接地址")
+    private String permsHref;
     
     @ApiModelProperty(value = "排序(升序)")
     private Integer permsSort;
@@ -68,6 +72,9 @@ public class Permission extends DataEntity<String>{
     
     @ApiModelProperty(value = "权重")
     private Integer permsWeight;
+
+    @ApiModelProperty(value = "按钮类型")
+    private String buttonType;
 
     @Override
     public void preInsert(){
