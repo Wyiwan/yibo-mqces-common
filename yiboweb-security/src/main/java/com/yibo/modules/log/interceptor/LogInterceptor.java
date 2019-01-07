@@ -112,15 +112,19 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
         MappedStatement mappedStatement = (MappedStatement)invocation.getArgs()[0];
         HttpServletRequest request = ServletUtils.getRequest();
 
-        if( request != null ){
+        if( request != null && mappedStatement != null ){
             SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
-            String sqlType = ObjectUtils.toString( request.getAttribute(SqlCommandType.class.getName()) );
 
-            if( StrUtil.isNotBlank(sqlType) ){
-                sqlType = (new StringBuilder()).insert(0, sqlType).append(",").toString();
+            if( sqlCommandType != null ) {
+                String sqlCommandName = SqlCommandType.class.getName();
+                String sqlType = ObjectUtils.toString(request.getAttribute(sqlCommandName));
+
+                if( StrUtil.isNotBlank(sqlType) ){
+                    sqlType = (new StringBuilder()).insert(0, sqlType).append(",").toString();
+                }
+                sqlType = (new StringBuilder()).insert(0, sqlType).append(sqlCommandType.toString()).toString();
+                request.setAttribute(sqlCommandName, sqlType);
             }
-            sqlType = (new StringBuilder()).insert(0, sqlType).append(sqlCommandType.toString()).toString();
-            request.setAttribute(SqlCommandType.class.getName(), sqlType);
         }
         return invocation.proceed();
     }

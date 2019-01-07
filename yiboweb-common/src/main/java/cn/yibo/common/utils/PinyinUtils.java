@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.text;
+package cn.yibo.common.utils;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;

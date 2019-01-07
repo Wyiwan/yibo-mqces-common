@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.network;
+package cn.yibo.common.web;
 
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.DeviceType;

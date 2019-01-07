@@ -20,7 +20,7 @@
 
 package com.yibo.modules.base.controller;
 
-import cn.yibo.common.text.PinyinUtils;
+import cn.yibo.common.utils.PinyinUtils;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.exception.LoginFailEnum;
 import io.swagger.annotations.Api;

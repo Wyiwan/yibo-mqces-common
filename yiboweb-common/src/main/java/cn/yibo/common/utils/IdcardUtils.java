@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.text;
+package cn.yibo.common.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

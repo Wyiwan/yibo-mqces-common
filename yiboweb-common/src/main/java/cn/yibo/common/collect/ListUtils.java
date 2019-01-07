@@ -62,8 +62,7 @@ public class ListUtils{
 	}
 	
 	public static <E> ArrayList<E> newArrayList(Iterable<? extends E> elements) {
-		return (elements instanceof Collection) ? new ArrayList<E>(cast(elements))
-				: newArrayList(elements.iterator());
+		return (elements instanceof Collection) ? new ArrayList<E>(cast(elements)) : newArrayList(elements.iterator());
 	}
 	
 	public static <E> ArrayList<E> newArrayList(Iterator<? extends E> elements) {
