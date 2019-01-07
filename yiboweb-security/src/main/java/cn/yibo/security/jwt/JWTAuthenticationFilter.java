@@ -96,7 +96,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
      * @return
      */
     private UsernamePasswordAuthenticationToken getAuthentication(String headToken, HttpServletRequest request){
-        log.info(">>>>>>>>>>>>>>> JWTAuthenticationFilter >>>>>>>>>>>>>>> validateToken：" + headToken);
+        log.info("============================================【JWTAuthenticationFilter validateToken：" + headToken+"】");
         String username = jwtUtil.validateToken(headToken);
 
         if( StrUtil.isNotBlank(username) ) {

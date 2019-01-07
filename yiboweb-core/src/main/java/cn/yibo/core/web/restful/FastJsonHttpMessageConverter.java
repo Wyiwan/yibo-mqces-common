@@ -33,7 +33,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.common.base.Strings;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -226,7 +225,7 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
                     styledData = StrUtil.str(AesUtils.encrypt(jsonData),"uft-8");
                 }
 
-                if( !Strings.isNullOrEmpty(styledData) ){
+                if( !StrUtil.isEmpty(styledData) ){
                     response.setStyledata(styledData);
                     response.setBizdata(null);
                 }

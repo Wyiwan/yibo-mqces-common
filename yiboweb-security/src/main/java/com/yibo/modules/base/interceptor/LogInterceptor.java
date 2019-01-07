@@ -14,11 +14,11 @@
 {  2019-01-02  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的log包
+{  注：本模块代码为底层基础框架封装的系统模块
 {*****************************************************************************
 */
 
-package com.yibo.modules.log.interceptor;
+package com.yibo.modules.base.interceptor;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -27,6 +27,8 @@ import cn.hutool.system.RuntimeInfo;
 import cn.hutool.system.SystemUtil;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
+import cn.yibo.security.context.UserContext;
+import com.yibo.modules.base.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -94,6 +96,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - beginTime;
         startTimeThreadLocal.remove();
+        LogUtils.saveLog(UserContext.getUser(), request, handler, ex, null, null, executeTime);
 
         if( log.isDebugEnabled() ){
             RuntimeInfo runtime = SystemUtil.getRuntimeInfo();

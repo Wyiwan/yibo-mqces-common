@@ -14,14 +14,14 @@
 {  2019-01-02  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的log包
+{  注：本本模块代码为底层基础框架封装的系统模块
 {*****************************************************************************
 */
 
-package com.yibo.modules.log.config;
+package com.yibo.modules.base.config;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.yibo.modules.log.interceptor.LogInterceptor;
+import com.yibo.modules.base.interceptor.LogInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
