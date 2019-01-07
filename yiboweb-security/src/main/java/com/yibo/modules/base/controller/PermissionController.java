@@ -20,11 +20,11 @@
 
 package com.yibo.modules.base.controller;
 
+import cn.hutool.core.map.MapUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -141,7 +141,7 @@ public class PermissionController extends BaseController{
     })
     @GetMapping("/verify-name")
     public Boolean verifyUniqueName(String id, String permsName){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = MapUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("permsName", permsName);
         return permissionService.count(conditionMap) > 0 ? false : true;
@@ -158,7 +158,7 @@ public class PermissionController extends BaseController{
     })
     @GetMapping("/verify-url")
     public Boolean verifyUniqueUrl(String id, String permsUrl){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = MapUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("permsUrl", permsUrl);
         return permissionService.count(conditionMap) > 0 ? false : true;

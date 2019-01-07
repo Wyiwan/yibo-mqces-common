@@ -21,14 +21,13 @@
 package com.yibo.modules.base.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.entity.User;
@@ -278,7 +277,7 @@ public class UserController extends BaseController {
     })
     @GetMapping("/verify")
     public Boolean verifyUnique(String id, String username){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = MapUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("username", username);
         return userService.count(conditionMap) > 0 ? false : true;
@@ -322,7 +321,7 @@ public class UserController extends BaseController {
         if( !CollUtil.isEmpty(roleList) ){
             return ListUtils.extractToList(roleList, "id");
         }
-        return Lists.newArrayList();
+        return CollUtil.newArrayList();
     }
 
     /**

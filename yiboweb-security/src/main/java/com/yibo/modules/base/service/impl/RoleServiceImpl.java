@@ -28,7 +28,6 @@ import cn.yibo.common.utils.ThreadPoolUtils;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
@@ -73,7 +72,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void updateNull(Role role){
         super.updateNull(role);
-        this.clearUsersCacheByRoleId( Lists.newArrayList(role.getId()) );
+        this.clearUsersCacheByRoleId( CollUtil.newArrayList(role.getId()) );
     }
 
     /**
@@ -85,7 +84,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
-        List tmpList = Lists.newArrayList();
+        List tmpList = CollUtil.newArrayList();
 
         if( !UserContext.getUser().isSuperAdmin() && !CollUtil.isEmpty(list)){
             for(int i = 0 ; i < list.size() ; i++){
@@ -149,7 +148,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantPermission(Role role){
         dao.grantPermission(role);
-        this.clearUsersCacheByRoleId( Lists.newArrayList(role.getId()) );
+        this.clearUsersCacheByRoleId( CollUtil.newArrayList(role.getId()) );
     }
 
     /**

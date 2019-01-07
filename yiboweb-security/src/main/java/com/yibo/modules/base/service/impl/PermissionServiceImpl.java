@@ -20,14 +20,14 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
@@ -104,7 +104,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public List<Permission> findByType(String type){
-        Map<String, Object> condition = Maps.newHashMap();
+        Map<String, Object> condition = MapUtil.newHashMap();
         condition.put("status", CommonConstant.STATUS_NORMAL);
         condition.put("permsType", type);
 
@@ -150,7 +150,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public List<Permission> getAccessPermission(User user) {
-        List<Permission> permissions = Lists.newArrayList();
+        List<Permission> permissions = CollUtil.newArrayList();
         user = user == null ? UserContext.getUser() : user;
 
         if( user != null ){
@@ -172,7 +172,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Override
     public List<Permission> getGrantPermission() {
         User user = UserContext.getUser();
-        List<Permission> permissions = Lists.newArrayList();
+        List<Permission> permissions = CollUtil.newArrayList();
 
         if( user != null ){
             if( user.isSuperAdmin() ){

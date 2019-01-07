@@ -30,8 +30,6 @@ import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.*;
@@ -111,7 +109,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void grantRole(User user){
         dao.grantRole(user);
-        this.clearUsersCacheByUserId( Lists.newArrayList(user.getId()) );
+        this.clearUsersCacheByUserId( CollUtil.newArrayList(user.getId()) );
     }
 
     /**
@@ -176,8 +174,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             // 关联权限
             List<Permission> permissions = permsService.getAccessPermission(user);
             if( !CollUtil.isEmpty(permissions) ){
-                List<Permission> operPermissions = Lists.newArrayList();
-                List<Permission> menuPermissions = Lists.newArrayList();
+                List<Permission> operPermissions = CollUtil.newArrayList();
+                List<Permission> menuPermissions = CollUtil.newArrayList();
 
                 for(int i = 0; i < permissions.size(); i++){
                     String permsUrl = permissions.get(i).getPermsUrl();
@@ -203,7 +201,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     public Map<String, Object> loginUser(){
-        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Object> map = MapUtil.newHashMap();
 
         User user = UserContext.getUser();
         if( user != null ){

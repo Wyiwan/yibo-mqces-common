@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.service.impl.AbstractBaseService;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.dao.OfficeDao;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
@@ -64,9 +64,9 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
             dao.update(office);
 
             // 更新参数
-            Map updateMap = Maps.newHashMap();
+            Map updateMap = CollUtil.newHashMap();
             updateMap.put("status", office.getStatus());
-            Map conditionMap = Maps.newHashMap();
+            Map conditionMap = CollUtil.newHashMap();
             conditionMap.put("tenantId", office.getId());
 
             // 同步更新机构下用户状态

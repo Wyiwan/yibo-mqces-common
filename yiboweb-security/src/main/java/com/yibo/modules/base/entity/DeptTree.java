@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.yibo.common.utils.tree.Tree;
-import com.google.common.collect.Lists;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class DeptTree extends Tree<Dept, String> {
     protected void setChildren(Dept node, Dept children) {
         List<Dept> currChildren = node.getChildren();
         if( currChildren == null ){
-            node.setChildren(Lists.newArrayList());
+            node.setChildren(CollUtil.newArrayList());
         }
         node.getChildren().add(children);
         node.setIsLeaf(true);

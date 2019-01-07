@@ -21,6 +21,7 @@
 package com.yibo.modules.base.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
@@ -30,8 +31,6 @@ import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
@@ -169,7 +168,7 @@ public class RoleController extends BaseController{
     })
     @GetMapping("/verify-code")
     public Boolean verifyUniqueCode(String id, String roleCode){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = MapUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("roleCode", roleCode);
         return roleService.count(conditionMap) > 0 ? false : true;
@@ -182,7 +181,7 @@ public class RoleController extends BaseController{
     })
     @GetMapping("/verify-name")
     public Boolean verifyUniqueName(String id, String roleName){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = MapUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("roleName", roleName);
         conditionMap.put("tenantId", UserContext.getUser().getTenantId());
@@ -240,7 +239,7 @@ public class RoleController extends BaseController{
         if( !CollUtil.isEmpty(permissionList) ){
             return ListUtils.extractToList(permissionList, "id");
         }
-        return Lists.newArrayList();
+        return CollUtil.newArrayList();
     }
 
     /**

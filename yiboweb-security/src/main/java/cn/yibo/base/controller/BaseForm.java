@@ -25,12 +25,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -43,7 +43,7 @@ public class BaseForm<T>{
 	/**
 	 * 查询参数对象
 	 */
-	protected Map<String, Object> values = Maps.newLinkedHashMap();
+	protected Map<String, Object> values = new LinkedHashMap<String, Object>();
 
 	/**
 	 * 当前页码
@@ -128,7 +128,7 @@ public class BaseForm<T>{
 	 */
     public Object get(String name){
     	if( values == null ){
-    		values = Maps.newLinkedHashMap();
+    		values = new LinkedHashMap<String, Object>();
     		return null;
     	}
     	return this.values.get(name);

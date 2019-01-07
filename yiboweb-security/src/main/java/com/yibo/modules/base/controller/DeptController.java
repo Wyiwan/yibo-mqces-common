@@ -21,11 +21,11 @@
 package com.yibo.modules.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BusinessException;
 import cn.yibo.security.context.UserContext;
-import com.google.common.collect.Maps;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.DeptTree;
 import com.yibo.modules.base.service.DeptService;
@@ -144,7 +144,7 @@ public class DeptController extends BaseController{
     })
     @GetMapping("/verify")
     public Boolean verifyUnique(String id, String deptName){
-        Map conditionMap = Maps.newHashMap();
+        Map conditionMap = CollUtil.newHashMap();
         conditionMap.put("id", id);
         conditionMap.put("deptName", deptName);
         conditionMap.put("tenantId", UserContext.getUser().getTenantId());

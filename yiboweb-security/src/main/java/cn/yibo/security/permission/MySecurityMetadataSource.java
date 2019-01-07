@@ -22,7 +22,6 @@ package cn.yibo.security.permission;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.service.PermissionService;
@@ -108,7 +107,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
                 if( StrUtil.isNotBlank(permsName) && StrUtil.isNotBlank(permsUrl) ){
                     ConfigAttribute configAttribute = new SecurityConfig(permsName.trim());
-                    Collection<ConfigAttribute> configAttributes = Lists.newArrayList(configAttribute);
+                    Collection<ConfigAttribute> configAttributes = CollUtil.newArrayList(configAttribute);
                     map.put(permsUrl.trim(), configAttributes);
                 }
             }

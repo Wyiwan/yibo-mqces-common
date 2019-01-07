@@ -14,13 +14,13 @@
 {  2019-01-03  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的log包
+{  注：本模块代码为底层基础框架封装的系统模块
 {*****************************************************************************
 */
 
-package com.yibo.modules.log.config;
+package com.yibo.modules.base.config;
 
-import com.yibo.modules.log.interceptor.LogInterceptor;
+import com.yibo.modules.base.interceptor.LogInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
