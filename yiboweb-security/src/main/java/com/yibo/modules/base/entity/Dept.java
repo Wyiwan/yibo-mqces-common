@@ -94,4 +94,10 @@ public class Dept extends DataEntity<String>{
         super.preInsert();
         this.deptCode = RandomUtil.randomNumbers(CommonConstant.DEPT_CODE_NUM);
     }
+
+    public void preUpdateInfo(Dept oldDept){
+        if( oldDept != null ){
+            this.deptCode = oldDept.getDeptCode();
+        }
+    }
 }

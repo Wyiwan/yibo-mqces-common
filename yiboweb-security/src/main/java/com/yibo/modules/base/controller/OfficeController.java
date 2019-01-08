@@ -79,6 +79,9 @@ public class OfficeController extends BaseController{
         if( !verifyUnique(office.getId(), office.getOfficeName()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
+
+        Office oldOffice = officeService.fetch(office.getId());
+        office.preUpdateInfo(oldOffice);
         officeService.save(office);
         return UPDATE_SUCCEED;
     }

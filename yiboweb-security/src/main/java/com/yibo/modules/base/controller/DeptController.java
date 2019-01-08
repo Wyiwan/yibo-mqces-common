@@ -80,6 +80,9 @@ public class DeptController extends BaseController{
         if( !verifyUnique(dept.getId(), dept.getDeptName()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
+
+        Dept oldDept = deptService.fetch(dept.getId());
+        dept.preUpdateInfo(oldDept);
         deptService.save(dept);
         return UPDATE_SUCCEED;
     }
