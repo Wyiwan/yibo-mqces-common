@@ -54,7 +54,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("============================================【loadUserByUsername login name：" + username+"】");
         String flagKey = "loginFailFlag:"+username;
         String value = redisTemplate.opsForValue().get(flagKey);
         Long timeRest = redisTemplate.getExpire(flagKey, TimeUnit.MINUTES);
