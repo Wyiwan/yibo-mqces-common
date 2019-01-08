@@ -21,7 +21,7 @@
 package cn.yibo.core.protocol;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  * 版本: v1.0
  */
 @Slf4j
-public class ResponseTs {
+public class ResponseTs{
     /**
      * 成功返回
      * @return
@@ -58,21 +58,21 @@ public class ResponseTs {
     }
 
     /**
-     * @param ex
+     * @param bizException
      * @param debug  是否调试模式  true 调试模式，返回详细的错误堆栈信息
      * @param <T>
      * @return
      */
-    public static <T> ResponseT<T> newResponseException(BusinessException ex, boolean debug){
-        return new ResponseT<T>(ex, debug);
+    public static <T> ResponseT<T> newResponseException(BizException bizException, boolean debug){
+        return new ResponseT<T>(bizException, debug);
     }
 
     /**
      * 业务异常返回
      * @return
      */
-    public static <T> ResponseT<T> newResponseException(BusinessException ex){
-        return new ResponseT<T>(ex, StrUtil.isNotBlank(ex.getDevops()));
+    public static <T> ResponseT<T> newResponseException(BizException bizException){
+        return newResponseException(bizException, StrUtil.isNotBlank(bizException.getErrorInfo()));
     }
 
     /**
@@ -144,7 +144,7 @@ public class ResponseTs {
      * @param response
      * @param ex
      */
-    public static void outResponseException(ServletResponse response, BusinessException ex){
+    public static void outResponseException(ServletResponse response, BizException ex){
         PrintWriter out = null;
         try{
             response.setCharacterEncoding("UTF-8");

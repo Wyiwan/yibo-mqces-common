@@ -24,7 +24,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -172,9 +172,9 @@ public class PermissionController extends BaseController{
     private void VerifyPermission(Permission permission) throws Exception{
         if( permission != null ){
             if( !verifyUniqueName(permission.getId(), permission.getPermsName()) ){
-                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在菜单名称");
             }else if( !verifyUniqueUrl(permission.getId(), permission.getPermsUrl()) ){
-                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在路径地址");
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在路径地址");
             }
         }
     }

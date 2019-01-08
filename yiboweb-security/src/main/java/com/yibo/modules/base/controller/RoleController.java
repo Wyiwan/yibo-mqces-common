@@ -27,7 +27,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
@@ -198,16 +198,16 @@ public class RoleController extends BaseController{
         Role fetchRole = null;
         if( role != null ){
             if( !verifyUniqueName(role.getId(), role.getRoleName()) ){
-                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色名称");
             }else if( !verifyUniqueCode(role.getId(), role.getRoleCode()) ){
-                throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在角色编码");
             }
         }
         if( StrUtil.isNotBlank(roleId) ){
             fetchRole = roleService.fetch(roleId);
 
             if( !UserContext.getUser().isSuperAdmin() && fetchRole != null && CommonConstant.YES.equals(fetchRole.getIsSys()) ){
-                throw new BusinessException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+                throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
             }
         }
         return fetchRole;

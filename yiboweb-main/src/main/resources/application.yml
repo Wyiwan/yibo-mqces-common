@@ -26,6 +26,7 @@ webapp:
     excludePathPatterns:
       - /common/**
       - /druid/**
+      - /error
 
 #Srping相关配置
 spring:

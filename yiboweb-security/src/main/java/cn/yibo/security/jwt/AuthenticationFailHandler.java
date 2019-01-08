@@ -22,7 +22,7 @@ package cn.yibo.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.exception.LoginFailEnum;
 import cn.yibo.security.exception.LoginFailLimitException;
 import lombok.extern.slf4j.Slf4j;
@@ -62,10 +62,9 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private LoginFailEnum loginFailEnum = LoginFailEnum.LOGIN_FAIL_ERROR;
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+        BizException bizException;
         if( e instanceof UsernameNotFoundException || e instanceof BadCredentialsException ) {
             String username = request.getParameter("username");
             recordLoginTime(username);
@@ -77,23 +76,21 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
             int restLoginTime = loginTimeLimit - loginFailTime;
             log.info("用户" + username + "登录失败，还有" + restLoginTime + "次机会");
 
-            loginFailEnum = LoginFailEnum.INCORRECT_ERROR;
             if( restLoginTime <= 3 && restLoginTime > 0 ){
-                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，还有" + restLoginTime + "次尝试机会"));
+                bizException = new BizException(LoginFailEnum.INCORRECT_ERROR.getCode(), LoginFailEnum.INCORRECT_ERROR.getDesc()+"，还有" + restLoginTime + "次尝试机会");
             }else if( restLoginTime <= 0 ){
-                loginFailEnum = LoginFailEnum.LOGIN_FAIL_LIMIT_ERROR;
-                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()+"，请" + loginAfterTime + "分钟后再试"));
+                bizException = new BizException(LoginFailEnum.LOGIN_FAIL_LIMIT_ERROR.getCode(), LoginFailEnum.LOGIN_FAIL_LIMIT_ERROR.getDesc()+"，请" + loginAfterTime + "分钟后再试");
             }else{
-                ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
+                bizException = new BizException(LoginFailEnum.INCORRECT_ERROR.getCode(), LoginFailEnum.INCORRECT_ERROR.getDesc());
             }
         }else if(e instanceof DisabledException || e instanceof LockedException){
-            loginFailEnum = LoginFailEnum.DISABLED_ERROR;
-            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc()));
+            bizException = new BizException(LoginFailEnum.DISABLED_ERROR.getCode(), LoginFailEnum.DISABLED_ERROR.getDesc());
         }else if(e instanceof LoginFailLimitException){
-            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), ((LoginFailLimitException)e).getMsg()));
+            bizException = new BizException(LoginFailEnum.LOGIN_FAIL_LIMIT_ERROR.getCode(), ((LoginFailLimitException)e).getMsg());
         }else{
-            ResponseTs.outResponseException(response, new BusinessException(loginFailEnum.getCode(), loginFailEnum.getDesc(), e.getMessage()));
+            bizException = new BizException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), LoginFailEnum.LOGIN_FAIL_ERROR.getDesc(), e.getMessage());
         }
+        ResponseTs.outResponseException(response, bizException);
     }
 
     /**

@@ -22,7 +22,7 @@ package cn.yibo.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.SecurityUserDetails;
 import cn.yibo.security.constant.SecurityConstant;
 import cn.yibo.security.exception.LoginFailEnum;
@@ -81,9 +81,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
             log.error(exception.getMessage());
 
             if( exception instanceof LoginFailLimitException || exception instanceof SignatureException || exception instanceof ExpiredJwtException ){
-                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getCode(), LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc()));
+                ResponseTs.outResponseException(response, new BizException(LoginFailEnum.LOGIN_EXPIRED_ERROR.getCode(), LoginFailEnum.LOGIN_EXPIRED_ERROR.getDesc()));
             }else{
-                ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), exception.getMessage()));
+                ResponseTs.outResponseException(response, new BizException(LoginFailEnum.LOGIN_FAIL_ERROR.getCode(), exception.getMessage()));
             }
             return;
         }

@@ -21,7 +21,7 @@
 package cn.yibo.security.jwt;
 
 import cn.yibo.core.protocol.ResponseTs;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.exception.LoginFailEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -46,7 +46,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ResponseTs.outResponseException(response, new BusinessException(LoginFailEnum.UNDECLARED_ERROR.getCode(), LoginFailEnum.UNDECLARED_ERROR.getDesc()));
+        ResponseTs.outResponseException(response, new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), LoginFailEnum.UNDECLARED_ERROR.getDesc()));
     }
 
 }

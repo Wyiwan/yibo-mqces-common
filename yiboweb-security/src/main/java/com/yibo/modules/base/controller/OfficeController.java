@@ -24,7 +24,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
 import io.swagger.annotations.Api;
@@ -61,7 +61,7 @@ public class OfficeController extends BaseController{
     @PostMapping("/created")
     public String created(@Valid @RequestBody Office office) throws Exception{
         if( !verifyUnique(null, office.getOfficeName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
 
         officeService.save(office);
@@ -77,7 +77,7 @@ public class OfficeController extends BaseController{
     @PostMapping("/updated")
     public String updated(@Valid @RequestBody Office office){
         if( !verifyUnique(office.getId(), office.getOfficeName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
         }
         officeService.save(office);
         return UPDATE_SUCCEED;

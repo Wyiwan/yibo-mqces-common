@@ -26,8 +26,10 @@ import cn.hutool.core.util.ZipUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -38,133 +40,97 @@ import java.io.Serializable;
  * 时间: 2018-08-07
  * 版本: v1.0
  */
+@Data
 public class ResponseT<T> implements Serializable {
-    /** 返回的响应码为000000，说明是正常返回 */
+    // 返回的响应码为000000，说明是正常返回
     private String retcode;
 
-    /** 错误信息 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常 */
+    // 错误信息 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常
     private String message;
 
-    /** 错误堆栈信息，便于排查问题   正常是调试模式下该字段才返回信息 */
-    private String devops;
-
-    /** 错误说明url 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常 */
+    // 错误说明url 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常
     private String uri;
 
-    /** 时间戳 */
-    private long timestamp = System.currentTimeMillis();
-
-    /** 返回的业务 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常 */
+    // 返回的业务 有业务异常的时候，来源于BizException；否则（系统异常），使用通用异常
     private T bizdata;
 
-    /** data的处理方式 */
+    // data的处理方式
     private StyleEnum style;
 
-    /* style处理后的返回数据 */
+    // style处理后的返回数据
     private String styledata;
 
-    /* 构建加密工具 */
-    private SymmetricCrypto AesUtils = new SymmetricCrypto(SymmetricAlgorithm.AES, SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
+    // 是否调试模式
+    @JSONField(serialize = false)
+    private boolean debug;
 
+    // 错误堆栈信息，便于排查问题，用于记录日志
+    @JSONField(serialize = false)
+    private String exception;
+
+    // 错误堆栈信息，便于排查问题 ，正常是调试模式下该字段才返回信息
+    private String devop;
+
+    // 时间戳
+    private long timestamp = System.currentTimeMillis();
+
+    /**
+     * 构造方法
+     */
     public ResponseT(){
         this.style = StyleEnum.PLAIN;
     }
 
-    public ResponseT(StyleEnum style) {
+    /**
+     * 构造方法
+     * @param style
+     */
+    public ResponseT(StyleEnum style){
         this.style = style;
     }
 
+    /**
+     * 构造方法
+     * @param returnCodeEnum
+     */
     public ResponseT(ReturnCodeEnum returnCodeEnum){
         this.retcode = returnCodeEnum.getCode();
         this.message = returnCodeEnum.getDesc();
         this.style = StyleEnum.PLAIN;
     }
 
-    public ResponseT(ReturnCodeEnum returnCodeEnum, String devops, boolean debug){
+    /**
+     * 构造方法
+     * @param returnCodeEnum
+     * @param exception
+     * @param debug
+     */
+    public ResponseT(ReturnCodeEnum returnCodeEnum, String exception, boolean debug){
         this(returnCodeEnum);
-        if( debug ) {
-            this.devops = devops;
-        }
+        this.exception = exception;
+        this.debug = debug;
     }
 
-    public ResponseT(BusinessException businessException){
-        this(businessException, false);
-    }
-
-    public ResponseT(BusinessException businessException, boolean debug){
-        this.retcode = businessException.getErrorCode();
-        this.message = businessException.getMsg();
-        this.uri = businessException.getUri();
+    /**
+     * 构造方法
+     * @param bizException
+     * @param debug
+     */
+    public ResponseT(BizException bizException, boolean debug){
+        this.debug = debug;
         this.style = StyleEnum.PLAIN;
-        if( debug ){
-            this.devops = businessException.getDevops();
-        }
-    }
-
-    public String getRetcode() {
-        return retcode;
-    }
-
-    public void setRetcode(String retcode) {
-        this.retcode = retcode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public StyleEnum getStyle() {
-        return style;
-    }
-
-    public void setStyle(StyleEnum style) {
-        this.style = style;
-    }
-
-    public String getDevops() {
-        return devops;
-    }
-
-    public void setDevops(String devops) {
-        this.devops = devops;
-    }
-
-    public String getStyledata() {
-        return styledata;
-    }
-
-    public void setStyledata(String styledata) {
-        this.styledata = styledata;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public T getBizdata() {
-        return bizdata;
+        this.uri = bizException.getUri();
+        this.retcode = bizException.getErrorCode();
+        this.message = bizException.getMessage();
+        this.exception = bizException.getErrorInfo();
     }
 
     public void setBizdata(T bizdata){
         if( StyleEnum.PLAIN.equals(style) ){
             this.bizdata = bizdata;
         }else{
+            SymmetricCrypto AesUtils = new SymmetricCrypto(SymmetricAlgorithm.AES, SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded());
+
             if( bizdata == null || "".equals(bizdata.toString()) ){
                 this.bizdata = bizdata;
             }else{

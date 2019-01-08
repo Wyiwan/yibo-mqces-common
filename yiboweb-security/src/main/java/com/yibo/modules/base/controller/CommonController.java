@@ -21,7 +21,7 @@
 package com.yibo.modules.base.controller;
 
 import cn.yibo.common.utils.PinyinUtils;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.exception.LoginFailEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -48,7 +48,7 @@ public class CommonController {
      */
     @RequestMapping(value = "/unauth",method = RequestMethod.GET)
     public void unauth(){
-        throw new BusinessException(LoginFailEnum.NOT_LOGGED_ERROR.getCode(), LoginFailEnum.NOT_LOGGED_ERROR.getDesc());
+        throw new BizException(LoginFailEnum.NOT_LOGGED_ERROR.getCode(), LoginFailEnum.NOT_LOGGED_ERROR.getDesc());
     }
 
     /**

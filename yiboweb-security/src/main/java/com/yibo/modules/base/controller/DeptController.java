@@ -24,7 +24,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.DeptTree;
@@ -63,7 +63,7 @@ public class DeptController extends BaseController{
     @PostMapping("/created")
     public String created(@Valid @RequestBody Dept dept) throws Exception{
         if( !verifyUnique(null, dept.getDeptName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
         deptService.save(dept);
         return dept.getId();
@@ -78,7 +78,7 @@ public class DeptController extends BaseController{
     @PostMapping("/updated")
     public String updated(@Valid @RequestBody Dept dept) throws Exception{
         if( !verifyUnique(dept.getId(), dept.getDeptName()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在科室名称");
         }
         deptService.save(dept);
         return UPDATE_SUCCEED;

@@ -147,10 +147,11 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
     }
 
     @Override
-    protected void writeInternal(T t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+    protected void writeInternal(T t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException{
         ResponseT<T> response = null;
         if( t instanceof ResponseErrorMap){
             response = (ResponseT)((ResponseErrorMap)t).get("responseT");
+            if( response.isDebug() ) response.setDevop(response.getException());
         }else{
             response = ResponseTs.newResponse(t);
         }

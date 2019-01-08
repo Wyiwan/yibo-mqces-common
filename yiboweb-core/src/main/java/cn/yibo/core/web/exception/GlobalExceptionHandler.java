@@ -20,6 +20,7 @@
 
 package cn.yibo.core.web.exception;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.yibo.core.protocol.ResponseT;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.protocol.ReturnCodeEnum;
@@ -49,16 +50,45 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     /**
      * 业务异常
-     * @param exception
+     * @param bizException
      * @param request
      * @return
      */
-    @ExceptionHandler(BusinessException.class)
-    public String handleException(BusinessException exception, HttpServletRequest request){
-        ResponseT<String> responseT = ResponseTs.<String>newResponseException(exception, request.getParameter("debug") != null);
+    @ExceptionHandler(BizException.class)
+    public String handleException(BizException bizException, HttpServletRequest request){
+        ResponseT<String> responseT = ResponseTs.<String>newResponseException(bizException, request.getParameter("debug") != null);
         request.setAttribute("responseT", responseT);
 
-        log.error("invoke {} error: {} ", request.getRequestURL(), exception.getMsg());
+        log.error("invoke {} error: {} ", request.getRequestURL(), bizException);
+        return "forward:/error";
+    }
+
+    /**
+     * 数据校验异常
+     * @param bindException
+     * @param request
+     * @return
+     */
+    @ExceptionHandler({BindException.class})
+    public String bindException(BindException bindException, HttpServletRequest request) {
+        BindingResult bindingResult = bindException.getBindingResult();
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
+        List<Map<String,Object>> errorList = Lists.newArrayList();
+
+        allErrors.forEach(objectError -> {
+            Map<String,Object> errorMap = Maps.newHashMap();
+            FieldError fieldError = (FieldError)objectError;
+            errorMap.put("field", fieldError.getField());
+            errorMap.put("objectName", fieldError.getObjectName());
+            errorMap.put("message", fieldError.getDefaultMessage());
+            errorList.add(errorMap);
+        });
+
+        ResponseT<List> responseT = ResponseTs.<List>newValidateError();
+        responseT.setBizdata(errorList);
+        request.setAttribute("responseT", responseT);
+
+        log.error("invoke {} error: {} ", request.getRequestURL(), bindException);
         return "forward:/error";
     }
 
@@ -81,36 +111,6 @@ public class GlobalExceptionHandler {
 
         log.error("invoke {} error: {} ", request.getRequestURL(), exception);
         return "forward:/error";
-        //return new ResponseEntity<>(responseT, HttpStatus.UNAUTHORIZED);
-    }
-
-    /**
-     * 数据校验异常
-     * @param exception
-     * @param request
-     * @return
-     */
-    @ExceptionHandler({BindException.class})
-    public String bindException(BindException exception, HttpServletRequest request) {
-        BindingResult bindingResult = exception.getBindingResult();
-        List<ObjectError> allErrors = bindingResult.getAllErrors();
-        List<Map<String,Object>> errorList = Lists.newArrayList();
-
-        allErrors.forEach(objectError -> {
-            Map<String,Object> errorMap = Maps.newHashMap();
-            FieldError fieldError = (FieldError)objectError;
-            errorMap.put("field", fieldError.getField());
-            errorMap.put("objectName", fieldError.getObjectName());
-            errorMap.put("message", fieldError.getDefaultMessage());
-            errorList.add(errorMap);
-        });
-
-        ResponseT<List> responseT = ResponseTs.<List>newValidateError();
-        responseT.setBizdata(errorList);
-        request.setAttribute("responseT", responseT);
-
-        log.error("invoke {} error: {} ", request.getRequestURL(), exception);
-        return "forward:/error";
     }
 
     /**
@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public String handleException(Exception exception, HttpServletRequest request){
-        ResponseT<String> responseT = new ResponseT<>(ReturnCodeEnum.UNKNOW, exception.getMessage(), request.getParameter("debug") != null);
+        ResponseT<String> responseT = new ResponseT<>(ReturnCodeEnum.UNKNOW, ExceptionUtil.getMessage(exception), request.getParameter("debug") != null);
         request.setAttribute("responseT", responseT);
 
         log.error("invoke {} error: {} ", request.getRequestURL(), exception);

@@ -26,7 +26,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BusinessException;
+import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.entity.Role;
@@ -71,7 +71,7 @@ public class UserController extends BaseController {
     @PostMapping("/created")
     public String created(@Valid @RequestBody User user){
         if( !verifyUnique(null, user.getUsername()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
 
         user.setPassword(null);
@@ -88,7 +88,7 @@ public class UserController extends BaseController {
     @PostMapping("/updated")
     public String updated(@Valid @RequestBody User user){
         if( !verifyUnique(user.getId(), user.getUsername()) ){
-            throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
 
         User oldUser = userService.fetch(user.getId());
@@ -301,7 +301,7 @@ public class UserController extends BaseController {
                 return user;
             }
         }
-        throw new BusinessException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "非法数据");
+        throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "非法数据");
     }
 
     //------------------------------------------------------------------------------------------------------------------

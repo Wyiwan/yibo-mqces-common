@@ -51,8 +51,6 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         responseT.setUri((String)errorMap.get("path"));
 
         ResponseErrorMap<String, Object> dataMap = new ResponseErrorMap<String, Object>();
-        dataMap.put("debug", debug);
-        dataMap.put("error", errorMap);
         dataMap.put("responseT", responseT);
         return dataMap;
     }
