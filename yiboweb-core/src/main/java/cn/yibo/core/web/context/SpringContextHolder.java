@@ -96,6 +96,6 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
 	 * 检查ApplicationContext不为空.
 	 */
 	private static void assertContextInjected() {
-		Assert.isNull(applicationContext,"applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.", "");
+		Assert.isTrue(applicationContext != null,"applicaitonContext属性未注入", "");
 	}
 }
