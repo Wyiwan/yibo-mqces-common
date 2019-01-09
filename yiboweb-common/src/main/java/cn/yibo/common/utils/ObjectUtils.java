@@ -22,15 +22,13 @@ package cn.yibo.common.utils;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 对象操作工具类, 继承cn.hutool.core.util.ObjectUti类
@@ -38,6 +36,44 @@ import java.util.Set;
  * @version 2019-01-03
  */
 public class ObjectUtils extends cn.hutool.core.util.ObjectUtil {
+	/**
+	 * map转String(密码特殊处理)
+	 * @param paramMap
+	 * @return
+	 */
+	public static String mapToString(Map<String, String[]> paramMap){
+		if( paramMap == null ){
+			return "";
+		}
+		Map<String, Object> params = new HashMap<>(16);
+		for( Map.Entry<String, String[]> param : paramMap.entrySet() ){
+
+			String key = param.getKey();
+			String paramValue = (param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : "");
+			String obj = StrUtil.endWithIgnoreCase(param.getKey(), "password") ? "你是看不见我的" : paramValue;
+			params.put(key,obj);
+		}
+		return JSON.toJSONString(params);
+	}
+
+	/**
+	 * map转String
+	 * @param paramMap
+	 * @return
+	 */
+	public static String mapToStringAll(Map<String, String[]> paramMap){
+		if( paramMap == null ){
+			return "";
+		}
+		Map<String, Object> params = new HashMap<>(16);
+		for( Map.Entry<String, String[]> param : paramMap.entrySet() ){
+
+			String key = param.getKey();
+			String paramValue = (param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : "");
+			params.put(key, paramValue);
+		}
+		return JSON.toJSONString(params);
+	}
 
 	/**
 	 * 转换为Double类型

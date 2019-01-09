@@ -69,7 +69,7 @@ public class ResponseT<T> implements Serializable {
     private String exception;
 
     // 错误堆栈信息，便于排查问题 ，正常是调试模式下该字段才返回信息
-    private String devop;
+    private String devinfo;
 
     // 时间戳
     private long timestamp = System.currentTimeMillis();

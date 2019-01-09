@@ -24,6 +24,7 @@ webapp:
     addPathPatterns:
       - /**
     excludePathPatterns:
+      - /api/log/*
       - /common/**
       - /druid/**
       - /error

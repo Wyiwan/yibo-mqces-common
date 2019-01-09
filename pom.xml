@@ -28,17 +28,19 @@
         <java.version>1.8</java.version>
 
         <!-- Framework setting -->
-        <springboot.redis>1.4.7.RELEASE</springboot.redis>
         <sringboot.druid>1.1.10</sringboot.druid>
-        <jjwt.version>0.9.0</jjwt.version>
-        <jasypt.version>2.1.0</jasypt.version>
-        <lombok.version>1.16.20</lombok.version>
-        <mybatis.version>1.3.2</mybatis.version>
-        <pagehelper.version>1.2.5</pagehelper.version>
-        <fastjson.version>1.2.49</fastjson.version>
-        <swagger.version>2.9.2</swagger.version>
+        <springboot.redis>1.4.7.RELEASE</springboot.redis>
         <ehcache.version>3.3.1</ehcache.version>
         <ehcache.core.version>2.6.11</ehcache.core.version>
+        <jjwt.version>0.9.0</jjwt.version>
+        <mybatis.version>1.3.2</mybatis.version>
+        <pagehelper.version>1.2.5</pagehelper.version>
+        <swagger.version>2.9.2</swagger.version>
+        <jasypt.version>2.1.0</jasypt.version>
+        <lombok.version>1.16.20</lombok.version>
+        <hutool.version>4.3.2</hutool.version>
+        <poi.version>3.14</poi.version>
+        <fastjson.version>1.2.49</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -57,11 +59,16 @@
                 <version>${springboot.redis}</version>
             </dependency>
 
-            <!-- Java加密 -->
+            <!-- 缓存 -->
             <dependency>
-                <groupId>com.github.ulisesbocchio</groupId>
-                <artifactId>jasypt-spring-boot-starter</artifactId>
-                <version>${jasypt.version}</version>
+                <groupId>org.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>${ehcache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-core</artifactId>
+                <version>${ehcache.core.version}</version>
             </dependency>
 
             <!-- JWT -->
@@ -69,13 +76,6 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
-            </dependency>
-
-            <!-- Lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
             </dependency>
 
             <!-- Mybatis -->
@@ -92,25 +92,6 @@
                 <version>${pagehelper.version}</version>
             </dependency>
 
-            <!-- Fastjson -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-
-            <!-- 缓存 -->
-            <dependency>
-                <groupId>org.ehcache</groupId>
-                <artifactId>ehcache</artifactId>
-                <version>${ehcache.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-core</artifactId>
-                <version>${ehcache.core.version}</version>
-            </dependency>
-
             <!-- Swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -121,6 +102,41 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+
+            <!-- Java加密 -->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
+            </dependency>
+
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <!-- Hutool工具包 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- POI工具包-->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <!-- Fastjson -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -174,7 +190,7 @@
         <repository>
             <id>thirdparty</id>
             <name>thirdparty</name>
-            <url>http://192.168.1.131:8081/nexus/content/repositories/thirdparty/</url>
+            <url>http://183.6.50.10:13181/nexus/content/repositories/thirdparty/</url>
         </repository>
     </distributionManagement>
 </project>

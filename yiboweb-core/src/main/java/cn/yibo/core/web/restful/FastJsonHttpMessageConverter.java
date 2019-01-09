@@ -151,7 +151,9 @@ public class FastJsonHttpMessageConverter<T> extends AbstractHttpMessageConverte
         ResponseT<T> response = null;
         if( t instanceof ResponseErrorMap){
             response = (ResponseT)((ResponseErrorMap)t).get("responseT");
-            if( response.isDebug() ) response.setDevop(response.getException());
+            if( response.isDebug() ){
+                response.setDevinfo(response.getException());
+            }
         }else{
             response = ResponseTs.newResponse(t);
         }

@@ -161,7 +161,7 @@ public class RoleController extends BaseController{
      * 唯一性校验
      * @return
      */
-    @ApiOperation("验证角色编码是否可用")
+    @ApiOperation("角色管理/验证角色编码")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
             @ApiImplicitParam(name = "roleCode", value = "角色编码", paramType = "query", dataType = "String", required = true)
@@ -174,7 +174,7 @@ public class RoleController extends BaseController{
         return roleService.count(conditionMap) > 0 ? false : true;
     }
 
-    @ApiOperation("验证角色名称是否可用")
+    @ApiOperation("角色管理/验证角色名称")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
             @ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String", required = true)
@@ -220,7 +220,7 @@ public class RoleController extends BaseController{
      * 获取授权菜单的树结构
      * @return
      */
-    @ApiOperation("获取授权菜单的树结构")
+    @ApiOperation("角色管理/可授权菜单")
     @GetMapping("/get-grant-permission")
     public List getGrantPermision(){
         List<Permission> treeData = permissionService.getGrantPermission();
@@ -231,7 +231,7 @@ public class RoleController extends BaseController{
      * 获取已授权的菜单权限
      * @return
      */
-    @ApiOperation("获取已授权的菜单权限")
+    @ApiOperation("角色管理/已授权菜单")
     @GetMapping("/get-granted-permission")
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     public List getGrantedPermision(String roleId){
@@ -247,7 +247,7 @@ public class RoleController extends BaseController{
      * @param role
      * @return
      */
-    @ApiOperation("菜单授权")
+    @ApiOperation("角色管理/菜单授权")
     @PostMapping("/granted-permission")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
@@ -266,7 +266,7 @@ public class RoleController extends BaseController{
      * 获取已授权的用户
      * @return
      */
-    @ApiOperation("已授权用户的分页查询")
+    @ApiOperation("角色管理/已授权用户")
     @GetMapping("/granted-user-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
@@ -283,7 +283,7 @@ public class RoleController extends BaseController{
      * 获取未授权的用户
      * @return
      */
-    @ApiOperation("未授权用户的分页查询")
+    @ApiOperation("角色管理/可授权用户")
     @GetMapping("/grant-user-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
@@ -301,7 +301,7 @@ public class RoleController extends BaseController{
      * @param role
      * @return
      */
-    @ApiOperation("用户授权")
+    @ApiOperation("角色管理/用户授权")
     @PostMapping("/granted-user")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
@@ -317,7 +317,7 @@ public class RoleController extends BaseController{
      * @param role
      * @return
      */
-    @ApiOperation("取消用户授权")
+    @ApiOperation("角色管理/取消用户授权")
     @PostMapping("/un-granted-user")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),

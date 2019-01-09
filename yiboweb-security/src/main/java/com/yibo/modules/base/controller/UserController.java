@@ -215,7 +215,7 @@ public class UserController extends BaseController {
      * 分页查询
      * @return
      */
-    @ApiOperation("系统管理员/分页查询")
+    @ApiOperation("系统管理员/查询")
     @GetMapping("/mgr-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
@@ -270,7 +270,7 @@ public class UserController extends BaseController {
      * 唯一性校验
      * @return
      */
-    @ApiOperation("验证登录账号是否可用")
+    @ApiOperation("用户管理/验证登录账号")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", dataType = "String", required = false),
             @ApiImplicitParam(name = "username", value = "登录账号", paramType = "query", dataType = "String", required = true)
@@ -311,7 +311,7 @@ public class UserController extends BaseController {
      * 获取已授权的角色
      * @return
      */
-    @ApiOperation("获取已授权的角色")
+    @ApiOperation("用户管理/已授权角色")
     @GetMapping("/get-granted-role")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true)
@@ -329,7 +329,7 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @ApiOperation("角色授权")
+    @ApiOperation("用户管理/角色授权")
     @PostMapping("/granted-role")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true),

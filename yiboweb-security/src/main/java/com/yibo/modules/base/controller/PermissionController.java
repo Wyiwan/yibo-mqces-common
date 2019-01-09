@@ -110,7 +110,7 @@ public class PermissionController extends BaseController{
      * 查询树结构数据
      * @return
      */
-    @ApiOperation("树结构查询")
+    @ApiOperation("菜单树查询")
     @GetMapping("/tree")
     public List tree(){
         List result = permissionService.findTree();
@@ -121,9 +121,9 @@ public class PermissionController extends BaseController{
      * 查询列表数据
      * @return
      */
-    @ApiOperation("列表树结构查询")
+    @ApiOperation("列表查询")
     @ApiImplicitParam(name = "permsName", value = "菜单名称", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/list-tree")
+    @GetMapping("/list")
     public List treeList(){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
         List result = permissionService.queryList(conditionMap);

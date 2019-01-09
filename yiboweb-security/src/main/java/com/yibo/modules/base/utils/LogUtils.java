@@ -33,9 +33,11 @@ import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import eu.bitwalker.useragentutils.UserAgent;
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -81,24 +83,6 @@ public class LogUtils {
         log.setLogTitle(logTitle);
         log.setLogType(logType);
 
-        // 操作类型
-        log.setSqlCommand(true);
-        if( StrUtil.isBlank(log.getLogType()) ){
-            String sqlCommandTypes = "," + ObjectUtils.toString(request.getAttribute(SqlCommandType.class.getName())) + ",";
-            if( StrUtil.containsAny(sqlCommandTypes, ",INSERT,") ){
-                log.setLogType(Log.TYPE_INSERT);
-            }else if(StrUtil.containsAny(sqlCommandTypes, ",UPDATE,")) {
-                log.setLogType(Log.TYPE_UPDATE);
-            }else if(StrUtil.containsAny(sqlCommandTypes, ",DELETE,")) {
-                log.setLogType(Log.TYPE_DELETE);
-            }else if(StrUtil.containsAny(sqlCommandTypes, ",SELECT,")) {
-                log.setLogType(Log.TYPE_SELECT);
-            }else{
-                log.setLogType(Log.TYPE_ACCESS);
-                log.setSqlCommand(false);
-            }
-        }
-
         // IP信息
         log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
         log.setRemoteAddr(ServletUtil.getClientIP(request));
@@ -119,50 +103,86 @@ public class LogUtils {
         log.setCurrentUser(user);
         log.setCreateByName(user.getUsername());
         log.setTenantId(user.getTenantId());
-
-        // 异常信息
-        Object objectT = request.getAttribute("responseT");
-        if( objectT != null && objectT instanceof ResponseT){
-            ResponseT responseT = (ResponseT)objectT;
-
-            if( !ReturnCodeEnum.SUCCESS.getCode().equals(responseT.getRetcode()) ){
-                log.setLogType(Log.TYPE_ERROR);
-                log.setIsException(CommonConstant.YES);
-                log.setRequestUri(responseT.getUri());
-
-                String exception = StrUtil.emptyToDefault(responseT.getException(), responseT.getMessage());
-                log.setExceptionInfo(exception);
-            }
-        }
         log.preInsert();
-        ThreadPoolUtils.getPool().execute(new SaveLogThread(log));
+
+        ThreadPoolUtils.getPool().execute(new SaveLogThread(request, log, handler));
     }
 
     public static class SaveLogThread extends Thread{
         private Log log;
+        private HttpServletRequest request;
+        private Object handler;
 
-        public SaveLogThread(Log log){
+        public SaveLogThread(HttpServletRequest request, Log log, Object handler){
             this.log = log;
+            this.request = request;
+            this.handler = handler;
         }
 
         public void run(){
             LogDao logDao = SpringContextHolder.getBean(LogDao.class);
             PermissionService permissionService = SpringContextHolder.getBean(PermissionService.class);
 
+            // 操作类型
+            log.setSqlCommand(true);
+            if( StrUtil.isBlank(log.getLogType()) ){
+                String sqlCommandTypes = "," + ObjectUtils.toString(request.getAttribute(SqlCommandType.class.getName())) + ",";
+
+                if( StrUtil.containsAny(sqlCommandTypes, ",INSERT,") ){
+                    log.setLogType(Log.TYPE_INSERT);
+                }else if(StrUtil.containsAny(sqlCommandTypes, ",UPDATE,")) {
+                    if( StrUtil.containsIgnoreCase(log.getRequestUri(), "deleted") ){
+                        log.setLogType(Log.TYPE_DELETE);
+                    }else{
+                        log.setLogType(Log.TYPE_UPDATE);
+                    }
+                }else if(StrUtil.containsAny(sqlCommandTypes, ",DELETE,")) {
+                    log.setLogType(Log.TYPE_DELETE);
+                }else if(StrUtil.containsAny(sqlCommandTypes, ",SELECT,")) {
+                    log.setLogType(Log.TYPE_SELECT);
+                }else{
+                    log.setLogType(Log.TYPE_ACCESS);
+                    log.setSqlCommand(false);
+                }
+            }
+
+            // 异常信息
+            Object objectT = request.getAttribute("responseT");
+            if( objectT != null && objectT instanceof ResponseT){
+                ResponseT responseT = (ResponseT)objectT;
+
+                if( !ReturnCodeEnum.SUCCESS.getCode().equals(responseT.getRetcode()) ){
+                    log.setLogType(Log.TYPE_ERROR);
+                    log.setIsException(CommonConstant.YES);
+                    log.setRequestUri(responseT.getUri());
+
+                    String exception = StrUtil.emptyToDefault(responseT.getException(), responseT.getMessage());
+                    log.setExceptionInfo(exception);
+                }
+            }
+
+            // 日志标题
             if( StrUtil.isBlank(log.getLogTitle()) ){
                 this.log.setLogTitle(permissionService.getMenuNamePath(log.getRequestUri()));
             }
-
-            if( "false".equals(log.getLogTitle()) && !log.isSqlCommand() ){
-                return;
+            if( "false".equals(log.getLogTitle()) ){
+                if( !log.isSqlCommand() ) {
+                    return;
+                }
+                if( handler instanceof HandlerMethod ){
+                    HandlerMethod hm = (HandlerMethod)handler;
+                    ApiOperation apiOperation = hm.getMethodAnnotation(ApiOperation.class);
+                    if( apiOperation != null && StrUtil.isNotBlank(apiOperation.value()) ){
+                        log.setLogTitle(apiOperation.value());
+                    }
+                }
             }
-
             if( StrUtil.isBlank(log.getLogTitle()) || "false".equals(log.getLogTitle()) ){
                 this.log.setLogTitle("未知操作");
             }
 
             // 入库操作
-            if( !StrUtil.isBlank(this.log.getRequestUri()) || !StrUtil.isBlank(this.log.getExceptionInfo()) ){
+            if( !StrUtil.isBlank(log.getRequestUri()) || !StrUtil.isBlank(log.getExceptionInfo()) ){
                 logDao.insert(log);
             }
         }

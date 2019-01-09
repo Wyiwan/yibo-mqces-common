@@ -117,7 +117,7 @@ public class DeptController extends BaseController{
      * 查询树结构数据
      * @return
      */
-    @ApiOperation("树结构查询")
+    @ApiOperation("科室树查询")
     @GetMapping("/tree")
     public List tree(Dept dept){
         List result = deptService.findTree(dept);
@@ -129,7 +129,7 @@ public class DeptController extends BaseController{
      * @return
      */
     @ApiOperation("列表查询")
-    @GetMapping("/list-tree")
+    @GetMapping("/list")
     public List treeList(Dept dept) throws Exception{
         Map conditionMap = BeanUtil.beanToMap(dept, false, true);
         List result = deptService.queryList(conditionMap);
