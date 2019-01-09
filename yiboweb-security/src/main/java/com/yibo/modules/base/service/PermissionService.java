@@ -82,4 +82,11 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @return
      */
     List<Permission> getGrantPermission();
+
+    /**
+     * 根据菜单地址获取菜单路径
+     * @param menuUrl
+     * @return
+     */
+    String getMenuNamePath(String menuUrl);
 }

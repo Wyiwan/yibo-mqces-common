@@ -64,10 +64,10 @@ public class ClearUserCacheThread extends Thread{
 
     @Override
     public void run(){
-        UserDao userDao = SpringContextHolder.getBean("userDao");
+        UserDao userDao = SpringContextHolder.getBean(UserDao.class);
         if( userDao != null ){
             TimeInterval timer = DateUtil.timer();
-            log.info("清除用户缓存中...");
+            log.info("======================= 清除用户缓存 =======================");
 
             if( !CollUtil.isEmpty(userIdList) ){
                 List<String> list = userDao.findUsernameByIds(userIdList);
@@ -87,7 +87,7 @@ public class ClearUserCacheThread extends Thread{
                     this.clearCaches(list);
                 }
             }
-            log.info("清除用户缓存完成，耗时：" + timer.interval()+ "ms");
+            log.info("=======================清除用户缓存耗时：" + timer.interval()+ "ms");
         }
     }
 

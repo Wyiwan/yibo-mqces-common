@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.modules.base.dao.LogDao">
+    <sql id="Base_Column_List">
+        id,
+        log_type,
+        log_title,
+        create_by,
+        create_by_name,
+        create_date,
+        request_uri,
+        request_method,
+        request_params,
+        diff_modify_data,
+        biz_key,
+        biz_type,
+        remote_addr,
+        server_addr,
+        is_exception,
+        exception_info,
+        user_agent,
+        device_name,
+        browser_name,
+        execute_time,
+        tenant_id
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="com.yibo.modules.base.entity.Log">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            log_type,
+            log_title,
+            create_by,
+            create_by_name,
+            create_date,
+            request_uri,
+            request_method,
+            request_params,
+            diff_modify_data,
+            biz_key,
+            biz_type,
+            remote_addr,
+            server_addr,
+            is_exception,
+            exception_info,
+            user_agent,
+            device_name,
+            browser_name,
+            execute_time,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{logType,jdbcType=VARCHAR},
+            #{logTitle,jdbcType=VARCHAR},
+            #{createBy,jdbcType=VARCHAR},
+            #{createByName,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{requestUri,jdbcType=VARCHAR},
+            #{requestMethod,jdbcType=VARCHAR},
+            #{requestParams,jdbcType=OTHER},
+            #{diffModifyData,jdbcType=VARCHAR},
+            #{bizKey,jdbcType=VARCHAR},
+            #{bizType,jdbcType=VARCHAR},
+            #{remoteAddr,jdbcType=VARCHAR},
+            #{serverAddr,jdbcType=VARCHAR},
+            #{isException,jdbcType=VARCHAR},
+            #{exceptionInfo,jdbcType=VARCHAR},
+            #{userAgent,jdbcType=VARCHAR},
+            #{deviceName,jdbcType=VARCHAR},
+            #{browserName,jdbcType=VARCHAR},
+            #{executeTime,jdbcType=NUMERIC},
+            #{tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <insert id="insertMap">
+        insert into sys_log 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            log_type,
+            log_title,
+            create_by,
+            create_by_name,
+            create_date,
+            request_uri,
+            request_method,
+            request_params,
+            diff_modify_data,
+            biz_key,
+            biz_type,
+            remote_addr,
+            server_addr,
+            is_exception,
+            exception_info,
+            user_agent,
+            device_name,
+            browser_name,
+            execute_time,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            replace(UUID(),'-',''),
+            #{map.logType,jdbcType=VARCHAR},
+            #{map.logTitle,jdbcType=VARCHAR},
+            #{map.createBy,jdbcType=VARCHAR},
+            #{map.createByName,jdbcType=VARCHAR},
+            #{map.createDate,jdbcType=TIMESTAMP},
+            #{map.requestUri,jdbcType=VARCHAR},
+            #{map.requestMethod,jdbcType=VARCHAR},
+            #{map.requestParams,jdbcType=OTHER},
+            #{map.diffModifyData,jdbcType=VARCHAR},
+            #{map.bizKey,jdbcType=VARCHAR},
+            #{map.bizType,jdbcType=VARCHAR},
+            #{map.remoteAddr,jdbcType=VARCHAR},
+            #{map.serverAddr,jdbcType=VARCHAR},
+            #{map.isException,jdbcType=VARCHAR},
+            #{map.exceptionInfo,jdbcType=VARCHAR},
+            #{map.userAgent,jdbcType=VARCHAR},
+            #{map.deviceName,jdbcType=VARCHAR},
+            #{map.browserName,jdbcType=VARCHAR},
+            #{map.executeTime,jdbcType=NUMERIC},
+            #{map.tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <!-- 更新相关 -->
+    <update id="update" parameterType="com.yibo.modules.base.entity.Log">
+        update sys_log
+        <trim prefix="set" suffixOverrides=",">
+            <if test="logType!=null">
+                log_type = #{logType,jdbcType=VARCHAR},
+            </if>
+            <if test="logTitle!=null">
+                log_title = #{logTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="createByName!=null">
+                create_by_name = #{createByName,jdbcType=VARCHAR},
+            </if>
+            <if test="requestUri!=null">
+                request_uri = #{requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="requestMethod!=null">
+                request_method = #{requestMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="requestParams!=null">
+                request_params = #{requestParams,jdbcType=OTHER},
+            </if>
+            <if test="diffModifyData!=null">
+                diff_modify_data = #{diffModifyData,jdbcType=VARCHAR},
+            </if>
+            <if test="bizKey!=null">
+                biz_key = #{bizKey,jdbcType=VARCHAR},
+            </if>
+            <if test="bizType!=null">
+                biz_type = #{bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteAddr!=null">
+                remote_addr = #{remoteAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="serverAddr!=null">
+                server_addr = #{serverAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="isException!=null">
+                is_exception = #{isException,jdbcType=VARCHAR},
+            </if>
+            <if test="exceptionInfo!=null">
+                exception_info = #{exceptionInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="userAgent!=null">
+                user_agent = #{userAgent,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceName!=null">
+                device_name = #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="browserName!=null">
+                browser_name = #{browserName,jdbcType=VARCHAR},
+            </if>
+            <if test="executeTime!=null">
+                execute_time = #{executeTime,jdbcType=NUMERIC},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+       </trim>
+       <where>
+            id = #{id}
+       </where>
+    </update>
+    
+    <update id="updateNull" parameterType="com.yibo.modules.base.entity.Log">
+        update sys_log
+        <trim prefix="set" suffixOverrides=",">
+            log_type = #{logType,jdbcType=VARCHAR},
+            log_title = #{logTitle,jdbcType=VARCHAR},
+            create_by_name = #{createByName,jdbcType=VARCHAR},
+            request_uri = #{requestUri,jdbcType=VARCHAR},
+            request_method = #{requestMethod,jdbcType=VARCHAR},
+            request_params = #{requestParams,jdbcType=OTHER},
+            diff_modify_data = #{diffModifyData,jdbcType=VARCHAR},
+            biz_key = #{bizKey,jdbcType=VARCHAR},
+            biz_type = #{bizType,jdbcType=VARCHAR},
+            remote_addr = #{remoteAddr,jdbcType=VARCHAR},
+            server_addr = #{serverAddr,jdbcType=VARCHAR},
+            is_exception = #{isException,jdbcType=VARCHAR},
+            exception_info = #{exceptionInfo,jdbcType=VARCHAR},
+            user_agent = #{userAgent,jdbcType=VARCHAR},
+            device_name = #{deviceName,jdbcType=VARCHAR},
+            browser_name = #{browserName,jdbcType=VARCHAR},
+            execute_time = #{executeTime,jdbcType=NUMERIC},
+            tenant_id = #{tenantId,jdbcType=VARCHAR},
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateMap">
+        update sys_log
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.logType!=null">
+                log_type = #{map.logType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.logTitle!=null">
+                log_title = #{map.logTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="map.createByName!=null">
+                create_by_name = #{map.createByName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.requestUri!=null">
+                request_uri = #{map.requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="map.requestMethod!=null">
+                request_method = #{map.requestMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="map.requestParams!=null">
+                request_params = #{map.requestParams,jdbcType=OTHER},
+            </if>
+            <if test="map.diffModifyData!=null">
+                diff_modify_data = #{map.diffModifyData,jdbcType=VARCHAR},
+            </if>
+            <if test="map.bizKey!=null">
+                biz_key = #{map.bizKey,jdbcType=VARCHAR},
+            </if>
+            <if test="map.bizType!=null">
+                biz_type = #{map.bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.remoteAddr!=null">
+                remote_addr = #{map.remoteAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="map.serverAddr!=null">
+                server_addr = #{map.serverAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="map.isException!=null">
+                is_exception = #{map.isException,jdbcType=VARCHAR},
+            </if>
+            <if test="map.exceptionInfo!=null">
+                exception_info = #{map.exceptionInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="map.userAgent!=null">
+                user_agent = #{map.userAgent,jdbcType=VARCHAR},
+            </if>
+            <if test="map.deviceName!=null">
+                device_name = #{map.deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.browserName!=null">
+                browser_name = #{map.browserName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.executeTime!=null">
+                execute_time = #{map.executeTime,jdbcType=NUMERIC},
+            </if>
+            <if test="map.tenantId!=null">
+                tenant_id = #{map.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{map.id}
+        </where>
+    </update>
+    
+    <update id="updateByCondition">
+        update sys_log
+        <trim prefix="set" suffixOverrides=",">
+            <if test="update.logType!=null">
+                log_type = #{update.logType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.logTitle!=null">
+                log_title = #{update.logTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="update.createByName!=null">
+                create_by_name = #{update.createByName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.requestUri!=null">
+                request_uri = #{update.requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="update.requestMethod!=null">
+                request_method = #{update.requestMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="update.requestParams!=null">
+                request_params = #{update.requestParams,jdbcType=OTHER},
+            </if>
+            <if test="update.diffModifyData!=null">
+                diff_modify_data = #{update.diffModifyData,jdbcType=VARCHAR},
+            </if>
+            <if test="update.bizKey!=null">
+                biz_key = #{update.bizKey,jdbcType=VARCHAR},
+            </if>
+            <if test="update.bizType!=null">
+                biz_type = #{update.bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.remoteAddr!=null">
+                remote_addr = #{update.remoteAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="update.serverAddr!=null">
+                server_addr = #{update.serverAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="update.isException!=null">
+                is_exception = #{update.isException,jdbcType=VARCHAR},
+            </if>
+            <if test="update.exceptionInfo!=null">
+                exception_info = #{update.exceptionInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="update.userAgent!=null">
+                user_agent = #{update.userAgent,jdbcType=VARCHAR},
+            </if>
+            <if test="update.deviceName!=null">
+                device_name = #{update.deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.browserName!=null">
+                browser_name = #{update.browserName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.executeTime!=null">
+                execute_time = #{update.executeTime,jdbcType=NUMERIC},
+            </if>
+            <if test="update.tenantId!=null">
+                tenant_id = #{update.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.logType!=null">
+                and log_type = #{condition.logType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.logTitle!=null">
+                and log_title = #{condition.logTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createBy!=null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createByName!=null">
+                and create_by_name = #{condition.createByName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate!=null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.requestUri!=null">
+                and request_uri = #{condition.requestUri,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.requestMethod!=null">
+                and request_method = #{condition.requestMethod,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.requestParams!=null">
+                and request_params = #{condition.requestParams,jdbcType=OTHER}
+            </if>
+            <if test="condition.diffModifyData!=null">
+                and diff_modify_data = #{condition.diffModifyData,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.bizKey!=null">
+                and biz_key = #{condition.bizKey,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.bizType!=null">
+                and biz_type = #{condition.bizType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.remoteAddr!=null">
+                and remote_addr = #{condition.remoteAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.serverAddr!=null">
+                and server_addr = #{condition.serverAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.isException!=null">
+                and is_exception = #{condition.isException,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.exceptionInfo!=null">
+                and exception_info = #{condition.exceptionInfo,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userAgent!=null">
+                and user_agent = #{condition.userAgent,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.deviceName!=null">
+                and device_name = #{condition.deviceName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.browserName!=null">
+                and browser_name = #{condition.browserName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.executeTime!=null">
+                and execute_time = #{condition.executeTime,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.tenantId!=null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>  
+    </update>
+    
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.String">
+        update sys_log set status = 0 where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+       update sys_log set status = 0
+       <trim prefix="where" prefixOverrides="and | or">
+           and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+       </trim>
+    </delete>
+
+    <delete id="deleteByCondition">
+        update sys_log set status = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.logType != null">
+                and log_type = #{condition.logType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.logTitle != null">
+                and log_title = #{condition.logTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createByName != null">
+                and create_by_name = #{condition.createByName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.requestUri != null">
+                and request_uri = #{condition.requestUri,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.requestMethod != null">
+                and request_method = #{condition.requestMethod,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.requestParams != null">
+                and request_params = #{condition.requestParams,jdbcType=OTHER}
+            </if>
+            <if test="condition.diffModifyData != null">
+                and diff_modify_data = #{condition.diffModifyData,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.bizKey != null">
+                and biz_key = #{condition.bizKey,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.bizType != null">
+                and biz_type = #{condition.bizType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.remoteAddr != null">
+                and remote_addr = #{condition.remoteAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.serverAddr != null">
+                and server_addr = #{condition.serverAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.isException != null">
+                and is_exception = #{condition.isException,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.exceptionInfo != null">
+                and exception_info = #{condition.exceptionInfo,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userAgent != null">
+                and user_agent = #{condition.userAgent,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.deviceName != null">
+                and device_name = #{condition.deviceName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.browserName != null">
+                and browser_name = #{condition.browserName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.executeTime != null">
+                and execute_time = #{condition.executeTime,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <delete id="deleteByProperty">
+       update sys_log set status = 0 where ${property} = #{value}
+    </delete>
+    
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            and id = #{id}
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            <if test="condition.logType != null">
+                and log_type = #{condition.logType}
+            </if>
+            <if test="condition.logTitle != null">
+                and log_title = #{condition.logTitle}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createByName != null">
+                and create_by_name = #{condition.createByName}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.requestUri != null">
+                and request_uri = #{condition.requestUri}
+            </if>
+            <if test="condition.requestMethod != null">
+                and request_method = #{condition.requestMethod}
+            </if>
+            <if test="condition.requestParams != null">
+                and request_params = #{condition.requestParams}
+            </if>
+            <if test="condition.diffModifyData != null">
+                and diff_modify_data = #{condition.diffModifyData}
+            </if>
+            <if test="condition.bizKey != null">
+                and biz_key = #{condition.bizKey}
+            </if>
+            <if test="condition.bizType != null">
+                and biz_type = #{condition.bizType}
+            </if>
+            <if test="condition.remoteAddr != null">
+                and remote_addr = #{condition.remoteAddr}
+            </if>
+            <if test="condition.serverAddr != null">
+                and server_addr = #{condition.serverAddr}
+            </if>
+            <if test="condition.isException != null">
+                and is_exception = #{condition.isException}
+            </if>
+            <if test="condition.exceptionInfo != null">
+                and exception_info = #{condition.exceptionInfo}
+            </if>
+            <if test="condition.userAgent != null">
+                and user_agent = #{condition.userAgent}
+            </if>
+            <if test="condition.deviceName != null">
+                and device_name = #{condition.deviceName}
+            </if>
+            <if test="condition.browserName != null">
+                and browser_name = #{condition.browserName}
+            </if>
+            <if test="condition.executeTime != null">
+                and execute_time = #{condition.executeTime}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+        limit 0,1
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            <if test="condition.logType != null">
+                and log_type = #{condition.logType}
+            </if>
+            <if test="condition.logTitle != null">
+                and log_title = #{condition.logTitle}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createByName != null">
+                and create_by_name = #{condition.createByName}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.requestUri != null">
+                and request_uri = #{condition.requestUri}
+            </if>
+            <if test="condition.requestMethod != null">
+                and request_method = #{condition.requestMethod}
+            </if>
+            <if test="condition.requestParams != null">
+                and request_params = #{condition.requestParams}
+            </if>
+            <if test="condition.diffModifyData != null">
+                and diff_modify_data = #{condition.diffModifyData}
+            </if>
+            <if test="condition.bizKey != null">
+                and biz_key = #{condition.bizKey}
+            </if>
+            <if test="condition.bizType != null">
+                and biz_type = #{condition.bizType}
+            </if>
+            <if test="condition.remoteAddr != null">
+                and remote_addr = #{condition.remoteAddr}
+            </if>
+            <if test="condition.serverAddr != null">
+                and server_addr = #{condition.serverAddr}
+            </if>
+            <if test="condition.isException != null">
+                and is_exception = #{condition.isException}
+            </if>
+            <if test="condition.exceptionInfo != null">
+                and exception_info = #{condition.exceptionInfo}
+            </if>
+            <if test="condition.userAgent != null">
+                and user_agent = #{condition.userAgent}
+            </if>
+            <if test="condition.deviceName != null">
+                and device_name = #{condition.deviceName}
+            </if>
+            <if test="condition.browserName != null">
+                and browser_name = #{condition.browserName}
+            </if>
+            <if test="condition.executeTime != null">
+                and execute_time = #{condition.executeTime}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            <if test="condition.logType != null">
+                and log_type = #{condition.logType}
+            </if>            
+            <if test="condition.logTitle != null">
+                and log_title = #{condition.logTitle}
+            </if>            
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>            
+            <if test="condition.createByName != null">
+                and create_by_name = #{condition.createByName}
+            </if>            
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>            
+            <if test="condition.requestUri != null">
+                and request_uri = #{condition.requestUri}
+            </if>            
+            <if test="condition.requestMethod != null">
+                and request_method = #{condition.requestMethod}
+            </if>            
+            <if test="condition.requestParams != null">
+                and request_params = #{condition.requestParams}
+            </if>            
+            <if test="condition.diffModifyData != null">
+                and diff_modify_data = #{condition.diffModifyData}
+            </if>            
+            <if test="condition.bizKey != null">
+                and biz_key = #{condition.bizKey}
+            </if>            
+            <if test="condition.bizType != null">
+                and biz_type = #{condition.bizType}
+            </if>            
+            <if test="condition.remoteAddr != null">
+                and remote_addr = #{condition.remoteAddr}
+            </if>            
+            <if test="condition.serverAddr != null">
+                and server_addr = #{condition.serverAddr}
+            </if>            
+            <if test="condition.isException != null">
+                and is_exception = #{condition.isException}
+            </if>            
+            <if test="condition.exceptionInfo != null">
+                and exception_info = #{condition.exceptionInfo}
+            </if>            
+            <if test="condition.userAgent != null">
+                and user_agent = #{condition.userAgent}
+            </if>            
+            <if test="condition.deviceName != null">
+                and device_name = #{condition.deviceName}
+            </if>            
+            <if test="condition.browserName != null">
+                and browser_name = #{condition.browserName}
+            </if>            
+            <if test="condition.executeTime != null">
+                and execute_time = #{condition.executeTime}
+            </if>            
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>            
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by id
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+	    ${executeSql}
+    </select>
+
+    <select id="like" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            and status != 0
+            <if test="condition.logType != null">
+                and log_type like concat('%', #{condition.logType} , '%')
+            </if>
+            <if test="condition.logTitle != null">
+                and log_title like concat('%', #{condition.logTitle} , '%')
+            </if>
+            <if test="condition.createBy != null">
+                and create_by like concat('%', #{condition.createBy} , '%')
+            </if>
+            <if test="condition.createByName != null">
+                and create_by_name like concat('%', #{condition.createByName} , '%')
+            </if>
+            <if test="condition.createDate != null">
+                and create_date like concat('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.requestUri != null">
+                and request_uri like concat('%', #{condition.requestUri} , '%')
+            </if>
+            <if test="condition.requestMethod != null">
+                and request_method like concat('%', #{condition.requestMethod} , '%')
+            </if>
+            <if test="condition.requestParams != null">
+                and request_params like concat('%', #{condition.requestParams} , '%')
+            </if>
+            <if test="condition.diffModifyData != null">
+                and diff_modify_data like concat('%', #{condition.diffModifyData} , '%')
+            </if>
+            <if test="condition.bizKey != null">
+                and biz_key like concat('%', #{condition.bizKey} , '%')
+            </if>
+            <if test="condition.bizType != null">
+                and biz_type like concat('%', #{condition.bizType} , '%')
+            </if>
+            <if test="condition.remoteAddr != null">
+                and remote_addr like concat('%', #{condition.remoteAddr} , '%')
+            </if>
+            <if test="condition.serverAddr != null">
+                and server_addr like concat('%', #{condition.serverAddr} , '%')
+            </if>
+            <if test="condition.isException != null">
+                and is_exception like concat('%', #{condition.isException} , '%')
+            </if>
+            <if test="condition.exceptionInfo != null">
+                and exception_info like concat('%', #{condition.exceptionInfo} , '%')
+            </if>
+            <if test="condition.userAgent != null">
+                and user_agent like concat('%', #{condition.userAgent} , '%')
+            </if>
+            <if test="condition.deviceName != null">
+                and device_name like concat('%', #{condition.deviceName} , '%')
+            </if>
+            <if test="condition.browserName != null">
+                and browser_name like concat('%', #{condition.browserName} , '%')
+            </if>
+            <if test="condition.executeTime != null">
+                and execute_time like concat('%', #{condition.executeTime} , '%')
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id like concat('%', #{condition.tenantId} , '%')
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+</mapper>

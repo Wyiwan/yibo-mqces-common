@@ -22,6 +22,8 @@ package cn.yibo.security.jwt;
 
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.security.SecurityUserDetails;
+import com.yibo.modules.base.entity.Log;
+import com.yibo.modules.base.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -54,5 +56,6 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         SecurityUserDetails userDetails = ((SecurityUserDetails)authentication.getPrincipal());
         String token = jwtUtil.genAccessToken(userDetails);
         ResponseTs.outResponse(response, token);
+        LogUtils.saveLog(userDetails, request, "系统登录", Log.TYPE_LOGIN);
     }
 }

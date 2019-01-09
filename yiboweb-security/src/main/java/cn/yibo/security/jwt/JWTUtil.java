@@ -207,10 +207,7 @@ public class JWTUtil {
         final String username = tokenUser.getUsername();
 
         // 使之前登录的token失效
-        String oldToken = getRedisUserToken(username);
-        if( StrUtil.isNotBlank(oldToken) ){
-            redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
-        }
+        removeRedisToken(username);
         setRedisToken(token, tokenUser);
     }
 
@@ -226,6 +223,15 @@ public class JWTUtil {
         }else{
             redisTemplate.opsForValue().set(tokenUserKey, token, tokenExpireTime, TimeUnit.MINUTES);
             redisTemplate.opsForValue().set(tokenPreKey, tokenUserVal, tokenExpireTime, TimeUnit.MINUTES);
+        }
+    }
+
+    public void removeRedisToken(String username){
+        if( tokenRedis ){
+            String oldToken = getRedisUserToken(username);
+            if( StrUtil.isNotBlank(oldToken) ){
+                redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
+            }
         }
     }
 

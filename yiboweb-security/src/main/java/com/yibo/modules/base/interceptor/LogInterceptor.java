@@ -95,7 +95,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
         long beginTime = (Long)startTimeThreadLocal.get();
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - beginTime;
-        startTimeThreadLocal.remove();
+
+        // 异步保存日志
         LogUtils.saveLog(UserContext.getUser(), request, handler, ex, null, null, executeTime);
 
         if( log.isDebugEnabled() ){

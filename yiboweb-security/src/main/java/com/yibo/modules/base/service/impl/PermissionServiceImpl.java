@@ -24,13 +24,16 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
+import com.google.common.collect.Lists;
 import com.yibo.modules.base.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
+import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 菜单权限表实体服务实现层类(Permission)
@@ -48,6 +52,7 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
+    private static final String MENU_CACHE = "allMenus";
     private static String configMinWeight = ObjectUtils.toString( PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight") );
     public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = StrUtil.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
 
@@ -61,6 +66,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void insert(Permission permission){
         super.insert(permission);
         dao.updateAncestor(permission);
+        CacheUtils.remove(MENU_CACHE);
     }
 
     /**
@@ -72,6 +78,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
+        CacheUtils.remove(MENU_CACHE);
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
     }
 
@@ -85,6 +92,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void updateNull(Permission permission){
         super.updateNull(permission);
         dao.updateAncestor(permission);
+        CacheUtils.remove(MENU_CACHE);
         CacheUtils.removeAll(CommonConstant.USER_CACHE);
     }
 
@@ -93,8 +101,13 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> findTree() {
-        return dao.findTree();
+    public List<Permission> findTree(){
+        List<Permission> permissions = (List<Permission>)CacheUtils.get(MENU_CACHE);
+        if( permissions == null ){
+            permissions = dao.findTree();
+            CacheUtils.put(MENU_CACHE, permissions);
+        }
+        return permissions;
     }
 
     /**
@@ -184,6 +197,34 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
             }
         }
         return permissions;
+    }
+
+    /**
+     * 根据菜单地址获取菜单路径
+     * @param menuUrl
+     * @return
+     */
+    @Override
+    public String getMenuNamePath(String menuUrl){
+        List<Permission> menus = this.findTree();
+
+        if( !CollUtil.isEmpty(menus) && !StrUtil.isEmpty(menuUrl) ){
+            List<String> condition = Lists.newArrayList(menuUrl);
+            List<Permission> resultList = menus.stream().filter((Permission p) -> condition.contains(p.getPermsUrl())).collect(Collectors.toList());
+
+            if( !CollUtil.isEmpty(resultList) ){
+                Permission node = resultList.get(0);
+                List<Permission> parentList = new PermissionTree(menus).getParentsNode(node, CommonConstant.PERMISSION_PAGE.equals(node.getPermsType()));
+                List<String> parentNameList = ListUtils.extractToList(parentList, "permsName");
+
+                if( !CollUtil.isEmpty(parentNameList) ){
+                    return CollUtil.join(CollUtil.reverse(parentNameList), StrUtil.SLASH);
+                }
+            }else{
+                return "false";
+            }
+        }
+        return StrUtil.EMPTY;
     }
 
 }
