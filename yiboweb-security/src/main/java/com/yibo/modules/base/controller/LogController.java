@@ -22,6 +22,9 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.security.context.UserContext;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.service.LogService;
 import io.swagger.annotations.Api;
@@ -30,9 +33,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 操作日志表实体控制器层类(Log)
@@ -65,5 +66,28 @@ public class LogController extends BaseController{
         return logService.queryPage(new BaseForm<T>());
     }
 
+    /**
+     * 删除
+     * @param jsonObject
+     * @return
+     */
+    @ApiOperation("删除")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "categoryId", value = "日志类型(1登录日志 2操作日志 3异常日志)", paramType = "query",dataType = "String"),
+            @ApiImplicitParam(name = "keepTime", value = "保留时间(7保留一周 1保留一个月 3保留一个月)", paramType = "query",dataType = "String")
+    })
+    @PostMapping(value = "/deleted")
+    public String deleted(@RequestBody JSONObject jsonObject){
+        if( ObjectUtils.isEmpty(jsonObject.get("categoryId")) ){
+            jsonObject.put("categoryId", 1);
+        }
+        if( ObjectUtils.isEmpty(jsonObject.get("keepTime")) ){
+            jsonObject.put("keepTime", 3);
+        }
+        jsonObject.put("tenantId", UserContext.getUser().getTenantId());
+
+        logService.deleteByCondition(jsonObject);
+        return DEL_SUCCEED;
+    }
 
 }

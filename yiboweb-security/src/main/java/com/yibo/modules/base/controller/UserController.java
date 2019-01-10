@@ -347,7 +347,7 @@ public class UserController extends BaseController {
      * 查询用户菜单权限
      * @return
      */
-    @ApiOperation("查询用户登录信息")
+    @ApiOperation("系统登录/查询登录信息")
     @GetMapping("/login-info")
     public Map<String, Object> loginUser(){
         return userService.loginUser();

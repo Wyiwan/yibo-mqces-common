@@ -80,69 +80,34 @@
     </insert>
     
     <delete id="deleteByCondition">
-        update sys_log set status = 0
-        <trim prefix="where" prefixOverrides="and | or">
-            <if test="condition.logType != null">
-                and log_type = #{condition.logType,jdbcType=VARCHAR}
+        delete from sys_log
+        <where>
+            <if test="condition.keepTime == 7">
+                <![CDATA[
+                    and create_date < DATE_ADD(now(),INTERVAL '-7' day)
+                ]]>
             </if>
-            <if test="condition.logTitle != null">
-                and log_title = #{condition.logTitle,jdbcType=VARCHAR}
+            <if test="condition.keepTime == 1">
+                <![CDATA[
+                    and create_date < DATE_ADD(now(),INTERVAL '-1' month)
+                ]]>
             </if>
-            <if test="condition.createBy != null">
-                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            <if test="condition.keepTime == 3">
+                <![CDATA[
+                    and create_date < DATE_ADD(now(),INTERVAL '-3' month)
+                ]]>
             </if>
-            <if test="condition.createByName != null">
-                and create_by_name = #{condition.createByName,jdbcType=VARCHAR}
+            <if test="condition.categoryId == 1">
+                and log_type in ('login','logout')
             </if>
-            <if test="condition.createDate != null">
-                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            <if test="condition.categoryId == 2">
+                and log_type in ('insert','update','delete','select','access')
             </if>
-            <if test="condition.requestUri != null">
-                and request_uri = #{condition.requestUri,jdbcType=VARCHAR}
+            <if test="condition.categoryId == 3">
+                and log_type = 'error'
             </if>
-            <if test="condition.requestMethod != null">
-                and request_method = #{condition.requestMethod,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.requestParams != null">
-                and request_params = #{condition.requestParams,jdbcType=OTHER}
-            </if>
-            <if test="condition.diffModifyData != null">
-                and diff_modify_data = #{condition.diffModifyData,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.bizKey != null">
-                and biz_key = #{condition.bizKey,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.bizType != null">
-                and biz_type = #{condition.bizType,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.remoteAddr != null">
-                and remote_addr = #{condition.remoteAddr,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.serverAddr != null">
-                and server_addr = #{condition.serverAddr,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.isException != null">
-                and is_exception = #{condition.isException,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.exceptionInfo != null">
-                and exception_info = #{condition.exceptionInfo,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.userAgent != null">
-                and user_agent = #{condition.userAgent,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.deviceName != null">
-                and device_name = #{condition.deviceName,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.browserName != null">
-                and browser_name = #{condition.browserName,jdbcType=VARCHAR}
-            </if>
-            <if test="condition.executeTime != null">
-                and execute_time = #{condition.executeTime,jdbcType=NUMERIC}
-            </if>
-            <if test="condition.tenantId != null">
-                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
-            </if>
-        </trim>
+            and tenant_id = #{condition.tenantId}
+        </where>
     </delete>
 
     <select id="queryPage" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.Log">
