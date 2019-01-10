@@ -23,6 +23,8 @@ package com.yibo.modules.base.controller;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.core.protocol.ReturnCodeEnum;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -73,16 +75,13 @@ public class LogController extends BaseController{
      */
     @ApiOperation("删除")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "categoryId", value = "日志类型(1登录日志 2操作日志 3异常日志)", paramType = "query",dataType = "String"),
-            @ApiImplicitParam(name = "keepTime", value = "保留时间(7保留一周 1保留一个月 3保留一个月)", paramType = "query",dataType = "String")
+            @ApiImplicitParam(name = "categoryId", value = "日志类型(1登录日志 2操作日志 3异常日志)", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "keepTime", value = "保留时间(7保留一周 1保留一个月 3保留三个月)", paramType = "query", required = true, dataType = "String")
     })
     @PostMapping(value = "/deleted")
     public String deleted(@RequestBody JSONObject jsonObject){
-        if( ObjectUtils.isEmpty(jsonObject.get("categoryId")) ){
-            jsonObject.put("categoryId", 1);
-        }
-        if( ObjectUtils.isEmpty(jsonObject.get("keepTime")) ){
-            jsonObject.put("keepTime", 3);
+        if( ObjectUtils.isEmpty(jsonObject.get("categoryId")) || ObjectUtils.isEmpty(jsonObject.get("keepTime")) ){
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), ReturnCodeEnum.VALIDATE_ERROR.getDesc());
         }
         jsonObject.put("tenantId", UserContext.getUser().getTenantId());
 

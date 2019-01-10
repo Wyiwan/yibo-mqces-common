@@ -82,30 +82,40 @@
     <delete id="deleteByCondition">
         delete from sys_log
         <where>
-            <if test="condition.keepTime == 7">
-                <![CDATA[
-                    and create_date < DATE_ADD(now(),INTERVAL '-7' day)
-                ]]>
-            </if>
-            <if test="condition.keepTime == 1">
-                <![CDATA[
-                    and create_date < DATE_ADD(now(),INTERVAL '-1' month)
-                ]]>
-            </if>
-            <if test="condition.keepTime == 3">
-                <![CDATA[
-                    and create_date < DATE_ADD(now(),INTERVAL '-3' month)
-                ]]>
-            </if>
-            <if test="condition.categoryId == 1">
-                and log_type in ('login','logout')
-            </if>
-            <if test="condition.categoryId == 2">
-                and log_type in ('insert','update','delete','select','access')
-            </if>
-            <if test="condition.categoryId == 3">
-                and log_type = 'error'
-            </if>
+            <choose>
+                <when test="condition.keepTime == 7">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-7' day)
+                    ]]>
+                </when>
+                <when test="condition.keepTime == 1">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-1' month)
+                    ]]>
+                </when>
+                <when test="condition.keepTime == 3">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-3' month)
+                    ]]>
+                </when>
+                <otherwise>
+                    and create_date > now()
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="condition.categoryId == 1">
+                    and log_type in ('login','logout')
+                </when>
+                <when test="condition.categoryId == 2">
+                    and log_type in ('insert','update','delete','select','access')
+                </when>
+                <when test="condition.categoryId == 3">
+                    and log_type = 'error'
+                </when>
+                <otherwise>
+                    and log_type = 'no'
+                </otherwise>
+            </choose>
             and tenant_id = #{condition.tenantId}
         </where>
     </delete>

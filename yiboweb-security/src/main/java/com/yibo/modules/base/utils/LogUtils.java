@@ -94,9 +94,9 @@ public class LogUtils {
         log.setUserAgent(request.getHeader("User-Agent"));
 
         // 请求信息
-        log.setRequestUri(StrUtil.brief(request.getRequestURI(), 255));
-        log.setRequestParams(request.getParameterMap());
         log.setRequestMethod(request.getMethod());
+        log.setRequestUri(StrUtil.brief(request.getRequestURI(), 255));
+        log.setRequestParameter(request);
 
         // 用户信息
         log.setExecuteTime(executeTime);

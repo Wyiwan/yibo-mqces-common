@@ -126,7 +126,7 @@ public class PermissionController extends BaseController{
     @GetMapping("/list")
     public List treeList(){
         Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
-        List result = permissionService.queryList(conditionMap);
+        List result = permissionService.queryList(conditionMap, "perms_sort", null);
         return new PermissionTree(result).getTreeList();
     }
 

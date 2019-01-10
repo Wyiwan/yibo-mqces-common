@@ -22,13 +22,15 @@ package com.yibo.modules.base.entity;
 
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.common.web.ServletUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
-import java.util.Map;
+import java.io.IOException;
 
 /**
  * 操作日志表实体类(Log)
@@ -108,13 +110,16 @@ public class Log extends DataEntity<String>{
     @JSONField(serialize = false)
     private boolean sqlCommand;
 
-    /**
-     * 设置请求参数
-     * @param paramsMap
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void setRequestParams(Map paramsMap){
-        this.requestParams = ObjectUtils.mapToString(paramsMap);
+    public void setRequestParameter(HttpServletRequest request){
+        if( "POST".equals(request.getMethod()) ){
+            try {
+                this.requestParams = ServletUtils.getRequestPostStr(request);
+            }catch(IOException e){
+                this.requestParams = ObjectUtils.mapToString(request.getParameterMap());
+            }
+        }else{
+            this.requestParams = ObjectUtils.mapToString(request.getParameterMap());
+        }
     }
 
 }

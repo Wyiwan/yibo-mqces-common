@@ -22,6 +22,8 @@ package cn.yibo.core.config;
 
 import cn.yibo.core.listener.WebServletListener;
 import cn.yibo.core.web.restful.ExtFastJsonHttpMessageConverter;
+import cn.yibo.core.web.wrapper.HttpServletRequestReplacedFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -83,4 +85,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return registrationBean;
     }
 
+    // 注册复制流过滤器
+    @Bean
+    public FilterRegistrationBean httpServletRequestReplacedRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new HttpServletRequestReplacedFilter());
+        registration.addUrlPatterns("/*");
+        registration.addInitParameter("paramName", "paramValue");
+        registration.setName("httpServletRequestReplacedFilter");
+        registration.setOrder(1);
+        return registration;
+    }
 }
