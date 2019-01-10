@@ -6,7 +6,7 @@
 
     <groupId>cn.yibo</groupId>
     <artifactId>yiboweb-parent</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.7</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -19,7 +19,6 @@
         <module>yiboweb-common</module>
         <module>yiboweb-core</module>
         <module>yiboweb-main</module>
-        <module>yiboweb-test</module>
         <module>yiboweb-security</module>
     </modules>
 
