@@ -20,11 +20,15 @@
 
 package cn.yibo.security;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.security.exception.LoginFailEnum;
+import cn.yibo.security.exception.LoginFailLimitException;
+import com.yibo.modules.base.dao.UserDao;
+import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.UserService;
-import cn.yibo.security.exception.LoginFailLimitException;
+import com.yibo.modules.base.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -33,6 +37,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,12 +52,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService{
-
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,5 +77,17 @@ public class UserDetailsServiceImpl implements UserDetailsService{
             throw new UsernameNotFoundException(LoginFailEnum.INCORRECT_ERROR.getDesc());
         }
         return new SecurityUserDetails(user);
+    }
+
+    public void saveLoginInfo(HttpServletRequest request, User user){
+        Map<String, Object> entityMap = MapUtil.newHashMap();
+        if( user.getFirstVisitDate() == null ){
+            entityMap.put("firstVisitDate", new Date());
+        }
+        entityMap.put("id", user.getId());
+        entityMap.put("lastVisitDate", new Date());
+        userDao.updateMap(entityMap);
+
+        LogUtils.saveLog(user, request, "系统登录", Log.TYPE_LOGIN);
     }
 }

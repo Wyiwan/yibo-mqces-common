@@ -63,6 +63,7 @@ public class SecurityUserDetails extends User implements UserDetails{
             this.setEmpStatus(user.getEmpStatus());
             this.setSex(user.getSex());
             this.setAvatar(user.getAvatar());
+            this.setFirstVisitDate(user.getFirstVisitDate());
             this.setLastVisitDate(user.getLastVisitDate());
 
             this.setDept(user.getDept());

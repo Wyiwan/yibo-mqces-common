@@ -27,6 +27,7 @@ import cn.yibo.security.jwt.JWTUtil;
 import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +49,7 @@ public class AuthController {
     /**
      * 退出
      */
-    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    @PostMapping("/logout")
     public String logout(HttpServletRequest request){
         if( UserContext.getUser() != null ){
             jwtUtil.removeRedisToken( UserContext.getUser().getUsername() );

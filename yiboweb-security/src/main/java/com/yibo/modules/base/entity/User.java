@@ -115,18 +115,22 @@ public class User extends DataEntity<String>{
     private String mgrType;
     
     @ApiModelProperty(value = "首次登录时间")
+    @JSONField(format="yyyy-MM-dd HH:mm")
     private Date firstVisitDate;
     
     @ApiModelProperty(value = "最后登陆IP")
     private String lastVisitIp;
     
     @ApiModelProperty(value = "最后登录时间")
+    @JSONField(format="yyyy-MM-dd HH:mm")
     private Date lastVisitDate;
     
     @ApiModelProperty(value = "允许访问开始时间")
+    @JSONField(format="yyyy-MM-dd")
     private Date allowStartTime;
     
     @ApiModelProperty(value = "允许访问结束时间")
+    @JSONField(format="yyyy-MM-dd")
     private Date allowEndTime;
 
     //------------------------------------------------------------------------------------------------------------------

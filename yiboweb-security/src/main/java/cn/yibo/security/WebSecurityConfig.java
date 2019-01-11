@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/api/auth/unauth")
                 .loginProcessingUrl("/api/auth/login").permitAll()
-                .successHandler(new AuthenticationSuccessHandler(jwtUtil))
+                .successHandler(new AuthenticationSuccessHandler(jwtUtil, userDetailsService))
                 .failureHandler(failHandler)
             .and()
                 .logout().permitAll()

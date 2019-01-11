@@ -22,8 +22,7 @@ package cn.yibo.security.jwt;
 
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.security.SecurityUserDetails;
-import com.yibo.modules.base.entity.Log;
-import com.yibo.modules.base.utils.LogUtils;
+import cn.yibo.security.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -44,18 +43,19 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-
     private JWTUtil jwtUtil;
 
-    public AuthenticationSuccessHandler(JWTUtil jwtUtil){
+    private UserDetailsServiceImpl userDetailsService;
+
+    public AuthenticationSuccessHandler(JWTUtil jwtUtil, UserDetailsServiceImpl userDetailsService){
         this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SecurityUserDetails userDetails = ((SecurityUserDetails)authentication.getPrincipal());
-        String token = jwtUtil.genAccessToken(userDetails);
-        ResponseTs.outResponse(response, token);
-        LogUtils.saveLog(userDetails, request, "系统登录", Log.TYPE_LOGIN);
+        ResponseTs.outResponse(response, jwtUtil.genAccessToken(userDetails));
+        userDetailsService.saveLoginInfo(request, userDetails);
     }
 }
