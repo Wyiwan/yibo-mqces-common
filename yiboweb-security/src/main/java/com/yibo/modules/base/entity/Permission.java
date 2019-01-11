@@ -23,7 +23,7 @@ package com.yibo.modules.base.entity;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.utils.ObjectUtils;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

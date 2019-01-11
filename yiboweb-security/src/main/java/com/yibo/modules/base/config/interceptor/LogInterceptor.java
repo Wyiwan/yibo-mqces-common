@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package com.yibo.modules.base.interceptor;
+package com.yibo.modules.base.config.interceptor;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -28,6 +28,7 @@ import cn.hutool.system.SystemUtil;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
 import cn.yibo.security.context.UserContext;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.CacheKey;
@@ -40,6 +41,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -96,8 +98,15 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - beginTime;
 
-        // 异步保存日志
-        LogUtils.saveLog(UserContext.getUser(), request, handler, ex, null, null, executeTime);
+        if( handler instanceof HandlerMethod) {
+            HandlerMethod hm = (HandlerMethod) handler;
+            IgnoredLog annotation = hm.getMethodAnnotation(IgnoredLog.class);
+
+            // 异步保存日志
+            if( annotation == null ){
+                LogUtils.saveLog(UserContext.getUser(), request, handler, ex, null, null, executeTime);
+            }
+        }
 
         if( log.isDebugEnabled() ){
             RuntimeInfo runtime = SystemUtil.getRuntimeInfo();

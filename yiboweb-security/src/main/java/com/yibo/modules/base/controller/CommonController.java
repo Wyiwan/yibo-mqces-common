@@ -21,6 +21,7 @@
 package com.yibo.modules.base.controller;
 
 import cn.yibo.common.utils.PinyinUtils;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +44,7 @@ public class CommonController {
      * 获取汉字拼音首字母
      * @return
      */
+    @IgnoredLog
     @ApiOperation("获取汉字拼音首字母")
     @ApiImplicitParam(name = "name", value = "中文汉字", paramType = "query", required = true, dataType = "String")
     @GetMapping("/first-pinyin-code")

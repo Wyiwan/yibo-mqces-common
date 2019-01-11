@@ -25,6 +25,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
 import io.swagger.annotations.Api;
@@ -128,6 +129,7 @@ public class OfficeController extends BaseController{
      * 唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("验证机构名称是否可用")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),

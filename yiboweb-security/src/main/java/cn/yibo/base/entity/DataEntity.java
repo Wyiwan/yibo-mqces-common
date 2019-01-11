@@ -23,7 +23,7 @@ package cn.yibo.base.entity;
 import cn.hutool.core.util.ObjectUtil;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

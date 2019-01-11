@@ -30,7 +30,7 @@ import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;

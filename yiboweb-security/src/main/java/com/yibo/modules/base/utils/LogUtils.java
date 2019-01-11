@@ -20,14 +20,14 @@
 package com.yibo.modules.base.utils;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.yibo.common.utils.IpUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.utils.ThreadPoolUtils;
 import cn.yibo.common.web.UserAgentUtils;
 import cn.yibo.core.protocol.ResponseT;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.context.SpringContextHolder;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.LogDao;
 import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.entity.User;
@@ -85,7 +85,7 @@ public class LogUtils {
 
         // IP信息
         log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
-        log.setRemoteAddr(ServletUtil.getClientIP(request));
+        log.setRemoteAddr(IpUtils.getIpAdrress(request));
 
         // 浏览器信息
         UserAgent userAgent = UserAgentUtils.getUserAgent(request);

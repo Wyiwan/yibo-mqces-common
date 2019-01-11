@@ -20,7 +20,7 @@
 
 package com.yibo.modules.base.config;
 
-import com.yibo.modules.base.interceptor.LogInterceptor;
+import com.yibo.modules.base.config.interceptor.LogInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;

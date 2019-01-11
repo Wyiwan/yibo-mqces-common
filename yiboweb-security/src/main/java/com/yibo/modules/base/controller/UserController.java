@@ -28,7 +28,8 @@ import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageInfo;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.RoleService;
@@ -270,6 +271,7 @@ public class UserController extends BaseController {
      * 唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("用户管理/验证登录账号")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", dataType = "String", required = false),
@@ -311,6 +313,7 @@ public class UserController extends BaseController {
      * 获取已授权的角色
      * @return
      */
+    @IgnoredLog
     @ApiOperation("用户管理/已授权角色")
     @GetMapping("/get-granted-role")
     @ApiImplicitParams(value = {
@@ -347,6 +350,7 @@ public class UserController extends BaseController {
      * 查询用户菜单权限
      * @return
      */
+    @IgnoredLog
     @ApiOperation("系统登录/查询登录信息")
     @GetMapping("/login-info")
     public Map<String, Object> loginUser(){

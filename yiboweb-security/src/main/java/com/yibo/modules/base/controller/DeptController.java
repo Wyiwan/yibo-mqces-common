@@ -26,6 +26,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.entity.DeptTree;
 import com.yibo.modules.base.service.DeptService;
@@ -117,6 +118,7 @@ public class DeptController extends BaseController{
      * 查询树结构数据
      * @return
      */
+    @IgnoredLog
     @ApiOperation("科室树查询")
     @GetMapping("/tree")
     public List tree(Dept dept){
@@ -140,6 +142,7 @@ public class DeptController extends BaseController{
      * 唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("验证科室名称是否可用")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),

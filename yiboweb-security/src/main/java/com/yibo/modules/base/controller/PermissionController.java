@@ -25,6 +25,7 @@ import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.service.PermissionService;
@@ -110,6 +111,7 @@ public class PermissionController extends BaseController{
      * 查询树结构数据
      * @return
      */
+    @IgnoredLog
     @ApiOperation("菜单树查询")
     @GetMapping("/tree")
     public List tree(){
@@ -134,6 +136,7 @@ public class PermissionController extends BaseController{
      * 菜单名称唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("验证菜单名称是否可用")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
@@ -151,6 +154,7 @@ public class PermissionController extends BaseController{
      * 路径地址唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("验证路径地址是否可用")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),

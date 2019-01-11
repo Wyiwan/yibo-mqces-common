@@ -31,7 +31,8 @@ import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageInfo;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.Role;
@@ -161,6 +162,7 @@ public class RoleController extends BaseController{
      * 唯一性校验
      * @return
      */
+    @IgnoredLog
     @ApiOperation("角色管理/验证角色编码")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
@@ -174,6 +176,7 @@ public class RoleController extends BaseController{
         return roleService.count(conditionMap) > 0 ? false : true;
     }
 
+    @IgnoredLog
     @ApiOperation("角色管理/验证角色名称")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
@@ -220,6 +223,7 @@ public class RoleController extends BaseController{
      * 获取授权菜单的树结构
      * @return
      */
+    @IgnoredLog
     @ApiOperation("角色管理/可授权菜单")
     @GetMapping("/get-grant-permission")
     public List getGrantPermision(){
@@ -231,6 +235,7 @@ public class RoleController extends BaseController{
      * 获取已授权的菜单权限
      * @return
      */
+    @IgnoredLog
     @ApiOperation("角色管理/已授权菜单")
     @GetMapping("/get-granted-permission")
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
@@ -266,6 +271,7 @@ public class RoleController extends BaseController{
      * 获取已授权的用户
      * @return
      */
+    @IgnoredLog
     @ApiOperation("角色管理/已授权用户")
     @GetMapping("/granted-user-paged")
     @ApiImplicitParams(value = {
@@ -283,6 +289,7 @@ public class RoleController extends BaseController{
      * 获取未授权的用户
      * @return
      */
+    @IgnoredLog
     @ApiOperation("角色管理/可授权用户")
     @GetMapping("/grant-user-paged")
     @ApiImplicitParams(value = {

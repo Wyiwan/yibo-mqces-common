@@ -28,6 +28,7 @@ import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.service.LogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -45,7 +46,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/log")
-@Api(tags = "操作日志表接口")
+@Api(tags = "9006.日志表管理")
 public class LogController extends BaseController{
    @Autowired
    private LogService logService;
@@ -54,6 +55,7 @@ public class LogController extends BaseController{
      * 分页查询
      * @return
      */
+    @IgnoredLog
     @ApiOperation("分页查询")
     @GetMapping("/paged")
     @ApiImplicitParams(value = {

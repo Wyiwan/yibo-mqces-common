@@ -21,7 +21,7 @@
 package cn.yibo.security;
 
 import cn.hutool.core.collection.CollUtil;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.entity.Permission;
 import com.yibo.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;

@@ -28,7 +28,7 @@ import cn.yibo.common.utils.ThreadPoolUtils;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;

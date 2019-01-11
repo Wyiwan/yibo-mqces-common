@@ -26,7 +26,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
-import com.yibo.modules.base.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;

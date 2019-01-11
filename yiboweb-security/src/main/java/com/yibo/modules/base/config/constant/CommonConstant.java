@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package com.yibo.modules.base.constant;
+package com.yibo.modules.base.config.constant;
 
 /**
  *  描述: 公共常量

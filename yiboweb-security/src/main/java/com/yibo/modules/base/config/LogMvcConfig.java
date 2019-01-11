@@ -21,7 +21,7 @@
 package com.yibo.modules.base.config;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.yibo.modules.base.interceptor.LogInterceptor;
+import com.yibo.modules.base.config.interceptor.LogInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
