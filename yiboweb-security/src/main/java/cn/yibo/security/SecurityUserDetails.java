@@ -54,7 +54,7 @@ public class SecurityUserDetails extends User implements UserDetails{
             this.setTenantId(user.getTenantId());
             this.setOfficeName(user.getOfficeName());
             this.setDeptId(user.getDeptId());
-            this.setDeptId(user.getDeptName());
+            this.setDeptName(user.getDeptName());
 
             this.setMgrType(user.getMgrType());
             this.setUserWeight(user.getUserWeight());
@@ -68,7 +68,6 @@ public class SecurityUserDetails extends User implements UserDetails{
 
             this.setDept(user.getDept());
             this.setRoles(user.getRoles());
-
             this.setMenuPermissions(user.getMenuPermissions());
             this.setOperPermissions(user.getOperPermissions());
             this.setPermissions(user.getPermissions());

@@ -20,6 +20,8 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
@@ -112,13 +114,15 @@ public class Log extends DataEntity<String>{
 
     public void setRequestParameter(HttpServletRequest request){
         if( "POST".equals(request.getMethod()) ){
-            try {
-                this.requestParams = ServletUtils.getRequestPostStr(request);
+            try{
+                String postStr = ServletUtils.getRequestPostStr(request);
+                JSONObject jsonObject = JSONUtil.parseObj(postStr);
+                this.requestParams = ObjectUtils.mapToString(jsonObject);
             }catch(IOException e){
-                this.requestParams = ObjectUtils.mapToString(request.getParameterMap());
+                this.requestParams = ObjectUtils.mapToString2(request.getParameterMap());
             }
         }else{
-            this.requestParams = ObjectUtils.mapToString(request.getParameterMap());
+            this.requestParams = ObjectUtils.mapToString2(request.getParameterMap());
         }
     }
 

@@ -21,6 +21,8 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
@@ -36,9 +38,11 @@ import com.yibo.modules.base.entity.*;
 import com.yibo.modules.base.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +166,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             // 关联科室
             Dept dept = deptService.fetch(user.getDeptId());
             if( dept != null ){
+                user.setDeptName(dept.getDeptName());
                 user.setDept(dept);
             }
 
@@ -211,7 +216,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
             map.put("officeId", user.getTenantId());
             map.put("officeName", user.getOfficeName());
-            map.put("deptId", user.getId());
+            map.put("deptId", user.getDeptId());
             map.put("deptName", user.getDeptName());
 
             map.put("admin", user.isAdmin());
@@ -262,5 +267,69 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
         }
         return map;
+    }
+
+    /**
+     * 用户个人信息
+     * @return
+     */
+    @Override
+    public Map<String, Object> persInfo(){
+        Map<String, Object> map = MapUtil.newHashMap();
+        if( UserContext.getUser() != null ){
+            User user = dao.fetch(UserContext.getUser().getId());
+
+            if( user != null ){
+                map.put("userId", UserContext.getUser().getId());
+                map.put("userName", UserContext.getUser().getUsername());
+                map.put("name", user.getName());
+                map.put("avatar", user.getAvatar());
+                map.put("empCode", UserContext.getUser().getEmpCode());
+                map.put("deptName", UserContext.getUser().getDeptName());
+                map.put("officeName", UserContext.getUser().getOfficeName());
+                map.put("roleNames", UserContext.getUser().getRoleNames());
+                map.put("sex", user.getSex());
+                map.put("email", user.getEmail());
+                map.put("mobile", user.getMobile());
+                map.put("lastVisitDate", DateUtil.format(user.getLastVisitDate(), DatePattern.NORM_DATETIME_MINUTE_FORMAT));
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 保存用户个人信息
+     * @param user
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void savePersInfo(User user){
+        Map<String, Object> map = MapUtil.newHashMap();
+        map.put("id", UserContext.getUser().getId());
+        map.put("name", user.getName());
+        map.put("avatar", user.getAvatar());
+        map.put("sex", user.getSex());
+        map.put("mobile", user.getMobile());
+        map.put("email", user.getEmail());
+        map.put("updateBy", UserContext.getUser().getId());
+        map.put("updateDate", new Date());
+        dao.updateMap(map);
+        this.clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+    }
+
+    /**
+     * 更新用户密码
+     * @param newPassword
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updatePersPwd(String newPassword){
+        Map<String, Object> map = MapUtil.newHashMap();
+        map.put("id", UserContext.getUser().getId());
+        map.put("password", new BCryptPasswordEncoder().encode(newPassword));
+        map.put("updateBy", UserContext.getUser().getId());
+        map.put("updateDate", new Date());
+        dao.updateMap(map);
+        this.clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
     }
 }

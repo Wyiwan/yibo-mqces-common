@@ -24,7 +24,6 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.security.exception.LoginFailEnum;
 import cn.yibo.security.exception.LoginFailLimitException;
-import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.UserService;
@@ -58,9 +57,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserDao userDao;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String flagKey = "loginFailFlag:"+username;
@@ -86,7 +82,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         }
         entityMap.put("id", user.getId());
         entityMap.put("lastVisitDate", new Date());
-        userDao.updateMap(entityMap);
+        userService.updateMap(entityMap);
 
         LogUtils.saveLog(user, request, "系统登录", Log.TYPE_LOGIN);
     }

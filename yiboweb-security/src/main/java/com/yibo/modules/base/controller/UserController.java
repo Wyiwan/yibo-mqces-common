@@ -22,11 +22,15 @@ package com.yibo.modules.base.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.common.collect.ListUtils;
+import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
+import cn.yibo.security.context.UserContext;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.config.constant.CommonConstant;
@@ -40,6 +44,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -74,8 +79,7 @@ public class UserController extends BaseController {
         if( !verifyUnique(null, user.getUsername()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
-
-        user.setPassword(null);
+        user.setMgrType(CommonConstant.USER_MGR_TYPE_NORMAL);
         userService.save(user);
         return user.getId();
     }
@@ -91,7 +95,6 @@ public class UserController extends BaseController {
         if( !verifyUnique(user.getId(), user.getUsername()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
         }
-
         User oldUser = userService.fetch(user.getId());
         user.preUpdateInfo(oldUser);
         userService.save(user);
@@ -140,8 +143,8 @@ public class UserController extends BaseController {
     public String reseted(@RequestBody String id){
         User user = verifyUser(id, false);
 
-        if (user != null) {
-            user.setPassword(null);
+        if( user != null ){
+            user.initPwd();
             userService.update(user);
         }
         return OPER_SUCCEED;
@@ -185,8 +188,12 @@ public class UserController extends BaseController {
     @ApiOperation("系统管理员/新增")
     @PostMapping("/mgr-created")
     public String mgrCreated(@Valid @RequestBody User user){
+        if( !verifyUnique(null, user.getUsername()) ){
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+        }
         user.setMgrType(CommonConstant.USER_MGR_TYPE_ADMIN);
-        return created(user);
+        userService.save(user);
+        return user.getId();
     }
 
     /**
@@ -258,7 +265,7 @@ public class UserController extends BaseController {
         User user = verifyUser(id, true);
 
         if( user != null ){
-            user.setPassword(null);
+            user.initPwd();
             userService.update(user);
         }
         return OPER_SUCCEED;
@@ -347,13 +354,69 @@ public class UserController extends BaseController {
     // @其他
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 查询用户菜单权限
+     * 登录信息查询
      * @return
      */
     @IgnoredLog
-    @ApiOperation("系统登录/查询登录信息")
+    @ApiOperation("登录信息查询")
     @GetMapping("/login-info")
     public Map<String, Object> loginUser(){
         return userService.loginUser();
     }
+
+    /**
+     * 个人信息查询
+     * @return
+     */
+    @ApiOperation("用户个人信息查询")
+    @GetMapping("/pers-info")
+    public Map<String, Object> persInfo(){
+        return userService.persInfo();
+    }
+
+    /**
+     * 个人信息保存
+     * @return
+     */
+    @ApiOperation("个人信息保存")
+    @PostMapping("/pers-save")
+    public String persSave(@RequestBody User user){
+        if( ObjectUtils.isEmpty(user.getName()) ){
+            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "姓名不能为空");
+        }
+        userService.savePersInfo(user);
+        return SAVE_SUCCEED;
+    }
+
+    /**
+     * 用户密码修改
+     * @return
+     */
+    @ApiOperation("个人信息密码修改")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "oldPassword", value = "旧密码", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "newPassword", value = "新密码", paramType = "query", dataType = "String", required = true),
+            @ApiImplicitParam(name = "confirmNewPassword", value = "确认新密码", paramType = "query", dataType = "String", required = true)
+    })
+    @PostMapping("/pwd-save")
+    public String pwdSave(@RequestBody JSONObject jsonObject){
+        User vo = userService.fetch(UserContext.getUser().getId());
+        if( vo != null ){
+            String oldPassword = jsonObject.getString("oldPassword");
+            String newPassword = jsonObject.getString("newPassword");
+            String confirmNewPassword = jsonObject.getString("confirmNewPassword");
+
+            if( !new BCryptPasswordEncoder().matches(oldPassword, vo.getPassword()) ){
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "旧密码不正确");
+            }else if( StrUtil.isEmptyOrUndefined(newPassword) ){
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "新密码不能为空");
+            }else if( !StrUtil.equals(newPassword, confirmNewPassword) ){
+                throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "两次密码不一致");
+            }else{
+                userService.updatePersPwd(newPassword);
+            }
+        }
+        return UPDATE_SUCCEED;
+    }
+
 }

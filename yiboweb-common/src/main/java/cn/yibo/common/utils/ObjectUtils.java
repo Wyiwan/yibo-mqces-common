@@ -36,21 +36,34 @@ import java.util.*;
  * @version 2019-01-03
  */
 public class ObjectUtils extends cn.hutool.core.util.ObjectUtil {
+	public static String mapToString(Map<String, Object> paramMap){
+		if( paramMap == null ){
+			return "";
+		}
+		Map<String, Object> params = new HashMap<>(16);
+		for( Map.Entry<String, Object> param : paramMap.entrySet() ){
+			String key = param.getKey();
+			Object paramValue = param.getValue();
+			Object obj = StrUtil.containsAnyIgnoreCase(key, "password") ? "你是看不见我的" : paramValue;
+			params.put(key,obj);
+		}
+		return JSON.toJSONString(params);
+	}
+
 	/**
 	 * map转String(密码特殊处理)
 	 * @param paramMap
 	 * @return
 	 */
-	public static String mapToString(Map<String, String[]> paramMap){
+	public static String mapToString2(Map<String, String[]> paramMap){
 		if( paramMap == null ){
 			return "";
 		}
 		Map<String, Object> params = new HashMap<>(16);
 		for( Map.Entry<String, String[]> param : paramMap.entrySet() ){
-
 			String key = param.getKey();
 			String paramValue = (param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : "");
-			String obj = StrUtil.endWithIgnoreCase(param.getKey(), "password") ? "你是看不见我的" : paramValue;
+			String obj = StrUtil.containsAnyIgnoreCase(key, "password") ? "你是看不见我的" : paramValue;
 			params.put(key,obj);
 		}
 		return JSON.toJSONString(params);

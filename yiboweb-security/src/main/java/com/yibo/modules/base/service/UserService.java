@@ -56,4 +56,22 @@ public interface UserService extends IBaseService<UserDao, User>{
      * @return
      */
     Map<String, Object> loginUser();
+
+    /**
+     * 用户个人信息
+     * @return
+     */
+    Map<String, Object> persInfo();
+
+    /**
+     * 保存用户个人信息
+     * @param user
+     */
+    void savePersInfo(User user);
+
+    /**
+     * 更新用户密码
+     * @param newPassword
+     */
+    void updatePersPwd(String newPassword);
 }

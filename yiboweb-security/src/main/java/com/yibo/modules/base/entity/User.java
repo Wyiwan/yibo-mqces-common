@@ -20,8 +20,10 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -65,7 +67,7 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "用户姓名")
     private String name;
 
-    @ApiModelProperty(value = "员工编号")
+    @ApiModelProperty(value = "员工工号")
     private String empCode;
 
     @ApiModelProperty(value = "员工状态(1在职 2离职 3退休)")
@@ -180,22 +182,21 @@ public class User extends DataEntity<String>{
         }
     }
 
+    public String getRoleNames(){
+        if( !CollUtil.isEmpty(roles) ){
+            return ListUtils.extractToString(roles, "roleName", ",");
+        }
+        return "";
+    }
+
     @Override
     public void preInsert(){
-        preInit();
+        initPwd();
         super.preInsert();
     }
 
-    @Override
-    public void preUpdate(){
-        preInit();
-        super.preUpdate();
-    }
-
-    private void preInit(){
-        this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
-        this.mgrType = StrUtil.emptyToDefault(this.mgrType, CommonConstant.USER_MGR_TYPE_NORMAL);
-        this.password = StrUtil.emptyToDefault(this.password, new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD));
+    public void initPwd(){
+        this.password = new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD);
     }
 
     public void preUpdateInfo(User oldUser){

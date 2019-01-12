@@ -102,11 +102,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
             SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
 
             String tenantId = request.getHeader(SecurityConstant.TENANT_KEY);
-            if( StrUtil.isEmpty(headToken) ){
-                tenantId = request.getParameter(SecurityConstant.TENANT_KEY);
-            }
-
-            if( userDetails != null && userDetails.isSuperAdmin() && StrUtil.isNotBlank(tenantId)){
+            if( userDetails != null && userDetails.isSuperAdmin() && !StrUtil.isEmptyOrUndefined(tenantId)){
                 userDetails.setTenantId(tenantId);
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
