@@ -96,7 +96,7 @@ public class Office extends DataEntity<String>{
         this.officeCode = RandomUtil.randomNumbers(CommonConstant.OFFICE_CODE_NUM);
     }
 
-    public void preUpdateInfo(Office oldOffice) {
+    public void preUpdateInfo(Office oldOffice){
         if( oldOffice != null ){
             this.officeCode = oldOffice.getOfficeCode();
         }

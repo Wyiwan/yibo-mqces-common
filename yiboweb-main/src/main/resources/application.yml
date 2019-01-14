@@ -34,12 +34,6 @@ spring:
   profiles:
     active: @spring.active@
 
-  #Redis配置
-  redis:
-      host: 192.168.1.244
-      port: 8379
-      password: ENC(108NCrFBdhsxAwdjy36x4g==)
-
   #数据源配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -92,11 +86,11 @@ ignored:
   urls:
     - /common/**
     - /druid/**
+    - /v2/api-docs
     - /swagger-ui.html
     - /swagger-resources/**
     - /swagger/**
-    - /webjars/springfox-swagger-ui/**
-    - /**/v2/api-docs
+    - /webjars/**
     - /**/*.js
     - /**/*.css
     - /**/*.png
@@ -118,37 +112,61 @@ swagger:
 #本地环境
 spring:
   profiles: local
+  #数据源
   datasource:
     username: root
     password: ENC(WZH8zMOp2pSR7kxfp2LQsw==)
     url: jdbc:mysql://localhost:3306/yibo_frame?allowMultiQueries=true
+  #Redis
+  redis:
+    host: 192.168.1.244
+    port: 8379
+    password: ENC(108NCrFBdhsxAwdjy36x4g==)
 
 ---
 
 #开发环境
 spring:
   profiles: dev
+  #数据源
   datasource:
     username: root
     password: ENC(tzolKZvgH0mCwcJQPN5vtA==)
     url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true
+  #Redis
+  redis:
+    host: 192.168.1.244
+    port: 8379
+    password: ENC(108NCrFBdhsxAwdjy36x4g==)
 
 ---
 
 #测试环境
 spring:
   profiles: test
+  #数据源
   datasource:
     username: root
     password: ENC(4E7U6IcbrPePfppGqDWalA==)
     url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true
+  #Redis
+  redis:
+    host: 192.168.1.244
+    port: 8379
+    password: ENC(108NCrFBdhsxAwdjy36x4g==)
 
 ---
 
 #生产环境
 spring:
   profiles: produce
+  #数据源
   datasource:
     username: root
     password: ENC(4Q4ABgmCB71R6ConFllkIQ==)
     url: jdbc:mysql://192.168.1.244:3036/yibo_frame?allowMultiQueries=true
+  #Redis
+  redis:
+    host: 192.168.1.244
+    port: 8379
+    password: ENC(108NCrFBdhsxAwdjy36x4g==)
