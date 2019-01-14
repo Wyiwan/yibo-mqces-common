@@ -24,6 +24,7 @@ import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
 import cn.yibo.security.exception.LoginFailEnum;
 import cn.yibo.security.jwt.JWTUtil;
+import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Log;
 import com.yibo.modules.base.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class AuthController {
     /**
      * 退出
      */
+    @IgnoredLog
     @PostMapping("/logout")
     public String logout(HttpServletRequest request){
         if( UserContext.getUser() != null ){
