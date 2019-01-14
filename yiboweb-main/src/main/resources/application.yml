@@ -11,7 +11,7 @@ jasypt:
     password: YiboYun
 
 webapp:
-  name: 医博基础技术框架V1.3.1
+  name: 医博基础技术框架V1.3.2
   swagger-open: true
   token-save-redis: false # token是否存储在redis上
   token-expire-time: 60   # token过期时间（分钟）

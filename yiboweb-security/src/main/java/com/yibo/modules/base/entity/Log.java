@@ -20,7 +20,6 @@
 
 package com.yibo.modules.base.entity;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.utils.ObjectUtils;
@@ -32,7 +31,6 @@ import lombok.Data;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
-import java.io.IOException;
 
 /**
  * 操作日志表实体类(Log)
@@ -115,10 +113,10 @@ public class Log extends DataEntity<String>{
     public void setRequestParameter(HttpServletRequest request){
         if( "POST".equals(request.getMethod()) ){
             try{
+                // 从复制流中获取参数
                 String postStr = ServletUtils.getRequestPostStr(request);
-                JSONObject jsonObject = JSONUtil.parseObj(postStr);
-                this.requestParams = ObjectUtils.mapToString(jsonObject);
-            }catch(IOException e){
+                this.requestParams = ObjectUtils.mapToString(JSONUtil.parseObj(postStr));
+            }catch(Exception e){
                 this.requestParams = ObjectUtils.mapToString2(request.getParameterMap());
             }
         }else{
