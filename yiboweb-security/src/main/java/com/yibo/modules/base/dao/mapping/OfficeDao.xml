@@ -490,11 +490,33 @@
     <!-- 查询相关 -->
     <select id="fetch" parameterType="java.lang.String" resultType="com.yibo.modules.base.entity.Office">
         select
-            <include refid="Base_Column_List" />
-        from sys_office
+            o.id,
+            o.parent_id,
+            o.ancestor_id,
+            o.office_name,
+            o.office_code,
+            o.office_type,
+            o.office_level,
+            o.office_sort,
+            o.short_name,
+            o.director_id,
+            u.name as director_name,
+            o.avatar,
+            o.slogan,
+            o.introduction,
+            o.phone,
+            o.address,
+            o.status,
+            o.create_by,
+            o.create_date,
+            o.update_by,
+            o.update_date,
+            o.comments
+        from sys_office o
+        left join sys_user u on u.id = o.director_id and u.status != 0
         <where>
-            and status != 0
-            and id = #{id}
+            and o.status != 0
+            and o.id = #{id}
         </where>
     </select>
 

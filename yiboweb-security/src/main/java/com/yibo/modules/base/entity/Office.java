@@ -57,6 +57,9 @@ public class Office extends DataEntity<String>{
     @ApiModelProperty(value = "质量总监ID")
     private String directorId;
 
+    @ApiModelProperty(value = "质量总监名称")
+    private String directorName;
+
     @ApiModelProperty(value = "口号")
     private String slogan;
     
