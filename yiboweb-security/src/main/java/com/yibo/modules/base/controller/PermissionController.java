@@ -99,6 +99,7 @@ public class PermissionController extends BaseController{
      * @param id
      * @return
      */
+    @IgnoredLog
     @ApiOperation("单个查询")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @GetMapping("/fetched")
