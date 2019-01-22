@@ -48,12 +48,12 @@ public class PermissionTree extends Tree<Permission, String> {
     }
 
     @Override
-    protected void setChildren(Permission node, Permission children) {
-        List<Permission> currChildren = node.getChildren();
+    protected void setChildren(Permission parent, Permission children) {
+        List<Permission> currChildren = parent.getChildren();
         if( currChildren == null ){
-            node.setChildren(CollUtil.newArrayList());
+            parent.setChildren(CollUtil.newArrayList());
         }
-        node.getChildren().add(children);
-        node.setIsLeaf(false);
+        parent.getChildren().add(children);
+        parent.setIsLeaf(false);
     }
 }

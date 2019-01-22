@@ -76,6 +76,15 @@ public class Permission extends DataEntity<String>{
     @ApiModelProperty(value = "按钮类型")
     private String buttonType;
 
+    //------------------------------------------------------------------------------------------------------------------
+    // 扩展属性
+    //------------------------------------------------------------------------------------------------------------------
+    @ApiModelProperty(value = "子菜单/权限")
+    private List<Permission> children;
+
+    @ApiModelProperty(value = "是否叶子节点 前端所需")
+    private Boolean isLeaf = true;
+
     @Override
     public void preInsert(){
         preInit();
@@ -94,15 +103,5 @@ public class Permission extends DataEntity<String>{
             this.permsWeight = CommonConstant.USER_PERMS_WEIGHT;
         }
     }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // 扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "子菜单/权限")
-    private List<Permission> children;
-
-    @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = true;
-
 
 }

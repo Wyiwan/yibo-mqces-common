@@ -661,7 +661,7 @@
                 order by ${condition.orderby}
             </when>
             <otherwise>
-                order by id
+                order by create_date desc
             </otherwise>
         </choose>
     </select>

@@ -76,7 +76,7 @@
             <include refid="Base_Column_List_Ext" />
         from sys_permission p
         where 1 = 1
-          and p.status = 1
+            and p.status = 1
         order by p.perms_sort
     </select>
 

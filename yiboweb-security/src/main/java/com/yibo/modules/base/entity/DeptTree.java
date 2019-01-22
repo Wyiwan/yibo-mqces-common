@@ -47,12 +47,12 @@ public class DeptTree extends Tree<Dept, String> {
     }
 
     @Override
-    protected void setChildren(Dept node, Dept children) {
-        List<Dept> currChildren = node.getChildren();
+    protected void setChildren(Dept parent, Dept children) {
+        List<Dept> currChildren = parent.getChildren();
         if( currChildren == null ){
-            node.setChildren(CollUtil.newArrayList());
+            parent.setChildren(CollUtil.newArrayList());
         }
-        node.getChildren().add(children);
-        node.setIsLeaf(false);
+        parent.getChildren().add(children);
+        parent.setIsLeaf(false);
     }
 }
