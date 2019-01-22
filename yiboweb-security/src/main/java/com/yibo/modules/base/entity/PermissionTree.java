@@ -54,6 +54,6 @@ public class PermissionTree extends Tree<Permission, String> {
             node.setChildren(CollUtil.newArrayList());
         }
         node.getChildren().add(children);
-        node.setIsLeaf(true);
+        node.setIsLeaf(false);
     }
 }

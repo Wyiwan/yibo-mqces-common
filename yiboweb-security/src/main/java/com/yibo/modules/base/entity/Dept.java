@@ -78,7 +78,7 @@ public class Dept extends DataEntity<String>{
     private List<Dept> children;
 
     @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = false;
+    private Boolean isLeaf = true;
 
     @ApiModelProperty(value = "是否选中 前端所需")
     private Boolean selected = false;

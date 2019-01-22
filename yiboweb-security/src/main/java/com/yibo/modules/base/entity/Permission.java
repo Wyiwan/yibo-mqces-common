@@ -102,7 +102,7 @@ public class Permission extends DataEntity<String>{
     private List<Permission> children;
 
     @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = false;
+    private Boolean isLeaf = true;
 
 
 }

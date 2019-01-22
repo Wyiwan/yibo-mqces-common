@@ -53,6 +53,6 @@ public class DeptTree extends Tree<Dept, String> {
             node.setChildren(CollUtil.newArrayList());
         }
         node.getChildren().add(children);
-        node.setIsLeaf(true);
+        node.setIsLeaf(false);
     }
 }
