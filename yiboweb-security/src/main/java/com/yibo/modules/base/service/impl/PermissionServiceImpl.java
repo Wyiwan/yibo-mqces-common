@@ -30,6 +30,7 @@ import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
 import com.google.common.collect.Lists;
+import com.yibo.modules.base.config.constant.CacheConstant;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
@@ -52,7 +53,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
-    private static final String MENU_CACHE = "allMenus";
     private static String configMinWeight = ObjectUtils.toString( PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight") );
     public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = StrUtil.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
 
@@ -66,7 +66,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void insert(Permission permission){
         super.insert(permission);
         dao.updateAncestor(permission);
-        CacheUtils.remove(MENU_CACHE);
+        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
     }
 
     /**
@@ -78,8 +78,8 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
-        CacheUtils.remove(MENU_CACHE);
-        CacheUtils.removeAll(CommonConstant.USER_CACHE);
+        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
     }
 
     /**
@@ -92,8 +92,8 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void updateNull(Permission permission){
         super.updateNull(permission);
         dao.updateAncestor(permission);
-        CacheUtils.remove(MENU_CACHE);
-        CacheUtils.removeAll(CommonConstant.USER_CACHE);
+        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
     }
 
     /**
@@ -102,10 +102,10 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public List<Permission> findTree(){
-        List<Permission> permissions = (List<Permission>)CacheUtils.get(MENU_CACHE);
+        List<Permission> permissions = (List<Permission>)CacheUtils.get(CacheConstant.CACHE_MENU_LIST);
         if( permissions == null ){
             permissions = dao.findTree();
-            CacheUtils.put(MENU_CACHE, permissions);
+            CacheUtils.put(CacheConstant.CACHE_MENU_LIST, permissions);
         }
         return permissions;
     }

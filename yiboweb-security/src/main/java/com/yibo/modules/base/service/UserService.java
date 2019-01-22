@@ -21,7 +21,7 @@
 package com.yibo.modules.base.service;
 
 import cn.yibo.base.service.IBaseService;
-import com.yibo.modules.base.config.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CacheConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
 import org.springframework.cache.annotation.CacheConfig;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @since 2018-12-03
  * @version v1.0
  */
-@CacheConfig(cacheNames = CommonConstant.USER_CACHE)
+@CacheConfig(cacheNames = CacheConstant.USER_CACHE_NAME)
 public interface UserService extends IBaseService<UserDao, User>{
     /**
      * 通过用户名查询用户

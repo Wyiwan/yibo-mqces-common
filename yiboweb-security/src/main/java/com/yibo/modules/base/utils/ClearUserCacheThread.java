@@ -26,7 +26,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
-import com.yibo.modules.base.config.constant.CommonConstant;
+import com.yibo.modules.base.config.constant.CacheConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -94,7 +94,7 @@ public class ClearUserCacheThread extends Thread{
     private void clearCaches(List<String> list){
         if( !CollUtil.isEmpty(list) ){
             for(int i = 0 ; i < list.size() ; i++){
-                CacheUtils.remove(CommonConstant.USER_CACHE, list.get(i));
+                CacheUtils.remove(CacheConstant.USER_CACHE_NAME, list.get(i));
                 log.info("清除用户[ "+list.get(i)+" ]缓存...");
             }
         }
