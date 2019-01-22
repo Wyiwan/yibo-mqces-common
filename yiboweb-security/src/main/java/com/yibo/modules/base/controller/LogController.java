@@ -39,14 +39,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 操作日志表实体控制器层类(Log)
+ * 操作日志表控制器层
  * @author 高云
  * @since 2019-01-09
  * @version v1.0
  */
 @RestController
 @RequestMapping("/api/log")
-@Api(tags = "9006.日志表管理")
+@Api(tags = "9006.操作日志管理")
 public class LogController extends BaseController{
    @Autowired
    private LogService logService;

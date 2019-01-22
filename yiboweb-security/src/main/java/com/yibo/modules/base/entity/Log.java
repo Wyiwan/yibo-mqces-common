@@ -33,13 +33,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 操作日志表实体类(Log)
+ * 操作日志表实体类(sys_log)
  * @author 高云
  * @since 2019-01-07
  * @version v1.0
  */
 @Data
-@ApiModel(value = "操作日志表实体类(Log)")
+@ApiModel(value = "操作日志表实体类")
 public class Log extends DataEntity<String>{
     // 日志类型（access：访问日志；update：修改日志；delete：删除日志；select：查询日志；login：登录；logout：登出；error：异常）
     public static final String TYPE_ACCESS = "access";

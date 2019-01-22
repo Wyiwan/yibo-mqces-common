@@ -31,13 +31,13 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 科室表实体类(Dept)
+ * 科室表实体类(sys_dept)
  * @author 高云
  * @since 2018-12-12
  * @version v1.0
  */
 @Data
-@ApiModel(value = "科室表实体类(Dept)")
+@ApiModel(value = "科室表实体类")
 public class Dept extends DataEntity<String>{
     @ApiModelProperty(value = "父级ID")
     private String parentId;

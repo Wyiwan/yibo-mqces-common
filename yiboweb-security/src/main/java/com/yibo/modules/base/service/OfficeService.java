@@ -21,12 +21,11 @@
 package com.yibo.modules.base.service;
 
 import cn.yibo.base.service.IBaseService;
-import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.dao.OfficeDao;
-import org.apache.poi.ss.formula.functions.T;
+import com.yibo.modules.base.entity.Office;
 
 /**
- * 医疗机构表实体服务接口层类(Office)
+ * 医疗机构表服务接口层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0

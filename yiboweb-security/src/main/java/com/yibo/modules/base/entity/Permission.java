@@ -32,13 +32,13 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 菜单权限表实体类(Permission)
+ * 菜单权限表实体类(sys_permission)
  * @author 高云
  * @since 2018-12-04
  * @version v1.0
  */
 @Data
-@ApiModel(value = "菜单权限表实体类(Permission)")
+@ApiModel(value = "菜单权限表实体类")
 public class Permission extends DataEntity<String>{
     @ApiModelProperty(value = "父级ID")
     private String parentId;

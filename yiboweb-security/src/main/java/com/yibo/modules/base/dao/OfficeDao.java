@@ -24,7 +24,7 @@ import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.Office;
 
 /**
- * 医疗机构表实体数据访问层类(Office)
+ * 医疗机构表数据访问层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0

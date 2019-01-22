@@ -27,7 +27,7 @@ import com.yibo.modules.base.entity.Role;
 import java.util.List;
 
 /**
- * 角色表实体服务接口层类(Role)
+ * 角色表服务接口层
  * @author 高云
  * @since 2018-12-20
  * @version v1.0

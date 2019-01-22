@@ -24,16 +24,17 @@ import cn.yibo.base.entity.DataEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 用户角色关系表实体类(UserRole)
+ * 用户角色关系表实体类(sys_user_role)
  * @author 高云
  * @since 2018-12-24
  * @version v1.0
  */
 @Data
-@ApiModel(value = "用户角色关系表实体类(UserRole)")
+@ApiModel(value = "用户角色关系表实体类")
 public class UserRole extends DataEntity<String>{
     @NotEmpty(message="用户ID不能为空")
     @ApiModelProperty(value = "用户ID")

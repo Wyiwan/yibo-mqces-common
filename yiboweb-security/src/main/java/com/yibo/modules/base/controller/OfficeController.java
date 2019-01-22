@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
     
 /**
- * 医疗机构表实体控制器层类(Office)
+ * 医疗机构表控制器层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0

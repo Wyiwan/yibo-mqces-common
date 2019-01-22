@@ -26,7 +26,7 @@ import cn.yibo.common.utils.tree.Tree;
 import java.util.List;
 
 /**
- * 描述: 一句话描述该类的用途
+ * 描述: 科室表树型实体扩展类
  * 作者：高云
  * 时间: 2018-12-13
  * 版本: v1.0

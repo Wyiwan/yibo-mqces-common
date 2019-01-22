@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 角色表实体数据访问层类(Role)
+ * 角色表数据访问层
  * @author 高云
  * @since 2018-12-20
  * @version v1.0

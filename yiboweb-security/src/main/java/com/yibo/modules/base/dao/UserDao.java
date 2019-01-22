@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户表实体数据访问层类(User)
+ * 用户表数据访问层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

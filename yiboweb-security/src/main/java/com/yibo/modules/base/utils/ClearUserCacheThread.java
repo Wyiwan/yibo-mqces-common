@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
- * 描述: 清除用户缓存线程
+ * 描述: 清除用户缓存线程类
  * 作者：高云
  * 邮箱: gogo163gao@163.com
  * 时间: 2018-12-26

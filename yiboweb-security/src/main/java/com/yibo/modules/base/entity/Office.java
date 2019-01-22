@@ -30,13 +30,13 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 医疗机构表实体类(Office)
+ * 医疗机构表实体类(sys_office)
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
 @Data
-@ApiModel(value = "医疗机构表实体类(Office)")
+@ApiModel(value = "医疗机构表实体类")
 public class Office extends DataEntity<String>{
     @NotEmpty(message="机构名称不能为空")
     @ApiModelProperty(value = "机构名称")

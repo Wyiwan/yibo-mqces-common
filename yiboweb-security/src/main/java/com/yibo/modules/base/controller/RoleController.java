@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 角色表实体控制器层类(Role)
+ * 角色表控制器层
  * @author 高云
  * @since 2018-12-20
  * @version v1.0

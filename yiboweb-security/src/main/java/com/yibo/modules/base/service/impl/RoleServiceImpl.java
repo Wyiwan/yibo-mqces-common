@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 角色表实体服务实现层类(Role)
+ * 角色表服务实现层
  * @author 高云
  * @since 2018-12-20
  * @version v1.0

@@ -27,13 +27,13 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 角色权限关系表实体类(RolePermission)
+ * 角色权限关系表实体类(sys_role_permission)
  * @author 高云
  * @since 2018-12-24
  * @version v1.0
  */
 @Data
-@ApiModel(value = "角色权限关系表实体类(RolePermission)")
+@ApiModel(value = "角色权限关系表实体类")
 public class RolePermission extends DataEntity<String>{
     @NotEmpty(message="角色ID不能为空")
     @ApiModelProperty(value = "角色ID")

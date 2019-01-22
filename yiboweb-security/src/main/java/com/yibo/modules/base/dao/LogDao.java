@@ -24,7 +24,7 @@ import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.Log;
 
 /**
- * 操作日志表实体数据访问层类(Log)
+ * 操作日志表数据访问层
  * @author 高云
  * @since 2019-01-07
  * @version v1.0

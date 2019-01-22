@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户表实体服务实现层类(User)
+ * 用户表服务实现层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 科室表实体服务实现层类(Dept)
+ * 科室表服务实现层
  * @author 高云
  * @since 2018-12-12
  * @version v1.0

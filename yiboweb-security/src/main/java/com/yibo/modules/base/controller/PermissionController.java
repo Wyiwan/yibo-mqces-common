@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 菜单权限表实体控制器层类(Permission)
+ * 菜单权限表控制器层
  * @author 高云
  * @since 2018-12-11
  * @version v1.0

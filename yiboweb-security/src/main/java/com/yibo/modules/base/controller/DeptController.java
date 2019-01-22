@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 科室表实体控制器层类(Dept)
+ * 科室表控制器层
  * @author 高云
  * @since 2018-12-12
  * @version v1.0

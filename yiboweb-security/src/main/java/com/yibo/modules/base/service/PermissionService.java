@@ -28,7 +28,7 @@ import com.yibo.modules.base.entity.User;
 import java.util.List;
 
 /**
- * 菜单权限表实体服务接口层类(Permission)
+ * 菜单权限表服务接口层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

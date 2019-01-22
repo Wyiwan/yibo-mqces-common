@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户表实体控制器层类(User)
+ * 用户表控制器层
  * @author 高云
  * @since 2018-12-11
  * @version v1.0

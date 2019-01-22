@@ -27,7 +27,7 @@ import com.yibo.modules.base.entity.Dept;
 import java.util.List;
 
 /**
- * 科室表实体服务接口层类(Dept)
+ * 科室表服务接口层
  * @author 高云
  * @since 2018-12-12
  * @version v1.0

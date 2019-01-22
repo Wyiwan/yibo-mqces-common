@@ -39,13 +39,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户表实体类(User)
+ * 用户表实体类(sys_user)
  * @author 高云
  * @since 2018-12-17
  * @version v1.0
  */
 @Data
-@ApiModel(value = "用户表实体类(User)")
+@ApiModel(value = "用户表实体类")
 public class User extends DataEntity<String>{
     private static String configUserInitPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
     private static String configSuperAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));

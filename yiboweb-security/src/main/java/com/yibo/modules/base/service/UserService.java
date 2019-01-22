@@ -30,7 +30,7 @@ import org.springframework.cache.annotation.Cacheable;
 import java.util.Map;
 
 /**
- * 用户表实体服务接口层类(User)
+ * 用户表服务接口层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

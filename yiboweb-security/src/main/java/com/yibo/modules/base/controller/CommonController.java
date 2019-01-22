@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *  描述: 公共控制器
+ *  描述: 公共控制器层
  *  作者：高云
  *  邮箱: gogo163gao@163.com
  *  时间: 2018-09-16
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/common")
-@Api(tags = "系统公用接口")
+@Api(tags = "9000.系统公用接口")
 public class CommonController {
     /**
      * 获取汉字拼音首字母

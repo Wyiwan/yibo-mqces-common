@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 菜单权限表实体服务实现层类(Permission)
+ * 菜单权限表服务实现层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

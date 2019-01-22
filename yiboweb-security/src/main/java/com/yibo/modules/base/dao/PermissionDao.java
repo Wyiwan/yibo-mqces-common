@@ -27,7 +27,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 菜单权限表实体数据访问层类(Permission)
+ * 菜单权限表数据访问层
  * @author 高云
  * @since 2018-12-03
  * @version v1.0

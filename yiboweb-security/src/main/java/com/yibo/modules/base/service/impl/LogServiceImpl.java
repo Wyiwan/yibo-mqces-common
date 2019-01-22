@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 操作日志表实体服务实现层类(Log)
+ * 操作日志表服务实现层
  * @author 高云
  * @since 2019-01-07
  * @version v1.0

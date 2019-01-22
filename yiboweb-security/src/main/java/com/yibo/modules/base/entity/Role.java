@@ -32,13 +32,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 角色表实体类(Role)
+ * 角色表实体类(sys_role)
  * @author 高云
  * @since 2018-12-20
  * @version v1.0
  */
 @Data
-@ApiModel(value = "角色表实体类(Role)")
+@ApiModel(value = "角色表实体类")
 public class Role extends DataEntity<String>{
     @NotEmpty(message="角色名称不能为空")
     @ApiModelProperty(value = "角色名称")
