@@ -45,6 +45,7 @@ public interface BaseDAO<T extends BaseEntity>{
     public List<T> queryList(@Param("condition") Map<String, Object> condition, @Param("orderBy") String orderBy, @Param("sortBy") String sortBy);
     public List<T> queryPage(@Param("condition") Map<String, Object> condition);
     public List<T> queryBySql(@Param("executeSql") String executeSql);
+    public List<T> queryTree(T entity);
 
     public int deleteById(Object id);
     public int deleteByIds(List list);

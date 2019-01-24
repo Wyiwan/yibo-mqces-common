@@ -20,11 +20,10 @@
 
 package cn.yibo.base.service;
 
-import com.github.pagehelper.PageInfo;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.dao.BaseDAO;
 import cn.yibo.base.entity.BaseEntity;
-import org.apache.ibatis.annotations.Param;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,8 @@ public interface IBaseService<D extends BaseDAO, T extends BaseEntity> {
     public List<T> queryList(Map<String, Object> condition);
     public List<T> queryList(Map<String, Object> condition, String orderBy, String sortBy);
     public <T>PageInfo<T> queryPage(BaseForm<T> baseForm);
-    public List<T> queryBySql(@Param("executeSql") String executeSql);
+    public List<T> queryBySql(String executeSql);
+    public List<T> queryTree(T entity);
 
     public void deleteById(Object id);
     public void deleteByIds(List list);

@@ -133,6 +133,11 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     }
 
     @Override
+    public List queryTree(T t){
+        return dao.queryTree(t);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void deleteById(Object id){
         dao.deleteById(id);
@@ -198,6 +203,8 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     @Override
     @Transactional(readOnly = false)
     public void save(T t){
+        t.onBeforeSave();
+
         if( !ObjectUtils.isEmpty(t.getId()) ){
             t.preUpdate();
             this.updateNull(t);
@@ -225,6 +232,30 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( !CollUtil.isEmpty(userIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setUserIdList(userIdList);
+            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+        }
+    }
+
+    /**
+     * 根据角色ID清除用户缓存
+     * @param roleIdList
+     */
+    public void clearUsersCacheByRoleId(List roleIdList){
+        if( !CollUtil.isEmpty(roleIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setRoleIdList(roleIdList);
+            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+        }
+    }
+
+    /**
+     * 根据科室ID清除用户缓存
+     * @param deptIdList
+     */
+    public void clearUsersCacheByDeptId(List deptIdList){
+        if( !CollUtil.isEmpty(deptIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setDeptIdList(deptIdList);
             ThreadPoolUtils.getPool().execute(clearUserCacheThread);
         }
     }
