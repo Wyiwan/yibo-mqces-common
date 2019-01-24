@@ -38,21 +38,21 @@ public interface BaseTree<N, K> {
      * @param nodeList	所有节点List
      * @return
      */
-    Map<K, List<N>> getAllNodeAsMap(List<N> nodeList);
+    Map<K, List<N>> getAllNodeAsMap(List<? extends N> nodeList);
 
     /**
      * 获取所有节点的key - 自己的映射Map
      * @param nodeList	所有节点List
      * @return
      */
-    Map<K, N> getAllNodeSelfMap(List<N> nodeList);
+    Map<K, N> getAllNodeSelfMap(List<? extends N> nodeList);
 
     /**
      * 获取所有节点key - 子节点List 映射List tree
      * @param nodeList	所有节点List
      * @return
      */
-    List<N> getTreeList(List<N> nodeList);
+    List<N> getTreeList(List<? extends N> nodeList);
 
     /**
      * 从某节点开始往上级搜索

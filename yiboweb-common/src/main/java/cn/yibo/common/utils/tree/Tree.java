@@ -36,7 +36,7 @@ public abstract class Tree<N, K> {
     private N root;
 
     // 树上所有节点的列表
-    private List<N> allNodes;
+    private List<? extends N> allNodes;
 
     // 节点到其子节点的映射
     private Map<K, List<N>> childMap;
@@ -51,11 +51,11 @@ public abstract class Tree<N, K> {
      * 构造方法，传入所有树节点来构造一棵树
      * @param allNodes
      */
-    public Tree(Collection<N> allNodes) {
+    public Tree(Collection<? extends N> allNodes) {
         this.setAllNodes(new ArrayList<N>(allNodes));
     }
 
-    public List<N> getAllNodes() {
+    public List<? extends N> getAllNodes() {
         return allNodes;
     }
 

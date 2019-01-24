@@ -54,7 +54,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
     protected abstract void setChildren(N node, N children);
 
     @Override
-    public List<N> getTreeList(List<N> nodeList) {
+    public List<N> getTreeList(List<? extends N> nodeList) {
         // 根节点
         List<N> treeList = new ArrayList<N>();
         // 节点列表
@@ -77,7 +77,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
     }
 
     @Override
-    public Map<K, List<N>> getAllNodeAsMap(List<N> nodeList) {
+    public Map<K, List<N>> getAllNodeAsMap(List<? extends N> nodeList) {
         //map初始化容量(假设为满二叉树)
         int initialCapacity = Math.max((int) ((nodeList.size() - 1)/2.0f/.75f) + 1, 16);
         //建一个map来存放 父节点no到子节点列表 的映射
@@ -98,7 +98,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
     }
 
     @Override
-    public LinkedHashMap<K, N> getAllNodeSelfMap(List<N> nodeList) {
+    public LinkedHashMap<K, N> getAllNodeSelfMap(List<? extends N> nodeList) {
         //map初始化容量
         int initialCapacity = Math.max((int) (nodeList.size()/.75f) + 1, 16);
         //新建一个map
