@@ -21,7 +21,7 @@
 package com.yibo.modules.base.entity;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.base.entity.DataEntity;
+import cn.yibo.base.entity.TreeEntity;
 import cn.yibo.common.utils.ObjectUtils;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
@@ -29,7 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 /**
  * 菜单权限表实体类(sys_permission)
@@ -39,13 +38,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "菜单权限表实体类")
-public class Permission extends DataEntity<String>{
-    @ApiModelProperty(value = "父级ID")
-    private String parentId;
-    
-    @ApiModelProperty(value = "所有父级ID")
-    private String ancestorId;
-    
+public class Permission extends TreeEntity<Permission, String> {
     @ApiModelProperty(value = "权限类型(0菜单页面 1操作权限)")
     @NotEmpty(message="类型不能为空")
     private String permsType;
@@ -76,32 +69,11 @@ public class Permission extends DataEntity<String>{
     @ApiModelProperty(value = "按钮类型")
     private String buttonType;
 
-    //------------------------------------------------------------------------------------------------------------------
-    // 扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "子菜单/权限")
-    private List<Permission> children;
-
-    @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = true;
-
     @Override
-    public void preInsert(){
-        preInit();
-        super.preInsert();
-    }
-
-    @Override
-    public void preUpdate(){
-        preInit();
-        super.preUpdate();
-    }
-
-    private void preInit(){
+    public void onBeforeSave(){
         this.permsType = StrUtil.emptyToDefault(this.permsType, CommonConstant.PERMISSION_OPERATION);
         if( ObjectUtils.isEmpty(this.permsWeight) ){
             this.permsWeight = CommonConstant.USER_PERMS_WEIGHT;
         }
     }
-
 }

@@ -39,11 +39,14 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class DictKindServiceImpl extends AbstractBaseService<DictKindDao, DictKind> implements DictKindService {
     /**
-     * 查询树结构数据
+     * 重写删除
+     * @param list
      * @return
      */
     @Override
-    public List<DictKind> findTree(){
-        return dao.findTree();
+    @Transactional(readOnly = false)
+    public void deleteByIds(List list){
+        dao.deleteCascade(list.get(0));
     }
+
 }

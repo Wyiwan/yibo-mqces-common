@@ -24,8 +24,6 @@ import cn.yibo.base.service.IBaseService;
 import com.yibo.modules.base.dao.DeptDao;
 import com.yibo.modules.base.entity.Dept;
 
-import java.util.List;
-
 /**
  * 科室表服务接口层
  * @author 高云
@@ -33,10 +31,5 @@ import java.util.List;
  * @version v1.0
  */
 public interface DeptService extends IBaseService<DeptDao, Dept>{
-    /**
-     * 查询树结构数据
-     * @param dept
-     * @return
-     */
-    List<Dept> findTree(Dept dept);
+
 }

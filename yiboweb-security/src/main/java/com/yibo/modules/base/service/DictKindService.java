@@ -33,9 +33,5 @@ import java.util.List;
  * @version v1.0
  */
 public interface DictKindService extends IBaseService<DictKindDao, DictKind>{
-    /**
-     * 查询树结构数据
-     * @return
-     */
-    List<DictKind> findTree();
+
 }

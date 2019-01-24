@@ -22,6 +22,7 @@ package com.yibo.modules.base.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
@@ -32,6 +33,7 @@ import com.yibo.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述: 清除用户缓存线程类
@@ -45,6 +47,7 @@ public class ClearUserCacheThread extends Thread{
     private String tenantId;
     private List userIdList;
     private List roleIdList;
+    private List deptIdList;
 
     public ClearUserCacheThread(){
         super();
@@ -62,6 +65,10 @@ public class ClearUserCacheThread extends Thread{
         this.roleIdList = roleIdList;
     }
 
+    public void setDeptIdList(List deptIdList) {
+        this.deptIdList = deptIdList;
+    }
+
     @Override
     public void run(){
         UserDao userDao = SpringContextHolder.getBean(UserDao.class);
@@ -70,22 +77,31 @@ public class ClearUserCacheThread extends Thread{
             log.info("======================= 清除用户缓存 =======================");
 
             if( !CollUtil.isEmpty(userIdList) ){
-                List<String> list = userDao.findUsernameByIds(userIdList);
-                this.clearCaches(list);
+                Map<String, Object> condition = MapUtil.newHashMap();
+                condition.put("ids", userIdList);
+                List<User> userList = userDao.queryUserByIds(condition);
+                this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
 
             if( !CollUtil.isEmpty(roleIdList) ){
-                List<String> list = userDao.findUsernameByRoleIds(roleIdList);
-                this.clearCaches(list);
+                Map<String, Object> condition = MapUtil.newHashMap();
+                condition.put("roleIds", roleIdList);
+                List<User> userList = userDao.queryUserByIds(condition);
+
+                this.clearCaches( ListUtils.extractToList(userList, "username") );
+            }
+
+            if( !CollUtil.isEmpty(deptIdList) ){
+                Map<String, Object> condition = MapUtil.newHashMap();
+                condition.put("deptIds", deptIdList);
+                List<User> userList = userDao.queryUserByIds(condition);
+
+                this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
 
             if( StrUtil.isNotBlank(tenantId) ){
                 List<User> userList = userDao.findList("tenant_id",tenantId, null, null);
-
-                if( !CollUtil.isEmpty(userList) ){
-                    List<String> list = ListUtils.extractToList(userList, "username");
-                    this.clearCaches(list);
-                }
+                this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
             log.info("=======================清除用户缓存耗时：" + timer.interval()+ "ms");
         }

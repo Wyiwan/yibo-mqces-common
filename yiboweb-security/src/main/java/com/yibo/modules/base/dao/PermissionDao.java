@@ -34,12 +34,6 @@ import java.util.List;
  */
 public interface PermissionDao extends CrudDao<Permission>{
     /**
-     * 查询树结构数据
-     * @return
-     */
-    List<Permission> findTree();
-
-    /**
      * 根据用户ID查询权限
      * @param userId
      * @return

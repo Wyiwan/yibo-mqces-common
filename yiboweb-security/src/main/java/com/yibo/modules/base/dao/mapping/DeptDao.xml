@@ -176,7 +176,6 @@
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
             dept_name = #{deptName,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
-            dept_code = #{deptCode,jdbcType=VARCHAR},
             dept_type = #{deptType,jdbcType=VARCHAR},
             dept_level = #{deptLevel,jdbcType=NUMERIC},
             dept_sort = #{deptSort,jdbcType=NUMERIC},

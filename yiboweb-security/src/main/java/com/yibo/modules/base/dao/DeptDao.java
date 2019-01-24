@@ -42,13 +42,6 @@ public interface DeptDao extends CrudDao<Dept>{
     List<Dept> queryListExt(@Param("condition") Map<String, Object> condition);
 
     /**
-     * 查询树结构数据
-     * @param dept
-     * @return
-     */
-    List<Dept> findTree(Dept dept);
-
-    /**
      * 级联删除
      * @param list
      * @return

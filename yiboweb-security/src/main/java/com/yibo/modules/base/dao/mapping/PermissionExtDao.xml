@@ -71,7 +71,7 @@
     </select>
 
     <!-- 查询树结构数据 -->
-    <select id="findTree" resultType="com.yibo.modules.base.entity.Permission">
+    <select id="queryTree" resultType="com.yibo.modules.base.entity.Permission">
         select
             <include refid="Base_Column_List_Ext" />
         from sys_permission p

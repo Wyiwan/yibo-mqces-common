@@ -21,12 +21,10 @@
 package com.yibo.modules.base.controller;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.base.controller.BaseController;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.base.controller.CrudController;
 import cn.yibo.common.collect.ListUtils;
-import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
@@ -48,7 +46,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -61,57 +58,37 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/user")
 @Api(tags = "9002.用户管理")
-public class UserController extends BaseController {
-    @Autowired
-    private UserService userService;
-
+public class UserController extends CrudController<UserService, User> {
     @Autowired
     private RoleService roleService;
 
     /**
-     * 新增
+     * 重写保存之前调用的方法
      * @param user
-     * @return
+     * @throws Exception
      */
-    @ApiOperation("新增")
-    @PostMapping("/created")
-    public String created(@Valid @RequestBody User user){
-        if( !verifyUnique(null, user.getUsername()) ){
-            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
+    @Override
+    public void onBeforeSave(User user) throws Exception{
+        super.onBeforeSave(user);
+
+        // 修改保存时
+        if( StrUtil.isNotEmpty(user.getId()) ){
+            User oldUser = this.baseSevice.fetched(user.getId());
+            user.preUpdateInfo(oldUser);
+        // 新增保存时
+        }else{
+            user.setMgrType(CommonConstant.USER_MGR_TYPE_NORMAL);
         }
-        user.setMgrType(CommonConstant.USER_MGR_TYPE_NORMAL);
-        userService.save(user);
-        return user.getId();
     }
 
     /**
-     * 修改
-     * @param user
-     * @return
+     * 保存方法内部调用：验证数据合法性
+     * @param entity
+     * @throws Exception
      */
-    @ApiOperation("修改")
-    @PostMapping("/updated")
-    public String updated(@Valid @RequestBody User user){
-        if( !verifyUnique(user.getId(), user.getUsername()) ){
-            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
-        }
-        User oldUser = userService.fetch(user.getId());
-        user.preUpdateInfo(oldUser);
-        userService.save(user);
-        return UPDATE_SUCCEED;
-    }
-
-    /**
-     * 删除
-     * @param ids
-     * @return
-     */
-    @ApiOperation("删除")
-    @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/deleted")
-    public String deleted(@RequestBody String ids){
-        userService.deleteByIds(Arrays.asList(ids.split(",")));
-        return DEL_SUCCEED;
+    @Override
+    public void verifyUnique(User entity) throws Exception{
+        super.verifyUnique(entity, "系统已存在登录账号");
     }
 
     /**
@@ -123,13 +100,13 @@ public class UserController extends BaseController {
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
-        User user = verifyUser(id, false);
+        User user = this.baseSevice.fetched(id);
 
         if( user != null ){
             user.enabled();
-            userService.update(user);
+            this.baseSevice.updateNull(user);
         }
-        return OPER_SUCCEED;
+        return OPERATE_SUCCEED;
     }
 
     /**
@@ -141,41 +118,13 @@ public class UserController extends BaseController {
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/reseted")
     public String reseted(@RequestBody String id){
-        User user = verifyUser(id, false);
+        User user = this.baseSevice.fetched(id);
 
         if( user != null ){
-            user.initPwd();
-            userService.update(user);
+            user.initPassword();
+            this.baseSevice.updateNull(user);
         }
-        return OPER_SUCCEED;
-    }
-
-    /**
-     * 单个查询
-     * @param id
-     * @return
-     */
-    @IgnoredLog
-    @ApiOperation("单个查询")
-    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/fetched")
-    public User fetched(String id){
-        User vo = userService.fetch(id);
-        return vo == null ? new User() : vo;
-    }
-
-    /**
-     * 分页查询
-     * @return
-     */
-    @ApiOperation("分页查询")
-    @GetMapping("/paged")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
-            @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
-    })
-    public PageInfo<T> paged(){
-        return userService.queryPage(new BaseForm<T>());
+        return OPERATE_SUCCEED;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -186,14 +135,12 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @ApiOperation("系统管理员/新增")
-    @PostMapping("/mgr-created")
-    public String mgrCreated(@Valid @RequestBody User user){
-        if( !verifyUnique(null, user.getUsername()) ){
-            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在登录账号");
-        }
+    @ApiOperation("/系统管理员/新增")
+    @PostMapping("/admin-created")
+    public String adminCreated(@Valid @RequestBody User user) throws Exception{
+        super.onBeforeSave(user);
         user.setMgrType(CommonConstant.USER_MGR_TYPE_ADMIN);
-        userService.save(user);
+        this.baseSevice.save(user);
         return user.getId();
     }
 
@@ -203,9 +150,9 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation("系统管理员/编辑")
-    @PostMapping("/mgr-updated")
-    public String mgrUpdated(@Valid @RequestBody User user){
-        return updated(user);
+    @PostMapping("/admin-updated")
+    public String adminUpdated(@Valid @RequestBody User user) throws Exception{
+        return super.updated(user);
     }
 
     /**
@@ -215,9 +162,9 @@ public class UserController extends BaseController {
      */
     @ApiOperation("系统管理员/删除")
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/mgr-deleted")
-    public String mgrDeleted(@RequestBody String ids){
-        return deleted(ids);
+    @PostMapping("/admin-deleted")
+    public String adminDeleted(@RequestBody String ids){
+        return super.deleted(ids);
     }
 
     /**
@@ -225,15 +172,15 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation("系统管理员/查询")
-    @GetMapping("/mgr-paged")
+    @GetMapping("/admin-paged")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
     })
-    public PageInfo<T> mgrPaged(){
+    public PageInfo<T> adminPaged(){
         BaseForm<T> baseForm = new BaseForm<T>();
         baseForm.set("mgrType", CommonConstant.USER_MGR_TYPE_ADMIN);
-        return userService.queryPage(baseForm);
+        return this.baseSevice.queryPage(baseForm);
     }
 
     /**
@@ -243,15 +190,9 @@ public class UserController extends BaseController {
      */
     @ApiOperation("系统管理员/启用或停用")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/mgr-disabled")
-    public String mgrDisabled(@RequestBody String id){
-        User user = verifyUser(id, true);
-
-        if( user != null ){
-            user.enabled();
-            userService.update(user);
-        }
-        return OPER_SUCCEED;
+    @PostMapping("/admin-disabled")
+    public String adminDisabled(@RequestBody String id) throws Exception{
+        return disabled(id);
     }
 
     /**
@@ -261,57 +202,9 @@ public class UserController extends BaseController {
      */
     @ApiOperation("系统管理员/重置密码")
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @PostMapping("/mgr-reseted")
-    public String mgrReseted(@RequestBody String id){
-        User user = verifyUser(id, true);
-
-        if( user != null ){
-            user.initPwd();
-            userService.update(user);
-        }
-        return OPER_SUCCEED;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // @验证相关
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * 唯一性校验
-     * @return
-     */
-    @IgnoredLog
-    @ApiOperation("用户管理/验证登录账号")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", dataType = "String", required = false),
-            @ApiImplicitParam(name = "username", value = "登录账号", paramType = "query", dataType = "String", required = true)
-    })
-    @GetMapping("/verify")
-    public Boolean verifyUnique(String id, String username){
-        Map conditionMap = MapUtil.newHashMap();
-        conditionMap.put("id", id);
-        conditionMap.put("username", username);
-        return userService.count(conditionMap) > 0 ? false : true;
-    }
-
-    /**
-     * 验证用户有效性
-     * @param id
-     * @param isAdmin
-     * @return
-     */
-    private User verifyUser(String id, boolean isAdmin){
-        User user = userService.fetch(id);
-
-        if( user != null ){
-            String mgrType = user.getMgrType();
-
-            if( isAdmin && CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) ){
-                return user;
-            }else if( !isAdmin && CommonConstant.USER_MGR_TYPE_NORMAL.equals(mgrType) ){
-                return user;
-            }
-        }
-        throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "非法数据");
+    @PostMapping("/admin-reseted")
+    public String adminReseted(@RequestBody String id){
+        return reseted(id);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -322,7 +215,7 @@ public class UserController extends BaseController {
      * @return
      */
     @IgnoredLog
-    @ApiOperation("用户管理/已授权角色")
+    @ApiOperation("用户管理/查询已授权角色ID")
     @GetMapping("/get-granted-role")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true)
@@ -347,7 +240,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String grantedRole(@RequestBody User user){
-        userService.grantRole(user);
+        this.baseSevice.grantRole(user);
         return "角色授权成功";
     }
 
@@ -355,37 +248,37 @@ public class UserController extends BaseController {
     // @其他
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 登录信息查询
+     * 查询登录信息
      * @return
      */
     @IgnoredLog
-    @ApiOperation("登录信息查询")
+    @ApiOperation("查询登录信息")
     @GetMapping("/login-info")
-    public Map<String, Object> loginUser(){
-        return userService.loginUser();
+    public Map<String, Object> loginInfo(){
+        return this.baseSevice.loginInfo();
     }
 
     /**
-     * 个人信息查询
+     * 查询个人信息
      * @return
      */
-    @ApiOperation("用户个人信息查询")
+    @ApiOperation("查询个人信息")
     @GetMapping("/pers-info")
     public Map<String, Object> persInfo(){
-        return userService.persInfo();
+        return this.baseSevice.persInfo();
     }
 
     /**
-     * 个人信息保存
+     * 保存个人信息
      * @return
      */
-    @ApiOperation("个人信息保存")
+    @ApiOperation("保存个人信息")
     @PostMapping("/pers-save")
     public String persSave(@RequestBody User user){
-        if( ObjectUtils.isEmpty(user.getName()) ){
+        if( StrUtil.isEmpty(user.getName()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "姓名不能为空");
         }
-        userService.savePersInfo(user);
+        this.baseSevice.savePersInfo(user);
         return SAVE_SUCCEED;
     }
 
@@ -393,15 +286,15 @@ public class UserController extends BaseController {
      * 用户密码修改
      * @return
      */
-    @ApiOperation("个人信息密码修改")
+    @ApiOperation("用户密码修改")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "oldPassword", value = "旧密码", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "newPassword", value = "新密码", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "confirmNewPassword", value = "确认新密码", paramType = "query", dataType = "String", required = true)
     })
     @PostMapping("/pwd-save")
-    public String pwdSave(@RequestBody JSONObject jsonObject){
-        User vo = userService.fetch(UserContext.getUser().getId());
+    public String modifyPersPwd(@RequestBody JSONObject jsonObject){
+        User vo = this.baseSevice.fetch(UserContext.getUser().getId());
         if( vo != null ){
             String oldPassword = jsonObject.getString("oldPassword");
             String newPassword = jsonObject.getString("newPassword");
@@ -414,10 +307,9 @@ public class UserController extends BaseController {
             }else if( !StrUtil.equals(newPassword, confirmNewPassword) ){
                 throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "两次密码不一致");
             }else{
-                userService.updatePersPwd(newPassword);
+                this.baseSevice.modifyPersPwd(newPassword);
             }
         }
         return UPDATE_SUCCEED;
     }
-
 }

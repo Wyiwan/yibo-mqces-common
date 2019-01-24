@@ -21,6 +21,7 @@
 package com.yibo.modules.base.service;
 
 import cn.yibo.base.service.IBaseService;
+import cn.yibo.core.web.exception.BizException;
 import com.yibo.modules.base.config.constant.CacheConstant;
 import com.yibo.modules.base.dao.UserDao;
 import com.yibo.modules.base.entity.User;
@@ -46,6 +47,13 @@ public interface UserService extends IBaseService<UserDao, User>{
     User findByUsername(String username);
 
     /**
+     * 根据ID查询用户，管理员类型校验
+     * @param id
+     * @return
+     */
+    User fetched(String id) throws BizException;
+
+    /**
      * 角色授权
      * @param user
      */
@@ -55,7 +63,7 @@ public interface UserService extends IBaseService<UserDao, User>{
      * 用户登录信息
      * @return
      */
-    Map<String, Object> loginUser();
+    Map<String, Object> loginInfo();
 
     /**
      * 用户个人信息
@@ -70,8 +78,8 @@ public interface UserService extends IBaseService<UserDao, User>{
     void savePersInfo(User user);
 
     /**
-     * 更新用户密码
+     * 用户密码修改
      * @param newPassword
      */
-    void updatePersPwd(String newPassword);
+    void modifyPersPwd(String newPassword);
 }

@@ -27,6 +27,7 @@ import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -147,21 +148,27 @@ public class User extends DataEntity<String>{
     @ApiModelProperty(value = "所属科室对象")
     private Dept dept;
 
+    @JsonIgnore
     @ApiModelProperty(value = "用户当前角色")
     private Role currRole;
 
+    @JsonIgnore
     @ApiModelProperty(value = "用户拥有的角色")
     private List<Role> roles;
 
+    @JsonIgnore
     @ApiModelProperty(value = "用户拥有的权限")
     private List<Permission> permissions;
 
+    @JsonIgnore
     private List<Permission> operPermissions;
 
+    @JsonIgnore
     private List<Permission> menuPermissions;
 
     private String roleIds;
 
+    @JsonIgnore
     private List<String> roleIdList;
 
     public boolean isAdmin(){
@@ -191,11 +198,11 @@ public class User extends DataEntity<String>{
 
     @Override
     public void preInsert(){
-        initPwd();
         super.preInsert();
+        initPassword();
     }
 
-    public void initPwd(){
+    public void initPassword(){
         this.password = new BCryptPasswordEncoder().encode(USER_INIT_PASSWORD);
     }
 
@@ -213,5 +220,4 @@ public class User extends DataEntity<String>{
             this.tenantId = oldUser.getTenantId();
         }
     }
-
 }

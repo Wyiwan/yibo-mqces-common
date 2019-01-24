@@ -20,8 +20,8 @@
 
 package com.yibo.modules.base.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.service.impl.AbstractBaseService;
-import cn.yibo.security.context.UserContext;
 import com.yibo.modules.base.dao.DeptDao;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.service.DeptService;
@@ -61,7 +61,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
-        super.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
+        this.clearUsersCacheByDeptId(list);
     }
 
     /**
@@ -74,7 +74,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     public void updateNull(Dept dept){
         super.updateNull(dept);
         dao.updateAncestor(dept);
-        super.clearUsersCacheByTenantId(UserContext.getUser().getTenantId());
+        this.clearUsersCacheByDeptId(CollUtil.newArrayList(dept.getId()));
     }
 
     /**
@@ -85,15 +85,6 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     @Override
     public List queryList(Map<String, Object> condition) {
         return dao.queryListExt(condition);
-    }
-
-    /**
-     * 查询树结构数据
-     * @return
-     */
-    @Override
-    public List<Dept> findTree(Dept dept) {
-        return dao.findTree(dept);
     }
 
 }

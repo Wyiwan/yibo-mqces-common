@@ -199,7 +199,6 @@
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
             office_name = #{officeName,jdbcType=VARCHAR},
-            office_code = #{officeCode,jdbcType=VARCHAR},
             office_type = #{officeType,jdbcType=VARCHAR},
             office_level = #{officeLevel,jdbcType=NUMERIC},
             office_sort = #{officeSort,jdbcType=NUMERIC},

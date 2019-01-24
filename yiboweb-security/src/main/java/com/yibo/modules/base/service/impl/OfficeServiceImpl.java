@@ -63,14 +63,14 @@ public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> im
             office.enabled();
             dao.update(office);
 
-            // 更新参数
+            // 更新机构下所有用户的状态
             Map updateMap = CollUtil.newHashMap();
             updateMap.put("status", office.getStatus());
             Map conditionMap = CollUtil.newHashMap();
             conditionMap.put("tenantId", office.getId());
-
-            // 同步更新机构下用户状态
             userService.updateByCondition(updateMap, conditionMap);
+
+            // 清除当前机构下的用户缓存
             this.clearUsersCacheByTenantId(office.getId());
         }
     }

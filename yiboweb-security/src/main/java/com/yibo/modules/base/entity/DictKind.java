@@ -21,14 +21,13 @@
 package com.yibo.modules.base.entity;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.base.entity.DataEntity;
+import cn.yibo.base.entity.TreeEntity;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 /**
  * 字典类别表实体类(sys_dict_kind)
@@ -38,10 +37,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "字典类别表实体类")
-public class DictKind extends DataEntity<String>{
-    @ApiModelProperty(value = "父级ID")
-    private String parentId;
-    
+public class DictKind extends TreeEntity<DictKind, String>{
     @NotEmpty(message="字典名称不能为空")
     @ApiModelProperty(value = "字典名称")
     private String dictName;
@@ -59,28 +55,8 @@ public class DictKind extends DataEntity<String>{
     @ApiModelProperty(value = "树型结构（0否 1是）")
     private String isTree;
 
-    //------------------------------------------------------------------------------------------------------------------
-    // 扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "子菜单/权限")
-    private List<DictKind> children;
-
-    @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = true;
-
     @Override
-    public void preInsert(){
-        preInit();
-        super.preInsert();
-    }
-
-    @Override
-    public void preUpdate(){
-        preInit();
-        super.preUpdate();
-    }
-
-    private void preInit(){
+    public void onBeforeSave(){
         this.isTree = StrUtil.emptyToDefault(this.isTree, CommonConstant.NO);
         this.isSys = StrUtil.emptyToDefault(this.isSys, CommonConstant.NO);
     }

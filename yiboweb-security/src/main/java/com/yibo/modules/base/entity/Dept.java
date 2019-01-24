@@ -21,14 +21,13 @@
 package com.yibo.modules.base.entity;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.yibo.base.entity.DataEntity;
+import cn.yibo.base.entity.TreeEntity;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 /**
  * 科室表实体类(sys_dept)
@@ -38,13 +37,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "科室表实体类")
-public class Dept extends DataEntity<String>{
-    @ApiModelProperty(value = "父级ID")
-    private String parentId;
-    
-    @ApiModelProperty(value = "所有父级ID")
-    private String ancestorId;
-    
+public class Dept extends TreeEntity<Dept, String> {
     @NotEmpty(message="科室名称不能为空")
     @ApiModelProperty(value = "科室名称")
     private String deptName;
@@ -67,37 +60,16 @@ public class Dept extends DataEntity<String>{
     
     @ApiModelProperty(value = "科室负责人ID")
     private String leaderId;
-    
-    @ApiModelProperty(value = "联系电话")
-    private String phone;
-
-    //------------------------------------------------------------------------------------------------------------------
-    // 扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "子菜单/权限")
-    private List<Dept> children;
-
-    @ApiModelProperty(value = "是否叶子节点 前端所需")
-    private Boolean isLeaf = true;
-
-    @ApiModelProperty(value = "是否选中 前端所需")
-    private Boolean selected = false;
-
-    @ApiModelProperty(value = "是否禁用 前端所需")
-    private Boolean disabled = false;
 
     @ApiModelProperty(value = "科室负责人名称")
     private String leaderName;
+    
+    @ApiModelProperty(value = "联系电话")
+    private String phone;
 
     @Override
     public void preInsert(){
         super.preInsert();
         this.deptCode = RandomUtil.randomNumbers(CommonConstant.DEPT_CODE_NUM);
-    }
-
-    public void preUpdateInfo(Dept oldDept){
-        if( oldDept != null ){
-            this.deptCode = oldDept.getDeptCode();
-        }
     }
 }

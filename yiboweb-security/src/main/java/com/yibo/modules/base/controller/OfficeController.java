@@ -20,26 +20,17 @@
 
 package com.yibo.modules.base.controller;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.yibo.base.controller.BaseController;
-import cn.yibo.base.controller.BaseForm;
-import cn.yibo.core.protocol.ReturnCodeEnum;
-import cn.yibo.core.web.exception.BizException;
+import cn.yibo.base.controller.CrudController;
 import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Office;
 import com.yibo.modules.base.service.OfficeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
-    
+
 /**
  * 医疗机构表控制器层
  * @author 高云
@@ -49,41 +40,25 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/office")
 @Api(tags = "9005.机构管理")
-public class OfficeController extends BaseController{
-   @Autowired
-   private OfficeService officeService;
-   
+public class OfficeController extends CrudController<OfficeService, Office>{
     /**
-     * 新增
-     * @param office
-     * @return
+     * 保存方法内部调用：验证数据合法性
+     * @param entity
+     * @throws Exception
      */
-    @ApiOperation("新增")
-    @PostMapping("/created")
-    public String created(@Valid @RequestBody Office office) throws Exception{
-        if( !verifyUnique(null, office.getOfficeName()) ){
-            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
-        }
-        officeService.save(office);
-        return office.getId();
+    @Override
+    public void verifyUnique(Office entity) throws Exception {
+        super.verifyUnique(entity, "系统已存在机构名称");
     }
-    
+
     /**
-     * 修改
-     * @param office
+     * 列表查询
      * @return
      */
-    @ApiOperation("修改")
-    @PostMapping("/updated")
-    public String updated(@Valid @RequestBody Office office){
-        if( !verifyUnique(office.getId(), office.getOfficeName()) ){
-            throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "系统已存在机构名称");
-        }
-
-        Office oldOffice = officeService.fetch(office.getId());
-        office.preUpdateInfo(oldOffice);
-        officeService.save(office);
-        return UPDATE_SUCCEED;
+    @ApiOperation("列表查询")
+    @GetMapping("/list")
+    public List list(Office office){
+        return this.baseSevice.queryList(this.getParamMap(), "office_sort", null);
     }
 
     /**
@@ -95,52 +70,19 @@ public class OfficeController extends BaseController{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
-        Office office = officeService.fetch(id);
-        officeService.disabled(office);
-        return OPER_SUCCEED;
+        Office office = this.baseSevice.fetch(id);
+        this.baseSevice.disabled(office);
+        return OPERATE_SUCCEED;
     }
 
     /**
-     * 单个查询
-     * @param id
+     * 重写删除
+     * @param ids
      * @return
      */
     @IgnoredLog
-    @ApiOperation("单个查询")
-    @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
-    @GetMapping("/fetched")
-    public Office fetched(String id){
-        Office vo = officeService.fetch(id);
-        return vo == null ? new Office() : vo;
+    @Override
+    public String deleted(@RequestBody String ids){
+        return "机构信息不允许删除";
     }
-    
-    /**
-     * 列表查询
-     * @return
-     */
-    @ApiOperation("列表查询")
-    @GetMapping("/list")
-    public List list(Office office){
-        Map<String, Object> conditionMap = new BaseForm<T>().getParameters();
-        return officeService.queryList(conditionMap, "office_sort", null);
-    }
-
-    /**
-     * 唯一性校验
-     * @return
-     */
-    @IgnoredLog
-    @ApiOperation("验证机构名称是否可用")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query",dataType = "String", required = false),
-            @ApiImplicitParam(name = "officeName", value = "机构名称", paramType = "query", dataType = "String", required = true)
-    })
-    @GetMapping("/verify")
-    public Boolean verifyUnique(String id, String officeName){
-        Map conditionMap = CollUtil.newHashMap();
-        conditionMap.put("id", id);
-        conditionMap.put("officeName", officeName);
-        return officeService.count(conditionMap) > 0 ? false : true;
-    }
-    
 }

@@ -23,18 +23,17 @@ package com.yibo.modules.base.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.yibo.base.entity.TreeBuild;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.io.PropertiesUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.security.context.UserContext;
-import com.google.common.collect.Lists;
 import com.yibo.modules.base.config.constant.CacheConstant;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.PermissionDao;
 import com.yibo.modules.base.entity.Permission;
-import com.yibo.modules.base.entity.PermissionTree;
 import com.yibo.modules.base.entity.User;
 import com.yibo.modules.base.service.PermissionService;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 菜单权限表服务实现层
@@ -66,6 +64,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void insert(Permission permission){
         super.insert(permission);
         dao.updateAncestor(permission);
+
         CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
     }
 
@@ -78,6 +77,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
+
         CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
         CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
     }
@@ -92,6 +92,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void updateNull(Permission permission){
         super.updateNull(permission);
         dao.updateAncestor(permission);
+
         CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
         CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
     }
@@ -101,13 +102,14 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> findTree(){
-        List<Permission> permissions = (List<Permission>)CacheUtils.get(CacheConstant.CACHE_MENU_LIST);
-        if( permissions == null ){
-            permissions = dao.findTree();
-            CacheUtils.put(CacheConstant.CACHE_MENU_LIST, permissions);
+    public List queryTree(Permission permission){
+        List permissionList = (List)CacheUtils.get(CacheConstant.CACHE_MENU_LIST);
+
+        if( permissionList == null ){
+            permissionList = dao.queryTree(permission);
+            CacheUtils.put(CacheConstant.CACHE_MENU_LIST, permissionList);
         }
-        return permissions;
+        return permissionList;
     }
 
     /**
@@ -162,7 +164,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> getAccessPermission(User user) {
+    public List<Permission> findAccessPermission(User user) {
         List<Permission> permissions = CollUtil.newArrayList();
         user = user == null ? UserContext.getUser() : user;
 
@@ -183,7 +185,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> getGrantPermission() {
+    public List<Permission> findGrantPermission() {
         User user = UserContext.getUser();
         List<Permission> permissions = CollUtil.newArrayList();
 
@@ -206,25 +208,24 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public String getMenuNamePath(String menuUrl){
-        List<Permission> menus = this.findTree();
+        TreeBuild treeBuild = new TreeBuild(queryTree(null));
+        List<Permission> menuList = (List<Permission>) treeBuild.getAllNodes();
 
-        if( !CollUtil.isEmpty(menus) && !StrUtil.isEmpty(menuUrl) ){
-            List<String> condition = Lists.newArrayList(menuUrl);
-            List<Permission> resultList = menus.stream().filter((Permission p) -> condition.contains(p.getPermsUrl())).collect(Collectors.toList());
-
-            if( !CollUtil.isEmpty(resultList) ){
-                Permission node = resultList.get(0);
-                List<Permission> parentList = new PermissionTree(menus).getParentsNode(node, CommonConstant.PERMISSION_PAGE.equals(node.getPermsType()));
-                List<String> parentNameList = ListUtils.extractToList(parentList, "permsName");
-
-                if( !CollUtil.isEmpty(parentNameList) ){
-                    return CollUtil.join(CollUtil.reverse(parentNameList), StrUtil.SLASH);
+        if( menuList != null ){
+            Permission currNode = null;
+            for( Permission node : menuList ){
+                if( node.getPermsUrl().equals(menuUrl) ){
+                    currNode = node;
+                    break;
                 }
-            }else{
-                return "false";
+            }
+
+            if( currNode != null ){
+                List parentList = treeBuild.getParentsNode(currNode, false);
+                List<String> allParentNames = ListUtils.extractToList(parentList, "permsName");
+                return CollUtil.join(CollUtil.reverse(allParentNames), StrUtil.SLASH);
             }
         }
-        return StrUtil.EMPTY;
+        return "false";
     }
-
 }

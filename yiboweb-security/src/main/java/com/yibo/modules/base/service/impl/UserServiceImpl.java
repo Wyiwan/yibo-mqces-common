@@ -26,10 +26,13 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
+import cn.yibo.base.entity.TreeBuild;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
+import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.config.constant.CommonConstant;
@@ -83,6 +86,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
     /**
      * 重写更新
+     * 只更新用户基本信息，不更新用户角色
      * @param user
      * @return
      */
@@ -101,7 +105,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
-        super.deleteByIds(list);
+        dao.deleteByIdsExt(list);
         this.clearUsersCacheByUserId(list);
     }
 
@@ -132,11 +136,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         // 获取查询参数
         Map<String, Object> params = baseForm.getParameters();
 
-        // 管理员类型
+        // 用户管理：查询管理员用户和普通用户的标识
         String mgrType = ObjectUtils.toString(params.get("mgrType"));
         params.put("mgrType", StrUtil.emptyToDefault(mgrType, CommonConstant.USER_MGR_TYPE_NORMAL));
 
-        // 普通用户查询关联租户
+        // 角色管理：查询授权用户的标识
         String queryType = ObjectUtils.toString(params.get("queryType"));
         if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(queryType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
@@ -177,7 +181,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
 
             // 关联权限
-            List<Permission> permissions = permsService.getAccessPermission(user);
+            List<Permission> permissions = permsService.findAccessPermission(user);
             if( !CollUtil.isEmpty(permissions) ){
                 List<Permission> operPermissions = CollUtil.newArrayList();
                 List<Permission> menuPermissions = CollUtil.newArrayList();
@@ -201,11 +205,27 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
+     * 根据ID查询用户，会抛出数据校验异常
+     * @param id
+     * @return
+     * @throws BizException
+     */
+    public User fetched(String id) throws BizException{
+        User user = dao.fetch(id);
+        if( user != null && !UserContext.getUser().isSuperAdmin() ){
+            if( CommonConstant.USER_MGR_TYPE_ADMIN.equals(user.getMgrType()) || !UserContext.getUser().getTenantId().equals(user.getTenantId()) ){
+                throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作此数据");
+            }
+        }
+        return user;
+    }
+
+    /**
      * 用户登录信息
      * @return
      */
     @Override
-    public Map<String, Object> loginUser(){
+    public Map<String, Object> loginInfo(){
         Map<String, Object> map = MapUtil.newHashMap();
 
         User user = UserContext.getUser();
@@ -232,17 +252,17 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             // 菜单权限
             List<Permission> menuPermissions = user.getMenuPermissions();
             if( !CollUtil.isEmpty(menuPermissions) ){
-                map.put("menuAuthorities", new PermissionTree(menuPermissions).getTreeList());
+                map.put("menuAuthorities", new TreeBuild(menuPermissions).getTreeList());
             }
 
-            // 操作权限
+            // 操作权限(用于前端按钮权限控制)
             List<Permission> operPermissions = user.getOperPermissions();
             if( !CollUtil.isEmpty(operPermissions) ){
                 Map<String, List<String>> authorities = MapUtil.newHashMap();
-                PermissionTree permissionTree = new PermissionTree(user.getPermissions());
+                TreeBuild treeBuild = new TreeBuild(user.getPermissions());
 
                 for(Permission permission : operPermissions){
-                    Permission parentNode = permissionTree.getParent(permission);
+                    Permission parentNode = (Permission) treeBuild.getParent(permission);
 
                     if( parentNode != null && CommonConstant.PERMISSION_PAGE.equals(parentNode.getPermsType()) ){
                         String urlKey = parentNode.getPermsUrl();
@@ -318,12 +338,12 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 更新用户密码
+     * 用户密码修改
      * @param newPassword
      */
     @Override
     @Transactional(readOnly = false)
-    public void updatePersPwd(String newPassword){
+    public void modifyPersPwd(String newPassword){
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("id", UserContext.getUser().getId());
         map.put("password", new BCryptPasswordEncoder().encode(newPassword));

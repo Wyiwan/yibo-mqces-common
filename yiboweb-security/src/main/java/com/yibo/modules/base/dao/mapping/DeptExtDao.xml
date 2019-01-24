@@ -48,7 +48,7 @@
     </select>
 
     <!-- 查询树结构数据 -->
-    <select id="findTree" resultType="com.yibo.modules.base.entity.Dept">
+    <select id="queryTree" resultType="com.yibo.modules.base.entity.Dept">
         select
             id, parent_id, ancestor_id, dept_name, dept_type, dept_sort, dept_level
         from sys_dept

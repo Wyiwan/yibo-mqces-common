@@ -42,25 +42,24 @@ public interface UserDao extends CrudDao<User>{
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
 
     /**
-     * 根据角色ID查询Username
-     * 用于清除用户缓存
-     * @param list
+     * 根据ID查询用户信息
+     * condition：用户ID[ids]、角色ID[roleIds]、科室ID[deptIds]
+     * @param condition
      * @return
      */
-    List<String> findUsernameByIds(@Param("list") List list);
-
-    /**
-     * 根据角色ID查询Username
-     * 用于清除用户缓存
-     * @param list
-     * @return
-     */
-    List<String> findUsernameByRoleIds(@Param("list") List list);
+    List<User> queryUserByIds(@Param("condition") Map<String, Object> condition);
 
     /**
      * 角色授权
      * @param user
      */
     void grantRole(User user);
+
+    /**
+     * 扩展删除方法
+     * @param list
+     * @return
+     */
+    int deleteByIdsExt(List list);
 
 }

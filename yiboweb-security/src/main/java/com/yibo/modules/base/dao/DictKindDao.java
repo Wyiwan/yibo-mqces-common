@@ -22,8 +22,7 @@ package com.yibo.modules.base.dao;
 
 import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.DictKind;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 字典类别表数据访问层
@@ -33,8 +32,10 @@ import java.util.List;
  */
 public interface DictKindDao extends CrudDao<DictKind>{
     /**
-     * 查询树结构数据
+     * 级联删除
+     * @param id
      * @return
      */
-    List<DictKind> findTree();
+    int deleteCascade(@Param("id")Object id);
+
 }

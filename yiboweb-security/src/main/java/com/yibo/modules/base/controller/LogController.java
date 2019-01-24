@@ -88,7 +88,7 @@ public class LogController extends BaseController{
         jsonObject.put("tenantId", UserContext.getUser().getTenantId());
 
         logService.deleteByCondition(jsonObject);
-        return DEL_SUCCEED;
+        return DELETE_SUCCEED;
     }
 
 }

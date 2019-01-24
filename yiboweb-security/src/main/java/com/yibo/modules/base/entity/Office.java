@@ -88,20 +88,14 @@ public class Office extends DataEntity<String>{
     // 扩展属性
     //------------------------------------------------------------------------------------------------------------------
     @ApiModelProperty(value = "是否选中 前端所需")
-    private Boolean selected = false;
+    private Boolean selected;
 
     @ApiModelProperty(value = "是否禁用 前端所需")
-    private Boolean disabled = false;
+    private Boolean disabled;
 
     @Override
     public void preInsert(){
         super.preInsert();
         this.officeCode = RandomUtil.randomNumbers(CommonConstant.OFFICE_CODE_NUM);
-    }
-
-    public void preUpdateInfo(Office oldOffice){
-        if( oldOffice != null ){
-            this.officeCode = oldOffice.getOfficeCode();
-        }
     }
 }

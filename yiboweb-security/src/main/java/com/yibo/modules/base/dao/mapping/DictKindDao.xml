@@ -449,10 +449,16 @@
                 and parent_id = #{condition.parentId}
             </if>
             <if test="condition.dictName != null">
-                and dict_name = #{condition.dictName}
+                and dict_name like concat('%', #{condition.dictName} , '%')
             </if>
             <if test="condition.dictKind != null">
-                and dict_kind = #{condition.dictKind}
+                and dict_kind like concat('%', #{condition.dictKind} , '%')
+            </if>
+            <if test="condition.keyword != null and condition.keyword !=''">
+                and (
+                    dict_name like concat('%', #{condition.keyword} , '%') or
+                    dict_kind like concat('%', #{condition.keyword} , '%')
+                )
             </if>
             <if test="condition.dictSort != null">
                 and dict_sort = #{condition.dictSort}

@@ -77,7 +77,7 @@
             distinct username
         from sys_user
         where 1 = 1
-        and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+            and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
     </select>
 
     <!-- 根据角色ID查询Username-->
@@ -86,8 +86,29 @@
             distinct u.username
         from sys_user u, sys_user_role r
         where 1 = 1
-        and u.id = r.user_id
-        and r.role_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+            and u.id = r.user_id
+            and r.role_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+
+    <!-- 根据ID查询用户信息 -->
+    <select id="queryUserByIds" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
+        select
+            distinct <include refid="Base_Column_List" />
+        from sys_user
+        where status = 1
+        <choose>
+            <when test="condition.ids != null">
+                and id in <foreach collection="condition.ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </when>
+            <when test="condition.deptIds != null">
+                and dept_id in <foreach collection="condition.deptIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </when>
+            <when test="condition.roleIds != null">
+                and id in (
+                    select distinct user_id from sys_user_role where role_id in <foreach collection="condition.roleIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+                )
+            </when>
+        </choose>
     </select>
 
     <!-- 唯一性校验 -->
@@ -110,4 +131,10 @@
             </foreach>
         </if>
     </update>
+
+    <!-- 删除扩展 -->
+    <delete id="deleteByIdsExt">
+        update sys_user set status = 0 where id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+        delete from sys_user_role where user_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+    </delete>
 </mapper>

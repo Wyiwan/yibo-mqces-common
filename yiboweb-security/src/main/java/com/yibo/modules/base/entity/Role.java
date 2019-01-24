@@ -22,6 +22,7 @@ package com.yibo.modules.base.entity;
 
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.entity.DataEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yibo.modules.base.config.constant.CommonConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -71,10 +72,12 @@ public class Role extends DataEntity<String>{
     //------------------------------------------------------------------------------------------------------------------
     private String permissionIds;
 
+    @JsonIgnore
     private List<String> permissionIdList;
 
     private String userIds;
 
+    @JsonIgnore
     private List<String> userIdList;
 
     public void setPermissionIds(String permissionIds){
@@ -90,18 +93,7 @@ public class Role extends DataEntity<String>{
     }
 
     @Override
-    public void preInsert(){
-        preInit();
-        super.preInsert();
-    }
-
-    @Override
-    public void preUpdate(){
-        preInit();
-        super.preUpdate();
-    }
-
-    private void preInit(){
+    public void onBeforeSave(){
         this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
         if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
             this.isSys = CommonConstant.NO;

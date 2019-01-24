@@ -24,15 +24,12 @@ import cn.hutool.core.collection.CollUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.utils.ThreadPoolUtils;
 import cn.yibo.security.context.UserContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;
-import com.yibo.modules.base.utils.ClearUserCacheThread;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +69,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void updateNull(Role role){
         super.updateNull(role);
-        this.clearUsersCacheByRoleId( CollUtil.newArrayList(role.getId()) );
+        this.clearUsersCacheByRoleId(CollUtil.newArrayList(role.getId()));
     }
 
     /**
@@ -84,23 +81,8 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
-        List tmpList = CollUtil.newArrayList();
-
-        if( !UserContext.getUser().isSuperAdmin() && !CollUtil.isEmpty(list)){
-            for(int i = 0 ; i < list.size() ; i++){
-                String roleId = ObjectUtils.toString(list.get(i));
-                Role role = dao.fetch(list.get(i));
-
-                if( role != null && CommonConstant.NO.equals(role.getIsSys()) ){
-                    tmpList.add(roleId);
-                }
-            }
-        }else{
-            tmpList = list;
-        }
-
-        super.deleteByIds(tmpList);
-        this.clearUsersCacheByRoleId(tmpList);
+        super.deleteByIds(list);
+        this.clearUsersCacheByRoleId(list);
     }
 
     /**
@@ -148,7 +130,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantPermission(Role role){
         dao.grantPermission(role);
-        this.clearUsersCacheByRoleId( CollUtil.newArrayList(role.getId()) );
+        this.clearUsersCacheByRoleId(CollUtil.newArrayList(role.getId()));
     }
 
     /**
@@ -172,17 +154,4 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
         dao.unGrantUser(role);
         this.clearUsersCacheByUserId(role.getUserIdList());
     }
-
-    /**
-     * 根据角色ID清除用户缓存
-     * @param roleIdList
-     */
-    private void clearUsersCacheByRoleId(List roleIdList){
-        if( !CollUtil.isEmpty(roleIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setRoleIdList(roleIdList);
-            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
-        }
-    }
-
 }

@@ -35,12 +35,6 @@ import java.util.List;
  */
 public interface PermissionService extends IBaseService<PermissionDao, Permission>{
     /**
-     * 查询树结构数据
-     * @return
-     */
-    List<Permission> findTree();
-
-    /**
      * 根据类型查询权限
      * @param type
      * @return
@@ -75,13 +69,13 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @param user
      * @return
      */
-    List<Permission> getAccessPermission(User user);
+    List<Permission> findAccessPermission(User user);
 
     /**
      * 获取可授权的权限
      * @return
      */
-    List<Permission> getGrantPermission();
+    List<Permission> findGrantPermission();
 
     /**
      * 根据菜单地址获取菜单路径
