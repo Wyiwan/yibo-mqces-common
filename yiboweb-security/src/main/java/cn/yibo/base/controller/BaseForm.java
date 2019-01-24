@@ -100,20 +100,6 @@ public class BaseForm<T>{
 	}
 	
 	/**
-	 * 获取 Hibernate FirstResult
-	 */
-	public int getFirstResult(){
-		return (getPageNo() - 1) * getPageSize();
-	}
-	
-	/**
-	 * 获取 Hibernate MaxResults
-	 */
-	public int getMaxResults(){
-		return getPageSize();
-	}
-
-	/**
 	 * 获得参数信息对象
 	 * @return
 	 */

@@ -91,6 +91,10 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
         this.status = ObjectUtil.isNull(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
+    @Override
+    public void onBeforeSave(){
+    }
+
     public void enabled(){
         this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
     }

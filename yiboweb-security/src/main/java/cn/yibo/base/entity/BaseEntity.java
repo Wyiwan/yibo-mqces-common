@@ -24,6 +24,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.security.context.UserContext;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yibo.modules.base.entity.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -44,10 +45,12 @@ public abstract class BaseEntity<T> implements Serializable {
     protected T id;
 
     @ApiModelProperty(value = "租户ID")
+    @JSONField(serialize = false)
     protected String tenantId;
 
-    @ApiModelProperty(value = "当前登录用户")
+    @JsonIgnore
     @JSONField(serialize = false)
+    @ApiModelProperty(value = "当前登录用户")
     protected User currentUser;
 
     public BaseEntity(){
@@ -76,6 +79,8 @@ public abstract class BaseEntity<T> implements Serializable {
     public abstract void preInsert();
 
     public abstract void preUpdate();
+
+    public abstract void onBeforeSave();
 
     public abstract void enabled();
 
