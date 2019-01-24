@@ -31,6 +31,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -65,30 +66,37 @@ public class GlobalExceptionHandler {
 
     /**
      * 数据校验异常
-     * @param bindException
+     * @param ex
      * @param request
      * @return
      */
-    @ExceptionHandler({BindException.class})
-    public String bindException(BindException bindException, HttpServletRequest request) {
-        BindingResult bindingResult = bindException.getBindingResult();
-        List<ObjectError> allErrors = bindingResult.getAllErrors();
-        List<Map<String,Object>> errorList = Lists.newArrayList();
+    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
+    public String bindException(Exception ex, HttpServletRequest request) {
+        BindingResult bindingResult = null;
 
-        allErrors.forEach(objectError -> {
-            Map<String,Object> errorMap = Maps.newHashMap();
-            FieldError fieldError = (FieldError)objectError;
-            errorMap.put("field", fieldError.getField());
-            errorMap.put("objectName", fieldError.getObjectName());
-            errorMap.put("message", fieldError.getDefaultMessage());
-            errorList.add(errorMap);
-        });
+        if( ex instanceof BindException ){
+            bindingResult = ((BindException)ex).getBindingResult();
+        }else if( ex instanceof MethodArgumentNotValidException ){
+            bindingResult = ((MethodArgumentNotValidException)ex).getBindingResult();
+        }
 
-        ResponseT<List> responseT = ResponseTs.<List>newValidateError();
-        responseT.setBizdata(errorList);
-        request.setAttribute("responseT", responseT);
+        if( bindingResult != null ){
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            List<Map<String,Object>> errorList = Lists.newArrayList();
 
-        log.error("invoke {} error: {} ", request.getRequestURL(), bindException);
+            for(int i = 0; i < allErrors.size(); i++){
+                FieldError fieldError = (FieldError)allErrors.get(i);
+                Map<String,Object> errorMap = Maps.newHashMap();
+                errorMap.put("field", fieldError.getField());
+                errorMap.put("message", fieldError.getDefaultMessage());
+                errorList.add(errorMap);
+            }
+
+            ResponseT<List> responseT = ResponseTs.<List>newValidateError();
+            responseT.setBizdata(errorList);
+            request.setAttribute("responseT", responseT);
+            log.error("invoke {} error: {} ", request.getRequestURL(), ex);
+        }
         return "forward:/error";
     }
 
