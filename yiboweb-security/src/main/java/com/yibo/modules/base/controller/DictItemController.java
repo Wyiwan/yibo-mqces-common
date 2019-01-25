@@ -45,7 +45,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/dict-item")
-@Api(tags = "字典数据项表接口")
+@Api(tags = "9008.字典数据项管理")
 public class DictItemController extends CrudController<DictItemService, DictItem>{
     /**
      * 保存方法内部调用：验证数据合法性
