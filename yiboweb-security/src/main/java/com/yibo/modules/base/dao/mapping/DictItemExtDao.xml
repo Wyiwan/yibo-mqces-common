@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.modules.base.dao.DictItemDao">
+    <!-- 在这里存放用户自定义的映射配置（注：DictItemDAO.xml里各节点的ID不能在这里重复出现）  -->
+    <!-- 查询树结构数据 -->
+    <select id="queryTree" resultType="com.yibo.modules.base.entity.DictItem">
+        select
+            id,
+            parent_id,
+            item_name,
+            item_value,
+            item_sort
+        from sys_dict_item
+        where 1 = 1
+            and status = 1
+            and kind_id = #{kindId,jdbcType=VARCHAR}
+        order by item_sort
+    </select>
+
+    <!-- 唯一性校验 -->
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from sys_dict_item
+        where 1 = 1
+        <if test="condition.id != null and condition.id.length() > 0">
+            and id not in(select #{condition.id})
+        </if>
+        <if test="condition.itemName != null">
+            and item_name = #{condition.itemName,jdbcType=VARCHAR}
+        </if>
+        and kind_id = #{condition.kindId,jdbcType=VARCHAR}
+        and status = 1
+    </select>
+</mapper>

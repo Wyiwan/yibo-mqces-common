@@ -208,22 +208,21 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public String getMenuNamePath(String menuUrl){
-        TreeBuild treeBuild = new TreeBuild(queryTree(null));
-        List<Permission> menuList = (List<Permission>) treeBuild.getAllNodes();
+        List<Permission> menuList = queryTree(null);
 
         if( menuList != null ){
             Permission currNode = null;
             for( Permission node : menuList ){
-                if( node.getPermsUrl().equals(menuUrl) ){
+                if( StrUtil.equals(node.getPermsUrl(), menuUrl) ){
                     currNode = node;
                     break;
                 }
             }
 
             if( currNode != null ){
-                List parentList = treeBuild.getParentsNode(currNode, false);
-                List<String> allParentNames = ListUtils.extractToList(parentList, "permsName");
-                return CollUtil.join(CollUtil.reverse(allParentNames), StrUtil.SLASH);
+                List parentList = new TreeBuild(menuList).getParentsNode(currNode, false);
+                List<String> permsNameList = ListUtils.extractToList(parentList, "permsName");
+                return CollUtil.join(CollUtil.reverse(permsNameList), StrUtil.SLASH);
             }
         }
         return "false";
