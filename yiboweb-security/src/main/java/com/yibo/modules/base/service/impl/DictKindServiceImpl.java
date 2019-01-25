@@ -24,6 +24,7 @@ import cn.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.base.dao.DictKindDao;
 import com.yibo.modules.base.entity.DictKind;
 import com.yibo.modules.base.service.DictKindService;
+import com.yibo.modules.base.utils.DictUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,30 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class DictKindServiceImpl extends AbstractBaseService<DictKindDao, DictKind> implements DictKindService {
     /**
+     * 重写新增
+     * @param dictKind
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void insert(DictKind dictKind){
+        super.insert(dictKind);
+        DictUtils.clearDictCache();
+    }
+
+    /**
+     * 重写更新
+     * @param dictKind
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updateNull(DictKind dictKind){
+        super.updateNull(dictKind);
+        DictUtils.clearDictCache();
+    }
+
+    /**
      * 重写删除
      * @param list
      * @return
@@ -47,6 +72,7 @@ public class DictKindServiceImpl extends AbstractBaseService<DictKindDao, DictKi
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list.get(0));
+        DictUtils.clearDictCache();
     }
 
 }

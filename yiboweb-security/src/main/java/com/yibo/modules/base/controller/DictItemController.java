@@ -22,11 +22,14 @@ package com.yibo.modules.base.controller;
 
 import cn.yibo.base.controller.CrudController;
 import cn.yibo.base.entity.TreeBuild;
+import cn.yibo.common.utils.ObjectUtils;
 import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.DictItem;
 import com.yibo.modules.base.service.DictItemService;
+import com.yibo.modules.base.utils.DictUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +77,22 @@ public class DictItemController extends CrudController<DictItemService, DictItem
     @GetMapping("/list")
     @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query",dataType = "String")
     public List treeList(){
-        return this.baseSevice.queryList(this.getParamMap(), "item_sort", null);
+        List list = this.baseSevice.queryList(this.getParamMap(), "item_sort", null);
+        return new TreeBuild(list).getTreeList();
+    }
+
+    /**
+     * 字典项名称查询
+     * @return
+     */
+    @IgnoredLog
+    @ApiOperation("字典项名称查询")
+    @GetMapping("/data")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "dictKind", value = "字典类别", paramType = "query", dataType = "Number"),
+            @ApiImplicitParam(name = "itemValue", value = "字典项键值", paramType = "query", dataType = "Number")
+    })
+    public String data(String dictKind, String itemValue, String defaultValue){
+        return DictUtils.getItemName(dictKind, itemValue, ObjectUtils.toString(defaultValue));
     }
 }

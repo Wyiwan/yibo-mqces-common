@@ -45,7 +45,7 @@ public abstract class Tree<N, K> {
     private Map<K, N> selfMap;
 
     // 树集合
-    private List<N> treeList;
+    private List<? extends N> treeList;
 
     /**
      * 构造方法，传入所有树节点来构造一棵树
@@ -99,7 +99,7 @@ public abstract class Tree<N, K> {
         this.selfMap = selfMap;
     }
 
-    public List<N> getTreeList() {
+    public List<? extends N> getTreeList() {
         if( treeList == null ){
             treeList = baseTree.getTreeList(this.getAllNodes());
         }

@@ -24,8 +24,11 @@ import cn.yibo.base.service.impl.AbstractBaseService;
 import com.yibo.modules.base.dao.DictItemDao;
 import com.yibo.modules.base.entity.DictItem;
 import com.yibo.modules.base.service.DictItemService;
+import com.yibo.modules.base.utils.DictUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 字典数据项表服务实现层
@@ -36,5 +39,50 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class DictItemServiceImpl extends AbstractBaseService<DictItemDao, DictItem> implements DictItemService {
+    /**
+     * 重写新增
+     * @param dictItem
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void insert(DictItem dictItem){
+        super.insert(dictItem);
+        DictUtils.clearDictCache();
+    }
 
+    /**
+     * 重写更新
+     * @param dictItem
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updateNull(DictItem dictItem){
+        super.updateNull(dictItem);
+        DictUtils.clearDictCache();
+    }
+
+    /**
+     * 重写删除
+     * @param list
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteByIds(List list){
+        super.deleteByIds(list);
+        DictUtils.clearDictCache();
+    }
+
+    /**
+     * 重写findList方法
+     * @param property
+     * @param value
+     * @return
+     */
+    @Override
+    public List findList(String property, Object value){
+        return dao.findListExt(property, value,null, null);
+    }
 }

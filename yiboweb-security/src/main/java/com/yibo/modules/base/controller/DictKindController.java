@@ -28,6 +28,7 @@ import cn.yibo.core.web.exception.BizException;
 import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.DictKind;
 import com.yibo.modules.base.service.DictKindService;
+import com.yibo.modules.base.utils.DictUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -80,8 +81,8 @@ public class DictKindController extends CrudController<DictKindService, DictKind
     @IgnoredLog
     @ApiOperation("树结构查询")
     @GetMapping("/tree")
-    public List tree(DictKind dictKind){
-        List list = this.baseSevice.queryTree(dictKind);
+    public List tree(){
+        List list = this.baseSevice.queryTree(null);
         return new TreeBuild(list).getTreeList();
     }
 
@@ -95,5 +96,17 @@ public class DictKindController extends CrudController<DictKindService, DictKind
     public List treeList(){
         List list = this.baseSevice.queryList(this.getParamMap(), "dict_sort", null);
         return new TreeBuild(list).getTreeList();
+    }
+
+    /**
+     * 根据字典类别查询字典数据
+     * @return
+     */
+    @IgnoredLog
+    @ApiOperation("根据字典类别查询字典数据")
+    @GetMapping("/data")
+    @ApiImplicitParam(name = "dictKind", value = "字典类别", paramType = "query",dataType = "String")
+    public List data(String dictKind){
+        return DictUtils.getDictTreeList(dictKind);
     }
 }

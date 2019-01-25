@@ -38,10 +38,13 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @ApiModel(value = "字典数据项表实体类")
 public class DictItem extends TreeEntity<DictItem, String>{
-    @NotEmpty(message="类别ID不能为空")
-    @ApiModelProperty(value = "类别ID")
+    @ApiModelProperty(value = "字典类别")
+    private String dictKind;
+
+    @NotEmpty(message="字典类别ID不能为空")
+    @ApiModelProperty(value = "字典类别ID")
     private String kindId;
-    
+
     @NotEmpty(message="字典项名称不能为空")
     @ApiModelProperty(value = "字典项名称")
     private String itemName;

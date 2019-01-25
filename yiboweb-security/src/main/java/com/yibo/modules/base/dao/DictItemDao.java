@@ -22,6 +22,9 @@ package com.yibo.modules.base.dao;
 
 import cn.yibo.base.dao.CrudDao;
 import com.yibo.modules.base.entity.DictItem;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 字典数据项表数据访问层
@@ -30,5 +33,13 @@ import com.yibo.modules.base.entity.DictItem;
  * @version v1.0
  */
 public interface DictItemDao extends CrudDao<DictItem>{
-
+    /**
+     * findList方法扩展
+     * @param property
+     * @param value
+     * @param orderBy
+     * @param sortBy
+     * @return
+     */
+    List<DictItem> findListExt(@Param("property") String property, @Param("value") Object value, @Param("orderBy") String orderBy, @Param("sortBy") String sortBy);
 }

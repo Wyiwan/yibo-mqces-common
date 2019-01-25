@@ -70,14 +70,12 @@ public class UserController extends CrudController<UserService, User> {
     @Override
     public void onBeforeSave(User user) throws Exception{
         super.onBeforeSave(user);
+        user.setMgrType(CommonConstant.USER_MGR_TYPE_NORMAL);
 
-        // 修改保存时
+        // 如果是编辑
         if( StrUtil.isNotEmpty(user.getId()) ){
             User oldUser = this.baseSevice.fetched(user.getId());
             user.preUpdateInfo(oldUser);
-        // 新增保存时
-        }else{
-            user.setMgrType(CommonConstant.USER_MGR_TYPE_NORMAL);
         }
     }
 
