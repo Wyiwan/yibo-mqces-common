@@ -54,7 +54,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
     protected abstract void setChildren(N node, N children);
 
     @Override
-    public List<N> getTreeList(List<? extends N> nodeList) {
+    public List<? extends N> getTreeList(List<? extends N> nodeList) {
         // 根节点
         List<N> treeList = new ArrayList<N>();
         // 节点列表

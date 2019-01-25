@@ -52,7 +52,7 @@ public interface BaseTree<N, K> {
      * @param nodeList	所有节点List
      * @return
      */
-    List<N> getTreeList(List<? extends N> nodeList);
+    List<? extends N> getTreeList(List<? extends N> nodeList);
 
     /**
      * 从某节点开始往上级搜索
