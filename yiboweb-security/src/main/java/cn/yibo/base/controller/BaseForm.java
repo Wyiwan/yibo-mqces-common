@@ -64,7 +64,8 @@ public class BaseForm<T>{
 			Enumeration<String> params = request.getParameterNames();
 			while( params.hasMoreElements() ){
 				String name = params.nextElement();
-				this.set(name, URLDecoder.decode(request.getParameter(name),"UTF-8"));
+				String value = StrUtil.trim(request.getParameter(name));
+				this.set(name, URLDecoder.decode(value,"UTF-8"));
 			}
 			this.parsePagingQueryParams();
 		}catch(Exception e){
