@@ -27,10 +27,9 @@ import com.yibo.modules.base.config.annotation.IgnoredLog;
 import com.yibo.modules.base.entity.Dept;
 import com.yibo.modules.base.service.DeptService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -75,5 +74,23 @@ public class DeptController extends CrudController<DeptService, Dept>{
     public List treeList(Dept dept) throws Exception{
         List result = this.baseSevice.queryList(BeanUtil.beanToMap(dept));
         return new TreeBuild(result).getTreeList();
+    }
+
+    /**
+     * 启用或停用
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用或停用")
+    @PostMapping("/disabled")
+    @ApiImplicitParam(name = "id", value = "科室ID", paramType = "query", required = true, dataType = "String")
+    public String disabled(@RequestBody String id) throws Exception{
+        Dept dept = this.baseSevice.fetch(id);
+
+        if( dept != null ){
+            dept.enabled();
+            this.baseSevice.updateNull(dept);
+        }
+        return OPERATE_SUCCEED;
     }
 }
