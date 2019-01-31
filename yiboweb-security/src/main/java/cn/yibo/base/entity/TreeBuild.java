@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 描述: 树结构实体
+ * 描述: 树型构建工具类
  * 作者：高云
  * 时间: 2019-01-23 TreeBuild
  * 版本: v1.0

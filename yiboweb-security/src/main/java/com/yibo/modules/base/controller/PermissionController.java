@@ -31,9 +31,7 @@ import com.yibo.modules.base.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -95,5 +93,23 @@ public class PermissionController extends CrudController<PermissionService, Perm
     public List treeList(){
         List list = this.baseSevice.queryList(this.getParamMap(), "perms_sort", null);
         return new TreeBuild(list).getTreeList();
+    }
+
+    /**
+     * 启用或停用
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用或停用")
+    @PostMapping("/disabled")
+    @ApiImplicitParam(name = "id", value = "菜单ID", paramType = "query", required = true, dataType = "String")
+    public String disabled(@RequestBody String id) throws Exception{
+        Permission permission = this.baseSevice.fetch(id);
+
+        if( permission != null ){
+            permission.enabled();
+            this.baseSevice.updateNull(permission);
+        }
+        return OPERATE_SUCCEED;
     }
 }
