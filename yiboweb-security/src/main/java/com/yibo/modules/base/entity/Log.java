@@ -20,10 +20,10 @@
 
 package com.yibo.modules.base.entity;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.json.JSONUtil;
 import cn.yibo.base.entity.DataEntity;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.web.ServletUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -113,9 +113,12 @@ public class Log extends DataEntity<String>{
     public void setRequestParameter(HttpServletRequest request){
         if( "POST".equals(request.getMethod()) ){
             try{
-                // 从复制流中获取参数
-                String postStr = ServletUtils.getRequestPostStr(request);
-                this.requestParams = ObjectUtils.mapToString(JSONUtil.parseObj(postStr));
+                String postStr = ServletUtil.getBody(request);
+                if( !JSONUtil.isJson(postStr) && !ObjectUtils.isEmpty(postStr)){
+                    this.requestParams = postStr;
+                }else{
+                    this.requestParams = ObjectUtils.mapToString(JSONUtil.parseObj(postStr));
+                }
             }catch(Exception e){
                 this.requestParams = ObjectUtils.mapToString2(request.getParameterMap());
             }

@@ -72,7 +72,7 @@
     </select>
 
     <!-- 根据ID查询用户信息 -->
-    <select id="queryUserByIds" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
+    <select id="findUserByIds" parameterType="java.util.Map" resultType="com.yibo.modules.base.entity.User">
         select
             distinct <include refid="Base_Column_List" />
         from sys_user

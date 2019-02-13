@@ -72,6 +72,7 @@ public class ClearUserCacheThread extends Thread{
     @Override
     public void run(){
         UserDao userDao = SpringContextHolder.getBean(UserDao.class);
+
         if( userDao != null ){
             TimeInterval timer = DateUtil.timer();
             log.info("======================= 清除用户缓存 =======================");
@@ -79,14 +80,14 @@ public class ClearUserCacheThread extends Thread{
             if( !CollUtil.isEmpty(userIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("ids", userIdList);
-                List<User> userList = userDao.queryUserByIds(condition);
+                List<User> userList = userDao.findUserByIds(condition);
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
 
             if( !CollUtil.isEmpty(roleIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("roleIds", roleIdList);
-                List<User> userList = userDao.queryUserByIds(condition);
+                List<User> userList = userDao.findUserByIds(condition);
 
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
@@ -94,7 +95,7 @@ public class ClearUserCacheThread extends Thread{
             if( !CollUtil.isEmpty(deptIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("deptIds", deptIdList);
-                List<User> userList = userDao.queryUserByIds(condition);
+                List<User> userList = userDao.findUserByIds(condition);
 
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }

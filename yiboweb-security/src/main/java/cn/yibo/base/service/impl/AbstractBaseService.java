@@ -21,13 +21,13 @@
 package cn.yibo.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.dao.BaseDAO;
 import cn.yibo.base.entity.BaseEntity;
 import cn.yibo.base.service.IBaseService;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.utils.ThreadPoolUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yibo.modules.base.utils.ClearUserCacheThread;
@@ -232,7 +232,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( !CollUtil.isEmpty(userIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setUserIdList(userIdList);
-            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+            ThreadUtil.execute(clearUserCacheThread);
         }
     }
 
@@ -244,7 +244,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( !CollUtil.isEmpty(roleIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setRoleIdList(roleIdList);
-            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+            ThreadUtil.execute(clearUserCacheThread);
         }
     }
 
@@ -256,7 +256,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( !CollUtil.isEmpty(deptIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setDeptIdList(deptIdList);
-            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+            ThreadUtil.execute(clearUserCacheThread);
         }
     }
 
@@ -267,7 +267,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         if( StrUtil.isNotBlank(tenantId) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setTenantId(tenantId);
-            ThreadPoolUtils.getPool().execute(clearUserCacheThread);
+            ThreadUtil.execute(clearUserCacheThread);
         }
     }
 }

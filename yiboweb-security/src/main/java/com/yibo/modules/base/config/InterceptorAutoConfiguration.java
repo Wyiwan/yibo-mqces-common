@@ -48,7 +48,7 @@ public class InterceptorAutoConfiguration {
     LogInterceptor logInterceptor;
 
     @PostConstruct
-    public void addPageInterceptor(){
+    public void addLogInterceptor(){
         for( SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList ){
             sqlSessionFactory.getConfiguration().addInterceptor(logInterceptor);
         }

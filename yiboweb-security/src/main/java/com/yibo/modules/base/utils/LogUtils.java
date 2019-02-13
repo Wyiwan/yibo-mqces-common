@@ -19,10 +19,10 @@
 */
 package com.yibo.modules.base.utils;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.utils.IpUtils;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.utils.ThreadPoolUtils;
 import cn.yibo.common.web.UserAgentUtils;
 import cn.yibo.core.protocol.ResponseT;
 import cn.yibo.core.protocol.ReturnCodeEnum;
@@ -104,8 +104,7 @@ public class LogUtils {
         log.setCreateByName(user.getUsername());
         log.setTenantId(user.getTenantId());
         log.preInsert();
-
-        ThreadPoolUtils.getPool().execute(new SaveLogThread(request, log, handler));
+        ThreadUtil.execute(new SaveLogThread(request, log, handler));
     }
 
     public static class SaveLogThread extends Thread{

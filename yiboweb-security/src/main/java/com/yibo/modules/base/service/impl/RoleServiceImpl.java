@@ -21,12 +21,17 @@
 package com.yibo.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.yibo.base.controller.BaseForm;
 import cn.yibo.base.service.impl.AbstractBaseService;
+import cn.yibo.common.collect.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.core.web.exception.BizException;
 import cn.yibo.security.context.UserContext;
+import cn.yibo.security.exception.LoginFailEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yibo.modules.base.config.constant.CommonConstant;
 import com.yibo.modules.base.dao.RoleDao;
 import com.yibo.modules.base.entity.Role;
 import com.yibo.modules.base.service.RoleService;
@@ -81,6 +86,18 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
+        if( !UserContext.getUser().isSuperAdmin() && !ListUtils.isEmpty(list)){
+            Map<String, Object> condition = MapUtil.newHashMap();
+            condition.put("ids", list);
+
+            List<Role> roleList = dao.queryList(condition, null, null);
+            for(int i = 0 ; i < roleList.size(); i++){
+                Role role = roleList.get(i);
+                if( role != null && CommonConstant.YES.equals(role.getIsSys()) ){
+                    throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+                }
+            }
+        }
         super.deleteByIds(list);
         this.clearUsersCacheByRoleId(list);
     }

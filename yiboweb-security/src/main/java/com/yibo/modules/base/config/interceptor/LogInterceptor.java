@@ -100,10 +100,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
 
         if( handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler;
-            IgnoredLog annotation = hm.getMethodAnnotation(IgnoredLog.class);
 
             // 异步保存日志
-            if( annotation == null ){
+            if( hm.getMethodAnnotation(IgnoredLog.class) == null ){
                 LogUtils.saveLog(UserContext.getUser(), request, handler, ex, null, null, executeTime);
             }
         }
@@ -111,11 +110,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Interce
         if( log.isDebugEnabled() ){
             RuntimeInfo runtime = SystemUtil.getRuntimeInfo();
             String template = StrUtil.format("计时结束: {}  URI: {}  用时: {}ms  最大内存: {}  已分配内存: {}  已分配内存中的剩余空间: {}  最大可用内存: {}",
-                    DateUtil.date(endTime).toString("hh:mm:ss.SSS"), request.getRequestURI(), executeTime,
-                    FileUtil.readableFileSize(runtime.getMaxMemory()),
-                    FileUtil.readableFileSize(runtime.getTotalMemory()),
-                    FileUtil.readableFileSize(runtime.getFreeMemory()),
-                    FileUtil.readableFileSize(runtime.getUsableMemory()));
+                  DateUtil.date(endTime).toString("hh:mm:ss.SSS"), request.getRequestURI(), executeTime,
+                  FileUtil.readableFileSize(runtime.getMaxMemory()), FileUtil.readableFileSize(runtime.getTotalMemory()),
+                  FileUtil.readableFileSize(runtime.getFreeMemory()), FileUtil.readableFileSize(runtime.getUsableMemory()));
             log.debug(template);
         }
     }
