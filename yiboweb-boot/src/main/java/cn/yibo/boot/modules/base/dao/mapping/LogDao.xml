@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.LogDao">
+    <sql id="Base_Column_List">
+        id,
+        log_type,
+        log_title,
+        create_by,
+        create_by_name,
+        create_date,
+        request_uri,
+        request_method,
+        request_params,
+        diff_modify_data,
+        biz_key,
+        biz_type,
+        remote_addr,
+        server_addr,
+        is_exception,
+        exception_info,
+        user_agent,
+        device_name,
+        browser_name,
+        execute_time,
+        tenant_id
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.Log">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            log_type,
+            log_title,
+            create_by,
+            create_by_name,
+            create_date,
+            request_uri,
+            request_method,
+            request_params,
+            diff_modify_data,
+            biz_key,
+            biz_type,
+            remote_addr,
+            server_addr,
+            is_exception,
+            exception_info,
+            user_agent,
+            device_name,
+            browser_name,
+            execute_time,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{logType,jdbcType=VARCHAR},
+            #{logTitle,jdbcType=VARCHAR},
+            #{createBy,jdbcType=VARCHAR},
+            #{createByName,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{requestUri,jdbcType=VARCHAR},
+            #{requestMethod,jdbcType=VARCHAR},
+            #{requestParams,jdbcType=OTHER},
+            #{diffModifyData,jdbcType=VARCHAR},
+            #{bizKey,jdbcType=VARCHAR},
+            #{bizType,jdbcType=VARCHAR},
+            #{remoteAddr,jdbcType=VARCHAR},
+            #{serverAddr,jdbcType=VARCHAR},
+            #{isException,jdbcType=VARCHAR},
+            #{exceptionInfo,jdbcType=VARCHAR},
+            #{userAgent,jdbcType=VARCHAR},
+            #{deviceName,jdbcType=VARCHAR},
+            #{browserName,jdbcType=VARCHAR},
+            #{executeTime,jdbcType=NUMERIC},
+            #{tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <delete id="deleteByCondition">
+        delete from sys_log
+        <where>
+            <choose>
+                <when test="condition.keepTime == 7">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-7' day)
+                    ]]>
+                </when>
+                <when test="condition.keepTime == 1">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-1' month)
+                    ]]>
+                </when>
+                <when test="condition.keepTime == 3">
+                    <![CDATA[
+                        and create_date < DATE_ADD(now(),INTERVAL '-3' month)
+                    ]]>
+                </when>
+                <otherwise>
+                    and create_date > now()
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="condition.categoryId == 1">
+                    and log_type in ('login','logout')
+                </when>
+                <when test="condition.categoryId == 2">
+                    and log_type in ('insert','update','delete','select','access')
+                </when>
+                <when test="condition.categoryId == 3">
+                    and log_type = 'error'
+                </when>
+                <otherwise>
+                    and log_type = 'no'
+                </otherwise>
+            </choose>
+            and tenant_id = #{condition.tenantId}
+        </where>
+    </delete>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Log">
+        select
+            <include refid="Base_Column_List" />
+        from sys_log
+        <where>
+            <if test="condition.startDate != null and condition.startDate != ''">
+                <![CDATA[
+                    and date_format(create_date, '%Y-%m-%d') >= #{condition.startDate}
+                ]]>
+            </if>
+            <if test="condition.endDate != null and condition.endDate != ''">
+                <![CDATA[
+                    and date_format(create_date, '%Y-%m-%d') <= #{condition.endDate}
+                ]]>
+            </if>
+            <if test="condition.keyword != null and condition.keyword !=''">
+                and (
+                    log_title like concat('%', #{condition.keyword} , '%') or
+                    create_by_name like concat('%', #{condition.keyword} , '%') or
+                    request_uri like concat('%', #{condition.keyword} , '%') or
+                    remote_addr like concat('%', #{condition.keyword} , '%') or
+                    exception_info like concat('%', #{condition.keyword} , '%') or
+                    device_name like concat('%', #{condition.keyword} , '%')
+                )
+            </if>
+            <if test="condition.categoryId == 1">
+                and log_type in ('login','logout')
+            </if>
+            <if test="condition.categoryId == 2">
+                and log_type in ('insert','update','delete','select','access')
+            </if>
+            <if test="condition.categoryId == 3">
+                and log_type = 'error'
+            </if>
+            and tenant_id = #{condition.tenantId}
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by create_date desc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

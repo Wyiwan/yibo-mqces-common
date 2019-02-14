@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.OfficeDao">
+    <sql id="Base_Column_List">
+        id,
+        parent_id,
+        ancestor_id,
+        office_name,
+        office_code,
+        office_type,
+        office_level,
+        office_sort,
+        short_name,
+        director_id,
+        avatar,
+        slogan,
+        introduction,
+        phone,
+        address,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        comments
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.Office">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_office
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            parent_id,
+            ancestor_id,
+            office_name,
+            office_code,
+            office_type,
+            office_level,
+            office_sort,
+            short_name,
+            director_id,
+            avatar,
+            slogan,
+            introduction,
+            phone,
+            address,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{parentId,jdbcType=VARCHAR},
+            #{ancestorId,jdbcType=VARCHAR},
+            #{officeName,jdbcType=VARCHAR},
+            #{officeCode,jdbcType=VARCHAR},
+            #{officeType,jdbcType=VARCHAR},
+            #{officeLevel,jdbcType=NUMERIC},
+            #{officeSort,jdbcType=NUMERIC},
+            #{shortName,jdbcType=VARCHAR},
+            #{directorId,jdbcType=VARCHAR},
+            #{avatar,jdbcType=VARCHAR},
+            #{slogan,jdbcType=VARCHAR},
+            #{introduction,jdbcType=VARCHAR},
+            #{phone,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
+            #{status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP},
+            #{comments,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <insert id="insertMap">
+        insert into sys_office 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            parent_id,
+            ancestor_id,
+            office_name,
+            office_code,
+            office_type,
+            office_level,
+            office_sort,
+            short_name,
+            director_id,
+            avatar,
+            slogan,
+            introduction,
+            phone,
+            address,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            replace(UUID(),'-',''),
+            #{map.parentId,jdbcType=VARCHAR},
+            #{map.ancestorId,jdbcType=VARCHAR},
+            #{map.officeName,jdbcType=VARCHAR},
+            #{map.officeCode,jdbcType=VARCHAR},
+            #{map.officeType,jdbcType=VARCHAR},
+            #{map.officeLevel,jdbcType=NUMERIC},
+            #{map.officeSort,jdbcType=NUMERIC},
+            #{map.shortName,jdbcType=VARCHAR},
+            #{map.directorId,jdbcType=VARCHAR},
+            #{map.avatar,jdbcType=VARCHAR},
+            #{map.slogan,jdbcType=VARCHAR},
+            #{map.introduction,jdbcType=VARCHAR},
+            #{map.phone,jdbcType=VARCHAR},
+            #{map.address,jdbcType=VARCHAR},
+            #{map.status,jdbcType=INTEGER},
+            #{map.createBy,jdbcType=VARCHAR},
+            #{map.createDate,jdbcType=TIMESTAMP},
+            #{map.updateBy,jdbcType=VARCHAR},
+            #{map.updateDate,jdbcType=TIMESTAMP},
+            #{map.comments,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <!-- 更新相关 -->
+    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.Office">
+        update sys_office
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentId!=null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="ancestorId!=null">
+                ancestor_id = #{ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="officeName!=null">
+                office_name = #{officeName,jdbcType=VARCHAR},
+            </if>
+            <if test="officeCode!=null">
+                office_code = #{officeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="officeType!=null">
+                office_type = #{officeType,jdbcType=VARCHAR},
+            </if>
+            <if test="officeLevel!=null">
+                office_level = #{officeLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="officeSort!=null">
+                office_sort = #{officeSort,jdbcType=NUMERIC},
+            </if>
+            <if test="shortName!=null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="directorId!=null">
+                director_id = #{directorId,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar!=null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="slogan!=null">
+                slogan = #{slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction!=null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="phone!=null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address!=null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.Office">
+        update sys_office
+        <trim prefix="set" suffixOverrides=",">
+            parent_id = #{parentId,jdbcType=VARCHAR},
+            ancestor_id = #{ancestorId,jdbcType=VARCHAR},
+            office_name = #{officeName,jdbcType=VARCHAR},
+            office_type = #{officeType,jdbcType=VARCHAR},
+            office_level = #{officeLevel,jdbcType=NUMERIC},
+            office_sort = #{officeSort,jdbcType=NUMERIC},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            director_id = #{directorId,jdbcType=VARCHAR},
+            avatar = #{avatar,jdbcType=VARCHAR},
+            slogan = #{slogan,jdbcType=VARCHAR},
+            introduction = #{introduction,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            update_by = #{updateBy,jdbcType=VARCHAR},
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            comments = #{comments,jdbcType=VARCHAR},
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateMap">
+        update sys_office
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.parentId != null">
+                parent_id = #{map.parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.ancestorId != null">
+                ancestor_id = #{map.ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.officeName != null">
+                office_name = #{map.officeName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.officeCode != null">
+                office_code = #{map.officeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="map.officeType != null">
+                office_type = #{map.officeType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.officeLevel != null">
+                office_level = #{map.officeLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="map.officeSort != null">
+                office_sort = #{map.officeSort,jdbcType=NUMERIC},
+            </if>
+            <if test="map.shortName != null">
+                short_name = #{map.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.directorId != null">
+                director_id = #{map.directorId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.avatar != null">
+                avatar = #{map.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="map.slogan != null">
+                slogan = #{map.slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="map.introduction != null">
+                introduction = #{map.introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="map.phone != null">
+                phone = #{map.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="map.address != null">
+                address = #{map.address,jdbcType=VARCHAR},
+            </if>
+            <if test="map.status != null">
+                status = #{map.status,jdbcType=INTEGER},
+            </if>
+            <if test="map.updateBy != null">
+                update_by = #{map.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="map.updateDate != null">
+                update_date = #{map.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.comments != null">
+                comments = #{map.comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{map.id}
+        </where>
+    </update>
+    
+    <update id="updateByCondition">
+        update sys_office
+        <trim prefix="set" suffixOverrides=",">
+            <if test="update.parentId != null">
+                parent_id = #{update.parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.ancestorId != null">
+                ancestor_id = #{update.ancestorId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.officeName != null">
+                office_name = #{update.officeName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.officeCode != null">
+                office_code = #{update.officeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="update.officeType != null">
+                office_type = #{update.officeType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.officeLevel != null">
+                office_level = #{update.officeLevel,jdbcType=NUMERIC},
+            </if>
+            <if test="update.officeSort != null">
+                office_sort = #{update.officeSort,jdbcType=NUMERIC},
+            </if>
+            <if test="update.shortName != null">
+                short_name = #{update.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.directorId != null">
+                director_id = #{update.directorId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.avatar != null">
+                avatar = #{update.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="update.slogan != null">
+                slogan = #{update.slogan,jdbcType=VARCHAR},
+            </if>
+            <if test="update.introduction != null">
+                introduction = #{update.introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="update.phone != null">
+                phone = #{update.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="update.address != null">
+                address = #{update.address,jdbcType=VARCHAR},
+            </if>
+            <if test="update.status != null">
+                status = #{update.status,jdbcType=INTEGER},
+            </if>
+            <if test="update.updateBy != null">
+                update_by = #{update.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="update.updateDate != null">
+                update_date = #{update.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.comments != null">
+                comments = #{update.comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.ancestorId != null">
+                and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeName != null">
+                and office_name = #{condition.officeName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeCode != null">
+                and office_code = #{condition.officeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeType != null">
+                and office_type = #{condition.officeType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeLevel != null">
+                and office_level = #{condition.officeLevel,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.officeSort != null">
+                and office_sort = #{condition.officeSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.directorId != null">
+                and director_id = #{condition.directorId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+        </trim>  
+    </update>
+    
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.String">
+        update sys_office set status = 0 where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+       update sys_office set status = 0
+       <trim prefix="where" prefixOverrides="and | or">
+           and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+       </trim>
+    </delete>
+
+    <delete id="deleteByCondition">
+        update sys_office set status = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.ancestorId != null">
+                and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeName != null">
+                and office_name = #{condition.officeName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeCode != null">
+                and office_code = #{condition.officeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeType != null">
+                and office_type = #{condition.officeType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.officeLevel != null">
+                and office_level = #{condition.officeLevel,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.officeSort != null">
+                and office_sort = #{condition.officeSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.directorId != null">
+                and director_id = #{condition.directorId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <delete id="deleteByProperty">
+       update sys_office set status = 0 where ${property} = #{value}
+    </delete>
+    
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            o.id,
+            o.parent_id,
+            o.ancestor_id,
+            o.office_name,
+            o.office_code,
+            o.office_type,
+            o.office_level,
+            o.office_sort,
+            o.short_name,
+            o.director_id,
+            u.name as director_name,
+            o.avatar,
+            o.slogan,
+            o.introduction,
+            o.phone,
+            o.address,
+            o.status,
+            o.create_by,
+            o.create_date,
+            o.update_by,
+            o.update_date,
+            o.comments
+        from sys_office o
+        left join sys_user u on u.id = o.director_id and u.status != 0
+        <where>
+            and o.status != 0
+            and o.id = #{id}
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.ancestorId != null">
+                and ancestor_id = #{condition.ancestorId}
+            </if>
+            <if test="condition.officeName != null">
+                and office_name = #{condition.officeName}
+            </if>
+            <if test="condition.officeCode != null">
+                and office_code = #{condition.officeCode}
+            </if>
+            <if test="condition.officeType != null">
+                and office_type = #{condition.officeType}
+            </if>
+            <if test="condition.officeLevel != null">
+                and office_level = #{condition.officeLevel}
+            </if>
+            <if test="condition.officeSort != null">
+                and office_sort = #{condition.officeSort}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.directorId != null">
+                and director_id = #{condition.directorId}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+        limit 0,1
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.ancestorId != null">
+                and ancestor_id = #{condition.ancestorId}
+            </if>
+            <if test="condition.officeName != null">
+                and office_name like concat('%', #{condition.officeName} , '%')
+            </if>
+            <if test="condition.officeCode != null">
+                and office_code like concat('%', #{condition.officeCode} , '%')
+            </if>
+            <if test="condition.officeType != null">
+                and office_type = #{condition.officeType}
+            </if>
+            <if test="condition.officeLevel != null">
+                and office_level = #{condition.officeLevel}
+            </if>
+            <if test="condition.officeSort != null">
+                and office_sort = #{condition.officeSort}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.directorId != null">
+                and director_id = #{condition.directorId}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>
+            <if test="condition.address != null">
+                and address = #{condition.address}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>            
+            <if test="condition.ancestorId != null">
+                and ancestor_id = #{condition.ancestorId}
+            </if>            
+            <if test="condition.officeName != null">
+                and office_name = #{condition.officeName}
+            </if>            
+            <if test="condition.officeCode != null">
+                and office_code = #{condition.officeCode}
+            </if>            
+            <if test="condition.officeType != null">
+                and office_type = #{condition.officeType}
+            </if>            
+            <if test="condition.officeLevel != null">
+                and office_level = #{condition.officeLevel}
+            </if>            
+            <if test="condition.officeSort != null">
+                and office_sort = #{condition.officeSort}
+            </if>            
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>            
+            <if test="condition.directorId != null">
+                and director_id = #{condition.directorId}
+            </if>            
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>            
+            <if test="condition.slogan != null">
+                and slogan = #{condition.slogan}
+            </if>            
+            <if test="condition.introduction != null">
+                and introduction = #{condition.introduction}
+            </if>            
+            <if test="condition.phone != null">
+                and phone = #{condition.phone}
+            </if>            
+            <if test="condition.address != null">
+                and address = #{condition.address}
+            </if>            
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>            
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>            
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>            
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>            
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>            
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>            
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by create_date desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+	    ${executeSql}
+    </select>
+
+    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+        select
+            <include refid="Base_Column_List" />
+        from sys_office
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id like concat('%', #{condition.parentId} , '%')
+            </if>
+            <if test="condition.ancestorId != null">
+                and ancestor_id like concat('%', #{condition.ancestorId} , '%')
+            </if>
+            <if test="condition.officeName != null">
+                and office_name like concat('%', #{condition.officeName} , '%')
+            </if>
+            <if test="condition.officeCode != null">
+                and office_code like concat('%', #{condition.officeCode} , '%')
+            </if>
+            <if test="condition.officeType != null">
+                and office_type like concat('%', #{condition.officeType} , '%')
+            </if>
+            <if test="condition.officeLevel != null">
+                and office_level like concat('%', #{condition.officeLevel} , '%')
+            </if>
+            <if test="condition.officeSort != null">
+                and office_sort like concat('%', #{condition.officeSort} , '%')
+            </if>
+            <if test="condition.shortName != null">
+                and short_name like concat('%', #{condition.shortName} , '%')
+            </if>
+            <if test="condition.directorId != null">
+                and director_id like concat('%', #{condition.directorId} , '%')
+            </if>
+            <if test="condition.avatar != null">
+                and avatar like concat('%', #{condition.avatar} , '%')
+            </if>
+            <if test="condition.slogan != null">
+                and slogan like concat('%', #{condition.slogan} , '%')
+            </if>
+            <if test="condition.introduction != null">
+                and introduction like concat('%', #{condition.introduction} , '%')
+            </if>
+            <if test="condition.phone != null">
+                and phone like concat('%', #{condition.phone} , '%')
+            </if>
+            <if test="condition.address != null">
+                and address like concat('%', #{condition.address} , '%')
+            </if>
+            <if test="condition.status != null">
+                and status like concat('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.createBy != null">
+                and create_by like concat('%', #{condition.createBy} , '%')
+            </if>
+            <if test="condition.createDate != null">
+                and create_date like concat('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by like concat('%', #{condition.updateBy} , '%')
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date like concat('%', #{condition.updateDate} , '%')
+            </if>
+            <if test="condition.comments != null">
+                and comments like concat('%', #{condition.comments} , '%')
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+</mapper>

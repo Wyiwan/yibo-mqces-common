@@ -43,7 +43,7 @@ import javax.sql.DataSource;
  *  版本: v1.0
  */
 @Configuration
-@MapperScan(basePackages = {"com.yibo.modules.*.dao"}, sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(basePackages = {"cn.yibo.*.modules.*.dao"}, sqlSessionFactoryRef = "sqlSessionFactory")
 public class DataSourceConfig {
 
     @Bean(name = "dataSource")

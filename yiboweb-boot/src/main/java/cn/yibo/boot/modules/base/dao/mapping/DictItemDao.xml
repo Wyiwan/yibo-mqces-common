@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.DictItemDao">
+    <sql id="Base_Column_List">
+        id,
+        parent_id,
+        kind_id,
+        item_name,
+        item_value,
+        item_sort,
+        is_sys,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        comments,
+        tenant_id
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.DictItem">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_dict_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            parent_id,
+            kind_id,
+            item_name,
+            item_value,
+            item_sort,
+            is_sys,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{parentId,jdbcType=VARCHAR},
+            #{kindId,jdbcType=VARCHAR},
+            #{itemName,jdbcType=VARCHAR},
+            #{itemValue,jdbcType=VARCHAR},
+            #{itemSort,jdbcType=NUMERIC},
+            #{isSys,jdbcType=VARCHAR},
+            #{status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP},
+            #{comments,jdbcType=VARCHAR},
+            #{tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <insert id="insertMap">
+        insert into sys_dict_item 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            parent_id,
+            kind_id,
+            item_name,
+            item_value,
+            item_sort,
+            is_sys,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            replace(UUID(),'-',''),
+            #{map.parentId,jdbcType=VARCHAR},
+            #{map.kindId,jdbcType=VARCHAR},
+            #{map.itemName,jdbcType=VARCHAR},
+            #{map.itemValue,jdbcType=VARCHAR},
+            #{map.itemSort,jdbcType=NUMERIC},
+            #{map.isSys,jdbcType=VARCHAR},
+            #{map.status,jdbcType=INTEGER},
+            #{map.createBy,jdbcType=VARCHAR},
+            #{map.createDate,jdbcType=TIMESTAMP},
+            #{map.updateBy,jdbcType=VARCHAR},
+            #{map.updateDate,jdbcType=TIMESTAMP},
+            #{map.comments,jdbcType=VARCHAR},
+            #{map.tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <!-- 更新相关 -->
+    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.DictItem">
+        update sys_dict_item
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentId!=null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="kindId!=null">
+                kind_id = #{kindId,jdbcType=VARCHAR},
+            </if>
+            <if test="itemName!=null">
+                item_name = #{itemName,jdbcType=VARCHAR},
+            </if>
+            <if test="itemValue!=null">
+                item_value = #{itemValue,jdbcType=VARCHAR},
+            </if>
+            <if test="itemSort!=null">
+                item_sort = #{itemSort,jdbcType=NUMERIC},
+            </if>
+            <if test="isSys!=null">
+                is_sys = #{isSys,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+       </trim>
+       <where>
+            id = #{id}
+       </where>
+    </update>
+    
+    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.DictItem">
+        update sys_dict_item
+        <trim prefix="set" suffixOverrides=",">
+            parent_id = #{parentId,jdbcType=VARCHAR},
+            kind_id = #{kindId,jdbcType=VARCHAR},
+            item_name = #{itemName,jdbcType=VARCHAR},
+            item_value = #{itemValue,jdbcType=VARCHAR},
+            item_sort = #{itemSort,jdbcType=NUMERIC},
+            is_sys = #{isSys,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            update_by = #{updateBy,jdbcType=VARCHAR},
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            comments = #{comments,jdbcType=VARCHAR},
+            tenant_id = #{tenantId,jdbcType=VARCHAR},
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateMap">
+        update sys_dict_item
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.parentId!=null">
+                parent_id = #{map.parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.kindId!=null">
+                kind_id = #{map.kindId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.itemName!=null">
+                item_name = #{map.itemName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.itemValue!=null">
+                item_value = #{map.itemValue,jdbcType=VARCHAR},
+            </if>
+            <if test="map.itemSort!=null">
+                item_sort = #{map.itemSort,jdbcType=NUMERIC},
+            </if>
+            <if test="map.isSys!=null">
+                is_sys = #{map.isSys,jdbcType=VARCHAR},
+            </if>
+            <if test="map.status!=null">
+                status = #{map.status,jdbcType=INTEGER},
+            </if>
+            <if test="map.updateBy!=null">
+                update_by = #{map.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="map.updateDate!=null">
+                update_date = #{map.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.comments!=null">
+                comments = #{map.comments,jdbcType=VARCHAR},
+            </if>
+            <if test="map.tenantId!=null">
+                tenant_id = #{map.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{map.id}
+        </where>
+    </update>
+    
+    <update id="updateByCondition">
+        update sys_dict_item
+        <trim prefix="set" suffixOverrides=",">
+            <if test="update.parentId!=null">
+                parent_id = #{update.parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.kindId!=null">
+                kind_id = #{update.kindId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.itemName!=null">
+                item_name = #{update.itemName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.itemValue!=null">
+                item_value = #{update.itemValue,jdbcType=VARCHAR},
+            </if>
+            <if test="update.itemSort!=null">
+                item_sort = #{update.itemSort,jdbcType=NUMERIC},
+            </if>
+            <if test="update.isSys!=null">
+                is_sys = #{update.isSys,jdbcType=VARCHAR},
+            </if>
+            <if test="update.status!=null">
+                status = #{update.status,jdbcType=INTEGER},
+            </if>
+            <if test="update.updateBy!=null">
+                update_by = #{update.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="update.updateDate!=null">
+                update_date = #{update.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.comments!=null">
+                comments = #{update.comments,jdbcType=VARCHAR},
+            </if>
+            <if test="update.tenantId!=null">
+                tenant_id = #{update.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.parentId!=null">
+                and parent_id = #{condition.parentId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.kindId!=null">
+                and kind_id = #{condition.kindId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemName!=null">
+                and item_name = #{condition.itemName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemValue!=null">
+                and item_value = #{condition.itemValue,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemSort!=null">
+                and item_sort = #{condition.itemSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.isSys!=null">
+                and is_sys = #{condition.isSys,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status!=null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy!=null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate!=null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy!=null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate!=null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments!=null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.tenantId!=null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>  
+    </update>
+    
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.String">
+        update sys_dict_item set status = 0 where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+       update sys_dict_item set status = 0
+       <trim prefix="where" prefixOverrides="and | or">
+           and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+       </trim>
+    </delete>
+
+    <delete id="deleteByCondition">
+        update sys_dict_item set status = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.kindId != null">
+                and kind_id = #{condition.kindId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemName != null">
+                and item_name = #{condition.itemName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemValue != null">
+                and item_value = #{condition.itemValue,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.itemSort != null">
+                and item_sort = #{condition.itemSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <delete id="deleteByProperty">
+       update sys_dict_item set status = 0 where ${property} = #{value}
+    </delete>
+    
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            and id = #{id}
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.kindId != null">
+                and kind_id = #{condition.kindId}
+            </if>
+            <if test="condition.itemName != null">
+                and item_name = #{condition.itemName}
+            </if>
+            <if test="condition.itemValue != null">
+                and item_value = #{condition.itemValue}
+            </if>
+            <if test="condition.itemSort != null">
+                and item_sort = #{condition.itemSort}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+        limit 0,1
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.kindId != null">
+                and kind_id = #{condition.kindId}
+            </if>
+            <if test="condition.itemName != null">
+                and item_name = #{condition.itemName}
+            </if>
+            <if test="condition.itemValue != null">
+                and item_value = #{condition.itemValue}
+            </if>
+            <if test="condition.keyword != null and condition.keyword !=''">
+                and (
+                    item_name like concat('%', #{condition.keyword} , '%') or
+                    item_value like concat('%', #{condition.keyword} , '%')
+                )
+            </if>
+            <if test="condition.itemSort != null">
+                and item_sort = #{condition.itemSort}
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id = #{condition.parentId}
+            </if>            
+            <if test="condition.kindId != null">
+                and kind_id = #{condition.kindId}
+            </if>            
+            <if test="condition.itemName != null">
+                and item_name = #{condition.itemName}
+            </if>            
+            <if test="condition.itemValue != null">
+                and item_value = #{condition.itemValue}
+            </if>            
+            <if test="condition.itemSort != null">
+                and item_sort = #{condition.itemSort}
+            </if>            
+            <if test="condition.isSys != null">
+                and is_sys = #{condition.isSys}
+            </if>            
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>            
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>            
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>            
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>            
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>            
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>            
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>            
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by create_date desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+	    ${executeSql}
+    </select>
+
+    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.DictItem">
+        select
+            <include refid="Base_Column_List" />
+        from sys_dict_item
+        <where>
+            and status != 0
+            <if test="condition.parentId != null">
+                and parent_id like concat('%', #{condition.parentId} , '%')
+            </if>
+            <if test="condition.kindId != null">
+                and kind_id like concat('%', #{condition.kindId} , '%')
+            </if>
+            <if test="condition.itemName != null">
+                and item_name like concat('%', #{condition.itemName} , '%')
+            </if>
+            <if test="condition.itemValue != null">
+                and item_value like concat('%', #{condition.itemValue} , '%')
+            </if>
+            <if test="condition.itemSort != null">
+                and item_sort like concat('%', #{condition.itemSort} , '%')
+            </if>
+            <if test="condition.isSys != null">
+                and is_sys like concat('%', #{condition.isSys} , '%')
+            </if>
+            <if test="condition.status != null">
+                and status like concat('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.createBy != null">
+                and create_by like concat('%', #{condition.createBy} , '%')
+            </if>
+            <if test="condition.createDate != null">
+                and create_date like concat('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by like concat('%', #{condition.updateBy} , '%')
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date like concat('%', #{condition.updateDate} , '%')
+            </if>
+            <if test="condition.comments != null">
+                and comments like concat('%', #{condition.comments} , '%')
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id like concat('%', #{condition.tenantId} , '%')
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+</mapper>

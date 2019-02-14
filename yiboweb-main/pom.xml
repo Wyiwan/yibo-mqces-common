@@ -11,7 +11,7 @@
     <parent>
         <groupId>cn.yibo</groupId>
         <artifactId>yiboweb-parent</artifactId>
-        <version>1.3.9</version>
+        <version>1.4.0</version>
     </parent>
 
     <properties>
@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.yibo</groupId>
-            <artifactId>yiboweb-security</artifactId>
+            <artifactId>yiboweb-boot</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

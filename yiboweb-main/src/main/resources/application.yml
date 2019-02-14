@@ -73,10 +73,16 @@ spring:
         allow: # IP白名单
         deny:  # IP黑名单
 
+  # 文件大小上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 #Mybatis配置
 mybatis:
   #指定sql映射文件位置
-  mapper-locations: classpath*:com/yibo/modules/**/mapping/*.xml
+  mapper-locations: classpath*:cn/yibo/**/modules/**/mapping/*.xml
   #配置信息
   configuration:
     map-underscore-to-camel-case: true

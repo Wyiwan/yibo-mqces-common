@@ -1,0 +1,1230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.UserDao">
+    <sql id="Base_Column_List">
+        id,
+        username,
+        password,
+        name,
+        dept_id,
+        emp_code,
+        emp_status,
+        emp_posts,
+        short_name,
+        wubi_code,
+        identity_no,
+        native_place,
+        sex,
+        birthday,
+        avatar,
+        email,
+        mobile,
+        telephone,
+        user_type,
+        user_weight,
+        mgr_type,
+        first_visit_date,
+        last_visit_ip,
+        last_visit_date,
+        allow_start_time,
+        allow_end_time,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        comments,
+        tenant_id
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.User">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            username,
+            password,
+            name,
+            dept_id,
+            emp_code,
+            emp_status,
+            emp_posts,
+            short_name,
+            wubi_code,
+            identity_no,
+            native_place,
+            sex,
+            birthday,
+            avatar,
+            email,
+            mobile,
+            telephone,
+            user_type,
+            user_weight,
+            mgr_type,
+            first_visit_date,
+            last_visit_ip,
+            last_visit_date,
+            allow_start_time,
+            allow_end_time,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{username,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{deptId,jdbcType=VARCHAR},
+            #{empCode,jdbcType=VARCHAR},
+            #{empStatus,jdbcType=VARCHAR},
+            #{empPosts,jdbcType=VARCHAR},
+            #{shortName,jdbcType=VARCHAR},
+            #{wubiCode,jdbcType=VARCHAR},
+            #{identityNo,jdbcType=VARCHAR},
+            #{nativePlace,jdbcType=VARCHAR},
+            #{sex,jdbcType=VARCHAR},
+            #{birthday,jdbcType=TIMESTAMP},
+            #{avatar,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR},
+            #{mobile,jdbcType=VARCHAR},
+            #{telephone,jdbcType=VARCHAR},
+            #{userType,jdbcType=VARCHAR},
+            #{userWeight,jdbcType=NUMERIC},
+            #{mgrType,jdbcType=VARCHAR},
+            #{firstVisitDate,jdbcType=TIMESTAMP},
+            #{lastVisitIp,jdbcType=VARCHAR},
+            #{lastVisitDate,jdbcType=TIMESTAMP},
+            #{allowStartTime,jdbcType=TIMESTAMP},
+            #{allowEndTime,jdbcType=TIMESTAMP},
+            #{status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP},
+            #{comments,jdbcType=VARCHAR},
+            #{tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <insert id="insertMap">
+        insert into sys_user 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            username,
+            password,
+            name,
+            dept_id,
+            emp_code,
+            emp_status,
+            emp_posts,
+            short_name,
+            wubi_code,
+            identity_no,
+            native_place,
+            sex,
+            birthday,
+            avatar,
+            email,
+            mobile,
+            telephone,
+            user_type,
+            user_weight,
+            mgr_type,
+            first_visit_date,
+            last_visit_ip,
+            last_visit_date,
+            allow_start_time,
+            allow_end_time,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+            tenant_id,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            replace(UUID(),'-',''),
+            #{map.username,jdbcType=VARCHAR},
+            #{map.password,jdbcType=VARCHAR},
+            #{map.name,jdbcType=VARCHAR},
+            #{map.deptId,jdbcType=VARCHAR},
+            #{map.empCode,jdbcType=VARCHAR},
+            #{map.empStatus,jdbcType=VARCHAR},
+            #{map.empPosts,jdbcType=VARCHAR},
+            #{map.shortName,jdbcType=VARCHAR},
+            #{map.wubiCode,jdbcType=VARCHAR},
+            #{map.identityNo,jdbcType=VARCHAR},
+            #{map.nativePlace,jdbcType=VARCHAR},
+            #{map.sex,jdbcType=VARCHAR},
+            #{map.birthday,jdbcType=TIMESTAMP},
+            #{map.avatar,jdbcType=VARCHAR},
+            #{map.email,jdbcType=VARCHAR},
+            #{map.mobile,jdbcType=VARCHAR},
+            #{map.telephone,jdbcType=VARCHAR},
+            #{map.userType,jdbcType=VARCHAR},
+            #{map.userWeight,jdbcType=NUMERIC},
+            #{map.mgrType,jdbcType=VARCHAR},
+            #{map.firstVisitDate,jdbcType=TIMESTAMP},
+            #{map.lastVisitIp,jdbcType=VARCHAR},
+            #{map.lastVisitDate,jdbcType=TIMESTAMP},
+            #{map.allowStartTime,jdbcType=TIMESTAMP},
+            #{map.allowEndTime,jdbcType=TIMESTAMP},
+            #{map.status,jdbcType=INTEGER},
+            #{map.createBy,jdbcType=VARCHAR},
+            #{map.createDate,jdbcType=TIMESTAMP},
+            #{map.updateBy,jdbcType=VARCHAR},
+            #{map.updateDate,jdbcType=TIMESTAMP},
+            #{map.comments,jdbcType=VARCHAR},
+            #{map.tenantId,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <!-- 更新相关 -->
+    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.User">
+        update sys_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username!=null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password!=null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name!=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="deptId!=null">
+                dept_id = #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="empCode!=null">
+                emp_code = #{empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="empStatus!=null">
+                emp_status = #{empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="empPosts!=null">
+                emp_posts = #{empPosts,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName!=null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="wubiCode!=null">
+                wubi_code = #{wubiCode,jdbcType=VARCHAR},
+            </if>
+            <if test="identityNo!=null">
+                identity_no = #{identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="nativePlace!=null">
+                native_place = #{nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="sex!=null">
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday!=null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="avatar!=null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="email!=null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile!=null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone!=null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="userType!=null">
+                user_type = #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="userWeight!=null">
+                user_weight = #{userWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="mgrType!=null">
+                mgr_type = #{mgrType,jdbcType=VARCHAR},
+            </if>
+            <if test="firstVisitDate!=null">
+                first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastVisitIp!=null">
+                last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastVisitDate!=null">
+                last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="allowStartTime!=null">
+                allow_start_time = #{allowStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="allowEndTime!=null">
+                allow_end_time = #{allowEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="tenantId!=null">
+                tenant_id = #{tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.User">
+        update sys_user
+        <trim prefix="set" suffixOverrides=",">
+            username = #{username,jdbcType=VARCHAR},
+            password = #{password,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            dept_id = #{deptId,jdbcType=VARCHAR},
+            emp_code = #{empCode,jdbcType=VARCHAR},
+            emp_status = #{empStatus,jdbcType=VARCHAR},
+            emp_posts = #{empPosts,jdbcType=VARCHAR},
+            short_name = #{shortName,jdbcType=VARCHAR},
+            wubi_code = #{wubiCode,jdbcType=VARCHAR},
+            identity_no = #{identityNo,jdbcType=VARCHAR},
+            native_place = #{nativePlace,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=VARCHAR},
+            birthday = #{birthday,jdbcType=TIMESTAMP},
+            avatar = #{avatar,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR},
+            mobile = #{mobile,jdbcType=VARCHAR},
+            telephone = #{telephone,jdbcType=VARCHAR},
+            user_type = #{userType,jdbcType=VARCHAR},
+            user_weight = #{userWeight,jdbcType=NUMERIC},
+            mgr_type = #{mgrType,jdbcType=VARCHAR},
+            first_visit_date = #{firstVisitDate,jdbcType=TIMESTAMP},
+            last_visit_ip = #{lastVisitIp,jdbcType=VARCHAR},
+            last_visit_date = #{lastVisitDate,jdbcType=TIMESTAMP},
+            allow_start_time = #{allowStartTime,jdbcType=TIMESTAMP},
+            allow_end_time = #{allowEndTime,jdbcType=TIMESTAMP},
+            status = #{status,jdbcType=INTEGER},
+            update_by = #{updateBy,jdbcType=VARCHAR},
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            comments = #{comments,jdbcType=VARCHAR},
+            tenant_id = #{tenantId,jdbcType=VARCHAR},
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateMap">
+        update sys_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.username != null">
+                username = #{map.username,jdbcType=VARCHAR},
+            </if>
+            <if test="map.password != null">
+                password = #{map.password,jdbcType=VARCHAR},
+            </if>
+            <if test="map.name != null">
+                name = #{map.name,jdbcType=VARCHAR},
+            </if>
+            <if test="map.deptId != null">
+                dept_id = #{map.deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="map.empCode != null">
+                emp_code = #{map.empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="map.empStatus != null">
+                emp_status = #{map.empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="map.empPosts != null">
+                emp_posts = #{map.empPosts,jdbcType=VARCHAR},
+            </if>
+            <if test="map.shortName != null">
+                short_name = #{map.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="map.wubiCode != null">
+                wubi_code = #{map.wubiCode,jdbcType=VARCHAR},
+            </if>
+            <if test="map.identityNo != null">
+                identity_no = #{map.identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="map.nativePlace != null">
+                native_place = #{map.nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="map.sex != null">
+                sex = #{map.sex,jdbcType=VARCHAR},
+            </if>
+            <if test="map.birthday != null">
+                birthday = #{map.birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.avatar != null">
+                avatar = #{map.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="map.email != null">
+                email = #{map.email,jdbcType=VARCHAR},
+            </if>
+            <if test="map.mobile != null">
+                mobile = #{map.mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="map.telephone != null">
+                telephone = #{map.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="map.userType != null">
+                user_type = #{map.userType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.userWeight != null">
+                user_weight = #{map.userWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="map.mgrType != null">
+                mgr_type = #{map.mgrType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.firstVisitDate != null">
+                first_visit_date = #{map.firstVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.lastVisitIp != null">
+                last_visit_ip = #{map.lastVisitIp,jdbcType=VARCHAR},
+            </if>
+            <if test="map.lastVisitDate != null">
+                last_visit_date = #{map.lastVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.allowStartTime != null">
+                allow_start_time = #{map.allowStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.allowEndTime != null">
+                allow_end_time = #{map.allowEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.status != null">
+                status = #{map.status,jdbcType=INTEGER},
+            </if>
+            <if test="map.updateBy != null">
+                update_by = #{map.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="map.updateDate != null">
+                update_date = #{map.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.comments != null">
+                comments = #{map.comments,jdbcType=VARCHAR},
+            </if>
+            <if test="map.tenantId != null">
+                tenant_id = #{map.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{map.id}
+        </where>
+    </update>
+    
+    <update id="updateByCondition">
+        update sys_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="update.username != null">
+                username = #{update.username,jdbcType=VARCHAR},
+            </if>
+            <if test="update.password != null">
+                password = #{update.password,jdbcType=VARCHAR},
+            </if>
+            <if test="update.name != null">
+                name = #{update.name,jdbcType=VARCHAR},
+            </if>
+            <if test="update.deptId != null">
+                dept_id = #{update.deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="update.empCode != null">
+                emp_code = #{update.empCode,jdbcType=VARCHAR},
+            </if>
+            <if test="update.empStatus != null">
+                emp_status = #{update.empStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="update.empPosts != null">
+                emp_posts = #{update.empPosts,jdbcType=VARCHAR},
+            </if>
+            <if test="update.shortName != null">
+                short_name = #{update.shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="update.wubiCode != null">
+                wubi_code = #{update.wubiCode,jdbcType=VARCHAR},
+            </if>
+            <if test="update.identityNo != null">
+                identity_no = #{update.identityNo,jdbcType=VARCHAR},
+            </if>
+            <if test="update.nativePlace != null">
+                native_place = #{update.nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="update.sex != null">
+                sex = #{update.sex,jdbcType=VARCHAR},
+            </if>
+            <if test="update.birthday != null">
+                birthday = #{update.birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.avatar != null">
+                avatar = #{update.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="update.email != null">
+                email = #{update.email,jdbcType=VARCHAR},
+            </if>
+            <if test="update.mobile != null">
+                mobile = #{update.mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="update.telephone != null">
+                telephone = #{update.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="update.userType != null">
+                user_type = #{update.userType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.userWeight != null">
+                user_weight = #{update.userWeight,jdbcType=NUMERIC},
+            </if>
+            <if test="update.mgrType != null">
+                mgr_type = #{update.mgrType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.firstVisitDate != null">
+                first_visit_date = #{update.firstVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.lastVisitIp != null">
+                last_visit_ip = #{update.lastVisitIp,jdbcType=VARCHAR},
+            </if>
+            <if test="update.lastVisitDate != null">
+                last_visit_date = #{update.lastVisitDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.allowStartTime != null">
+                allow_start_time = #{update.allowStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.allowEndTime != null">
+                allow_end_time = #{update.allowEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.status != null">
+                status = #{update.status,jdbcType=INTEGER},
+            </if>
+            <if test="update.updateBy != null">
+                update_by = #{update.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="update.updateDate != null">
+                update_date = #{update.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.comments != null">
+                comments = #{update.comments,jdbcType=VARCHAR},
+            </if>
+            <if test="update.tenantId != null">
+                tenant_id = #{update.tenantId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.username != null">
+                and username = #{condition.username,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.password != null">
+                and password = #{condition.password,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.name != null">
+                and name = #{condition.name,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.deptId != null">
+                and dept_id = #{condition.deptId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.wubiCode != null">
+                and wubi_code = #{condition.wubiCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.identityNo != null">
+                and identity_no = #{condition.identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.nativePlace != null">
+                and native_place = #{condition.nativePlace,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.sex != null">
+                and sex = #{condition.sex,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.birthday != null">
+                and birthday = #{condition.birthday,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.email != null">
+                and email = #{condition.email,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.telephone != null">
+                and telephone = #{condition.telephone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userType != null">
+                and user_type = #{condition.userType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userWeight != null">
+                and user_weight = #{condition.userWeight,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date = #{condition.firstVisitDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip = #{condition.lastVisitIp,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date = #{condition.lastVisitDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.allowStartTime != null">
+                and allow_start_time = #{condition.allowStartTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.allowEndTime != null">
+                and allow_end_time = #{condition.allowEndTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>  
+    </update>
+    
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.String">
+        update sys_user set status = 0 where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+       update sys_user set status = 0
+       <trim prefix="where" prefixOverrides="and | or">
+           and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+       </trim>
+    </delete>
+
+    <delete id="deleteByCondition">
+        update sys_user set status = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.username != null">
+                and username = #{condition.username,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.password != null">
+                and password = #{condition.password,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.name != null">
+                and name = #{condition.name,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.deptId != null">
+                and dept_id = #{condition.deptId,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.wubiCode != null">
+                and wubi_code = #{condition.wubiCode,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.identityNo != null">
+                and identity_no = #{condition.identityNo,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.nativePlace != null">
+                and native_place = #{condition.nativePlace,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.sex != null">
+                and sex = #{condition.sex,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.birthday != null">
+                and birthday = #{condition.birthday,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.email != null">
+                and email = #{condition.email,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.telephone != null">
+                and telephone = #{condition.telephone,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userType != null">
+                and user_type = #{condition.userType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.userWeight != null">
+                and user_weight = #{condition.userWeight,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date = #{condition.firstVisitDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip = #{condition.lastVisitIp,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date = #{condition.lastVisitDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.allowStartTime != null">
+                and allow_start_time = #{condition.allowStartTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.allowEndTime != null">
+                and allow_end_time = #{condition.allowEndTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <delete id="deleteByProperty">
+       update sys_user set status = 0 where ${property} = #{value}
+    </delete>
+    
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            and id = #{id}
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            <if test="condition.username != null">
+                and username = #{condition.username}
+            </if>
+            <if test="condition.password != null">
+                and password = #{condition.password}
+            </if>
+            <if test="condition.name != null">
+                and name = #{condition.name}
+            </if>
+            <if test="condition.deptId != null">
+                and dept_id = #{condition.deptId}
+            </if>
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.wubiCode != null">
+                and wubi_code = #{condition.wubiCode}
+            </if>
+            <if test="condition.identityNo != null">
+                and identity_no = #{condition.identityNo}
+            </if>
+            <if test="condition.nativePlace != null">
+                and native_place = #{condition.nativePlace}
+            </if>
+            <if test="condition.sex != null">
+                and sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday != null">
+                and birthday = #{condition.birthday}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>
+            <if test="condition.email != null">
+                and email = #{condition.email}
+            </if>
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile}
+            </if>
+            <if test="condition.telephone != null">
+                and telephone = #{condition.telephone}
+            </if>
+            <if test="condition.userType != null">
+                and user_type = #{condition.userType}
+            </if>
+            <if test="condition.userWeight != null">
+                and user_weight = #{condition.userWeight}
+            </if>
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
+            </if>
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date = #{condition.firstVisitDate}
+            </if>
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip = #{condition.lastVisitIp}
+            </if>
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date = #{condition.lastVisitDate}
+            </if>
+            <if test="condition.allowStartTime != null">
+                and allow_start_time = #{condition.allowStartTime}
+            </if>
+            <if test="condition.allowEndTime != null">
+                and allow_end_time = #{condition.allowEndTime}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+        limit 0,1
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            <if test="condition.username != null">
+                and username = #{condition.username}
+            </if>
+            <if test="condition.password != null">
+                and password = #{condition.password}
+            </if>
+            <if test="condition.name != null">
+                and name = #{condition.name}
+            </if>
+            <if test="condition.deptId != null">
+                and dept_id = #{condition.deptId}
+            </if>
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
+            </if>
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>
+            <if test="condition.wubiCode != null">
+                and wubi_code = #{condition.wubiCode}
+            </if>
+            <if test="condition.identityNo != null">
+                and identity_no = #{condition.identityNo}
+            </if>
+            <if test="condition.nativePlace != null">
+                and native_place = #{condition.nativePlace}
+            </if>
+            <if test="condition.sex != null">
+                and sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday != null">
+                and birthday = #{condition.birthday}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>
+            <if test="condition.email != null">
+                and email = #{condition.email}
+            </if>
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile}
+            </if>
+            <if test="condition.telephone != null">
+                and telephone = #{condition.telephone}
+            </if>
+            <if test="condition.userType != null">
+                and user_type = #{condition.userType}
+            </if>
+            <if test="condition.userWeight != null">
+                and user_weight = #{condition.userWeight}
+            </if>
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
+            </if>
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date = #{condition.firstVisitDate}
+            </if>
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip = #{condition.lastVisitIp}
+            </if>
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date = #{condition.lastVisitDate}
+            </if>
+            <if test="condition.allowStartTime != null">
+                and allow_start_time = #{condition.allowStartTime}
+            </if>
+            <if test="condition.allowEndTime != null">
+                and allow_end_time = #{condition.allowEndTime}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            <if test="condition.username != null">
+                and username = #{condition.username}
+            </if>            
+            <if test="condition.password != null">
+                and password = #{condition.password}
+            </if>            
+            <if test="condition.name != null">
+                and name = #{condition.name}
+            </if>            
+            <if test="condition.deptId != null">
+                and dept_id = #{condition.deptId}
+            </if>            
+            <if test="condition.empCode != null">
+                and emp_code = #{condition.empCode}
+            </if>            
+            <if test="condition.empStatus != null">
+                and emp_status = #{condition.empStatus}
+            </if>            
+            <if test="condition.empPosts != null">
+                and emp_posts = #{condition.empPosts}
+            </if>            
+            <if test="condition.shortName != null">
+                and short_name = #{condition.shortName}
+            </if>            
+            <if test="condition.wubiCode != null">
+                and wubi_code = #{condition.wubiCode}
+            </if>            
+            <if test="condition.identityNo != null">
+                and identity_no = #{condition.identityNo}
+            </if>            
+            <if test="condition.nativePlace != null">
+                and native_place = #{condition.nativePlace}
+            </if>            
+            <if test="condition.sex != null">
+                and sex = #{condition.sex}
+            </if>            
+            <if test="condition.birthday != null">
+                and birthday = #{condition.birthday}
+            </if>            
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar}
+            </if>            
+            <if test="condition.email != null">
+                and email = #{condition.email}
+            </if>            
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile}
+            </if>            
+            <if test="condition.telephone != null">
+                and telephone = #{condition.telephone}
+            </if>            
+            <if test="condition.userType != null">
+                and user_type = #{condition.userType}
+            </if>            
+            <if test="condition.userWeight != null">
+                and user_weight = #{condition.userWeight}
+            </if>            
+            <if test="condition.mgrType != null">
+                and mgr_type = #{condition.mgrType}
+            </if>            
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date = #{condition.firstVisitDate}
+            </if>            
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip = #{condition.lastVisitIp}
+            </if>            
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date = #{condition.lastVisitDate}
+            </if>            
+            <if test="condition.allowStartTime != null">
+                and allow_start_time = #{condition.allowStartTime}
+            </if>            
+            <if test="condition.allowEndTime != null">
+                and allow_end_time = #{condition.allowEndTime}
+            </if>            
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>            
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>            
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>            
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>            
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>            
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>            
+            <if test="condition.tenantId != null">
+                and tenant_id = #{condition.tenantId}
+            </if>            
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by create_date desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+	    ${executeSql}
+    </select>
+
+    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+        select
+            <include refid="Base_Column_List" />
+        from sys_user
+        <where>
+            and status != 0
+            <if test="condition.username != null">
+                and username like concat('%', #{condition.username} , '%')
+            </if>
+            <if test="condition.password != null">
+                and password like concat('%', #{condition.password} , '%')
+            </if>
+            <if test="condition.name != null">
+                and name like concat('%', #{condition.name} , '%')
+            </if>
+            <if test="condition.deptId != null">
+                and dept_id like concat('%', #{condition.deptId} , '%')
+            </if>
+            <if test="condition.empCode != null">
+                and emp_code like concat('%', #{condition.empCode} , '%')
+            </if>
+            <if test="condition.empStatus != null">
+                and emp_status like concat('%', #{condition.empStatus} , '%')
+            </if>
+            <if test="condition.empPosts != null">
+                and emp_posts like concat('%', #{condition.empPosts} , '%')
+            </if>
+            <if test="condition.shortName != null">
+                and short_name like concat('%', #{condition.shortName} , '%')
+            </if>
+            <if test="condition.wubiCode != null">
+                and wubi_code like concat('%', #{condition.wubiCode} , '%')
+            </if>
+            <if test="condition.identityNo != null">
+                and identity_no like concat('%', #{condition.identityNo} , '%')
+            </if>
+            <if test="condition.nativePlace != null">
+                and native_place like concat('%', #{condition.nativePlace} , '%')
+            </if>
+            <if test="condition.sex != null">
+                and sex like concat('%', #{condition.sex} , '%')
+            </if>
+            <if test="condition.birthday != null">
+                and birthday like concat('%', #{condition.birthday} , '%')
+            </if>
+            <if test="condition.avatar != null">
+                and avatar like concat('%', #{condition.avatar} , '%')
+            </if>
+            <if test="condition.email != null">
+                and email like concat('%', #{condition.email} , '%')
+            </if>
+            <if test="condition.mobile != null">
+                and mobile like concat('%', #{condition.mobile} , '%')
+            </if>
+            <if test="condition.telephone != null">
+                and telephone like concat('%', #{condition.telephone} , '%')
+            </if>
+            <if test="condition.userType != null">
+                and user_type like concat('%', #{condition.userType} , '%')
+            </if>
+            <if test="condition.userWeight != null">
+                and user_weight like concat('%', #{condition.userWeight} , '%')
+            </if>
+            <if test="condition.mgrType != null">
+                and mgr_type like concat('%', #{condition.mgrType} , '%')
+            </if>
+            <if test="condition.firstVisitDate != null">
+                and first_visit_date like concat('%', #{condition.firstVisitDate} , '%')
+            </if>
+            <if test="condition.lastVisitIp != null">
+                and last_visit_ip like concat('%', #{condition.lastVisitIp} , '%')
+            </if>
+            <if test="condition.lastVisitDate != null">
+                and last_visit_date like concat('%', #{condition.lastVisitDate} , '%')
+            </if>
+            <if test="condition.allowStartTime != null">
+                and allow_start_time like concat('%', #{condition.allowStartTime} , '%')
+            </if>
+            <if test="condition.allowEndTime != null">
+                and allow_end_time like concat('%', #{condition.allowEndTime} , '%')
+            </if>
+            <if test="condition.status != null">
+                and status like concat('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.createBy != null">
+                and create_by like concat('%', #{condition.createBy} , '%')
+            </if>
+            <if test="condition.createDate != null">
+                and create_date like concat('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by like concat('%', #{condition.updateBy} , '%')
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date like concat('%', #{condition.updateDate} , '%')
+            </if>
+            <if test="condition.comments != null">
+                and comments like concat('%', #{condition.comments} , '%')
+            </if>
+            <if test="condition.tenantId != null">
+                and tenant_id like concat('%', #{condition.tenantId} , '%')
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+</mapper>

@@ -25,7 +25,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
             <appender-ref ref="STDOUT"/>
         </root>
 
-        <logger name="com.yibo" level="debug" additivity="false">
+        <logger name="cn.yibo" level="debug" additivity="false">
             <appender-ref ref="STDOUT"/>
         </logger>
     </springProfile>

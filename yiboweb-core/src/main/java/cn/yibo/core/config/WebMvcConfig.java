@@ -20,7 +20,7 @@
 
 package cn.yibo.core.config;
 
-import cn.yibo.core.listener.WebServletListener;
+import cn.yibo.core.web.listener.WebServletListener;
 import cn.yibo.core.web.restful.ExtFastJsonHttpMessageConverter;
 import cn.yibo.core.web.wrapper.HttpServletRequestReplacedFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
