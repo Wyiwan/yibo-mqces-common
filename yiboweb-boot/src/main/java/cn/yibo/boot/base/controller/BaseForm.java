@@ -14,7 +14,7 @@
 {  2018-08-01  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的security包
+{  注：本模块代码为底层基础框架封装的boot包
 {*****************************************************************************
 */
 
@@ -92,10 +92,10 @@ public class BaseForm<T>{
 	 * @return
 	 */
 	public int getPageSize(){
-		String rows = ObjectUtils.toString( this.get("rows") );
+		String pageSize = StrUtil.emptyToDefault(ObjectUtils.toString(this.get("pageSize")), ObjectUtils.toString(this.get("rows")));
 		
-		if( !StrUtil.isEmpty(rows) || NumberUtil.isNumber(rows) ){
-			this.pageSize = Integer.parseInt(rows);
+		if( !StrUtil.isEmpty(pageSize) || NumberUtil.isNumber(pageSize) ){
+			this.pageSize = Integer.parseInt(pageSize);
 		}
 		return this.pageSize;
 	}
