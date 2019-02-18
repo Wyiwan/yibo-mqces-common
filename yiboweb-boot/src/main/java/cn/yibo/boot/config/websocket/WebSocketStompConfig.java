@@ -42,7 +42,7 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/yibo/websocket").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/websocket-simple").setAllowedOrigins("*").withSockJS();
     }
 
     /**

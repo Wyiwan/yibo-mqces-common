@@ -21,14 +21,8 @@
 package cn.yibo.boot.config.interceptor;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * 日志拦截器配置
@@ -37,19 +31,11 @@ import java.util.List;
  * @version v1.0
  */
 @Configuration
-@ConditionalOnBean(SqlSessionFactory.class)
-@AutoConfigureAfter(MybatisAutoConfiguration.class)
-public class InterceptorConfiguration {
-    @Autowired
-    private List<SqlSessionFactory> sqlSessionFactoryList;
-
-    @Autowired
-    LogInterceptor logInterceptor;
-
-    @PostConstruct
-    public void addLogInterceptor(){
-        for( SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList ){
-            sqlSessionFactory.getConfiguration().addInterceptor(logInterceptor);
-        }
+public class MybatisInterceptorConfig {
+    @Bean
+    public String myInterceptor(SqlSessionFactory sqlSessionFactory) {
+        LogInterceptor logInterceptor = new LogInterceptor();
+        sqlSessionFactory.getConfiguration().addInterceptor(logInterceptor);
+        return "interceptor";
     }
 }
