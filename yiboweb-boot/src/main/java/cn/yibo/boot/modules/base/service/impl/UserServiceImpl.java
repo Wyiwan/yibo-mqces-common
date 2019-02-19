@@ -68,7 +68,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     private PermissionService permsService;
 
     @Autowired
-    private OfficeService officeService;
+    private OrganService organService;
 
     /**
      * 重写新增
@@ -162,9 +162,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
         if( user != null ){
             // 关联机构
-            Office office = officeService.fetch(user.getTenantId());
-            if( office != null ){
-                user.setOfficeName(office.getOfficeName());
+            Organ organ = organService.fetch(user.getTenantId());
+            if( organ != null ){
+                user.setOrganName(organ.getOrganName());
             }
 
             // 关联科室
@@ -234,8 +234,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             map.put("userName", user.getUsername());
             map.put("name", user.getName());
 
-            map.put("officeId", user.getTenantId());
-            map.put("officeName", user.getOfficeName());
+            map.put("organId", user.getTenantId());
+            map.put("organName", user.getOrganName());
             map.put("deptId", user.getDeptId());
             map.put("deptName", user.getDeptName());
 
@@ -306,7 +306,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                 map.put("avatar", user.getAvatar());
                 map.put("empCode", UserContext.getUser().getEmpCode());
                 map.put("deptName", UserContext.getUser().getDeptName());
-                map.put("officeName", UserContext.getUser().getOfficeName());
+                map.put("organName", UserContext.getUser().getOrganName());
                 map.put("roleNames", UserContext.getUser().getRoleNames());
                 map.put("sex", user.getSex());
                 map.put("email", user.getEmail());

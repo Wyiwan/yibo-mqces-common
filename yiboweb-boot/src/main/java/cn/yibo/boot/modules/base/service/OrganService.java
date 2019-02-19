@@ -18,17 +18,23 @@
 {*****************************************************************************	
 */
 
-package cn.yibo.boot.modules.base.dao;
+package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.dao.CrudDao;
-import cn.yibo.boot.modules.base.entity.Office;
+import cn.yibo.boot.base.service.IBaseService;
+import cn.yibo.boot.modules.base.dao.OrganDao;
+import cn.yibo.boot.modules.base.entity.Organ;
 
 /**
- * 医疗机构表数据访问层
+ * 机构表服务接口层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
-public interface OfficeDao extends CrudDao<Office>{
-
+public interface OrganService extends IBaseService<OrganDao, Organ>{
+    /**
+     * 启用或停用
+     * @param organ
+     * @return
+     */
+    void disabled(Organ organ);
 }

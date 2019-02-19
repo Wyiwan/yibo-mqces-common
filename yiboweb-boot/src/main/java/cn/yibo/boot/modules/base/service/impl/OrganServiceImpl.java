@@ -22,9 +22,9 @@ package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.yibo.boot.base.service.impl.AbstractBaseService;
-import cn.yibo.boot.modules.base.dao.OfficeDao;
-import cn.yibo.boot.modules.base.entity.Office;
-import cn.yibo.boot.modules.base.service.OfficeService;
+import cn.yibo.boot.modules.base.dao.OrganDao;
+import cn.yibo.boot.modules.base.entity.Organ;
+import cn.yibo.boot.modules.base.service.OrganService;
 import cn.yibo.boot.modules.base.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,45 +33,45 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 /**
- * 医疗机构表服务实现层
+ * 机构表服务实现层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
 @Service
 @Transactional(readOnly=true)
-public class OfficeServiceImpl extends AbstractBaseService<OfficeDao, Office> implements OfficeService {
+public class OrganServiceImpl extends AbstractBaseService<OrganDao, Organ> implements OrganService {
     @Autowired
     UserService userService;
 
     /**
      * 重写更新
-     * @param office
+     * @param organ
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public void updateNull(Office office){
-        super.updateNull(office);
-        this.clearUsersCacheByTenantId(office.getId());
+    public void updateNull(Organ organ){
+        super.updateNull(organ);
+        this.clearUsersCacheByTenantId(organ.getId());
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void disabled(Office office){
-        if( office != null ){
-            office.enabled();
-            dao.update(office);
+    public void disabled(Organ organ){
+        if( organ != null ){
+            organ.enabled();
+            dao.update(organ);
 
             // 更新机构下所有用户的状态
             Map updateMap = CollUtil.newHashMap();
-            updateMap.put("status", office.getStatus());
+            updateMap.put("status", organ.getStatus());
             Map conditionMap = CollUtil.newHashMap();
-            conditionMap.put("tenantId", office.getId());
+            conditionMap.put("tenantId", organ.getId());
             userService.updateByCondition(updateMap, conditionMap);
 
             // 清除当前机构下的用户缓存
-            this.clearUsersCacheByTenantId(office.getId());
+            this.clearUsersCacheByTenantId(organ.getId());
         }
     }
 }

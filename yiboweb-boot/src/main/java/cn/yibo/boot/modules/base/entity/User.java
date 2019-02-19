@@ -140,7 +140,7 @@ public class User extends DataEntity<String> {
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
     @ApiModelProperty(value = "所属机构名称")
-    private String officeName;
+    private String organName;
 
     @ApiModelProperty(value = "所属科室名称")
     private String deptName;

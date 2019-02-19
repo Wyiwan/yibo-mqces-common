@@ -22,8 +22,8 @@ package cn.yibo.boot.modules.base.controller;
 
 import cn.yibo.boot.base.controller.CrudController;
 import cn.yibo.boot.common.annotation.IgnoredLog;
-import cn.yibo.boot.modules.base.entity.Office;
-import cn.yibo.boot.modules.base.service.OfficeService;
+import cn.yibo.boot.modules.base.entity.Organ;
+import cn.yibo.boot.modules.base.service.OrganService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -32,22 +32,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 医疗机构表控制器层
+ * 机构表控制器层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
 @RestController
-@RequestMapping("/api/office")
+@RequestMapping("/api/organ")
 @Api(tags = "9005.机构管理")
-public class OfficeController extends CrudController<OfficeService, Office>{
+public class OrganController extends CrudController<OrganService, Organ>{
     /**
      * 保存方法内部调用：验证数据合法性
      * @param entity
      * @throws Exception
      */
     @Override
-    public void verifyUnique(Office entity) throws Exception {
+    public void verifyUnique(Organ entity) throws Exception {
         super.verifyUnique(entity, "系统已存在机构名称");
     }
 
@@ -57,8 +57,8 @@ public class OfficeController extends CrudController<OfficeService, Office>{
      */
     @ApiOperation("列表查询")
     @GetMapping("/list")
-    public List list(Office office){
-        return this.baseSevice.queryList(this.getParamMap(), "office_sort", null);
+    public List list(Organ organ){
+        return this.baseSevice.queryList(getParamMap(), "organ_sort", null);
     }
 
     /**
@@ -70,8 +70,8 @@ public class OfficeController extends CrudController<OfficeService, Office>{
     @ApiImplicitParam(name = "id", value = "标识ID", paramType = "query", required = true, dataType = "String")
     @PostMapping("/disabled")
     public String disabled(@RequestBody String id){
-        Office office = this.baseSevice.fetch(id);
-        this.baseSevice.disabled(office);
+        Organ organ = this.baseSevice.fetch(id);
+        this.baseSevice.disabled(organ);
         return OPERATE_SUCCEED;
     }
 

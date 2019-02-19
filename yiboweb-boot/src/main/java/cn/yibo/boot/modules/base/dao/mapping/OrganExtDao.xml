@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.yibo.boot.modules.base.dao.OfficeDao">
-    <!-- 在这里存放用户自定义的映射配置（注：OfficeDAO.xml里各节点的ID不能在这里重复出现）  -->
+<mapper namespace="cn.yibo.boot.modules.base.dao.OrganDao">
+    <!-- 在这里存放用户自定义的映射配置（注：OrganDAO.xml里各节点的ID不能在这里重复出现）  -->
     <!-- 唯一性校验 -->
     <select id="count" resultType="java.lang.Integer">
-        select count(1) from sys_office
+        select count(1) from sys_organ
         <where>
             <if test="condition.id != null and condition.id.length() > 0">
                 and id not in(select #{condition.id})
             </if>
-            and office_name = #{condition.officeName,jdbcType=VARCHAR}
+            and organ_name = #{condition.organName,jdbcType=VARCHAR}
             and status = 1
         </where>
     </select>

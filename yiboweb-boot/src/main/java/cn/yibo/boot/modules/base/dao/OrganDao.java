@@ -18,23 +18,17 @@
 {*****************************************************************************	
 */
 
-package cn.yibo.boot.modules.base.service;
+package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.service.IBaseService;
-import cn.yibo.boot.modules.base.dao.OfficeDao;
-import cn.yibo.boot.modules.base.entity.Office;
+import cn.yibo.boot.base.dao.CrudDao;
+import cn.yibo.boot.modules.base.entity.Organ;
 
 /**
- * 医疗机构表服务接口层
+ * 机构表数据访问层
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
-public interface OfficeService extends IBaseService<OfficeDao, Office>{
-    /**
-     * 启用或停用
-     * @param office
-     * @return
-     */
-    void disabled(Office office);
+public interface OrganDao extends CrudDao<Organ>{
+
 }

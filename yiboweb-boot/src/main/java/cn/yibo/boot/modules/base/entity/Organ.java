@@ -30,26 +30,26 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 医疗机构表实体类(sys_office)
+ * 机构表实体类(sys_organ)
  * @author 高云
  * @since 2018-12-14
  * @version v1.0
  */
 @Data
-@ApiModel(value = "医疗机构表实体类")
-public class Office extends DataEntity<String> {
+@ApiModel(value = "机构表实体类")
+public class Organ extends DataEntity<String> {
     @NotEmpty(message="机构名称不能为空")
     @ApiModelProperty(value = "机构名称")
-    private String officeName;
+    private String organName;
     
     @ApiModelProperty(value = "机构编码(系统自动生成)")
-    private String officeCode;
+    private String organCode;
     
     @ApiModelProperty(value = "机构类型(1二甲 2三甲 3其他)")
-    private String officeType;
+    private String organType;
 
     @ApiModelProperty(value = "排序(升序)")
-    private Double officeSort;
+    private Double organSort;
     
     @ApiModelProperty(value = "机构简称")
     private String shortName;
@@ -82,7 +82,7 @@ public class Office extends DataEntity<String> {
     private String ancestorId;
 
     @ApiModelProperty(value = "层级(预留字段)")
-    private Double officeLevel;
+    private Double organLevel;
 
     //------------------------------------------------------------------------------------------------------------------
     // 扩展属性
@@ -96,6 +96,6 @@ public class Office extends DataEntity<String> {
     @Override
     public void preInsert(){
         super.preInsert();
-        this.officeCode = RandomUtil.randomNumbers(CommonConstant.OFFICE_CODE_NUM);
+        this.organCode = RandomUtil.randomNumbers(CommonConstant.ORGAN_CODE_NUM);
     }
 }

@@ -120,7 +120,7 @@ public interface CommonConstant {
     /**
      * 机构编码位数
      */
-    Integer OFFICE_CODE_NUM = 8;
+    Integer ORGAN_CODE_NUM = 8;
 
     /**
      * 否

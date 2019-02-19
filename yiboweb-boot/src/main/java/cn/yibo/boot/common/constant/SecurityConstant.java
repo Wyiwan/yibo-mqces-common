@@ -46,7 +46,7 @@ public interface SecurityConstant {
     /**
      * 切换租户接收参数名称
      */
-    String TENANT_KEY = "officeId";
+    String TENANT_KEY = "organId";
 
     /**
      * JWT签名用户ID参数名称

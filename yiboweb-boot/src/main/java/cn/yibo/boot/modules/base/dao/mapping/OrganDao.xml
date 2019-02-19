@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.yibo.boot.modules.base.dao.OfficeDao">
+<mapper namespace="cn.yibo.boot.modules.base.dao.OrganDao">
     <sql id="Base_Column_List">
         id,
         parent_id,
         ancestor_id,
-        office_name,
-        office_code,
-        office_type,
-        office_level,
-        office_sort,
+        organ_name,
+        organ_code,
+        organ_type,
+        organ_level,
+        organ_sort,
         short_name,
         director_id,
         avatar,
@@ -26,20 +26,20 @@
     </sql>
     
     <!-- 新增相关 -->
-    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.Office">
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.Organ">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
             select replace(UUID(),'-','')
         </selectKey>
-        insert into sys_office
+        insert into sys_organ
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             parent_id,
             ancestor_id,
-            office_name,
-            office_code,
-            office_type,
-            office_level,
-            office_sort,
+            organ_name,
+            organ_code,
+            organ_type,
+            organ_level,
+            organ_sort,
             short_name,
             director_id,
             avatar,
@@ -58,11 +58,11 @@
             #{id,jdbcType=VARCHAR},
             #{parentId,jdbcType=VARCHAR},
             #{ancestorId,jdbcType=VARCHAR},
-            #{officeName,jdbcType=VARCHAR},
-            #{officeCode,jdbcType=VARCHAR},
-            #{officeType,jdbcType=VARCHAR},
-            #{officeLevel,jdbcType=NUMERIC},
-            #{officeSort,jdbcType=NUMERIC},
+            #{organName,jdbcType=VARCHAR},
+            #{organCode,jdbcType=VARCHAR},
+            #{organType,jdbcType=VARCHAR},
+            #{organLevel,jdbcType=NUMERIC},
+            #{organSort,jdbcType=NUMERIC},
             #{shortName,jdbcType=VARCHAR},
             #{directorId,jdbcType=VARCHAR},
             #{avatar,jdbcType=VARCHAR},
@@ -80,16 +80,16 @@
     </insert>
     
     <insert id="insertMap">
-        insert into sys_office 
+        insert into sys_organ
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
             parent_id,
             ancestor_id,
-            office_name,
-            office_code,
-            office_type,
-            office_level,
-            office_sort,
+            organ_name,
+            organ_code,
+            organ_type,
+            organ_level,
+            organ_sort,
             short_name,
             director_id,
             avatar,
@@ -108,11 +108,11 @@
             replace(UUID(),'-',''),
             #{map.parentId,jdbcType=VARCHAR},
             #{map.ancestorId,jdbcType=VARCHAR},
-            #{map.officeName,jdbcType=VARCHAR},
-            #{map.officeCode,jdbcType=VARCHAR},
-            #{map.officeType,jdbcType=VARCHAR},
-            #{map.officeLevel,jdbcType=NUMERIC},
-            #{map.officeSort,jdbcType=NUMERIC},
+            #{map.organName,jdbcType=VARCHAR},
+            #{map.organCode,jdbcType=VARCHAR},
+            #{map.organType,jdbcType=VARCHAR},
+            #{map.organLevel,jdbcType=NUMERIC},
+            #{map.organSort,jdbcType=NUMERIC},
             #{map.shortName,jdbcType=VARCHAR},
             #{map.directorId,jdbcType=VARCHAR},
             #{map.avatar,jdbcType=VARCHAR},
@@ -130,8 +130,8 @@
     </insert>
     
     <!-- 更新相关 -->
-    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.Office">
-        update sys_office
+    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.Organ">
+        update sys_organ
         <trim prefix="set" suffixOverrides=",">
             <if test="parentId!=null">
                 parent_id = #{parentId,jdbcType=VARCHAR},
@@ -139,20 +139,20 @@
             <if test="ancestorId!=null">
                 ancestor_id = #{ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="officeName!=null">
-                office_name = #{officeName,jdbcType=VARCHAR},
+            <if test="organName!=null">
+                organ_name = #{organName,jdbcType=VARCHAR},
             </if>
-            <if test="officeCode!=null">
-                office_code = #{officeCode,jdbcType=VARCHAR},
+            <if test="organCode!=null">
+                organ_code = #{organCode,jdbcType=VARCHAR},
             </if>
-            <if test="officeType!=null">
-                office_type = #{officeType,jdbcType=VARCHAR},
+            <if test="organType!=null">
+                organ_type = #{organType,jdbcType=VARCHAR},
             </if>
-            <if test="officeLevel!=null">
-                office_level = #{officeLevel,jdbcType=NUMERIC},
+            <if test="organLevel!=null">
+                organ_level = #{organLevel,jdbcType=NUMERIC},
             </if>
-            <if test="officeSort!=null">
-                office_sort = #{officeSort,jdbcType=NUMERIC},
+            <if test="organSort!=null">
+                organ_sort = #{organSort,jdbcType=NUMERIC},
             </if>
             <if test="shortName!=null">
                 short_name = #{shortName,jdbcType=VARCHAR},
@@ -193,15 +193,15 @@
         </where>
     </update>
     
-    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.Office">
-        update sys_office
+    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.Organ">
+        update sys_organ
         <trim prefix="set" suffixOverrides=",">
             parent_id = #{parentId,jdbcType=VARCHAR},
             ancestor_id = #{ancestorId,jdbcType=VARCHAR},
-            office_name = #{officeName,jdbcType=VARCHAR},
-            office_type = #{officeType,jdbcType=VARCHAR},
-            office_level = #{officeLevel,jdbcType=NUMERIC},
-            office_sort = #{officeSort,jdbcType=NUMERIC},
+            organ_name = #{organName,jdbcType=VARCHAR},
+            organ_type = #{organType,jdbcType=VARCHAR},
+            organ_level = #{organLevel,jdbcType=NUMERIC},
+            organ_sort = #{organSort,jdbcType=NUMERIC},
             short_name = #{shortName,jdbcType=VARCHAR},
             director_id = #{directorId,jdbcType=VARCHAR},
             avatar = #{avatar,jdbcType=VARCHAR},
@@ -220,7 +220,7 @@
     </update>
     
     <update id="updateMap">
-        update sys_office
+        update sys_organ
         <trim prefix="set" suffixOverrides=",">
             <if test="map.parentId != null">
                 parent_id = #{map.parentId,jdbcType=VARCHAR},
@@ -228,20 +228,20 @@
             <if test="map.ancestorId != null">
                 ancestor_id = #{map.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="map.officeName != null">
-                office_name = #{map.officeName,jdbcType=VARCHAR},
+            <if test="map.organName != null">
+                organ_name = #{map.organName,jdbcType=VARCHAR},
             </if>
-            <if test="map.officeCode != null">
-                office_code = #{map.officeCode,jdbcType=VARCHAR},
+            <if test="map.organCode != null">
+                organ_code = #{map.organCode,jdbcType=VARCHAR},
             </if>
-            <if test="map.officeType != null">
-                office_type = #{map.officeType,jdbcType=VARCHAR},
+            <if test="map.organType != null">
+                organ_type = #{map.organType,jdbcType=VARCHAR},
             </if>
-            <if test="map.officeLevel != null">
-                office_level = #{map.officeLevel,jdbcType=NUMERIC},
+            <if test="map.organLevel != null">
+                organ_level = #{map.organLevel,jdbcType=NUMERIC},
             </if>
-            <if test="map.officeSort != null">
-                office_sort = #{map.officeSort,jdbcType=NUMERIC},
+            <if test="map.organSort != null">
+                organ_sort = #{map.organSort,jdbcType=NUMERIC},
             </if>
             <if test="map.shortName != null">
                 short_name = #{map.shortName,jdbcType=VARCHAR},
@@ -283,7 +283,7 @@
     </update>
     
     <update id="updateByCondition">
-        update sys_office
+        update sys_organ
         <trim prefix="set" suffixOverrides=",">
             <if test="update.parentId != null">
                 parent_id = #{update.parentId,jdbcType=VARCHAR},
@@ -291,20 +291,20 @@
             <if test="update.ancestorId != null">
                 ancestor_id = #{update.ancestorId,jdbcType=VARCHAR},
             </if>
-            <if test="update.officeName != null">
-                office_name = #{update.officeName,jdbcType=VARCHAR},
+            <if test="update.organName != null">
+                organ_name = #{update.organName,jdbcType=VARCHAR},
             </if>
-            <if test="update.officeCode != null">
-                office_code = #{update.officeCode,jdbcType=VARCHAR},
+            <if test="update.organCode != null">
+                organ_code = #{update.organCode,jdbcType=VARCHAR},
             </if>
-            <if test="update.officeType != null">
-                office_type = #{update.officeType,jdbcType=VARCHAR},
+            <if test="update.organType != null">
+                organ_type = #{update.organType,jdbcType=VARCHAR},
             </if>
-            <if test="update.officeLevel != null">
-                office_level = #{update.officeLevel,jdbcType=NUMERIC},
+            <if test="update.organLevel != null">
+                organ_level = #{update.organLevel,jdbcType=NUMERIC},
             </if>
-            <if test="update.officeSort != null">
-                office_sort = #{update.officeSort,jdbcType=NUMERIC},
+            <if test="update.organSort != null">
+                organ_sort = #{update.organSort,jdbcType=NUMERIC},
             </if>
             <if test="update.shortName != null">
                 short_name = #{update.shortName,jdbcType=VARCHAR},
@@ -347,20 +347,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeName != null">
-                and office_name = #{condition.officeName,jdbcType=VARCHAR}
+            <if test="condition.organName != null">
+                and organ_name = #{condition.organName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeCode != null">
-                and office_code = #{condition.officeCode,jdbcType=VARCHAR}
+            <if test="condition.organCode != null">
+                and organ_code = #{condition.organCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeType != null">
-                and office_type = #{condition.officeType,jdbcType=VARCHAR}
+            <if test="condition.organType != null">
+                and organ_type = #{condition.organType,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeLevel != null">
-                and office_level = #{condition.officeLevel,jdbcType=NUMERIC}
+            <if test="condition.organLevel != null">
+                and organ_level = #{condition.organLevel,jdbcType=NUMERIC}
             </if>
-            <if test="condition.officeSort != null">
-                and office_sort = #{condition.officeSort,jdbcType=NUMERIC}
+            <if test="condition.organSort != null">
+                and organ_sort = #{condition.organSort,jdbcType=NUMERIC}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
@@ -406,18 +406,18 @@
     
     <!-- 删除相关 -->
     <delete id="deleteById" parameterType="java.lang.String">
-        update sys_office set status = 0 where id = #{id}
+        update sys_organ set status = 0 where id = #{id}
     </delete>
 
     <delete id="deleteByIds">
-       update sys_office set status = 0
+       update sys_organ set status = 0
        <trim prefix="where" prefixOverrides="and | or">
            and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
        </trim>
     </delete>
 
     <delete id="deleteByCondition">
-        update sys_office set status = 0
+        update sys_organ set status = 0
         <trim prefix="where" prefixOverrides="and | or">
             <if test="condition.parentId != null">
                 and parent_id = #{condition.parentId,jdbcType=VARCHAR}
@@ -425,20 +425,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeName != null">
-                and office_name = #{condition.officeName,jdbcType=VARCHAR}
+            <if test="condition.organName != null">
+                and organ_name = #{condition.organName,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeCode != null">
-                and office_code = #{condition.officeCode,jdbcType=VARCHAR}
+            <if test="condition.organCode != null">
+                and organ_code = #{condition.organCode,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeType != null">
-                and office_type = #{condition.officeType,jdbcType=VARCHAR}
+            <if test="condition.organType != null">
+                and organ_type = #{condition.organType,jdbcType=VARCHAR}
             </if>
-            <if test="condition.officeLevel != null">
-                and office_level = #{condition.officeLevel,jdbcType=NUMERIC}
+            <if test="condition.organLevel != null">
+                and organ_level = #{condition.organLevel,jdbcType=NUMERIC}
             </if>
-            <if test="condition.officeSort != null">
-                and office_sort = #{condition.officeSort,jdbcType=NUMERIC}
+            <if test="condition.organSort != null">
+                and organ_sort = #{condition.organSort,jdbcType=NUMERIC}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
@@ -483,20 +483,20 @@
     </delete>
 
     <delete id="deleteByProperty">
-       update sys_office set status = 0 where ${property} = #{value}
+       update sys_organ set status = 0 where ${property} = #{value}
     </delete>
     
     <!-- 查询相关 -->
-    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             o.id,
             o.parent_id,
             o.ancestor_id,
-            o.office_name,
-            o.office_code,
-            o.office_type,
-            o.office_level,
-            o.office_sort,
+            o.organ_name,
+            o.organ_code,
+            o.organ_type,
+            o.organ_level,
+            o.organ_sort,
             o.short_name,
             o.director_id,
             u.name as director_name,
@@ -511,7 +511,7 @@
             o.update_by,
             o.update_date,
             o.comments
-        from sys_office o
+        from sys_organ o
         left join sys_user u on u.id = o.director_id and u.status != 0
         <where>
             and o.status != 0
@@ -519,10 +519,10 @@
         </where>
     </select>
 
-    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             and ${property} = #{value}
@@ -530,10 +530,10 @@
         limit 0,1
     </select>
 
-    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             and ${property} = #{value}
@@ -543,10 +543,10 @@
         </if>
     </select>
 
-    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
         </where>
@@ -555,10 +555,10 @@
         </if>
     </select>
 
-    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -567,20 +567,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.officeName != null">
-                and office_name = #{condition.officeName}
+            <if test="condition.organName != null">
+                and organ_name = #{condition.organName}
             </if>
-            <if test="condition.officeCode != null">
-                and office_code = #{condition.officeCode}
+            <if test="condition.organCode != null">
+                and organ_code = #{condition.organCode}
             </if>
-            <if test="condition.officeType != null">
-                and office_type = #{condition.officeType}
+            <if test="condition.organType != null">
+                and organ_type = #{condition.organType}
             </if>
-            <if test="condition.officeLevel != null">
-                and office_level = #{condition.officeLevel}
+            <if test="condition.organLevel != null">
+                and organ_level = #{condition.organLevel}
             </if>
-            <if test="condition.officeSort != null">
-                and office_sort = #{condition.officeSort}
+            <if test="condition.organSort != null">
+                and organ_sort = #{condition.organSort}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -628,10 +628,10 @@
         limit 0,1
     </select>
 
-    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -640,20 +640,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>
-            <if test="condition.officeName != null">
-                and office_name like concat('%', #{condition.officeName} , '%')
+            <if test="condition.organName != null">
+                and organ_name like concat('%', #{condition.organName} , '%')
             </if>
-            <if test="condition.officeCode != null">
-                and office_code like concat('%', #{condition.officeCode} , '%')
+            <if test="condition.organCode != null">
+                and organ_code like concat('%', #{condition.organCode} , '%')
             </if>
-            <if test="condition.officeType != null">
-                and office_type = #{condition.officeType}
+            <if test="condition.organType != null">
+                and organ_type = #{condition.organType}
             </if>
-            <if test="condition.officeLevel != null">
-                and office_level = #{condition.officeLevel}
+            <if test="condition.organLevel != null">
+                and organ_level = #{condition.organLevel}
             </if>
-            <if test="condition.officeSort != null">
-                and office_sort = #{condition.officeSort}
+            <if test="condition.organSort != null">
+                and organ_sort = #{condition.organSort}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -700,10 +700,10 @@
         </if>
     </select>
 
-    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -712,20 +712,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id = #{condition.ancestorId}
             </if>            
-            <if test="condition.officeName != null">
-                and office_name = #{condition.officeName}
+            <if test="condition.organName != null">
+                and organ_name = #{condition.organName}
             </if>            
-            <if test="condition.officeCode != null">
-                and office_code = #{condition.officeCode}
+            <if test="condition.organCode != null">
+                and organ_code = #{condition.organCode}
             </if>            
-            <if test="condition.officeType != null">
-                and office_type = #{condition.officeType}
+            <if test="condition.organType != null">
+                and organ_type = #{condition.organType}
             </if>            
-            <if test="condition.officeLevel != null">
-                and office_level = #{condition.officeLevel}
+            <if test="condition.organLevel != null">
+                and organ_level = #{condition.organLevel}
             </if>            
-            <if test="condition.officeSort != null">
-                and office_sort = #{condition.officeSort}
+            <if test="condition.organSort != null">
+                and organ_sort = #{condition.organSort}
             </if>            
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
@@ -781,10 +781,10 @@
 	    ${executeSql}
     </select>
 
-    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Office">
+    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Organ">
         select
             <include refid="Base_Column_List" />
-        from sys_office
+        from sys_organ
         <where>
             and status != 0
             <if test="condition.parentId != null">
@@ -793,20 +793,20 @@
             <if test="condition.ancestorId != null">
                 and ancestor_id like concat('%', #{condition.ancestorId} , '%')
             </if>
-            <if test="condition.officeName != null">
-                and office_name like concat('%', #{condition.officeName} , '%')
+            <if test="condition.organName != null">
+                and organ_name like concat('%', #{condition.organName} , '%')
             </if>
-            <if test="condition.officeCode != null">
-                and office_code like concat('%', #{condition.officeCode} , '%')
+            <if test="condition.organCode != null">
+                and organ_code like concat('%', #{condition.organCode} , '%')
             </if>
-            <if test="condition.officeType != null">
-                and office_type like concat('%', #{condition.officeType} , '%')
+            <if test="condition.organType != null">
+                and organ_type like concat('%', #{condition.organType} , '%')
             </if>
-            <if test="condition.officeLevel != null">
-                and office_level like concat('%', #{condition.officeLevel} , '%')
+            <if test="condition.organLevel != null">
+                and organ_level like concat('%', #{condition.organLevel} , '%')
             </if>
-            <if test="condition.officeSort != null">
-                and office_sort like concat('%', #{condition.officeSort} , '%')
+            <if test="condition.organSort != null">
+                and organ_sort like concat('%', #{condition.organSort} , '%')
             </if>
             <if test="condition.shortName != null">
                 and short_name like concat('%', #{condition.shortName} , '%')

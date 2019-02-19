@@ -52,7 +52,7 @@ public class SecurityUserDetails extends User implements UserDetails{
             this.setStatus(user.getStatus());
 
             this.setTenantId(user.getTenantId());
-            this.setOfficeName(user.getOfficeName());
+            this.setOrganName(user.getOrganName());
             this.setDeptId(user.getDeptId());
             this.setDeptName(user.getDeptName());
 
