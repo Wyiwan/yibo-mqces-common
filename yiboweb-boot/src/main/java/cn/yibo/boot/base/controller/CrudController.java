@@ -120,8 +120,8 @@ public abstract class CrudController<S extends IBaseService, D extends DataEntit
     @ApiOperation("分页查询")
     @GetMapping("/paged")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query", dataType = "Number"),
-            @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number")
+            @ApiImplicitParam(name = "pageNum", value = "当前页", paramType = "query", dataType = "Number"),
+            @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", dataType = "Number")
     })
     protected PageInfo<D> paged(){
         return baseSevice.queryPage(new BaseForm<D>());
