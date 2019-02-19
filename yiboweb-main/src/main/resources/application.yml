@@ -117,7 +117,7 @@ swagger:
 
 #本地环境
 spring:
-  profiles: local
+  profiles: locally
   #数据源
   datasource:
     username: root

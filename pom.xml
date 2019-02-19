@@ -157,9 +157,9 @@
 
     <profiles>
         <profile>
-            <id>local</id>
+            <id>locally</id>
             <properties>
-                <spring.active>local</spring.active>
+                <spring.active>locally</spring.active>
             </properties>
         </profile>
         <profile>
