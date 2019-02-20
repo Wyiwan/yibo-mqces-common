@@ -17,7 +17,7 @@
 {  注：本模块代码为底层基础框架封装的系统模块
 {*****************************************************************************
 */
-package cn.yibo.boot.modules.base.utils;
+package cn.yibo.boot.common.utils;
 
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;

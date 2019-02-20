@@ -25,7 +25,7 @@ import cn.yibo.boot.common.exception.LoginFailEnum;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.config.security.jwt.JWTUtil;
 import cn.yibo.boot.modules.base.entity.Log;
-import cn.yibo.boot.modules.base.utils.LogUtils;
+import cn.yibo.boot.common.utils.LogUtils;
 import cn.yibo.core.web.exception.BizException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -27,7 +27,7 @@ import cn.hutool.system.RuntimeInfo;
 import cn.hutool.system.SystemUtil;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.config.security.context.UserContext;
-import cn.yibo.boot.modules.base.utils.LogUtils;
+import cn.yibo.boot.common.utils.LogUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.ServletUtils;
 import lombok.extern.slf4j.Slf4j;

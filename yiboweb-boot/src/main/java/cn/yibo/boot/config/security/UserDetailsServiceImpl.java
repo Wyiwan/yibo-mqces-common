@@ -27,7 +27,7 @@ import cn.yibo.boot.common.exception.LoginFailLimitException;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.UserService;
-import cn.yibo.boot.modules.base.utils.LogUtils;
+import cn.yibo.boot.common.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
