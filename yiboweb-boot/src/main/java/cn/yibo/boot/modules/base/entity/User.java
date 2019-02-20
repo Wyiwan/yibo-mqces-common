@@ -57,8 +57,8 @@ public class User extends DataEntity<String> {
     @ApiModelProperty(value = "登录账号")
     private String username;
 
-    @ApiModelProperty(value = "登录密码")
     @JSONField(serialize = false)
+    @ApiModelProperty(value = "登录密码")
     private String password;
 
     @ApiModelProperty(value = "所属科室")
@@ -131,7 +131,7 @@ public class User extends DataEntity<String> {
     @ApiModelProperty(value = "允许访问开始时间")
     @JSONField(format="yyyy-MM-dd")
     private Date allowStartTime;
-    
+
     @ApiModelProperty(value = "允许访问结束时间")
     @JSONField(format="yyyy-MM-dd")
     private Date allowEndTime;
@@ -145,30 +145,31 @@ public class User extends DataEntity<String> {
     @ApiModelProperty(value = "所属科室名称")
     private String deptName;
 
-    @ApiModelProperty(value = "所属科室对象")
-    private Dept dept;
-
-    @JsonIgnore
-    @ApiModelProperty(value = "用户当前角色")
-    private Role currRole;
-
-    @JsonIgnore
-    @ApiModelProperty(value = "用户拥有的角色")
-    private List<Role> roles;
-
-    @JsonIgnore
-    @ApiModelProperty(value = "用户拥有的权限")
-    private List<Permission> permissions;
-
-    @JsonIgnore
-    private List<Permission> operPermissions;
-
-    @JsonIgnore
-    private List<Permission> menuPermissions;
-
+    @ApiModelProperty(value = "用户拥有的角色ID")
     private String roleIds;
 
     @JsonIgnore
+    @JSONField(serialize = false)
+    private Dept dept;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private List<Role> roles;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private List<Permission> permissions;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private List<Permission> operPermissions;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private List<Permission> menuPermissions;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
     private List<String> roleIdList;
 
     public boolean isAdmin(){

@@ -25,9 +25,11 @@ import cn.yibo.boot.common.constant.CacheConstant;
 import cn.yibo.boot.modules.base.dao.UserDao;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.core.web.exception.BizException;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +47,14 @@ public interface UserService extends IBaseService<UserDao, User>{
      */
     @Cacheable(key = "#username", unless = "#result == null")
     User findByUsername(String username);
+
+    /**
+     * 根据ID查询用户信息
+     * condition：用户ID[ids]、角色ID[roleIds]、机构ID[organIds]、科室ID[deptIds]
+     * @param condition
+     * @return
+     */
+    List<User> findUserByIds(@Param("condition") Map<String, Object> condition);
 
     /**
      * 根据ID查询用户，管理员类型校验

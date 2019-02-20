@@ -69,20 +69,6 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 重写删除
-     * @param list
-     * @return
-     */
-    @Override
-    @Transactional(readOnly = false)
-    public void deleteByIds(List list){
-        dao.deleteCascade(list);
-
-        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
-        CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
-    }
-
-    /**
      * 重写更新
      * @param permission
      * @return
@@ -92,6 +78,20 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void updateNull(Permission permission){
         super.updateNull(permission);
         dao.updateAncestor(permission);
+
+        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
+    }
+
+    /**
+     * 重写删除
+     * @param list
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteByIds(List list){
+        dao.deleteCascade(list);
 
         CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
         CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);

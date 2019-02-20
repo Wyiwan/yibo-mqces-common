@@ -76,13 +76,16 @@
         select
             distinct <include refid="Base_Column_List" />
         from sys_user
-        where status = 1
+        where status != 0
         <choose>
             <when test="condition.ids != null">
                 and id in <foreach collection="condition.ids" item="id" open="(" separator="," close=")">#{id}</foreach>
             </when>
             <when test="condition.deptIds != null">
                 and dept_id in <foreach collection="condition.deptIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </when>
+            <when test="condition.organIds != null">
+                and tenant_id in <foreach collection="condition.organIds" item="id" open="(" separator="," close=")">#{id}</foreach>
             </when>
             <when test="condition.roleIds != null">
                 and id in (

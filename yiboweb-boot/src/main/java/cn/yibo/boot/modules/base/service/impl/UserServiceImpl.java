@@ -199,6 +199,17 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
+     * 根据ID查询用户信息
+     * condition：用户ID[ids]、角色ID[roleIds]、机构ID[organIds]、科室ID[deptIds]
+     * @param condition
+     * @return
+     */
+    @Override
+    public List<User> findUserByIds(Map<String, Object> condition){
+        return  dao.findUserByIds(condition);
+    }
+
+    /**
      * 根据ID查询用户，会抛出数据校验异常
      * @param id
      * @return

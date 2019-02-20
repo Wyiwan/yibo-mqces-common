@@ -35,19 +35,19 @@ import java.util.Map;
  */
 public interface UserDao extends CrudDao<User>{
     /**
-     * 根据ID查询用户信息
-     * condition：用户ID[ids]、角色ID[roleIds]、科室ID[deptIds]
-     * @param condition
-     * @return
-     */
-    List<User> findUserByIds(@Param("condition") Map<String, Object> condition);
-
-    /**
      * 分页查询扩展
      * @param condition
      * @return
      */
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
+
+    /**
+     * 根据ID查询用户信息
+     * condition：用户ID[ids]、角色ID[roleIds]、机构ID[organIds]、科室ID[deptIds]
+     * @param condition
+     * @return
+     */
+    List<User> findUserByIds(@Param("condition") Map<String, Object> condition);
 
     /**
      * 角色授权
