@@ -169,7 +169,7 @@ public class RoleController extends CrudController<RoleService, Role> {
         if( !CollUtil.isEmpty(permissionList) ){
             return ListUtils.extractToList(permissionList, "id");
         }
-        return CollUtil.newArrayList();
+        return ListUtils.newArrayList();
     }
 
     /**

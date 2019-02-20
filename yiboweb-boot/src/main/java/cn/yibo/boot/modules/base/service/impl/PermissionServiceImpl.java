@@ -165,7 +165,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      */
     @Override
     public List<Permission> findAccessPermission(User user) {
-        List<Permission> permissions = CollUtil.newArrayList();
+        List<Permission> permissions = ListUtils.newArrayList();
         user = user == null ? UserContext.getUser() : user;
 
         if( user != null ){
@@ -187,7 +187,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Override
     public List<Permission> findGrantPermission() {
         User user = UserContext.getUser();
-        List<Permission> permissions = CollUtil.newArrayList();
+        List<Permission> permissions = ListUtils.newArrayList();
 
         if( user != null ){
             if( user.isSuperAdmin() ){

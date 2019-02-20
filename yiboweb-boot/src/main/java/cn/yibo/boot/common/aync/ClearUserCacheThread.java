@@ -25,11 +25,11 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CacheConstant;
+import cn.yibo.boot.modules.base.dao.UserDao;
+import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
-import cn.yibo.boot.modules.base.dao.UserDao;
-import cn.yibo.boot.modules.base.entity.User;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -110,9 +110,9 @@ public class ClearUserCacheThread extends Thread{
 
     private void clearCaches(List<String> list){
         if( !CollUtil.isEmpty(list) ){
-            for(int i = 0 ; i < list.size() ; i++){
-                CacheUtils.remove(CacheConstant.USER_CACHE_NAME, list.get(i));
-                log.info("清除用户[ "+list.get(i)+" ]缓存...");
+            for( String username : list ){
+                CacheUtils.remove(CacheConstant.USER_CACHE_NAME, username);
+                log.info("清除用户[ "+username+" ]缓存...");
             }
         }
     }

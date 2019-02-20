@@ -30,7 +30,6 @@ import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.RoleDao;
 import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.service.RoleService;
-import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
@@ -86,15 +85,16 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
-        if( !UserContext.getUser().isSuperAdmin() && !ListUtils.isEmpty(list)){
+        if( !UserContext.getUser().isSuperAdmin() ){
             Map<String, Object> condition = MapUtil.newHashMap();
             condition.put("ids", list);
 
             List<Role> roleList = dao.queryList(condition, null, null);
-            for(int i = 0 ; i < roleList.size(); i++){
-                Role role = roleList.get(i);
-                if( role != null && CommonConstant.YES.equals(role.getIsSys()) ){
-                    throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+            if( !CollUtil.isEmpty(roleList) ){
+                for( Role role : roleList ){
+                    if( CommonConstant.YES.equals(role.getIsSys()) ){
+                        throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
+                    }
                 }
             }
         }

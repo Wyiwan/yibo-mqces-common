@@ -223,7 +223,7 @@ public class UserController extends CrudController<UserService, User> {
         if( !CollUtil.isEmpty(roleList) ){
             return ListUtils.extractToList(roleList, "id");
         }
-        return CollUtil.newArrayList();
+        return ListUtils.newArrayList();
     }
 
     /**

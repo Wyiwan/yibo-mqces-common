@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.base.entity;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.tree.Tree;
+import cn.yibo.common.utils.ListUtils;
+import cn.yibo.common.utils.ObjectUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -56,7 +56,7 @@ public class TreeBuild extends Tree<TreeEntity, String> {
     protected void setChildren(TreeEntity parent, TreeEntity children) {
         List<TreeEntity> currChildren = parent.getChildren();
         if( currChildren == null ){
-            parent.setChildren(CollUtil.newArrayList());
+            parent.setChildren(ListUtils.newArrayList());
         }
         parent.getChildren().add(children);
         parent.setIsLeaf(false);

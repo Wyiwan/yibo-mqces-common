@@ -96,19 +96,16 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
      * 加载所有的操作权限
      */
     public void loadResourceDefine(){
-        // 获取所有启用的操作权限
-        List<Permission> permissions = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
-
         map = new HashMap<>(16);
-        if( !CollUtil.isEmpty(permissions) ){
-            for(int i = 0; i < permissions.size(); i++){
-                String permsName = permissions.get(i).getPermsName();
-                String permsUrl = permissions.get(i).getPermsUrl();
+        Collection<ConfigAttribute> configAttributes;
 
-                if( StrUtil.isNotBlank(permsName) && StrUtil.isNotBlank(permsUrl) ){
-                    ConfigAttribute configAttribute = new SecurityConfig(permsName.trim());
-                    Collection<ConfigAttribute> configAttributes = CollUtil.newArrayList(configAttribute);
-                    map.put(permsUrl.trim(), configAttributes);
+        // 获取所有启用的操作权限
+        List<Permission> permissionList = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
+        if( !CollUtil.isEmpty(permissionList) ){
+            for( Permission permission : permissionList ){
+                if( StrUtil.isNotBlank(permission.getPermsName()) && StrUtil.isNotBlank(permission.getPermsUrl()) ){
+                    configAttributes = CollUtil.newArrayList(new SecurityConfig(permission.getPermsName().trim()));
+                    map.put(permission.getPermsUrl().trim(), configAttributes);
                 }
             }
         }

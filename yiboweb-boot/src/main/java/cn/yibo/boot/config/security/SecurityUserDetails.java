@@ -83,10 +83,10 @@ public class SecurityUserDetails extends User implements UserDetails{
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
         // 添加请求权限
-        List<Permission> permissions = this.getOperPermissions();
-        if( !CollUtil.isEmpty(permissions) ){
-            for(int i = 0; i < permissions.size(); i++){
-                authorityList.add(new SimpleGrantedAuthority(permissions.get(i).getPermsName()));
+        List<Permission> permissionList = this.getOperPermissions();
+        if( !CollUtil.isEmpty(permissionList) ){
+            for( Permission permission : permissionList ){
+                authorityList.add(new SimpleGrantedAuthority(permission.getPermsName()));
             }
         }
         // log.info("添加的请求权限：\n" + authorityList);

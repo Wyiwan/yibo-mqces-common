@@ -105,11 +105,9 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         LinkedHashMap<K, N> selfMap = new LinkedHashMap<>(initialCapacity);
         //遍历所有
         if( !CollUtil.isEmpty(nodeList) ){
-            for(int i = 0; i < nodeList.size(); i++){
-                N node = nodeList.get(i);
+            for( N node : nodeList ){
                 selfMap.put(getKey(node), (N)ObjectUtil.clone(node));
             }
-
         }
         return selfMap;
     }

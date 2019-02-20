@@ -166,39 +166,33 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             if( organ != null ){
                 user.setOrganName(organ.getOrganName());
             }
-
             // 关联科室
             Dept dept = deptService.fetch(user.getDeptId());
             if( dept != null ){
                 user.setDeptName(dept.getDeptName());
                 user.setDept(dept);
             }
-
             // 关联角色
             List<Role> roles = roleService.findByUserId(user.getId());
             if( !CollUtil.isEmpty(roles) ){
                 user.setRoles(roles);
             }
-
             // 关联权限
-            List<Permission> permissions = permsService.findAccessPermission(user);
-            if( !CollUtil.isEmpty(permissions) ){
-                List<Permission> operPermissions = CollUtil.newArrayList();
-                List<Permission> menuPermissions = CollUtil.newArrayList();
+            List<Permission> permsList = permsService.findAccessPermission(user);
+            if( !CollUtil.isEmpty(permsList) ){
+                List<Permission> operPermsList = ListUtils.newArrayList();
+                List<Permission> menuPermsList = ListUtils.newArrayList();
 
-                for(int i = 0; i < permissions.size(); i++){
-                    String permsUrl = permissions.get(i).getPermsUrl();
-                    String permsType = permissions.get(i).getPermsType();
-
-                    if( CommonConstant.PERMISSION_OPERATION.equals(permsType) && StrUtil.isNotBlank(permsUrl) ){
-                        operPermissions.add(permissions.get(i));
-                    }else if( CommonConstant.PERMISSION_PAGE.equals(permsType) ){
-                        menuPermissions.add(permissions.get(i));
+                for( Permission p : permsList ){
+                    if( CommonConstant.PERMISSION_OPERATION.equals(p.getPermsType()) && StrUtil.isNotBlank(p.getPermsUrl()) ){
+                        operPermsList.add(p);
+                    }else if( CommonConstant.PERMISSION_PAGE.equals(p.getPermsType()) ){
+                        menuPermsList.add(p);
                     }
                 }
-                user.setOperPermissions(operPermissions);
-                user.setMenuPermissions(menuPermissions);
-                user.setPermissions(permissions);
+                user.setOperPermissions(operPermsList);
+                user.setMenuPermissions(menuPermsList);
+                user.setPermissions(permsList);
             }
         }
         return user;
@@ -256,13 +250,13 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
 
             // 操作权限(用于前端按钮权限控制)
-            List<Permission> operPermissions = user.getOperPermissions();
-            if( !CollUtil.isEmpty(operPermissions) ){
+            List<Permission> operPermsList = user.getOperPermissions();
+            if( !CollUtil.isEmpty(operPermsList) ){
                 Map<String, List<String>> authorities = MapUtil.newHashMap();
                 TreeBuild treeBuild = new TreeBuild(user.getPermissions());
 
-                for(Permission permission : operPermissions){
-                    Permission parentNode = (Permission) treeBuild.getParent(permission);
+                for(Permission permission : operPermsList){
+                    Permission parentNode = (Permission)treeBuild.getParent(permission);
 
                     if( parentNode != null && CommonConstant.PERMISSION_PAGE.equals(parentNode.getPermsType()) ){
                         String urlKey = parentNode.getPermsUrl();

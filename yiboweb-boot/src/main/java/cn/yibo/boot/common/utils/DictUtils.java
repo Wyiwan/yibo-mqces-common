@@ -29,6 +29,7 @@ import cn.yibo.boot.modules.base.entity.DictItem;
 import cn.yibo.boot.modules.base.entity.DictKind;
 import cn.yibo.boot.modules.base.service.DictItemService;
 import cn.yibo.boot.modules.base.service.DictKindService;
+import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
 
@@ -64,7 +65,7 @@ public class DictUtils {
         if( !CollUtil.isEmpty(list) ){
             Iterator<DictKind> iterator = list.iterator();
             while( iterator.hasNext() ){
-                dictMap.put(iterator.next().getDictKind(), CollUtil.newArrayList());
+                dictMap.put(iterator.next().getDictKind(), ListUtils.newArrayList());
             }
 
             List<DictItem> itemList = dictItemService.findList("i.status", CommonConstant.STATUS_NORMAL);
@@ -147,7 +148,7 @@ public class DictUtils {
         if( dictMap == null ){
             dictMap = dictCacheReload();
         }
-        return dictMap.get(dictKind) == null ? CollUtil.newArrayList() : dictMap.get(dictKind);
+        return dictMap.get(dictKind) == null ? ListUtils.newArrayList() : dictMap.get(dictKind);
     }
 
     /**
@@ -157,6 +158,6 @@ public class DictUtils {
      */
     public static List<DictItem> getDictTreeList(String dictKind){
         List dictList = getDictList(dictKind);
-        return dictList == null ? CollUtil.newArrayList() : (List<DictItem>)new TreeBuild(dictList).getTreeList();
+        return dictList == null ? ListUtils.newArrayList() : (List<DictItem>)new TreeBuild(dictList).getTreeList();
     }
 }

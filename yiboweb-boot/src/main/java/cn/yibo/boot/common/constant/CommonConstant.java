@@ -113,6 +113,16 @@ public interface CommonConstant {
     // @其他默认配置
     //------------------------------------------------------------------------------------------------------------------
     /**
+     * 否
+     */
+    String NO = "0";
+
+    /**
+     * 是
+     */
+    String YES = "1";
+
+    /**
      * 科室编码位数
      */
     Integer DEPT_CODE_NUM = 6;
@@ -123,12 +133,12 @@ public interface CommonConstant {
     Integer ORGAN_CODE_NUM = 8;
 
     /**
-     * 否
+     * 消息发送范围(全部用户)
      */
-    String NO = "0";
+    Integer MESSAGE_RANGE_ALL = 0;
 
     /**
-     * 是
+     * 消息发送范围(指定机构)
      */
-    String YES = "1";
+    Integer MESSAGE_RANGE_ORGAN = 1;
 }
