@@ -4,7 +4,7 @@
     <!-- 在这里存放用户自定义的映射配置（注：DeptDAO.xml里各节点的ID不能在这里重复出现）  -->
     <select id="queryListExt" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Dept">
         select
-            d.id, d.parent_id, d.ancestor_id, d.dept_name, d.short_name,
+            d.id, d.parent_id, d.ancestor_id, d.dept_name, d.pinyin_code,
             d.dept_code, d.dept_type, d.dept_level, d.dept_sort,
             d.leader_id, u.name as leader_name, d.phone, d.status,
             d.create_by, d.create_date, d.update_by, d.update_date,
@@ -22,8 +22,8 @@
             <if test="condition.deptName != null">
                 and d.dept_name like concat('%', #{condition.deptName} , '%')
             </if>
-            <if test="condition.shortName != null">
-                and d.short_name like concat('%', #{condition.shortName} , '%')
+            <if test="condition.pinyinCode != null">
+                and d.pinyin_code like concat('%', #{condition.pinyinCode} , '%')
             </if>
             <if test="condition.deptCode != null">
                 and d.dept_code like concat('%', #{condition.deptCode} , '%')

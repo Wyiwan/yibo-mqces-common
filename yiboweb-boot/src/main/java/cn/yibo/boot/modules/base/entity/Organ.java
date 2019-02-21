@@ -50,7 +50,10 @@ public class Organ extends DataEntity<String> {
 
     @ApiModelProperty(value = "排序(升序)")
     private Double organSort;
-    
+
+    @ApiModelProperty(value = "拼音编码")
+    private String pinyinCode;
+
     @ApiModelProperty(value = "机构简称")
     private String shortName;
     

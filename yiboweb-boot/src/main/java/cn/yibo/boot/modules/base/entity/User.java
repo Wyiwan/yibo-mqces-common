@@ -77,8 +77,8 @@ public class User extends DataEntity<String> {
     @ApiModelProperty(value = "所在岗位(预留)")
     private String empPosts;
 
-    @ApiModelProperty(value = "姓名简称")
-    private String shortName;
+    @ApiModelProperty(value = "拼音编码")
+    private String pinyinCode;
     
     @ApiModelProperty(value = "五笔编码")
     private String wubiCode;

@@ -5,7 +5,7 @@
     <!-- 分页查询扩展 -->
     <select id="queryPageExt" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
         select
-            u.id, u.username, u.name, u.short_name,
+            u.id, u.username, u.name, u.pinyin_code,
             u.dept_id, u.emp_code, u.emp_posts, u.emp_status,
             u.wubi_code, u.identity_no, u.native_place, u.sex, u.birthday, u.avatar,
             u.email, u.mobile, u.telephone, u.user_type, u.user_weight, u.mgr_type,
@@ -37,8 +37,8 @@
             <if test="condition.empCode != null">
                 and u.emp_code = #{condition.empCode}
             </if>
-            <if test="condition.shortName != null">
-                and u.short_name like concat('%', #{condition.shortName} , '%')
+            <if test="condition.pinyinCode != null">
+                and u.pinyin_code like concat('%', #{condition.pinyinCode} , '%')
             </if>
             <if test="condition.wubiCode != null">
                 and u.wubi_code = #{condition.wubiCode}

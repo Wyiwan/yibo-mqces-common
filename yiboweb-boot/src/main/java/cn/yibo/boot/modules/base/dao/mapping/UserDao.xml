@@ -10,7 +10,7 @@
         emp_code,
         emp_status,
         emp_posts,
-        short_name,
+        pinyin_code,
         wubi_code,
         identity_no,
         native_place,
@@ -52,7 +52,7 @@
             emp_code,
             emp_status,
             emp_posts,
-            short_name,
+            pinyin_code,
             wubi_code,
             identity_no,
             native_place,
@@ -87,7 +87,7 @@
             #{empCode,jdbcType=VARCHAR},
             #{empStatus,jdbcType=VARCHAR},
             #{empPosts,jdbcType=VARCHAR},
-            #{shortName,jdbcType=VARCHAR},
+            #{pinyinCode,jdbcType=VARCHAR},
             #{wubiCode,jdbcType=VARCHAR},
             #{identityNo,jdbcType=VARCHAR},
             #{nativePlace,jdbcType=VARCHAR},
@@ -126,7 +126,7 @@
             emp_code,
             emp_status,
             emp_posts,
-            short_name,
+            pinyin_code,
             wubi_code,
             identity_no,
             native_place,
@@ -161,7 +161,7 @@
             #{map.empCode,jdbcType=VARCHAR},
             #{map.empStatus,jdbcType=VARCHAR},
             #{map.empPosts,jdbcType=VARCHAR},
-            #{map.shortName,jdbcType=VARCHAR},
+            #{map.pinyinCode,jdbcType=VARCHAR},
             #{map.wubiCode,jdbcType=VARCHAR},
             #{map.identityNo,jdbcType=VARCHAR},
             #{map.nativePlace,jdbcType=VARCHAR},
@@ -214,8 +214,8 @@
             <if test="empPosts!=null">
                 emp_posts = #{empPosts,jdbcType=VARCHAR},
             </if>
-            <if test="shortName!=null">
-                short_name = #{shortName,jdbcType=VARCHAR},
+            <if test="pinyinCode!=null">
+                pinyin_code = #{pinyinCode,jdbcType=VARCHAR},
             </if>
             <if test="wubiCode!=null">
                 wubi_code = #{wubiCode,jdbcType=VARCHAR},
@@ -299,7 +299,7 @@
             emp_code = #{empCode,jdbcType=VARCHAR},
             emp_status = #{empStatus,jdbcType=VARCHAR},
             emp_posts = #{empPosts,jdbcType=VARCHAR},
-            short_name = #{shortName,jdbcType=VARCHAR},
+            pinyin_code = #{pinyinCode,jdbcType=VARCHAR},
             wubi_code = #{wubiCode,jdbcType=VARCHAR},
             identity_no = #{identityNo,jdbcType=VARCHAR},
             native_place = #{nativePlace,jdbcType=VARCHAR},
@@ -352,8 +352,8 @@
             <if test="map.empPosts != null">
                 emp_posts = #{map.empPosts,jdbcType=VARCHAR},
             </if>
-            <if test="map.shortName != null">
-                short_name = #{map.shortName,jdbcType=VARCHAR},
+            <if test="map.pinyinCode != null">
+                pinyin_code = #{map.pinyinCode,jdbcType=VARCHAR},
             </if>
             <if test="map.wubiCode != null">
                 wubi_code = #{map.wubiCode,jdbcType=VARCHAR},
@@ -451,8 +451,8 @@
             <if test="update.empPosts != null">
                 emp_posts = #{update.empPosts,jdbcType=VARCHAR},
             </if>
-            <if test="update.shortName != null">
-                short_name = #{update.shortName,jdbcType=VARCHAR},
+            <if test="update.pinyinCode != null">
+                pinyin_code = #{update.pinyinCode,jdbcType=VARCHAR},
             </if>
             <if test="update.wubiCode != null">
                 wubi_code = #{update.wubiCode,jdbcType=VARCHAR},
@@ -543,8 +543,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
             </if>
-            <if test="condition.shortName != null">
-                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode,jdbcType=VARCHAR}
             </if>
             <if test="condition.wubiCode != null">
                 and wubi_code = #{condition.wubiCode,jdbcType=VARCHAR}
@@ -657,8 +657,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts = #{condition.empPosts,jdbcType=VARCHAR}
             </if>
-            <if test="condition.shortName != null">
-                and short_name = #{condition.shortName,jdbcType=VARCHAR}
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode,jdbcType=VARCHAR}
             </if>
             <if test="condition.wubiCode != null">
                 and wubi_code = #{condition.wubiCode,jdbcType=VARCHAR}
@@ -813,8 +813,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts = #{condition.empPosts}
             </if>
-            <if test="condition.shortName != null">
-                and short_name = #{condition.shortName}
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
             </if>
             <if test="condition.wubiCode != null">
                 and wubi_code = #{condition.wubiCode}
@@ -922,8 +922,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts = #{condition.empPosts}
             </if>
-            <if test="condition.shortName != null">
-                and short_name = #{condition.shortName}
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
             </if>
             <if test="condition.wubiCode != null">
                 and wubi_code = #{condition.wubiCode}
@@ -1030,8 +1030,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts = #{condition.empPosts}
             </if>            
-            <if test="condition.shortName != null">
-                and short_name = #{condition.shortName}
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
             </if>            
             <if test="condition.wubiCode != null">
                 and wubi_code = #{condition.wubiCode}
@@ -1147,8 +1147,8 @@
             <if test="condition.empPosts != null">
                 and emp_posts like concat('%', #{condition.empPosts} , '%')
             </if>
-            <if test="condition.shortName != null">
-                and short_name like concat('%', #{condition.shortName} , '%')
+            <if test="condition.pinyinCode != null">
+                and pinyin_code like concat('%', #{condition.pinyinCode} , '%')
             </if>
             <if test="condition.wubiCode != null">
                 and wubi_code like concat('%', #{condition.wubiCode} , '%')

@@ -42,9 +42,8 @@ public class Dept extends TreeEntity<Dept, String> {
     @ApiModelProperty(value = "科室名称")
     private String deptName;
 
-    @NotEmpty(message="科室简称不能为空")
-    @ApiModelProperty(value = "科室简称")
-    private String shortName;
+    @ApiModelProperty(value = "拼音编码")
+    private String pinyinCode;
     
     @ApiModelProperty(value = "科室编码(系统自动生成)")
     private String deptCode;

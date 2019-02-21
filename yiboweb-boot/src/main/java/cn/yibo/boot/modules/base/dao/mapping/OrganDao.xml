@@ -10,6 +10,7 @@
         organ_type,
         organ_level,
         organ_sort,
+        pinyin_code,
         short_name,
         director_id,
         avatar,
@@ -40,6 +41,7 @@
             organ_type,
             organ_level,
             organ_sort,
+            pinyin_code,
             short_name,
             director_id,
             avatar,
@@ -63,6 +65,7 @@
             #{organType,jdbcType=VARCHAR},
             #{organLevel,jdbcType=NUMERIC},
             #{organSort,jdbcType=NUMERIC},
+            #{pinyinCode,jdbcType=VARCHAR},
             #{shortName,jdbcType=VARCHAR},
             #{directorId,jdbcType=VARCHAR},
             #{avatar,jdbcType=VARCHAR},
@@ -90,6 +93,7 @@
             organ_type,
             organ_level,
             organ_sort,
+            pinyin_code,
             short_name,
             director_id,
             avatar,
@@ -113,6 +117,7 @@
             #{map.organType,jdbcType=VARCHAR},
             #{map.organLevel,jdbcType=NUMERIC},
             #{map.organSort,jdbcType=NUMERIC},
+            #{map.pinyinCode,jdbcType=VARCHAR},
             #{map.shortName,jdbcType=VARCHAR},
             #{map.directorId,jdbcType=VARCHAR},
             #{map.avatar,jdbcType=VARCHAR},
@@ -153,6 +158,9 @@
             </if>
             <if test="organSort!=null">
                 organ_sort = #{organSort,jdbcType=NUMERIC},
+            </if>
+            <if test="pinyinCode!=null">
+                pinyin_code = #{pinyinCode,jdbcType=VARCHAR},
             </if>
             <if test="shortName!=null">
                 short_name = #{shortName,jdbcType=VARCHAR},
@@ -202,6 +210,7 @@
             organ_type = #{organType,jdbcType=VARCHAR},
             organ_level = #{organLevel,jdbcType=NUMERIC},
             organ_sort = #{organSort,jdbcType=NUMERIC},
+            pinyin_code = #{pinyinCode,jdbcType=VARCHAR},
             short_name = #{shortName,jdbcType=VARCHAR},
             director_id = #{directorId,jdbcType=VARCHAR},
             avatar = #{avatar,jdbcType=VARCHAR},
@@ -242,6 +251,9 @@
             </if>
             <if test="map.organSort != null">
                 organ_sort = #{map.organSort,jdbcType=NUMERIC},
+            </if>
+            <if test="map.pinyinCode != null">
+                pinyin_code = #{map.pinyinCode,jdbcType=VARCHAR},
             </if>
             <if test="map.shortName != null">
                 short_name = #{map.shortName,jdbcType=VARCHAR},
@@ -306,6 +318,9 @@
             <if test="update.organSort != null">
                 organ_sort = #{update.organSort,jdbcType=NUMERIC},
             </if>
+            <if test="update.pinyinCode != null">
+                pinyin_code = #{update.pinyinCode,jdbcType=VARCHAR},
+            </if>
             <if test="update.shortName != null">
                 short_name = #{update.shortName,jdbcType=VARCHAR},
             </if>
@@ -361,6 +376,9 @@
             </if>
             <if test="condition.organSort != null">
                 and organ_sort = #{condition.organSort,jdbcType=NUMERIC}
+            </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode,jdbcType=VARCHAR}
             </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
@@ -440,6 +458,9 @@
             <if test="condition.organSort != null">
                 and organ_sort = #{condition.organSort,jdbcType=NUMERIC}
             </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode,jdbcType=VARCHAR}
+            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName,jdbcType=VARCHAR}
             </if>
@@ -497,6 +518,7 @@
             o.organ_type,
             o.organ_level,
             o.organ_sort,
+            o.pinyin_code,
             o.short_name,
             o.director_id,
             u.name as director_name,
@@ -582,6 +604,9 @@
             <if test="condition.organSort != null">
                 and organ_sort = #{condition.organSort}
             </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
+            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
             </if>
@@ -655,6 +680,9 @@
             <if test="condition.organSort != null">
                 and organ_sort = #{condition.organSort}
             </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
+            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
             </if>
@@ -726,7 +754,10 @@
             </if>            
             <if test="condition.organSort != null">
                 and organ_sort = #{condition.organSort}
-            </if>            
+            </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code = #{condition.pinyinCode}
+            </if>
             <if test="condition.shortName != null">
                 and short_name = #{condition.shortName}
             </if>            
@@ -807,6 +838,9 @@
             </if>
             <if test="condition.organSort != null">
                 and organ_sort like concat('%', #{condition.organSort} , '%')
+            </if>
+            <if test="condition.pinyinCode != null">
+                and pinyin_code like concat('%', #{condition.pinyinCode} , '%')
             </if>
             <if test="condition.shortName != null">
                 and short_name like concat('%', #{condition.shortName} , '%')
