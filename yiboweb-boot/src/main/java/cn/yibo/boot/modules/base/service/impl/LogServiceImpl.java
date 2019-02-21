@@ -26,7 +26,6 @@ import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.LogDao;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.service.LogService;
-import cn.yibo.common.utils.ObjectUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -53,9 +52,7 @@ public class LogServiceImpl extends AbstractBaseService<LogDao, Log> implements 
     @Override
     public <T>PageInfo<T> queryPage(BaseForm<T> baseForm){
         // 设置分页参数
-        if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
-            PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
-        }
+        PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
 
         // 获取查询参数
         Map<String, Object> params = baseForm.getParameters();

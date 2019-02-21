@@ -30,7 +30,6 @@ import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.RoleDao;
 import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.service.RoleService;
-import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -111,9 +110,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     public <T>PageInfo<T> queryPage(BaseForm<T> baseForm){
         // 设置分页参数
-        if( !ObjectUtils.isEmpty( baseForm.get("page") ) ){
-            PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
-        }
+        PageHelper.startPage(baseForm.getPageNo(), baseForm.getPageSize());
 
         // 获取查询参数
         Map<String, Object> params = baseForm.getParameters();

@@ -79,10 +79,10 @@ public class BaseForm<T>{
 	 * @return
 	 */
 	public int getPageNo(){
-		String page = StrUtil.emptyToDefault(ObjectUtils.toString(this.get("pageNum")), ObjectUtils.toString(this.get("page")));
+		String pageNum = StrUtil.emptyToDefault(ObjectUtils.toString(this.get("pageNum")), ObjectUtils.toString(this.get("page")));
 		
-		if( !StrUtil.isEmpty(page) && NumberUtil.isNumber(page) ){
-			this.pageNo = Integer.parseInt(page);
+		if( !StrUtil.isEmpty(pageNum) && NumberUtil.isNumber(pageNum) ){
+			this.pageNo = Integer.parseInt(pageNum);
 		}
 		return this.pageNo;
 	}
