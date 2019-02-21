@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.MessageDao">
+    <sql id="Base_Column_List">
+        id,
+        message_type,
+        message_title,
+        message_content,
+        new_user_push,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        comments
+    </sql>
+    
+    <!-- 新增相关 -->
+    <insert id="insert" parameterType="cn.yibo.boot.modules.base.entity.Message">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            message_type,
+            message_title,
+            message_content,
+            new_user_push,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{messageType,jdbcType=VARCHAR},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{newUserPush,jdbcType=VARCHAR},
+            #{status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP},
+            #{comments,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <insert id="insertMap">
+        insert into sys_message 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            message_type,
+            message_title,
+            message_content,
+            new_user_push,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            replace(UUID(),'-',''),
+            #{map.messageType,jdbcType=VARCHAR},
+            #{map.messageTitle,jdbcType=VARCHAR},
+            #{map.messageContent,jdbcType=VARCHAR},
+            #{map.newUserPush,jdbcType=VARCHAR},
+            #{map.status,jdbcType=INTEGER},
+            #{map.createBy,jdbcType=VARCHAR},
+            #{map.createDate,jdbcType=TIMESTAMP},
+            #{map.updateBy,jdbcType=VARCHAR},
+            #{map.updateDate,jdbcType=TIMESTAMP},
+            #{map.comments,jdbcType=VARCHAR},
+        </trim>
+    </insert>
+    
+    <!-- 更新相关 -->
+    <update id="update" parameterType="cn.yibo.boot.modules.base.entity.Message">
+        update sys_message
+        <trim prefix="set" suffixOverrides=",">
+            <if test="messageType!=null">
+                message_type = #{messageType,jdbcType=VARCHAR},
+            </if>
+            <if test="messageTitle!=null">
+                message_title = #{messageTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="messageContent!=null">
+                message_content = #{messageContent,jdbcType=VARCHAR},
+            </if>
+            <if test="newUserPush!=null">
+                new_user_push = #{newUserPush,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateBy!=null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate!=null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comments!=null">
+                comments = #{comments,jdbcType=VARCHAR},
+            </if>
+       </trim>
+       <where>
+            id = #{id}
+       </where>
+    </update>
+    
+    <update id="updateNull" parameterType="cn.yibo.boot.modules.base.entity.Message">
+        update sys_message
+        <trim prefix="set" suffixOverrides=",">
+            message_type = #{messageType,jdbcType=VARCHAR},
+            message_title = #{messageTitle,jdbcType=VARCHAR},
+            message_content = #{messageContent,jdbcType=VARCHAR},
+            new_user_push = #{newUserPush,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            update_by = #{updateBy,jdbcType=VARCHAR},
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            comments = #{comments,jdbcType=VARCHAR},
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateMap">
+        update sys_message
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.messageType!=null">
+                message_type = #{map.messageType,jdbcType=VARCHAR},
+            </if>
+            <if test="map.messageTitle!=null">
+                message_title = #{map.messageTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="map.messageContent!=null">
+                message_content = #{map.messageContent,jdbcType=VARCHAR},
+            </if>
+            <if test="map.newUserPush!=null">
+                new_user_push = #{map.newUserPush,jdbcType=VARCHAR},
+            </if>
+            <if test="map.status!=null">
+                status = #{map.status,jdbcType=INTEGER},
+            </if>
+            <if test="map.updateBy!=null">
+                update_by = #{map.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="map.updateDate!=null">
+                update_date = #{map.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="map.comments!=null">
+                comments = #{map.comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <where>
+            id = #{map.id}
+        </where>
+    </update>
+    
+    <update id="updateByCondition">
+        update sys_message
+        <trim prefix="set" suffixOverrides=",">
+            <if test="update.messageType!=null">
+                message_type = #{update.messageType,jdbcType=VARCHAR},
+            </if>
+            <if test="update.messageTitle!=null">
+                message_title = #{update.messageTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="update.messageContent!=null">
+                message_content = #{update.messageContent,jdbcType=VARCHAR},
+            </if>
+            <if test="update.newUserPush!=null">
+                new_user_push = #{update.newUserPush,jdbcType=VARCHAR},
+            </if>
+            <if test="update.status!=null">
+                status = #{update.status,jdbcType=INTEGER},
+            </if>
+            <if test="update.updateBy!=null">
+                update_by = #{update.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="update.updateDate!=null">
+                update_date = #{update.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update.comments!=null">
+                comments = #{update.comments,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.messageType!=null">
+                and message_type = #{condition.messageType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.messageTitle!=null">
+                and message_title = #{condition.messageTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.messageContent!=null">
+                and message_content = #{condition.messageContent,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.newUserPush!=null">
+                and new_user_push = #{condition.newUserPush,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status!=null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy!=null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate!=null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy!=null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate!=null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments!=null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+        </trim>  
+    </update>
+    
+    <!-- 删除相关 -->
+    <delete id="deleteById" parameterType="java.lang.String">
+        update sys_message set status = 0 where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+       update sys_message set status = 0
+       <trim prefix="where" prefixOverrides="and | or">
+           and id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+       </trim>
+    </delete>
+
+    <delete id="deleteByCondition">
+        update sys_message set status = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="condition.messageType != null">
+                and message_type = #{condition.messageType,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.messageTitle != null">
+                and message_title = #{condition.messageTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.messageContent != null">
+                and message_content = #{condition.messageContent,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.newUserPush != null">
+                and new_user_push = #{condition.newUserPush,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+
+    <delete id="deleteByProperty">
+       update sys_message set status = 0 where ${property} = #{value}
+    </delete>
+    
+    <!-- 查询相关 -->
+    <select id="fetch" parameterType="java.lang.String" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            and id = #{id}
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="findList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            and ${property} = #{value}
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryOne" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            <if test="condition.messageType != null">
+                and message_type = #{condition.messageType}
+            </if>
+            <if test="condition.messageTitle != null">
+                and message_title = #{condition.messageTitle}
+            </if>
+            <if test="condition.messageContent != null">
+                and message_content = #{condition.messageContent}
+            </if>
+            <if test="condition.newUserPush != null">
+                and new_user_push = #{condition.newUserPush}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+        limit 0,1
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            <if test="condition.messageType != null">
+                and message_type = #{condition.messageType}
+            </if>
+            <if test="condition.messageTitle != null">
+                and message_title = #{condition.messageTitle}
+            </if>
+            <if test="condition.messageContent != null">
+                and message_content = #{condition.messageContent}
+            </if>
+            <if test="condition.newUserPush != null">
+                and new_user_push = #{condition.newUserPush}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            <if test="condition.messageType != null">
+                and message_type = #{condition.messageType}
+            </if>            
+            <if test="condition.messageTitle != null">
+                and message_title = #{condition.messageTitle}
+            </if>            
+            <if test="condition.messageContent != null">
+                and message_content = #{condition.messageContent}
+            </if>            
+            <if test="condition.newUserPush != null">
+                and new_user_push = #{condition.newUserPush}
+            </if>            
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>            
+            <if test="condition.createBy != null">
+                and create_by = #{condition.createBy}
+            </if>            
+            <if test="condition.createDate != null">
+                and create_date = #{condition.createDate}
+            </if>            
+            <if test="condition.updateBy != null">
+                and update_by = #{condition.updateBy}
+            </if>            
+            <if test="condition.updateDate != null">
+                and update_date = #{condition.updateDate}
+            </if>            
+            <if test="condition.comments != null">
+                and comments = #{condition.comments}
+            </if>            
+        </where>
+        <choose>
+            <when test="condition.sort != null">
+                order by ${condition.orderby}
+            </when>
+            <otherwise>
+                order by create_date desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryBySql" parameterType="string" resultType="map">
+	    ${executeSql}
+    </select>
+
+    <select id="like" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.Message">
+        select
+            <include refid="Base_Column_List" />
+        from sys_message
+        <where>
+            and status != 0
+            <if test="condition.messageType != null">
+                and message_type like concat('%', #{condition.messageType} , '%')
+            </if>
+            <if test="condition.messageTitle != null">
+                and message_title like concat('%', #{condition.messageTitle} , '%')
+            </if>
+            <if test="condition.messageContent != null">
+                and message_content like concat('%', #{condition.messageContent} , '%')
+            </if>
+            <if test="condition.newUserPush != null">
+                and new_user_push like concat('%', #{condition.newUserPush} , '%')
+            </if>
+            <if test="condition.status != null">
+                and status like concat('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.createBy != null">
+                and create_by like concat('%', #{condition.createBy} , '%')
+            </if>
+            <if test="condition.createDate != null">
+                and create_date like concat('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.updateBy != null">
+                and update_by like concat('%', #{condition.updateBy} , '%')
+            </if>
+            <if test="condition.updateDate != null">
+                and update_date like concat('%', #{condition.updateDate} , '%')
+            </if>
+            <if test="condition.comments != null">
+                and comments like concat('%', #{condition.comments} , '%')
+            </if>
+        </where>
+        <if test="orderBy!=null">
+            order by ${orderBy} ${sortBy}
+        </if>
+    </select>
+</mapper>

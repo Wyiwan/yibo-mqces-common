@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yibo.boot.modules.base.dao.MessageDao">
+    <!-- 在这里存放用户自定义的映射配置（注：MessageDAO.xml里各节点的ID不能在这里重复出现）  -->
+    <!-- 扩展新增 -->
+    <insert id="insertExt" parameterType="cn.yibo.boot.modules.base.entity.Message">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(UUID(),'-','')
+        </selectKey>
+        insert into sys_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            message_type,
+            message_title,
+            message_content,
+            new_user_push,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            comments,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #{messageType,jdbcType=VARCHAR},
+            #{messageTitle,jdbcType=VARCHAR},
+            #{messageContent,jdbcType=VARCHAR},
+            #{newUserPush,jdbcType=VARCHAR},
+            #{status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP},
+            #{comments,jdbcType=VARCHAR},
+        </trim>;
+        insert into sys_message_send(
+            id,
+            message_id,
+            user_id,
+            status,
+            create_by,
+            create_date,
+            update_by,
+            update_date
+        )values
+        <foreach collection="messagePushList" item="item" index="index" separator="," >
+        (
+            (select replace(UUID(), '-', '') as id),
+            #{id,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{createBy,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=TIMESTAMP}
+         )
+        </foreach>
+    </insert>
+
+    <!-- 扩展删除 -->
+    <delete id="deleteByIdsExt">
+        update sys_message set status = 0
+        where id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+        update sys_message_send set status = 0
+        where message_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+    </delete>
+</mapper>
