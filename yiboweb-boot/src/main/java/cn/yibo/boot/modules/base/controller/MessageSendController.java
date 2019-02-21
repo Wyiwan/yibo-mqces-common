@@ -41,11 +41,11 @@ import java.util.Arrays;
  * @version v1.0
  */
 @RestController
-@RequestMapping("/api/message-push")
+@RequestMapping("/api/message-send")
 @Api(tags = "90091.已推送消息管理")
-public class MessagePushController extends BaseController{
+public class MessageSendController extends BaseController{
     @Autowired
-    MessageSendService messagePushService;
+    MessageSendService messageSendService;
 
     /**
      * 分页查询
@@ -62,7 +62,7 @@ public class MessagePushController extends BaseController{
             @ApiImplicitParam(name = "messageId", value = "消息ID", paramType = "query", dataType = "String", required = true)
     })
     protected PageInfo<MessageSend> paged(){
-        return messagePushService.queryPage(new BaseForm<MessageSend>());
+        return messageSendService.queryPage(new BaseForm<MessageSend>());
     }
 
     /**
@@ -74,7 +74,7 @@ public class MessagePushController extends BaseController{
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
     @PostMapping("/deleted")
     protected String deleted(@RequestBody String ids){
-        messagePushService.deleteByIds( Arrays.asList(ids.split(",")) );
+        messageSendService.deleteByIds( Arrays.asList(ids.split(",")) );
         return DELETE_SUCCEED;
     }
 }
