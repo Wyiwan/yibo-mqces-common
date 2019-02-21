@@ -105,12 +105,12 @@ public interface CommonConstant {
     /**
      * 未读
      */
-    Integer MESSAGE_STATUS_UNREAD = 0;
+    Integer MESSAGE_STATUS_UNREAD = 3;
 
     /**
      * 已读
      */
-    Integer MESSAGE_STATUS_READ = 1;
+    Integer MESSAGE_STATUS_READ = 4;
 
     //------------------------------------------------------------------------------------------------------------------
     // @数据状态相关默认配置
