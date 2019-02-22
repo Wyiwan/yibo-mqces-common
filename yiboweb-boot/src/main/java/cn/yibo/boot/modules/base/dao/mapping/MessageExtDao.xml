@@ -13,7 +13,7 @@
             message_type,
             message_title,
             message_content,
-            new_user_push,
+            creator_send,
             status,
             create_by,
             create_date,
@@ -26,7 +26,7 @@
             #{messageType,jdbcType=VARCHAR},
             #{messageTitle,jdbcType=VARCHAR},
             #{messageContent,jdbcType=VARCHAR},
-            #{newUserPush,jdbcType=VARCHAR},
+            #{creatorSend,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
@@ -44,7 +44,7 @@
             update_by,
             update_date
         )values
-        <foreach collection="messagePushList" item="item" index="index" separator="," >
+        <foreach collection="messageSendList" item="item" index="index" separator="," >
         (
             (select replace(UUID(), '-', '') as id),
             #{id,jdbcType=VARCHAR},

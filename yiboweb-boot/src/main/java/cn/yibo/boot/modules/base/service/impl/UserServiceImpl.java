@@ -30,6 +30,7 @@ import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.utils.MsgUtils;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.UserDao;
 import cn.yibo.boot.modules.base.entity.*;
@@ -70,6 +71,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Autowired
     private OrganService organService;
 
+    @Autowired
+    private MsgUtils msgUtils;
+
     /**
      * 重写新增
      * @param user
@@ -82,6 +86,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         if( !CollUtil.isEmpty(user.getRoleIdList()) ){
             this.grantRole(user);
         }
+        msgUtils.sendMessage(user.getId());
     }
 
     /**

@@ -6,7 +6,7 @@
         message_type,
         message_title,
         message_content,
-        new_user_push,
+        creator_send,
         status,
         create_by,
         create_date,
@@ -26,7 +26,7 @@
             message_type,
             message_title,
             message_content,
-            new_user_push,
+            creator_send,
             status,
             create_by,
             create_date,
@@ -39,7 +39,7 @@
             #{messageType,jdbcType=VARCHAR},
             #{messageTitle,jdbcType=VARCHAR},
             #{messageContent,jdbcType=VARCHAR},
-            #{newUserPush,jdbcType=VARCHAR},
+            #{creatorSend,jdbcType=VARCHAR},
             #{status,jdbcType=INTEGER},
             #{createBy,jdbcType=VARCHAR},
             #{createDate,jdbcType=TIMESTAMP},
@@ -56,7 +56,7 @@
             message_type,
             message_title,
             message_content,
-            new_user_push,
+            creator_send,
             status,
             create_by,
             create_date,
@@ -69,7 +69,7 @@
             #{map.messageType,jdbcType=VARCHAR},
             #{map.messageTitle,jdbcType=VARCHAR},
             #{map.messageContent,jdbcType=VARCHAR},
-            #{map.newUserPush,jdbcType=VARCHAR},
+            #{map.creatorSend,jdbcType=VARCHAR},
             #{map.status,jdbcType=INTEGER},
             #{map.createBy,jdbcType=VARCHAR},
             #{map.createDate,jdbcType=TIMESTAMP},
@@ -92,8 +92,8 @@
             <if test="messageContent!=null">
                 message_content = #{messageContent,jdbcType=VARCHAR},
             </if>
-            <if test="newUserPush!=null">
-                new_user_push = #{newUserPush,jdbcType=VARCHAR},
+            <if test="creatorSend!=null">
+                creator_send = #{creatorSend,jdbcType=VARCHAR},
             </if>
             <if test="status!=null">
                 status = #{status,jdbcType=INTEGER},
@@ -119,7 +119,7 @@
             message_type = #{messageType,jdbcType=VARCHAR},
             message_title = #{messageTitle,jdbcType=VARCHAR},
             message_content = #{messageContent,jdbcType=VARCHAR},
-            new_user_push = #{newUserPush,jdbcType=VARCHAR},
+            creator_send = #{creatorSend,jdbcType=VARCHAR},
             status = #{status,jdbcType=INTEGER},
             update_by = #{updateBy,jdbcType=VARCHAR},
             update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -142,8 +142,8 @@
             <if test="map.messageContent!=null">
                 message_content = #{map.messageContent,jdbcType=VARCHAR},
             </if>
-            <if test="map.newUserPush!=null">
-                new_user_push = #{map.newUserPush,jdbcType=VARCHAR},
+            <if test="map.creatorSend!=null">
+                creator_send = #{map.creatorSend,jdbcType=VARCHAR},
             </if>
             <if test="map.status!=null">
                 status = #{map.status,jdbcType=INTEGER},
@@ -175,8 +175,8 @@
             <if test="update.messageContent!=null">
                 message_content = #{update.messageContent,jdbcType=VARCHAR},
             </if>
-            <if test="update.newUserPush!=null">
-                new_user_push = #{update.newUserPush,jdbcType=VARCHAR},
+            <if test="update.creatorSend!=null">
+                creator_send = #{update.creatorSend,jdbcType=VARCHAR},
             </if>
             <if test="update.status!=null">
                 status = #{update.status,jdbcType=INTEGER},
@@ -201,8 +201,8 @@
             <if test="condition.messageContent!=null">
                 and message_content = #{condition.messageContent,jdbcType=VARCHAR}
             </if>
-            <if test="condition.newUserPush!=null">
-                and new_user_push = #{condition.newUserPush,jdbcType=VARCHAR}
+            <if test="condition.creatorSend!=null">
+                and creator_send = #{condition.creatorSend,jdbcType=VARCHAR}
             </if>
             <if test="condition.status!=null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -249,8 +249,8 @@
             <if test="condition.messageContent != null">
                 and message_content = #{condition.messageContent,jdbcType=VARCHAR}
             </if>
-            <if test="condition.newUserPush != null">
-                and new_user_push = #{condition.newUserPush,jdbcType=VARCHAR}
+            <if test="condition.creatorSend != null">
+                and creator_send = #{condition.creatorSend,jdbcType=VARCHAR}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status,jdbcType=INTEGER}
@@ -339,8 +339,8 @@
             <if test="condition.messageContent != null">
                 and message_content = #{condition.messageContent}
             </if>
-            <if test="condition.newUserPush != null">
-                and new_user_push = #{condition.newUserPush}
+            <if test="condition.creatorSend != null">
+                and creator_send = #{condition.creatorSend}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -382,8 +382,8 @@
             <if test="condition.messageContent != null">
                 and message_content = #{condition.messageContent}
             </if>
-            <if test="condition.newUserPush != null">
-                and new_user_push = #{condition.newUserPush}
+            <if test="condition.creatorSend != null">
+                and creator_send = #{condition.creatorSend}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -424,8 +424,8 @@
             <if test="condition.messageContent != null">
                 and message_content = #{condition.messageContent}
             </if>            
-            <if test="condition.newUserPush != null">
-                and new_user_push = #{condition.newUserPush}
+            <if test="condition.creatorSend != null">
+                and creator_send = #{condition.creatorSend}
             </if>            
             <if test="condition.status != null">
                 and status = #{condition.status}
@@ -475,8 +475,8 @@
             <if test="condition.messageContent != null">
                 and message_content like concat('%', #{condition.messageContent} , '%')
             </if>
-            <if test="condition.newUserPush != null">
-                and new_user_push like concat('%', #{condition.newUserPush} , '%')
+            <if test="condition.creatorSend != null">
+                and creator_send like concat('%', #{condition.creatorSend} , '%')
             </if>
             <if test="condition.status != null">
                 and status like concat('%', #{condition.status} , '%')

@@ -54,7 +54,7 @@ public class Message extends DataEntity<String>{
     private String messageContent;
     
     @ApiModelProperty(value = "新创建账号也推送")
-    private Boolean newUserPush;
+    private Boolean creatorSend;
 
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
