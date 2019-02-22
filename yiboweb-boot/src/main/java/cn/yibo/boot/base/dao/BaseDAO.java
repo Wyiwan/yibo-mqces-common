@@ -60,6 +60,9 @@ public interface BaseDAO<T extends BaseEntity>{
     public int updateMap(@Param("map") Map<String, Object> entityMap);
     public int updateByCondition(@Param("update") Map<String, Object> updateMap, @Param("condition") Map<String, Object> conditionMap);
 
+    public int batchInsert(List list);
+    public int batchUpdate(List list);
+
     public int count(@Param("condition") Map<String, Object> condition);
     public Object selectMaxId();
 

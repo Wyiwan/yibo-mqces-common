@@ -25,6 +25,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  *  描述: 程序启动类
@@ -33,8 +34,12 @@ import org.springframework.context.annotation.ComponentScan;
  *  版本: v1.0
  */
 @SpringBootApplication
+// 扫描路径
 @ComponentScan(basePackages = {"cn.yibo"})
+// 启用缓存
 @EnableCaching
+// 启用异步
+@EnableAsync
 public class Application {
 
 	public static void main(String[] args) {

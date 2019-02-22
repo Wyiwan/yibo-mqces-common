@@ -200,6 +200,18 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
 
     @Override
     @Transactional(readOnly = false)
+    public int batchInsert(List list) {
+        return dao.batchInsert(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public int batchUpdate(List list) {
+        return dao.batchUpdate(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void save(T t){
         t.onBeforeSave();
 

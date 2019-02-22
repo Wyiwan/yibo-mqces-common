@@ -67,7 +67,10 @@ public interface IBaseService<D extends BaseDAO, T extends BaseEntity> {
     public void updateMap(Map<String, Object> entityMap);
     public void updateByCondition(Map<String, Object> updateMap, Map<String, Object> conditionMap);
 
+    public int batchInsert(List list);
+    public int batchUpdate(List list);
     public void save(T t);
+
     public int count(Map<String, Object> condition);
     public Object selectMaxId();
 }
