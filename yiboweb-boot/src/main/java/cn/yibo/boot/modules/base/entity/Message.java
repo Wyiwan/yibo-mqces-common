@@ -79,7 +79,7 @@ public class Message extends DataEntity<String>{
     @JsonIgnore
     @JSONField(serialize = false)
     @ApiModelProperty(value = "推送消息集合")
-    private List<MessageSend> messagePushList;
+    private List<MessageSend> messageSendList;
 
     public void setOrganIds(String organIds) {
         if( StrUtil.isNotBlank(organIds) ){

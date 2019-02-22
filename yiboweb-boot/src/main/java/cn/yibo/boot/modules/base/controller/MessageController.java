@@ -65,13 +65,13 @@ public class MessageController extends CrudController<MessageService, Message>{
      */
     @Override
     public Object created(@Valid @RequestBody Message message) throws Exception{
-        List<MessageSend> msgPushList = ListUtils.newArrayList();
+        List<MessageSend> msgSendList = ListUtils.newArrayList();
 
         // 全部用户
         if(CommonConstant.MESSAGE_RANGE_ALL.equals(message.getRange())){
             List<User> allUser = userService.findAll();
             allUser.forEach(user -> {
-                msgPushList.add(new MessageSend(user.getId()));
+                msgSendList.add(new MessageSend(user.getId()));
             });
             // 广播推送
             messagingTemplate.convertAndSend("/topic/subscribe", "您收到了新的系统消息");
@@ -83,7 +83,7 @@ public class MessageController extends CrudController<MessageService, Message>{
 
                 List<User> userList = userService.findUserByIds(condition);
                 userList.forEach(user -> {
-                    msgPushList.add(new MessageSend(user.getId()));
+                    msgSendList.add(new MessageSend(user.getId()));
                     // 指定推送
                     messagingTemplate.convertAndSendToUser(user.getId(),"/queue/subscribe", "您收到了新的消息");
                 });
@@ -92,7 +92,7 @@ public class MessageController extends CrudController<MessageService, Message>{
         }else{
             if( !CollUtil.isEmpty(message.getUserIdList()) ){
                 for( String userId : message.getUserIdList() ){
-                    msgPushList.add(new MessageSend(userId));
+                    msgSendList.add(new MessageSend(userId));
                     // 指定推送
                     messagingTemplate.convertAndSendToUser(userId,"/queue/subscribe", "您收到了新的消息");
                 }
@@ -100,7 +100,7 @@ public class MessageController extends CrudController<MessageService, Message>{
         }
 
         // 保存消息推送信息
-        message.setMessagePushList(msgPushList);
+        message.setMessageSendList(msgSendList);
         baseSevice.save(message);
         return message.getId();
     }
