@@ -29,6 +29,7 @@ import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.utils.PermUtils;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.Role;
@@ -65,6 +66,9 @@ public class RoleController extends CrudController<RoleService, Role> {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PermUtils permUtils;
 
     /**
      * 保存方法内部调用：验证数据合法性
@@ -152,7 +156,7 @@ public class RoleController extends CrudController<RoleService, Role> {
     @ApiOperation("角色管理/查询可授权菜单")
     @GetMapping("/get-grant-permission")
     public List findGrantPermission(){
-        List<Permission> list = permissionService.findGrantPermission();
+        List<Permission> list = permUtils.getAuthorizationPermissions();
         return new TreeBuild(list).getTreeList();
     }
 

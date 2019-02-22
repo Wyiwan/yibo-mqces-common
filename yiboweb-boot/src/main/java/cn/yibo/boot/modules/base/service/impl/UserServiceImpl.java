@@ -31,11 +31,11 @@ import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.common.exception.LoginFailEnum;
 import cn.yibo.boot.common.utils.MsgUtils;
+import cn.yibo.boot.common.utils.PermUtils;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.UserDao;
 import cn.yibo.boot.modules.base.entity.*;
 import cn.yibo.boot.modules.base.service.*;
-import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
@@ -72,7 +72,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     private OrganService organService;
 
     @Autowired
+    private PermUtils permUtils;
+
+    @Autowired
     private MsgUtils msgUtils;
+
 
     /**
      * 重写新增
@@ -181,21 +185,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
                 user.setRoles(roles);
             }
             // 关联权限
-            List<Permission> permsList = permsService.findAccessPermission(user);
-            if( !CollUtil.isEmpty(permsList) ){
-                List<Permission> operPermsList = ListUtils.newArrayList();
-                List<Permission> menuPermsList = ListUtils.newArrayList();
-
-                for( Permission p : permsList ){
-                    if( CommonConstant.PERMISSION_OPERATION.equals(p.getPermsType()) && StrUtil.isNotBlank(p.getPermsUrl()) ){
-                        operPermsList.add(p);
-                    }else if( CommonConstant.PERMISSION_PAGE.equals(p.getPermsType()) ){
-                        menuPermsList.add(p);
-                    }
-                }
-                user.setOperPermissions(operPermsList);
-                user.setMenuPermissions(menuPermsList);
-                user.setPermissions(permsList);
+            List<Permission> permissions = permUtils.getUserAllPermissions(user);
+            if( !CollUtil.isEmpty(permissions) ){
+                user.setPermissions(permissions);
             }
         }
         return user;
@@ -258,34 +250,15 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             map.put("lastVisitDate", user.getLastVisitDate());
 
             // 菜单权限
-            List<Permission> menuPermissions = user.getMenuPermissions();
+            List<Permission> menuPermissions = PermUtils.getPermissionsByType(user.getPermissions(), CommonConstant.PERMISSION_PAGE);
             if( !CollUtil.isEmpty(menuPermissions) ){
                 map.put("menuAuthorities", new TreeBuild(menuPermissions).getTreeList());
             }
 
             // 操作权限(用于前端按钮权限控制)
-            List<Permission> operPermsList = user.getOperPermissions();
-            if( !CollUtil.isEmpty(operPermsList) ){
-                Map<String, List<String>> authorities = MapUtil.newHashMap();
-                TreeBuild treeBuild = new TreeBuild(user.getPermissions());
-
-                for(Permission permission : operPermsList){
-                    Permission parentNode = (Permission)treeBuild.getParent(permission);
-
-                    if( parentNode != null && CommonConstant.PERMISSION_PAGE.equals(parentNode.getPermsType()) ){
-                        String urlKey = parentNode.getPermsUrl();
-                        String buttonType = permission.getButtonType();
-
-                        if( !CollUtil.isEmpty(authorities.get(urlKey)) ){
-                            authorities.get(urlKey).add(buttonType);
-                        }else{
-                            authorities.put(urlKey, ListUtils.newArrayList(buttonType));
-                        }
-                    }
-                }
-                if( !CollUtil.isEmpty(authorities) ){
-                    map.put("authorities", authorities);
-                }
+            Map<String, List<String>> btnPermissions = PermUtils.getButtonPermissions(user.getPermissions());
+            if( !CollUtil.isEmpty(btnPermissions) ){
+                map.put("authorities", btnPermissions);
             }
 
             // 所属角色

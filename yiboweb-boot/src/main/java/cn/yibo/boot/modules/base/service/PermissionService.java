@@ -23,7 +23,6 @@ package cn.yibo.boot.modules.base.service;
 import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
-import cn.yibo.boot.modules.base.entity.User;
 
 import java.util.List;
 
@@ -64,23 +63,4 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      */
     List<Permission> findByWeight(Integer min, Integer max, String type);
 
-    /**
-     * 获取访问的权限
-     * @param user
-     * @return
-     */
-    List<Permission> findAccessPermission(User user);
-
-    /**
-     * 获取可授权的权限
-     * @return
-     */
-    List<Permission> findGrantPermission();
-
-    /**
-     * 根据菜单地址获取菜单路径
-     * @param menuUrl
-     * @return
-     */
-    String getMenuNamePath(String menuUrl);
 }

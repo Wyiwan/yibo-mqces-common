@@ -24,8 +24,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,7 +50,7 @@ import java.util.List;
 public class User extends DataEntity<String> {
     private static String configUserInitPassword = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.user-init-password"));
     private static String configSuperAdminCode = ObjectUtils.toString(PropertiesUtils.getInstance().getProperty("webapp.super-admin-code"));
-    public static final String USER_INIT_PASSWORD = StrUtil.isEmpty(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
+    private static final String USER_INIT_PASSWORD = StrUtil.isEmpty(configUserInitPassword) ? CommonConstant.USER_INIT_PASSWORD : configUserInitPassword;
     private static final String SUPER_ADMIN_CODE = StrUtil.isEmpty(configSuperAdminCode) ? CommonConstant.SUPER_ADMIN_ACCOUNT : configSuperAdminCode;
 
     @NotEmpty(message="登录账号不能为空")
@@ -158,19 +158,11 @@ public class User extends DataEntity<String> {
 
     @JsonIgnore
     @JSONField(serialize = false)
-    private List<Permission> permissions;
-
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private List<Permission> operPermissions;
-
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private List<Permission> menuPermissions;
-
-    @JsonIgnore
-    @JSONField(serialize = false)
     private List<String> roleIdList;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private List<Permission> permissions;
 
     public boolean isAdmin(){
         return CommonConstant.USER_MGR_TYPE_ADMIN.equals(this.mgrType);

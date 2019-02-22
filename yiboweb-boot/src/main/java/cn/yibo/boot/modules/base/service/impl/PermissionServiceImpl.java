@@ -20,21 +20,13 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.common.constant.CacheConstant;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
-import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.PermissionService;
-import cn.yibo.common.io.PropertiesUtils;
-import cn.yibo.common.utils.ListUtils;
-import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.cache.CacheUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,9 +43,6 @@ import java.util.Map;
 @Service
 @Transactional(readOnly=true)
 public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Permission> implements PermissionService {
-    private static String configMinWeight = ObjectUtils.toString( PropertiesUtils.getInstance().getProperty("webapp.super-admin-get-perms-min-weight") );
-    public static final Integer SUPER_GET_PERMS_MIN_WEIGHT = StrUtil.isEmpty(configMinWeight) ? CommonConstant.ADMIN_PERMS_WEIGHT : ObjectUtils.toInteger(configMinWeight);
-
     /**
      * 重写新增
      * @param permission
@@ -98,7 +87,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
-     * 查询树结构数据
+     * 重写树结构查询
      * @return
      */
     @Override
@@ -158,73 +147,4 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         return dao.findByWeight(min, max, type);
     }
 
-    /**
-     * 获取访问的权限
-     * @param user
-     * @return
-     */
-    @Override
-    public List<Permission> findAccessPermission(User user) {
-        List<Permission> permissions = ListUtils.newArrayList();
-        user = user == null ? UserContext.getUser() : user;
-
-        if( user != null ){
-            if( user.isSuperAdmin() ){
-                permissions = this.findByWeight(SUPER_GET_PERMS_MIN_WEIGHT, null, null);
-            }else if( user.isAdmin() ){
-                permissions = this.findByWeight(CommonConstant.ADMIN_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
-            }else{
-                permissions = this.findByUserId(user.getId(), null);
-            }
-        }
-        return permissions;
-    }
-
-    /**
-     * 获取可授权的权限
-     * @return
-     */
-    @Override
-    public List<Permission> findGrantPermission() {
-        User user = UserContext.getUser();
-        List<Permission> permissions = ListUtils.newArrayList();
-
-        if( user != null ){
-            if( user.isSuperAdmin() ){
-                permissions = this.findByWeight(CommonConstant.USER_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
-            }else if( user.isAdmin() ){
-                permissions = this.findByWeight(CommonConstant.USER_PERMS_WEIGHT, CommonConstant.ADMIN_PERMS_WEIGHT, null);
-            }else{
-                permissions = this.findByUserId(user.getId(), null);
-            }
-        }
-        return permissions;
-    }
-
-    /**
-     * 根据菜单地址获取菜单路径
-     * @param menuUrl
-     * @return
-     */
-    @Override
-    public String getMenuNamePath(String menuUrl){
-        List<Permission> menuList = queryTree(null);
-
-        if( menuList != null ){
-            Permission currNode = null;
-            for( Permission node : menuList ){
-                if( StrUtil.equals(node.getPermsUrl(), menuUrl) ){
-                    currNode = node;
-                    break;
-                }
-            }
-
-            if( currNode != null ){
-                List parentList = new TreeBuild(menuList).getParentsNode(currNode, false);
-                List<String> permsNameList = ListUtils.extractToList(parentList, "permsName");
-                return CollUtil.join(CollUtil.reverse(permsNameList), StrUtil.SLASH);
-            }
-        }
-        return "false";
-    }
 }

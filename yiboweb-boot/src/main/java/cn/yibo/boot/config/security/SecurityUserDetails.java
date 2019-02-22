@@ -21,6 +21,7 @@
 package cn.yibo.boot.config.security;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
@@ -68,8 +69,6 @@ public class SecurityUserDetails extends User implements UserDetails{
 
             this.setDept(user.getDept());
             this.setRoles(user.getRoles());
-            this.setMenuPermissions(user.getMenuPermissions());
-            this.setOperPermissions(user.getOperPermissions());
             this.setPermissions(user.getPermissions());
         }
     }
@@ -83,10 +82,12 @@ public class SecurityUserDetails extends User implements UserDetails{
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
         // 添加请求权限
-        List<Permission> permissionList = this.getOperPermissions();
-        if( !CollUtil.isEmpty(permissionList) ){
-            for( Permission permission : permissionList ){
-                authorityList.add(new SimpleGrantedAuthority(permission.getPermsName()));
+        List<Permission> permissions = this.getPermissions();
+        if( !CollUtil.isEmpty(permissions) ){
+            for( Permission p : permissions ) {
+                if( CommonConstant.PERMISSION_OPERATION.equals(p.getPermsType()) && StrUtil.isNotBlank(p.getPermsName()) && StrUtil.isNotBlank(p.getPermsUrl()) ){
+                    authorityList.add(new SimpleGrantedAuthority(p.getPermsName()));
+                }
             }
         }
         // log.info("添加的请求权限：\n" + authorityList);

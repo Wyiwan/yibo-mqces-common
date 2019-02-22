@@ -26,7 +26,6 @@ import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.dao.LogDao;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.entity.User;
-import cn.yibo.boot.modules.base.service.PermissionService;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.common.web.UserAgentUtils;
 import cn.yibo.core.protocol.ResponseT;
@@ -120,7 +119,7 @@ public class LogUtils {
 
         public void run(){
             LogDao logDao = SpringContextHolder.getBean(LogDao.class);
-            PermissionService permissionService = SpringContextHolder.getBean(PermissionService.class);
+            PermUtils permUtils = SpringContextHolder.getBean(PermUtils.class);
 
             // 操作类型
             log.setSqlCommand(true);
@@ -162,7 +161,7 @@ public class LogUtils {
 
             // 日志标题
             if( StrUtil.isBlank(log.getLogTitle()) ){
-                this.log.setLogTitle(permissionService.getMenuNamePath(log.getRequestUri()));
+                this.log.setLogTitle(permUtils.getMenuNamePath(log.getRequestUri()));
             }
             if( "false".equals(log.getLogTitle()) ){
                 if( !log.isSqlCommand() ) {
