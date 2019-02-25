@@ -35,7 +35,10 @@ import cn.yibo.boot.common.utils.PermUtils;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.UserDao;
 import cn.yibo.boot.modules.base.entity.*;
-import cn.yibo.boot.modules.base.service.*;
+import cn.yibo.boot.modules.base.service.DeptService;
+import cn.yibo.boot.modules.base.service.OrganService;
+import cn.yibo.boot.modules.base.service.RoleService;
+import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
@@ -64,9 +67,6 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private PermissionService permsService;
 
     @Autowired
     private OrganService organService;

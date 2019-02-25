@@ -103,7 +103,7 @@
                 and id not in(select #{condition.id})
             </if>
             and username = #{condition.username,jdbcType=VARCHAR}
-            and status = 1
+            and status != 0
     </select>
 
     <!-- 角色授权 -->

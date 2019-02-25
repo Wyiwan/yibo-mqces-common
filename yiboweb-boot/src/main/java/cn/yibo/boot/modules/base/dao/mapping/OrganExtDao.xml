@@ -10,7 +10,7 @@
                 and id not in(select #{condition.id})
             </if>
             and organ_name = #{condition.organName,jdbcType=VARCHAR}
-            and status = 1
+            and status != 0
         </where>
     </select>
 </mapper>

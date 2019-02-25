@@ -10,7 +10,7 @@
             union all
             select * from sys_role where status != 0 and is_sys = 1
             <if test="condition.userWeight != null">
-                and role_weight = #{condition.userWeight}
+                and #{condition.userWeight} >= role_weight
             </if>
         ) t
         <where>
@@ -82,7 +82,7 @@
         <if test="condition.roleCode != null">
             and role_code = #{condition.roleCode,jdbcType=VARCHAR}
         </if>
-        and status = 1
+        and status != 0
     </select>
 
     <!-- 菜单授权 -->

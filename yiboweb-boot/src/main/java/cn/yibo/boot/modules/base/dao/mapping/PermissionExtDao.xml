@@ -76,7 +76,7 @@
             <include refid="Base_Column_List_Ext" />
         from sys_permission p
         where 1 = 1
-            and p.status = 1
+            and p.status != 0
         order by p.perms_sort
     </select>
 
@@ -98,7 +98,7 @@
             <if test="condition.id != null and condition.id.length() > 0">
                 and id not in(select #{condition.id})
             </if>
-            and status = 1
+            and status != 0
     </select>
 
     <!-- 级联删除 -->

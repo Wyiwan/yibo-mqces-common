@@ -50,10 +50,10 @@
     <!-- 查询树结构数据 -->
     <select id="queryTree" resultType="cn.yibo.boot.modules.base.entity.Dept">
         select
-            id, parent_id, ancestor_id, dept_name, dept_type, dept_sort, dept_level
+            id, parent_id, ancestor_id, dept_name, dept_type, dept_sort, dept_level, status
         from sys_dept
         where 1 = 1
-            and status = 1
+            and status != 0
             and tenant_id = #{tenantId,jdbcType=VARCHAR}
         order by dept_sort
     </select>
@@ -72,7 +72,7 @@
             </if>
             and dept_name = #{condition.deptName,jdbcType=VARCHAR}
             and tenant_id = #{condition.tenantId,jdbcType=VARCHAR}
-            and status = 1
+            and status != 0
     </select>
 
     <!-- 级联删除 -->
