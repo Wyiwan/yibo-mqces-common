@@ -20,11 +20,11 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.modules.base.dao.DictKindDao;
 import cn.yibo.boot.modules.base.entity.DictKind;
 import cn.yibo.boot.modules.base.service.DictKindService;
 import cn.yibo.boot.common.utils.DictUtils;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.DictItem;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  * @since 2019-01-25
  * @version v1.0
  */
-public interface DictItemDao extends CrudDao<DictItem>{
+public interface DictItemDao extends CrudDao<DictItem> {
     /**
      * findList方法扩展
      * @param property

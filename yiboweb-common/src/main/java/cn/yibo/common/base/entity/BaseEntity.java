@@ -18,19 +18,35 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.tree;
+package cn.yibo.common.base.entity;
+
+import cn.hutool.core.util.ObjectUtil;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
- * 自定义树搜索器
- * @author abo
- * @param <N> 树节点
+ *  描述: 实体抽象类
+ *  作者: 高云
+ *  时间: 2018-08-07
+ *  版本: v1.0
  */
-public interface BaseTreeSearcher<N> {
+@Data
+public abstract class BaseEntity<T> implements Serializable {
+    private static final long serialVersionUID = 7924850300269237733L;
 
-    /**
-     * 当该方法返回true时,表示匹配到该节点
-     * @param node	当前树节点
-     * @return
-     */
-    boolean search(N node);
+    protected T id;
+
+    public BaseEntity(){
+    }
+
+    public abstract void preInsert();
+
+    public abstract void preUpdate();
+
+    public abstract void enabled();
+
+    public Object clone(){
+        return ObjectUtil.clone(this);
+    }
 }

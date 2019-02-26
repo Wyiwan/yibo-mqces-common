@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.DictItemDao;
 import cn.yibo.boot.modules.base.entity.DictItem;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 字典数据项表服务接口层
@@ -30,6 +30,6 @@ import cn.yibo.boot.modules.base.entity.DictItem;
  * @since 2019-01-25
  * @version v1.0
  */
-public interface DictItemService extends IBaseService<DictItemDao, DictItem>{
+public interface DictItemService extends IBaseService<DictItemDao, DictItem> {
     
 }

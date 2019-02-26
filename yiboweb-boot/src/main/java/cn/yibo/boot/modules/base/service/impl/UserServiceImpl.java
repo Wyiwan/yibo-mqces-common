@@ -24,12 +24,11 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.controller.BaseForm;
-import cn.yibo.boot.base.entity.TreeBuild;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
+import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.common.utils.MsgUtils;
 import cn.yibo.boot.common.utils.PermUtils;
 import cn.yibo.boot.config.security.context.UserContext;
@@ -39,6 +38,9 @@ import cn.yibo.boot.modules.base.service.DeptService;
 import cn.yibo.boot.modules.base.service.OrganService;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
@@ -88,7 +90,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     public void insert(User user){
         super.insert(user);
         if( !CollUtil.isEmpty(user.getRoleIdList()) ){
-            this.grantRole(user);
+            this.roleAuthorized(user);
         }
         msgUtils.sendMessage(user.getId());
     }
@@ -115,18 +117,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteByIdsExt(list);
-        this.clearUsersCacheByUserId(list);
-    }
-
-    /**
-     * 角色授权
-     * @param user
-     */
-    @Override
-    @Transactional(readOnly = false)
-    public void grantRole(User user){
-        dao.grantRole(user);
-        this.clearUsersCacheByUserId( CollUtil.newArrayList(user.getId()) );
+        clearUsersCacheByUserId(list);
     }
 
     /**
@@ -200,8 +191,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * @return
      */
     @Override
-    public List<User> findUserByIds(Map<String, Object> condition){
-        return  dao.findUserByIds(condition);
+    public List<User> findByIds(Map<String, Object> condition){
+        return  dao.findByIds(condition);
     }
 
     /**
@@ -221,10 +212,69 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 用户登录信息
+     * 获取用户相关信息
+     * @param type
      * @return
      */
     @Override
+    public Map<String, Object> userInfo(String type) {
+        if("login".equals(type)){
+            return loginInfo();
+        }else if("personal".equals(type)){
+            return personalInfo();
+        }
+        return MapUtil.newHashMap();
+    }
+
+    /**
+     * 保存用户个人信息
+     * @param user
+     */
+    @Transactional(readOnly = false)
+    public void saveUserInfo(User user){
+        Map<String, Object> map = MapUtil.newHashMap();
+        map.put("id", UserContext.getUser().getId());
+        map.put("name", user.getName());
+        map.put("avatar", user.getAvatar());
+        map.put("sex", user.getSex());
+        map.put("mobile", user.getMobile());
+        map.put("email", user.getEmail());
+        map.put("updateBy", UserContext.getUser().getId());
+        map.put("updateDate", new Date());
+        dao.updateMap(map);
+        clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+    }
+
+    /**
+     * 用户密码修改
+     * @param newPassword
+     */
+    @Transactional(readOnly = false)
+    public void saveUserPassword(String newPassword){
+        Map<String, Object> map = MapUtil.newHashMap();
+        map.put("id", UserContext.getUser().getId());
+        map.put("password", new BCryptPasswordEncoder().encode(newPassword));
+        map.put("updateBy", UserContext.getUser().getId());
+        map.put("updateDate", new Date());
+        dao.updateMap(map);
+        clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+    }
+
+    /**
+     * 角色授权
+     * @param user
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void roleAuthorized(User user){
+        dao.roleAuthorized(user);
+        clearUsersCacheByUserId(CollUtil.newArrayList(user.getId()));
+    }
+
+    /**
+     * 用户登录信息
+     * @return
+     */
     public Map<String, Object> loginInfo(){
         Map<String, Object> map = MapUtil.newHashMap();
 
@@ -274,8 +324,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * 用户个人信息
      * @return
      */
-    @Override
-    public Map<String, Object> persInfo(){
+    public Map<String, Object> personalInfo(){
         Map<String, Object> map = MapUtil.newHashMap();
         if( UserContext.getUser() != null ){
             User user = dao.fetch(UserContext.getUser().getId());
@@ -299,38 +348,14 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 保存用户个人信息
-     * @param user
+     * 根据用户ID清除用户缓存
+     * @param userIdList
      */
-    @Override
-    @Transactional(readOnly = false)
-    public void savePersInfo(User user){
-        Map<String, Object> map = MapUtil.newHashMap();
-        map.put("id", UserContext.getUser().getId());
-        map.put("name", user.getName());
-        map.put("avatar", user.getAvatar());
-        map.put("sex", user.getSex());
-        map.put("mobile", user.getMobile());
-        map.put("email", user.getEmail());
-        map.put("updateBy", UserContext.getUser().getId());
-        map.put("updateDate", new Date());
-        dao.updateMap(map);
-        this.clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
-    }
-
-    /**
-     * 用户密码修改
-     * @param newPassword
-     */
-    @Override
-    @Transactional(readOnly = false)
-    public void modifyPersPwd(String newPassword){
-        Map<String, Object> map = MapUtil.newHashMap();
-        map.put("id", UserContext.getUser().getId());
-        map.put("password", new BCryptPasswordEncoder().encode(newPassword));
-        map.put("updateBy", UserContext.getUser().getId());
-        map.put("updateDate", new Date());
-        dao.updateMap(map);
-        this.clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+    public void clearUsersCacheByUserId(List userIdList){
+        if( !CollUtil.isEmpty(userIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setUserIdList(userIdList);
+            ThreadUtil.execute(clearUserCacheThread);
+        }
     }
 }

@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Log;
+import cn.yibo.common.base.dao.CrudDao;
 
 /**
  * 操作日志表数据访问层
@@ -29,6 +29,6 @@ import cn.yibo.boot.modules.base.entity.Log;
  * @since 2019-01-07
  * @version v1.0
  */
-public interface LogDao extends CrudDao<Log>{
+public interface LogDao extends CrudDao<Log> {
 
 }

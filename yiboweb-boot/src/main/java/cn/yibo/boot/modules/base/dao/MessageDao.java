@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Message;
+import cn.yibo.common.base.dao.CrudDao;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2019-02-20
  * @version v1.0
  */
-public interface MessageDao extends CrudDao<Message>{
+public interface MessageDao extends CrudDao<Message> {
     /**
      * 扩展新增方法
      * @param message

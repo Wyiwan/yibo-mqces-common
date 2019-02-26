@@ -20,9 +20,8 @@
 
 package cn.yibo.boot.modules.base.entity;
 
-import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.common.base.entity.TreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -57,10 +56,5 @@ public class DictItem extends TreeEntity<DictItem, String> {
     private Double itemSort;
     
     @ApiModelProperty(value = "系统内置(1是 0否)")
-    private String isSys;
-
-    @Override
-    public void onBeforeSave(){
-        this.isSys = StrUtil.emptyToDefault(this.isSys, CommonConstant.NO);
-    }
+    private String isSys = CommonConstant.NO;
 }

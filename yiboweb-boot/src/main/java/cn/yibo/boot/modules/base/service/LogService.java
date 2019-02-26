@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.LogDao;
 import cn.yibo.boot.modules.base.entity.Log;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 操作日志表服务接口层
@@ -30,6 +30,6 @@ import cn.yibo.boot.modules.base.entity.Log;
  * @since 2019-01-07
  * @version v1.0
  */
-public interface LogService extends IBaseService<LogDao, Log>{
+public interface LogService extends IBaseService<LogDao, Log> {
     
 }

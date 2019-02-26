@@ -20,7 +20,7 @@
 
 package cn.yibo.boot.config.security.jwt;
 
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.web.exception.BizException;
 import lombok.extern.slf4j.Slf4j;

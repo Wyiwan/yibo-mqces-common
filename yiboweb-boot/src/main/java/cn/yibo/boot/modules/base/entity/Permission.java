@@ -21,8 +21,8 @@
 package cn.yibo.boot.modules.base.entity;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.common.base.entity.TreeEntity;
 import cn.yibo.common.utils.ObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -70,10 +70,16 @@ public class Permission extends TreeEntity<Permission, String> {
     private String buttonType;
 
     @Override
-    public void onBeforeSave(){
+    public void preInsert(){
+        super.preInsert();
         this.permsType = StrUtil.emptyToDefault(this.permsType, CommonConstant.PERMISSION_OPERATION);
-        if( ObjectUtils.isEmpty(this.permsWeight) ){
-            this.permsWeight = CommonConstant.USER_PERMS_WEIGHT;
-        }
+        this.permsWeight = ObjectUtils.isNull(this.permsWeight) ? CommonConstant.USER_PERMS_WEIGHT : this.permsWeight;
+    }
+
+    @Override
+    public void preUpdate(){
+        super.preUpdate();
+        this.permsType = StrUtil.emptyToDefault(this.permsType, CommonConstant.PERMISSION_OPERATION);
+        this.permsWeight = ObjectUtils.isNull(this.permsWeight) ? CommonConstant.USER_PERMS_WEIGHT : this.permsWeight;
     }
 }

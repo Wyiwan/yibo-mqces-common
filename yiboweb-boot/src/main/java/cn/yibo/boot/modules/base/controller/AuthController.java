@@ -21,7 +21,7 @@
 package cn.yibo.boot.modules.base.controller;
 
 import cn.yibo.boot.common.annotation.IgnoredLog;
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.config.security.jwt.JWTUtil;
 import cn.yibo.boot.modules.base.entity.Log;

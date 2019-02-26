@@ -22,11 +22,11 @@ package cn.yibo.boot.modules.base.controller;
 
 import cn.hutool.core.map.MapUtil;
 import cn.yibo.boot.base.controller.CrudController;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.modules.base.entity.DictKind;
 import cn.yibo.boot.modules.base.service.DictKindService;
 import cn.yibo.boot.common.utils.DictUtils;
+import cn.yibo.common.base.entity.TreeBuild;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import io.swagger.annotations.Api;

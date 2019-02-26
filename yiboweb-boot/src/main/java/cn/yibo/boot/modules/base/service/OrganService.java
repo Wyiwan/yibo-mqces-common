@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.OrganDao;
 import cn.yibo.boot.modules.base.entity.Organ;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 机构表服务接口层
@@ -30,7 +30,7 @@ import cn.yibo.boot.modules.base.entity.Organ;
  * @since 2018-12-14
  * @version v1.0
  */
-public interface OrganService extends IBaseService<OrganDao, Organ>{
+public interface OrganService extends IBaseService<OrganDao, Organ> {
     /**
      * 启用或停用
      * @param organ

@@ -80,14 +80,14 @@ public class ClearUserCacheThread extends Thread{
             if( !CollUtil.isEmpty(userIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("ids", userIdList);
-                List<User> userList = userDao.findUserByIds(condition);
+                List<User> userList = userDao.findByIds(condition);
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
 
             if( !CollUtil.isEmpty(roleIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("roleIds", roleIdList);
-                List<User> userList = userDao.findUserByIds(condition);
+                List<User> userList = userDao.findByIds(condition);
 
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }
@@ -95,7 +95,7 @@ public class ClearUserCacheThread extends Thread{
             if( !CollUtil.isEmpty(deptIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("deptIds", deptIdList);
-                List<User> userList = userDao.findUserByIds(condition);
+                List<User> userList = userDao.findByIds(condition);
 
                 this.clearCaches( ListUtils.extractToList(userList, "username") );
             }

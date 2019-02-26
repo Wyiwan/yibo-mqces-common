@@ -20,11 +20,11 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.yibo.boot.base.controller.BaseForm;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.modules.base.dao.MessageSendDao;
 import cn.yibo.boot.modules.base.entity.MessageSend;
 import cn.yibo.boot.modules.base.service.MessageSendService;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;

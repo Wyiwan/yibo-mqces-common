@@ -27,7 +27,7 @@ import cn.yibo.boot.modules.base.dao.LogDao;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.web.UserAgentUtils;
+import cn.yibo.common.utils.UserAgentUtils;
 import cn.yibo.core.protocol.ResponseT;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.context.SpringContextHolder;

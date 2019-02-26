@@ -21,8 +21,8 @@
 package cn.yibo.boot.modules.base.entity;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.yibo.boot.base.entity.TreeEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.common.base.entity.TreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

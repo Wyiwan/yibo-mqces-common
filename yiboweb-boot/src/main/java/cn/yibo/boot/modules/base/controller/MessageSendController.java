@@ -20,10 +20,10 @@
 
 package cn.yibo.boot.modules.base.controller;
 
-import cn.yibo.boot.base.controller.BaseController;
-import cn.yibo.boot.base.controller.BaseForm;
 import cn.yibo.boot.modules.base.entity.MessageSend;
 import cn.yibo.boot.modules.base.service.MessageSendService;
+import cn.yibo.common.base.controller.BaseController;
+import cn.yibo.common.base.controller.BaseForm;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,7 +43,7 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/api/message-send")
 @Api(tags = "90091.已推送消息管理")
-public class MessageSendController extends BaseController{
+public class MessageSendController extends BaseController {
     @Autowired
     MessageSendService messageSendService;
 

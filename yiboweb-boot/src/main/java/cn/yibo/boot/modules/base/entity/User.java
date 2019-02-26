@@ -24,7 +24,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.utils.PropertiesUtils;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import com.alibaba.fastjson.annotation.JSONField;

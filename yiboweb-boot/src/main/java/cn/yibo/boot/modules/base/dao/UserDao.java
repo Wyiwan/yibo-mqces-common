@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,7 +33,15 @@ import java.util.Map;
  * @since 2018-12-03
  * @version v1.0
  */
-public interface UserDao extends CrudDao<User>{
+public interface UserDao extends CrudDao<User> {
+    /**
+     * 根据ID查询用户信息
+     * condition：用户ID[ids]、角色ID[roleIds]、机构ID[organIds]、科室ID[deptIds]
+     * @param condition
+     * @return
+     */
+    List<User> findByIds(@Param("condition") Map<String, Object> condition);
+
     /**
      * 分页查询扩展
      * @param condition
@@ -42,24 +50,15 @@ public interface UserDao extends CrudDao<User>{
     List<User> queryPageExt(@Param("condition") Map<String, Object> condition);
 
     /**
-     * 根据ID查询用户信息
-     * condition：用户ID[ids]、角色ID[roleIds]、机构ID[organIds]、科室ID[deptIds]
-     * @param condition
-     * @return
-     */
-    List<User> findUserByIds(@Param("condition") Map<String, Object> condition);
-
-    /**
-     * 角色授权
-     * @param user
-     */
-    void grantRole(User user);
-
-    /**
-     * 扩展删除方法
+     * 删除扩展
      * @param list
      * @return
      */
     int deleteByIdsExt(List list);
 
+    /**
+     * 角色授权
+     * @param user
+     */
+    void roleAuthorized(User user);
 }

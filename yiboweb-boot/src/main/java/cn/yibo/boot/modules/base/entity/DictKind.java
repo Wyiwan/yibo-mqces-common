@@ -20,9 +20,8 @@
 
 package cn.yibo.boot.modules.base.entity;
 
-import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.common.base.entity.TreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -50,14 +49,8 @@ public class DictKind extends TreeEntity<DictKind, String> {
     private Double dictSort;
     
     @ApiModelProperty(value = "系统内置（0否 1是）")
-    private String isSys;
+    private String isSys = CommonConstant.NO;
     
     @ApiModelProperty(value = "树型结构（0否 1是）")
-    private String isTree;
-
-    @Override
-    public void onBeforeSave(){
-        this.isTree = StrUtil.emptyToDefault(this.isTree, CommonConstant.NO);
-        this.isSys = StrUtil.emptyToDefault(this.isSys, CommonConstant.NO);
-    }
+    private String isTree = CommonConstant.NO;
 }

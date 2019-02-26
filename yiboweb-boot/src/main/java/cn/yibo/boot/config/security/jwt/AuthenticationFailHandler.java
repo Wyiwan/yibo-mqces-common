@@ -21,7 +21,7 @@
 package cn.yibo.boot.config.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.common.exception.LoginFailLimitException;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.web.exception.BizException;

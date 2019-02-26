@@ -21,11 +21,12 @@
 package cn.yibo.boot.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.yibo.boot.base.entity.BaseEntity;
-import cn.yibo.boot.base.entity.DataEntity;
-import cn.yibo.boot.base.entity.EmptyEntity;
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.common.annotation.IgnoredLog;
+import cn.yibo.common.base.controller.BaseController;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.entity.BaseEntity;
+import cn.yibo.common.base.entity.EmptyEntity;
+import cn.yibo.common.base.service.IBaseService;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageInfo;
@@ -47,7 +48,7 @@ import java.util.Map;
  *  时间: 2018-08-07
  *  版本: v1.0
  */
-public abstract class CrudController<S extends IBaseService, D extends DataEntity> extends BaseController{
+public abstract class CrudController<S extends IBaseService, D extends BaseEntity> extends BaseController {
     @Autowired
     public S baseSevice;
 
@@ -95,7 +96,7 @@ public abstract class CrudController<S extends IBaseService, D extends DataEntit
     @ApiImplicitParam(name = "ids", value = "标识ID(多个以逗号隔开)", paramType = "query", required = true, dataType = "String")
     @PostMapping("/deleted")
     protected String deleted(@RequestBody String ids){
-        baseSevice.deleteByIds( Arrays.asList(ids.split(",")) );
+        baseSevice.deleteByIds(Arrays.asList(ids.split(",")));
         return DELETE_SUCCEED;
     }
 

@@ -21,11 +21,14 @@
 package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.modules.base.dao.OrganDao;
 import cn.yibo.boot.modules.base.entity.Organ;
 import cn.yibo.boot.modules.base.service.OrganService;
 import cn.yibo.boot.modules.base.service.UserService;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +56,7 @@ public class OrganServiceImpl extends AbstractBaseService<OrganDao, Organ> imple
     @Transactional(readOnly = false)
     public void updateNull(Organ organ){
         super.updateNull(organ);
-        this.clearUsersCacheByTenantId(organ.getId());
+        clearUsersCacheByTenantId(organ.getId());
     }
 
     @Override
@@ -71,7 +74,18 @@ public class OrganServiceImpl extends AbstractBaseService<OrganDao, Organ> imple
             userService.updateByCondition(updateMap, conditionMap);
 
             // 清除当前机构下的用户缓存
-            this.clearUsersCacheByTenantId(organ.getId());
+            clearUsersCacheByTenantId(organ.getId());
+        }
+    }
+
+    /**
+     * 根据租户ID清除用户缓存
+     */
+    public void clearUsersCacheByTenantId(String tenantId){
+        if( StrUtil.isNotBlank(tenantId) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setTenantId(tenantId);
+            ThreadUtil.execute(clearUserCacheThread);
         }
     }
 }

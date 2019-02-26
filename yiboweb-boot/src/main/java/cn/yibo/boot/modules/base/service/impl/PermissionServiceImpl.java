@@ -21,12 +21,13 @@
 package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.map.MapUtil;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.common.constant.CacheConstant;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.service.PermissionService;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
+import cn.yibo.common.constant.StatusEnum;
 import cn.yibo.core.cache.CacheUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,7 +110,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Override
     public List<Permission> findByType(String type){
         Map<String, Object> condition = MapUtil.newHashMap();
-        condition.put("status", CommonConstant.STATUS_NORMAL);
+        condition.put("status", StatusEnum.N.getCode());
         condition.put("permsType", type);
 
         return dao.queryList(condition, "perms_sort", null);

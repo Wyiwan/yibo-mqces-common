@@ -20,10 +20,10 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.modules.base.dao.MessageDao;
 import cn.yibo.boot.modules.base.entity.Message;
 import cn.yibo.boot.modules.base.service.MessageService;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

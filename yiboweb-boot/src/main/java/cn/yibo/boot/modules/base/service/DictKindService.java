@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.DictKindDao;
 import cn.yibo.boot.modules.base.entity.DictKind;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 字典类别表服务接口层
@@ -30,6 +30,6 @@ import cn.yibo.boot.modules.base.entity.DictKind;
  * @since 2019-01-22
  * @version v1.0
  */
-public interface DictKindService extends IBaseService<DictKindDao, DictKind>{
+public interface DictKindService extends IBaseService<DictKindDao, DictKind> {
 
 }

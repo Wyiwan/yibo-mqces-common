@@ -20,10 +20,10 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.common.constant.CacheConstant;
 import cn.yibo.boot.modules.base.dao.UserDao;
 import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.common.base.service.IBaseService;
 import cn.yibo.core.web.exception.BizException;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheConfig;
@@ -39,7 +39,7 @@ import java.util.Map;
  * @version v1.0
  */
 @CacheConfig(cacheNames = CacheConstant.USER_CACHE_NAME)
-public interface UserService extends IBaseService<UserDao, User>{
+public interface UserService extends IBaseService<UserDao, User> {
     /**
      * 通过用户名查询用户
      * @param username
@@ -54,7 +54,7 @@ public interface UserService extends IBaseService<UserDao, User>{
      * @param condition
      * @return
      */
-    List<User> findUserByIds(@Param("condition") Map<String, Object> condition);
+    List<User> findByIds(@Param("condition") Map<String, Object> condition);
 
     /**
      * 根据ID查询用户，管理员类型校验
@@ -64,32 +64,26 @@ public interface UserService extends IBaseService<UserDao, User>{
     User fetched(String id) throws BizException;
 
     /**
-     * 角色授权
-     * @param user
-     */
-    void grantRole(User user);
-
-    /**
-     * 用户登录信息
+     *  获取用户相关信息
      * @return
      */
-    Map<String, Object> loginInfo();
-
-    /**
-     * 用户个人信息
-     * @return
-     */
-    Map<String, Object> persInfo();
+    Map<String, Object> userInfo(String type);
 
     /**
      * 保存用户个人信息
      * @param user
      */
-    void savePersInfo(User user);
+    void saveUserInfo(User user);
 
     /**
      * 用户密码修改
      * @param newPassword
      */
-    void modifyPersPwd(String newPassword);
+    void saveUserPassword(String newPassword);
+
+    /**
+     * 角色授权
+     * @param user
+     */
+    void roleAuthorized(User user);
 }

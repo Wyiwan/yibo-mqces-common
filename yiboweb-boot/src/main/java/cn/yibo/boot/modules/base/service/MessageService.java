@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.MessageDao;
 import cn.yibo.boot.modules.base.entity.Message;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 消息推送表服务接口层
@@ -30,6 +30,6 @@ import cn.yibo.boot.modules.base.entity.Message;
  * @since 2019-02-20
  * @version v1.0
  */
-public interface MessageService extends IBaseService<MessageDao, Message>{
+public interface MessageService extends IBaseService<MessageDao, Message> {
     
 }

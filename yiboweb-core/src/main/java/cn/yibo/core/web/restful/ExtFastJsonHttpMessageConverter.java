@@ -20,7 +20,7 @@
 
 package cn.yibo.core.web.restful;
 
-import cn.yibo.common.web.ServletUtils;
+import cn.yibo.common.utils.ServletUtils;
 import cn.yibo.core.protocol.ResponseMap;
 import com.alibaba.fastjson.JSON;
 import org.springframework.http.HttpInputMessage;

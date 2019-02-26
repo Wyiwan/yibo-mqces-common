@@ -4,30 +4,26 @@
 {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
 {  创建人：  高云
 {  审查人：
-{  模块：安全控制模块
+{  模块：公用模块
 {  功能描述:
 {
 {  ---------------------------------------------------------------------------
 {  维护历史:
 {  日期        维护人        维护类型
 {  ---------------------------------------------------------------------------
-{  2018-08-01  高云        新建
+{  2018-08-07  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的boot包
+{  注：本模块代码为底层基础框架封装的common包
 {*****************************************************************************
 */
 
-package cn.yibo.boot.base.service.impl;
+package cn.yibo.common.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.controller.BaseForm;
-import cn.yibo.boot.base.dao.BaseDAO;
-import cn.yibo.boot.base.entity.BaseEntity;
-import cn.yibo.boot.base.service.IBaseService;
-import cn.yibo.boot.common.aync.ClearUserCacheThread;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.dao.BaseDAO;
+import cn.yibo.common.base.entity.BaseEntity;
+import cn.yibo.common.base.service.IBaseService;
 import cn.yibo.common.utils.ObjectUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -121,7 +117,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         Map<String, Object> params = baseForm.getParameters();
         logger.info("分页请求参数："+params);
 
-        List<T> list = dao.queryPage(params);
+        List list = dao.queryPage(params);
         return new PageInfo<T>(list);
     }
 
@@ -213,9 +209,7 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
     @Override
     @Transactional(readOnly = false)
     public void save(T t){
-        t.onBeforeSave();
-
-        if( !ObjectUtils.isEmpty(t.getId()) ){
+        if( ObjectUtils.isNotNull(t.getId()) ){
             t.preUpdate();
             this.updateNull(t);
         }else{
@@ -234,50 +228,4 @@ public abstract class AbstractBaseService<D extends BaseDAO, T extends BaseEntit
         return dao.selectMaxId();
     }
 
-    /**
-     * 根据用户ID清除用户缓存
-     * @param userIdList
-     */
-    public void clearUsersCacheByUserId(List userIdList){
-        if( !CollUtil.isEmpty(userIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setUserIdList(userIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
-    }
-
-    /**
-     * 根据角色ID清除用户缓存
-     * @param roleIdList
-     */
-    public void clearUsersCacheByRoleId(List roleIdList){
-        if( !CollUtil.isEmpty(roleIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setRoleIdList(roleIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
-    }
-
-    /**
-     * 根据科室ID清除用户缓存
-     * @param deptIdList
-     */
-    public void clearUsersCacheByDeptId(List deptIdList){
-        if( !CollUtil.isEmpty(deptIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setDeptIdList(deptIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
-    }
-
-    /**
-     * 根据租户ID清除用户缓存
-     */
-    public void clearUsersCacheByTenantId(String tenantId){
-        if( StrUtil.isNotBlank(tenantId) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setTenantId(tenantId);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
-    }
 }

@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Dept;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @since 2018-12-12
  * @version v1.0
  */
-public interface DeptDao extends CrudDao<Dept>{
+public interface DeptDao extends CrudDao<Dept> {
     /**
      * 列表查询扩展
      * @param condition

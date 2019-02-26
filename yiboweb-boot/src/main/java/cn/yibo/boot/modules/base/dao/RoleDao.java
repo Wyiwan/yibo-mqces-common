@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 2018-12-20
  * @version v1.0
  */
-public interface RoleDao extends CrudDao<Role>{
+public interface RoleDao extends CrudDao<Role> {
     /**
      * 分页查询扩展
      * @param condition

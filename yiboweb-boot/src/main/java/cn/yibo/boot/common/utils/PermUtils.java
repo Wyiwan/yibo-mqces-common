@@ -22,13 +22,13 @@ package cn.yibo.boot.common.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.PermissionService;
-import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.common.utils.PropertiesUtils;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,7 +139,6 @@ public class PermUtils {
         }
         return map;
     }
-
 
     /**
      * 根据菜单地址获取菜单路径

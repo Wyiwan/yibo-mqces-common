@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.DictKind;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.ibatis.annotations.Param;
  * @since 2019-01-22
  * @version v1.0
  */
-public interface DictKindDao extends CrudDao<DictKind>{
+public interface DictKindDao extends CrudDao<DictKind> {
     /**
      * 级联删除
      * @param id

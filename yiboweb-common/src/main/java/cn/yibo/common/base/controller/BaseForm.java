@@ -4,27 +4,27 @@
 {  版权信息 (c) 2018-2020 广州医博信息技术有限公司. 保留所有权利.
 {  创建人：  高云
 {  审查人：
-{  模块：安全控制模块
+{  模块：公用模块
 {  功能描述:
 {
 {  ---------------------------------------------------------------------------
 {  维护历史:
 {  日期        维护人        维护类型
 {  ---------------------------------------------------------------------------
-{  2018-08-01  高云        新建
+{  2018-08-07  高云        新建
 {
 {  ---------------------------------------------------------------------------
-{  注：本模块代码为底层基础框架封装的boot包
+{  注：本模块代码为底层基础框架封装的common包
 {*****************************************************************************
 */
 
-package cn.yibo.boot.base.controller;
+package cn.yibo.common.base.controller;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.web.ServletUtils;
+import cn.yibo.common.utils.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +34,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 基础参数辅助类<p/>
- * @author kfzx-gaoyun
- * @version 2016-05-12
+ *  描述：基础参数辅助类<p/>
+ *  作者: 高云
+ *  时间: 2018-08-07
+ *  版本: v1.0
  */
 @Slf4j
 public class BaseForm<T>{

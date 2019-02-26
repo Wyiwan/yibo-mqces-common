@@ -21,10 +21,12 @@
 package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.modules.base.dao.DeptDao;
 import cn.yibo.boot.modules.base.entity.Dept;
 import cn.yibo.boot.modules.base.service.DeptService;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +63,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
         dao.deleteCascade(list);
-        this.clearUsersCacheByDeptId(list);
+        clearUsersCacheByDeptId(list);
     }
 
     /**
@@ -74,7 +76,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     public void updateNull(Dept dept){
         super.updateNull(dept);
         dao.updateAncestor(dept);
-        this.clearUsersCacheByDeptId(CollUtil.newArrayList(dept.getId()));
+        clearUsersCacheByDeptId(CollUtil.newArrayList(dept.getId()));
     }
 
     /**
@@ -87,4 +89,15 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
         return dao.queryListExt(condition);
     }
 
+    /**
+     * 根据科室ID清除用户缓存
+     * @param deptIdList
+     */
+    public void clearUsersCacheByDeptId(List deptIdList){
+        if( !CollUtil.isEmpty(deptIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setDeptIdList(deptIdList);
+            ThreadUtil.execute(clearUserCacheThread);
+        }
+    }
 }

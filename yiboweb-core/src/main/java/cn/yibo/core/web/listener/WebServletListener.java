@@ -20,7 +20,7 @@
 
 package cn.yibo.core.web.listener;
 
-import cn.yibo.common.io.PropertiesUtils;
+import cn.yibo.common.utils.PropertiesUtils;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

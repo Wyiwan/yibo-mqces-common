@@ -22,14 +22,16 @@ package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.yibo.boot.base.controller.BaseForm;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.RoleDao;
 import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.service.RoleService;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -72,7 +74,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void updateNull(Role role){
         super.updateNull(role);
-        this.clearUsersCacheByRoleId(CollUtil.newArrayList(role.getId()));
+        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()), null);
     }
 
     /**
@@ -98,7 +100,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             }
         }
         super.deleteByIds(list);
-        this.clearUsersCacheByRoleId(list);
+        clearUsersCacheByIds(list, null);
     }
 
     /**
@@ -144,7 +146,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantPermission(Role role){
         dao.grantPermission(role);
-        this.clearUsersCacheByRoleId(CollUtil.newArrayList(role.getId()));
+        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()),null);
     }
 
     /**
@@ -155,7 +157,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void grantUser(Role role){
         dao.grantUser(role);
-        this.clearUsersCacheByUserId(role.getUserIdList());
+        clearUsersCacheByIds(null, role.getUserIdList());
     }
 
     /**
@@ -166,6 +168,25 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void unGrantUser(Role role){
         dao.unGrantUser(role);
-        this.clearUsersCacheByUserId(role.getUserIdList());
+        clearUsersCacheByIds(null, role.getUserIdList());
+    }
+
+    /**
+     * 清除用户缓存
+     * @param roleIdList
+     * @param userIdList
+     */
+    public void clearUsersCacheByIds(List roleIdList, List userIdList){
+        if( !CollUtil.isEmpty(roleIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setRoleIdList(roleIdList);
+            ThreadUtil.execute(clearUserCacheThread);
+        }
+
+        if( !CollUtil.isEmpty(userIdList) ){
+            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+            clearUserCacheThread.setUserIdList(userIdList);
+            ThreadUtil.execute(clearUserCacheThread);
+        }
     }
 }

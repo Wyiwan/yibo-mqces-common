@@ -81,7 +81,7 @@ public class MessageController extends CrudController<MessageService, Message>{
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("organIds", message.getOrganIdList());
 
-                List<User> userList = userService.findUserByIds(condition);
+                List<User> userList = userService.findByIds(condition);
                 userList.forEach(user -> {
                     msgSendList.add(new MessageSend(user.getId()));
                     // 指定推送

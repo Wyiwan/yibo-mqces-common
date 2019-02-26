@@ -18,19 +18,40 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.tree;
+package cn.yibo.common.constant;
 
 /**
- * 自定义树搜索器
- * @author abo
- * @param <N> 树节点
+ *  描述: 状态枚举
+ *  作者: 高云
+ *  时间: 2018-08-07
+ *  版本: v1.0
  */
-public interface BaseTreeSearcher<N> {
+public enum StatusEnum {
+    N(1, "正常"),
+    S(2, "停用"),
+    D(0, "逻辑删除");
 
-    /**
-     * 当该方法返回true时,表示匹配到该节点
-     * @param node	当前树节点
-     * @return
-     */
-    boolean search(N node);
+    private int code;
+    private String name;
+
+    StatusEnum(int code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public int getCode() {
+        return this.code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

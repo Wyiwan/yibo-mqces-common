@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
+import cn.yibo.common.base.service.IBaseService;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * @since 2018-12-03
  * @version v1.0
  */
-public interface PermissionService extends IBaseService<PermissionDao, Permission>{
+public interface PermissionService extends IBaseService<PermissionDao, Permission> {
     /**
      * 根据类型查询权限
      * @param type

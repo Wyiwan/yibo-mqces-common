@@ -20,10 +20,9 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.MessageSend;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ import java.util.Map;
  * @since 2019-02-20
  * @version v1.0
  */
-public interface MessageSendDao extends CrudDao<MessageSend>{
+public interface MessageSendDao extends CrudDao<MessageSend> {
     /**
      * 分页查询扩展
      * @param condition

@@ -20,11 +20,11 @@
 
 package cn.yibo.boot.modules.base.controller;
 
-import cn.yibo.boot.base.controller.BaseController;
-import cn.yibo.boot.base.controller.BaseForm;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.service.LogService;
+import cn.yibo.common.base.controller.BaseController;
+import cn.yibo.common.base.controller.BaseForm;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;

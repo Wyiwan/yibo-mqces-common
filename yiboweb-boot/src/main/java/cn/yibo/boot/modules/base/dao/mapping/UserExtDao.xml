@@ -72,7 +72,7 @@
     </select>
 
     <!-- 根据ID查询用户信息 -->
-    <select id="findUserByIds" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
+    <select id="findByIds" parameterType="java.util.Map" resultType="cn.yibo.boot.modules.base.entity.User">
         select
             distinct <include refid="Base_Column_List" />
         from sys_user
@@ -106,8 +106,14 @@
             and status != 0
     </select>
 
+    <!-- 删除扩展 -->
+    <delete id="deleteByIdsExt">
+        update sys_user set status = 0 where id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+        delete from sys_user_role where user_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
+    </delete>
+
     <!-- 角色授权 -->
-    <update id="grantRole" parameterType="cn.yibo.boot.modules.base.entity.User">
+    <update id="roleAuthorized" parameterType="cn.yibo.boot.modules.base.entity.User">
         delete from sys_user_role where user_id = #{id};
         <if test="roleIdList != null">
             <foreach collection="roleIdList" item="roleId">
@@ -115,10 +121,4 @@
             </foreach>
         </if>
     </update>
-
-    <!-- 删除扩展 -->
-    <delete id="deleteByIdsExt">
-        update sys_user set status = 0 where id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
-        delete from sys_user_role where user_id in <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>;
-    </delete>
 </mapper>

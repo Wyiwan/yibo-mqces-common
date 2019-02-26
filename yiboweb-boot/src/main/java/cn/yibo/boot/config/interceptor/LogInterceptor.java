@@ -29,7 +29,7 @@ import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.common.utils.LogUtils;
 import cn.yibo.common.utils.ObjectUtils;
-import cn.yibo.common.web.ServletUtils;
+import cn.yibo.common.utils.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;

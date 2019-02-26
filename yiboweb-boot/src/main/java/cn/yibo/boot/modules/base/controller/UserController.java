@@ -22,7 +22,6 @@ package cn.yibo.boot.modules.base.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.controller.BaseForm;
 import cn.yibo.boot.base.controller.CrudController;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.common.constant.CommonConstant;
@@ -31,6 +30,7 @@ import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
+import cn.yibo.common.base.controller.BaseForm;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
@@ -238,7 +238,7 @@ public class UserController extends CrudController<UserService, User> {
             @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String grantedRole(@RequestBody User user){
-        this.baseSevice.grantRole(user);
+        this.baseSevice.roleAuthorized(user);
         return "角色授权成功";
     }
 
@@ -253,7 +253,7 @@ public class UserController extends CrudController<UserService, User> {
     @ApiOperation("查询登录信息")
     @GetMapping("/login-info")
     public Map<String, Object> loginInfo(){
-        return this.baseSevice.loginInfo();
+        return this.baseSevice.userInfo("login");
     }
 
     /**
@@ -263,7 +263,7 @@ public class UserController extends CrudController<UserService, User> {
     @ApiOperation("查询个人信息")
     @GetMapping("/pers-info")
     public Map<String, Object> persInfo(){
-        return this.baseSevice.persInfo();
+        return this.baseSevice.userInfo("personal");
     }
 
     /**
@@ -272,11 +272,11 @@ public class UserController extends CrudController<UserService, User> {
      */
     @ApiOperation("保存个人信息")
     @PostMapping("/pers-save")
-    public String persSave(@RequestBody User user){
+    public String saveUserInfo(@RequestBody User user){
         if( StrUtil.isEmpty(user.getName()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "姓名不能为空");
         }
-        this.baseSevice.savePersInfo(user);
+        this.baseSevice.saveUserInfo(user);
         return SAVE_SUCCEED;
     }
 
@@ -291,7 +291,7 @@ public class UserController extends CrudController<UserService, User> {
             @ApiImplicitParam(name = "confirmNewPassword", value = "确认新密码", paramType = "query", dataType = "String", required = true)
     })
     @PostMapping("/pwd-save")
-    public String modifyPersPwd(@RequestBody JSONObject jsonObject){
+    public String updatedPassword(@RequestBody JSONObject jsonObject){
         User vo = this.baseSevice.fetch(UserContext.getUser().getId());
         if( vo != null ){
             String oldPassword = jsonObject.getString("oldPassword");
@@ -305,7 +305,7 @@ public class UserController extends CrudController<UserService, User> {
             }else if( !StrUtil.equals(newPassword, confirmNewPassword) ){
                 throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "两次密码不一致");
             }else{
-                this.baseSevice.modifyPersPwd(newPassword);
+                this.baseSevice.saveUserPassword(newPassword);
             }
         }
         return UPDATE_SUCCEED;

@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.DeptDao;
 import cn.yibo.boot.modules.base.entity.Dept;
+import cn.yibo.common.base.service.IBaseService;
 
 /**
  * 科室表服务接口层
@@ -30,6 +30,6 @@ import cn.yibo.boot.modules.base.entity.Dept;
  * @since 2018-12-12
  * @version v1.0
  */
-public interface DeptService extends IBaseService<DeptDao, Dept>{
+public interface DeptService extends IBaseService<DeptDao, Dept> {
 
 }

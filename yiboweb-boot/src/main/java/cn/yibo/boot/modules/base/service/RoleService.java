@@ -20,9 +20,9 @@
 
 package cn.yibo.boot.modules.base.service;
 
-import cn.yibo.boot.base.service.IBaseService;
 import cn.yibo.boot.modules.base.dao.RoleDao;
 import cn.yibo.boot.modules.base.entity.Role;
+import cn.yibo.common.base.service.IBaseService;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * @since 2018-12-20
  * @version v1.0
  */
-public interface RoleService extends IBaseService<RoleDao, Role>{
+public interface RoleService extends IBaseService<RoleDao, Role> {
     /**
      * 根据用户ID查询角色
      * @param userId

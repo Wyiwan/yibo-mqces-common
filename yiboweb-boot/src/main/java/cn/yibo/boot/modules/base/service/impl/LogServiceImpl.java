@@ -20,12 +20,12 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.yibo.boot.base.controller.BaseForm;
-import cn.yibo.boot.base.service.impl.AbstractBaseService;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.dao.LogDao;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.service.LogService;
+import cn.yibo.common.base.controller.BaseForm;
+import cn.yibo.common.base.service.impl.AbstractBaseService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;

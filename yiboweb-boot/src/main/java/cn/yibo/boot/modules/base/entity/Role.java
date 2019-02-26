@@ -23,6 +23,7 @@ package cn.yibo.boot.modules.base.entity;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -70,14 +71,12 @@ public class Role extends DataEntity<String> {
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
-    private String permissionIds;
-
     @JsonIgnore
+    @JSONField(serialize = false)
     private List<String> permissionIdList;
 
-    private String userIds;
-
     @JsonIgnore
+    @JSONField(serialize = false)
     private List<String> userIdList;
 
     public void setPermissionIds(String permissionIds){
@@ -93,7 +92,19 @@ public class Role extends DataEntity<String> {
     }
 
     @Override
-    public void onBeforeSave(){
+    public void preInsert(){
+        super.preInsert();
+
+        this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
+        if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
+            this.isSys = CommonConstant.NO;
+        }
+    }
+
+    @Override
+    public void preUpdate(){
+        super.preUpdate();
+
         this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
         if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
             this.isSys = CommonConstant.NO;

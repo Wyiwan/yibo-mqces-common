@@ -22,7 +22,7 @@ package cn.yibo.boot.config.security;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.common.exception.LoginFailEnum;
+import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.common.exception.LoginFailLimitException;
 import cn.yibo.boot.modules.base.entity.Log;
 import cn.yibo.boot.modules.base.entity.User;

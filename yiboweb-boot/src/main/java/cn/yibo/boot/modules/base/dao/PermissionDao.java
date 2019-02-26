@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Permission;
+import cn.yibo.common.base.dao.CrudDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  * @since 2018-12-03
  * @version v1.0
  */
-public interface PermissionDao extends CrudDao<Permission>{
+public interface PermissionDao extends CrudDao<Permission> {
     /**
      * 根据用户ID查询权限
      * @param userId

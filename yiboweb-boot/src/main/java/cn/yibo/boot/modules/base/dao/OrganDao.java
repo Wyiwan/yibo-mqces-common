@@ -20,8 +20,8 @@
 
 package cn.yibo.boot.modules.base.dao;
 
-import cn.yibo.boot.base.dao.CrudDao;
 import cn.yibo.boot.modules.base.entity.Organ;
+import cn.yibo.common.base.dao.CrudDao;
 
 /**
  * 机构表数据访问层
@@ -29,6 +29,6 @@ import cn.yibo.boot.modules.base.entity.Organ;
  * @since 2018-12-14
  * @version v1.0
  */
-public interface OrganDao extends CrudDao<Organ>{
+public interface OrganDao extends CrudDao<Organ> {
 
 }

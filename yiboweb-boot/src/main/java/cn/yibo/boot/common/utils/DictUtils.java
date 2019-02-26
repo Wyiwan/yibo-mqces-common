@@ -22,13 +22,13 @@ package cn.yibo.boot.common.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.constant.CacheConstant;
-import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.DictItem;
 import cn.yibo.boot.modules.base.entity.DictKind;
 import cn.yibo.boot.modules.base.service.DictItemService;
 import cn.yibo.boot.modules.base.service.DictKindService;
+import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.common.constant.StatusEnum;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.cache.CacheUtils;
 import cn.yibo.core.web.context.SpringContextHolder;
@@ -61,14 +61,14 @@ public class DictUtils {
     public static Map<String, List> dictCacheReload(){
         Map<String, List> dictMap = MapUtil.newHashMap();
 
-        List<DictKind> list = dictKindService.findList("status", CommonConstant.STATUS_NORMAL);
+        List<DictKind> list = dictKindService.findList("status", StatusEnum.N.getCode());
         if( !CollUtil.isEmpty(list) ){
             Iterator<DictKind> iterator = list.iterator();
             while( iterator.hasNext() ){
                 dictMap.put(iterator.next().getDictKind(), ListUtils.newArrayList());
             }
 
-            List<DictItem> itemList = dictItemService.findList("i.status", CommonConstant.STATUS_NORMAL);
+            List<DictItem> itemList = dictItemService.findList("i.status", StatusEnum.N.getCode());
             if( !CollUtil.isEmpty(itemList) ){
                 Iterator<DictItem> itemIterator = itemList.iterator();
 

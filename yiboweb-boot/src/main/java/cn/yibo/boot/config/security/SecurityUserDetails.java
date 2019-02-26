@@ -25,6 +25,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.common.constant.StatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -109,7 +110,7 @@ public class SecurityUserDetails extends User implements UserDetails{
      */
     @Override
     public boolean isAccountNonLocked(){
-        return CommonConstant.STATUS_DISABLE.equals(this.getStatus()) ? false : true;
+        return StatusEnum.S.getCode() == this.getStatus() ? false : true;
     }
 
     /**
@@ -127,7 +128,7 @@ public class SecurityUserDetails extends User implements UserDetails{
      */
     @Override
     public boolean isEnabled(){
-        return CommonConstant.STATUS_NORMAL.equals(this.getStatus()) ? true : false;
+        return StatusEnum.N.getCode() == this.getStatus() ? true : false;
     }
 
 }

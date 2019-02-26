@@ -20,14 +20,13 @@
 
 package cn.yibo.boot.base.entity;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.yibo.boot.common.constant.CommonConstant;
+import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.config.security.context.UserContext;
+import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.common.base.entity.CreateEntity;
 import com.alibaba.fastjson.annotation.JSONField;
-import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  *  描述: 实体抽象类
@@ -36,66 +35,48 @@ import java.util.Date;
  *  版本: v1.0
  */
 @Data
-public abstract class DataEntity<T> extends BaseEntity<T> {
-    private static final long serialVersionUID = 8724055578251954450L;
+public abstract class DataEntity<T> extends CreateEntity<T> {
+    private static final long serialVersionUID = -2284090858176882512L;
 
-    @ApiModelProperty(value = "状态(0删除 1启用 2禁用)")
-    protected Integer status;
+    /** 租户ID */
+    protected String tenantId;
 
-    @ApiModelProperty(value = "创建人")
+    /** 当前登录用户 */
+    @JsonIgnore
     @JSONField(serialize = false)
-    protected String createBy;
+    protected User currentUser;
 
-    @ApiModelProperty(value = "创建人名称")
-    @JSONField(serialize = false)
-    protected String createByName;
+    public String getTenantId(){
+        if( StrUtil.isEmpty(tenantId) && UserContext.getUser() != null ){
+            this.tenantId = UserContext.getUser().getTenantId();
+        }
+        return tenantId;
+    }
 
-    @ApiModelProperty(value = "创建时间")
-    @JSONField(format="yyyy-MM-dd HH:mm")
-    protected Date createDate;
-
-    @ApiModelProperty(value = "修改人")
-    @JSONField(serialize = false)
-    protected String updateBy;
-
-    @ApiModelProperty(value = "修改人名称")
-    @JSONField(serialize = false)
-    protected String updateByName;
-
-    @ApiModelProperty(value = "修改时间")
-    @JSONField(format="yyyy-MM-dd HH:mm")
-    protected Date updateDate;
-
-    @ApiModelProperty(value = "备注")
-    protected String comments;
+    public User getCurrentUser(){
+        if( this.currentUser == null ){
+            this.currentUser = UserContext.getUser();
+        }
+        return currentUser;
+    }
 
     @Override
     public void preInsert(){
-        this.updateDate = new Date();
-        this.createDate = this.updateDate;
+        super.preInsert();
 
         if( UserContext.getUser() != null ){
             this.updateBy = UserContext.getUser().getId();
             this.createBy = this.updateBy;
         }
-        this.status = ObjectUtil.isNull(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
     @Override
     public void preUpdate(){
-        this.updateDate = new Date();
+        super.preUpdate();
 
         if( UserContext.getUser() != null ){
             this.updateBy = UserContext.getUser().getId();
         }
-        this.status = ObjectUtil.isNull(this.status) ? CommonConstant.STATUS_NORMAL : this.status;
     }
 
-    @Override
-    public void onBeforeSave(){
-    }
-
-    public void enabled(){
-        this.status = (this.status == CommonConstant.STATUS_NORMAL ? CommonConstant.STATUS_DISABLE : CommonConstant.STATUS_NORMAL);
-    }
 }
