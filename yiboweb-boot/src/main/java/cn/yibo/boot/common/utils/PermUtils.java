@@ -27,7 +27,7 @@ import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.PermissionService;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.utils.PropertiesUtils;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;

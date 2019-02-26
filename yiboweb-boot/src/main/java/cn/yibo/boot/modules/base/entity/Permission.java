@@ -22,7 +22,7 @@ package cn.yibo.boot.modules.base.entity;
 
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.common.base.entity.TreeEntity;
+import cn.yibo.boot.base.entity.TreeEntity;
 import cn.yibo.common.utils.ObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

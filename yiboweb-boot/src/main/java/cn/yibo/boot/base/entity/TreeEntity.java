@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.base.entity;
+package cn.yibo.boot.base.entity;
 
 import lombok.Data;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * 版本: v1.0
  */
 @Data
-public abstract class TreeEntity<D extends TreeEntity, T> extends CreateEntity<T> {
+public abstract class TreeEntity<D extends TreeEntity, T> extends DataEntity<T> {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -25,7 +25,7 @@ import cn.yibo.boot.base.controller.CrudController;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.modules.base.entity.Dept;
 import cn.yibo.boot.modules.base.service.DeptService;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

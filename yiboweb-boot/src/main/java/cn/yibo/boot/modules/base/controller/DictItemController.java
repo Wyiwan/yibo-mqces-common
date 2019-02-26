@@ -25,7 +25,7 @@ import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.modules.base.entity.DictItem;
 import cn.yibo.boot.modules.base.service.DictItemService;
 import cn.yibo.boot.common.utils.DictUtils;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.utils.ObjectUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

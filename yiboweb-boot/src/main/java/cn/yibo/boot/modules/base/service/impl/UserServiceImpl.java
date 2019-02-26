@@ -39,7 +39,7 @@ import cn.yibo.boot.modules.base.service.OrganService;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.base.controller.BaseForm;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.base.service.impl.AbstractBaseService;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;

@@ -35,7 +35,7 @@ import cn.yibo.boot.modules.base.service.PermissionService;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.base.controller.BaseForm;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;

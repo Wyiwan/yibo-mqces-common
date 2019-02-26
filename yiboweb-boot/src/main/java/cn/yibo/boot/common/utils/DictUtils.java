@@ -27,7 +27,7 @@ import cn.yibo.boot.modules.base.entity.DictItem;
 import cn.yibo.boot.modules.base.entity.DictKind;
 import cn.yibo.boot.modules.base.service.DictItemService;
 import cn.yibo.boot.modules.base.service.DictKindService;
-import cn.yibo.common.base.entity.TreeBuild;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.constant.StatusEnum;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.cache.CacheUtils;

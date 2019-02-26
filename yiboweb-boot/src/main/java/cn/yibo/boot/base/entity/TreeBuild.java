@@ -18,7 +18,7 @@
 {*****************************************************************************
 */
 
-package cn.yibo.common.base.entity;
+package cn.yibo.boot.base.entity;
 
 import cn.yibo.common.tree.Tree;
 import cn.yibo.common.utils.ListUtils;
