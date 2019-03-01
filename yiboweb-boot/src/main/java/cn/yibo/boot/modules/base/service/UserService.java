@@ -85,5 +85,5 @@ public interface UserService extends IBaseService<UserDao, User> {
      * 角色授权
      * @param user
      */
-    void roleAuthorized(User user);
+    void authorizedRole(User user);
 }

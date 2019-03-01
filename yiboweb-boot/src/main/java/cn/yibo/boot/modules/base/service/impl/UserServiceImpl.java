@@ -89,9 +89,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void insert(User user){
         super.insert(user);
-        if( !CollUtil.isEmpty(user.getRoleIdList()) ){
-            this.roleAuthorized(user);
-        }
+        this.authorizedRole(user);
         msgUtils.sendMessage(user.getId());
     }
 
@@ -266,7 +264,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public void roleAuthorized(User user){
+    public void authorizedRole(User user){
         dao.roleAuthorized(user);
         clearUsersCacheByUserId(CollUtil.newArrayList(user.getId()));
     }

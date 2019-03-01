@@ -44,17 +44,13 @@ public interface RoleService extends IBaseService<RoleDao, Role> {
      * 菜单授权
      * @param role
      */
-    void grantPermission(Role role);
+    void saveAuthorize(Role role);
 
     /**
      * 用户授权
-     * @param role
+     * @param roleId
+     * @param userIds
      */
-    void grantUser(Role role);
+    void saveMember(String roleId, List<String> userIds);
 
-    /**
-     * 取消用户授权
-     * @param role
-     */
-    void unGrantUser(Role role);
 }

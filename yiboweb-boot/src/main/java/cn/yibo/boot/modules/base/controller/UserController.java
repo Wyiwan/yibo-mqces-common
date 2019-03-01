@@ -238,7 +238,7 @@ public class UserController extends CrudController<UserService, User> {
             @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
     public String grantedRole(@RequestBody User user){
-        this.baseSevice.roleAuthorized(user);
+        this.baseSevice.authorizedRole(user);
         return "角色授权成功";
     }
 

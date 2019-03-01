@@ -23,6 +23,7 @@ package cn.yibo.boot.modules.base.entity;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.common.utils.ListUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -30,7 +31,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -62,32 +62,20 @@ public class Role extends DataEntity<String> {
     @ApiModelProperty(value = "系统内置（0否 1是）")
     private String isSys;
 
+    @JsonIgnore
+    @JSONField(serialize = false)
     @ApiModelProperty(value = "角色所对应的权限")
-    private List<RolePermission> rolePermissions;
-
-    @ApiModelProperty(value = "角色所对应的用户")
-    private List<UserRole> userRoles;
-
-    //------------------------------------------------------------------------------------------------------------------
-    // 以下为扩展属性
-    //------------------------------------------------------------------------------------------------------------------
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private List<String> permissionIdList;
-
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private List<String> userIdList;
+    private List<Permission> permissions;
 
     public void setPermissionIds(String permissionIds){
-        if( StrUtil.isNotBlank(permissionIds) ){
-            this.setPermissionIdList( Arrays.asList(permissionIds.split(",")) );
-        }
-    }
+        permissions = ListUtils.newArrayList();
 
-    public void setUserIds(String userIds){
-        if( StrUtil.isNotBlank(userIds) ){
-            this.setUserIdList( Arrays.asList(userIds.split(",")) );
+        if( StrUtil.isNotBlank(permissionIds) ){
+            for( String id : permissionIds.split(",") ){
+                Permission permission = new Permission();
+                permission.setId(id);
+                permissions.add(permission);
+            }
         }
     }
 

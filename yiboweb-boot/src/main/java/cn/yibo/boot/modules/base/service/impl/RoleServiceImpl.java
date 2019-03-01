@@ -59,10 +59,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void insert(Role role){
         super.insert(role);
-
-        if( !CollUtil.isEmpty(role.getPermissionIdList()) ){
-            this.grantPermission(role);
-        }
+        this.saveAuthorize(role);
     }
 
     /**
@@ -74,7 +71,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void updateNull(Role role){
         super.updateNull(role);
-        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()), null);
+        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()));
     }
 
     /**
@@ -100,7 +97,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             }
         }
         super.deleteByIds(list);
-        clearUsersCacheByIds(list, null);
+        clearUsersCacheByIds(list);
     }
 
     /**
@@ -144,48 +141,31 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      */
     @Override
     @Transactional(readOnly = false)
-    public void grantPermission(Role role){
-        dao.grantPermission(role);
-        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()),null);
+    public void saveAuthorize(Role role){
+        dao.saveAuthorize(role);
+        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()));
     }
 
     /**
      * 用户授权
-     * @param role
+     * @param roleId
+     * @param userIds
      */
     @Override
     @Transactional(readOnly = false)
-    public void grantUser(Role role){
-        dao.grantUser(role);
-        clearUsersCacheByIds(null, role.getUserIdList());
-    }
-
-    /**
-     * 取消用户授权
-     * @param role
-     */
-    @Override
-    @Transactional(readOnly = false)
-    public void unGrantUser(Role role){
-        dao.unGrantUser(role);
-        clearUsersCacheByIds(null, role.getUserIdList());
+    public void saveMember(String roleId, List<String> userIds){
+        dao.saveMember(roleId, userIds);
+        clearUsersCacheByIds(CollUtil.newArrayList(roleId));
     }
 
     /**
      * 清除用户缓存
      * @param roleIdList
-     * @param userIdList
      */
-    public void clearUsersCacheByIds(List roleIdList, List userIdList){
+    public void clearUsersCacheByIds(List roleIdList){
         if( !CollUtil.isEmpty(roleIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setRoleIdList(roleIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
-
-        if( !CollUtil.isEmpty(userIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setUserIdList(userIdList);
             ThreadUtil.execute(clearUserCacheThread);
         }
     }

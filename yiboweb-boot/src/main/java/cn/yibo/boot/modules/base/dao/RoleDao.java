@@ -53,17 +53,12 @@ public interface RoleDao extends CrudDao<Role> {
      * 菜单授权
      * @param role
      */
-    void grantPermission(Role role);
+    void saveAuthorize(Role role);
 
     /**
-     * 用户授权
-     * @param role
+     * 成员授权
+     * @param roleId
+     * @param userIds
      */
-    void grantUser(Role role);
-
-    /**
-     * 取消用户授权
-     * @param role
-     */
-    void unGrantUser(Role role);
+    void saveMember(@Param("roleId") String roleId, @Param("userIds") List<String> userIds);
 }

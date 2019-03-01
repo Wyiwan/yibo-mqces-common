@@ -24,6 +24,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.controller.CrudController;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.common.constant.LoginFailEnum;
@@ -35,11 +36,11 @@ import cn.yibo.boot.modules.base.service.PermissionService;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.base.controller.BaseForm;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -48,6 +49,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -191,7 +193,7 @@ public class RoleController extends CrudController<RoleService, Role> {
         Role fetchRole = this.baseSevice.fetch(role.getId());
         verifyUserIdentity(fetchRole);
 
-        this.baseSevice.grantPermission(role);
+        this.baseSevice.saveAuthorize(role);
         return "菜单授权成功";
     }
 
@@ -236,33 +238,22 @@ public class RoleController extends CrudController<RoleService, Role> {
 
     /**
      * 用户授权
-     * @param role
+     * @param id
+     * @param userIds
      * @return
      */
     @ApiOperation("角色管理/用户授权")
-    @PostMapping("/granted-user")
+    @GetMapping("/granted-user")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
-    public String grantedUser(@RequestBody Role role){
-        this.baseSevice.grantUser(role);
-        return "分配用户成功";
-    }
-
-    /**
-     * 取消用户授权
-     * @param role
-     * @return
-     */
-    @ApiOperation("角色管理/取消用户授权")
-    @PostMapping("/un-granted-user")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
-            @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
-    })
-    public String unGrantedUser(@RequestBody Role role){
-        this.baseSevice.unGrantUser(role);
-        return "取消用户成功";
+    public String grantedUser(String id, String userIds){
+        List<String> userIdList = Lists.newArrayList();
+        if( StrUtil.isNotBlank(userIds) ){
+            userIdList = Arrays.asList( userIds.split(",") );
+        }
+        this.baseSevice.saveMember(id, userIdList);
+        return "用户授权成功";
     }
 }

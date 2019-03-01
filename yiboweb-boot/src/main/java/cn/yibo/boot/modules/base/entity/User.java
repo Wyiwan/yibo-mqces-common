@@ -24,9 +24,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
-import cn.yibo.common.utils.PropertiesUtils;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.common.utils.PropertiesUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -35,7 +35,6 @@ import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -145,9 +144,6 @@ public class User extends DataEntity<String> {
     @ApiModelProperty(value = "所属科室名称")
     private String deptName;
 
-    @ApiModelProperty(value = "用户拥有的角色ID")
-    private String roleIds;
-
     @JsonIgnore
     @JSONField(serialize = false)
     private Dept dept;
@@ -155,10 +151,6 @@ public class User extends DataEntity<String> {
     @JsonIgnore
     @JSONField(serialize = false)
     private List<Role> roles;
-
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private List<String> roleIdList;
 
     @JsonIgnore
     @JSONField(serialize = false)
@@ -176,17 +168,23 @@ public class User extends DataEntity<String> {
         return SUPER_ADMIN_CODE.equals(username);
     }
 
-    public void setRoleIds(String roleIds){
-        if( StrUtil.isNotBlank(roleIds) ){
-            this.setRoleIdList( Arrays.asList(roleIds.split(",")) );
-        }
-    }
-
     public String getRoleNames(){
         if( !CollUtil.isEmpty(roles) ){
             return ListUtils.extractToString(roles, "roleName", ",");
         }
         return "";
+    }
+
+    public void setRoleIds(String roleIds){
+        roles = ListUtils.newArrayList();
+
+        if( StrUtil.isNotBlank(roleIds) ){
+            for( String id : roleIds.split(",") ){
+                Role role = new Role();
+                role.setId(id);
+                roles.add(role);
+            }
+        }
     }
 
     @Override
