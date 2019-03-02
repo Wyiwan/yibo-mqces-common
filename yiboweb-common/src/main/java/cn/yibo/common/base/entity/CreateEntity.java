@@ -23,6 +23,7 @@ package cn.yibo.common.base.entity;
 import cn.hutool.core.util.ObjectUtil;
 import cn.yibo.common.constant.StatusEnum;
 import com.alibaba.fastjson.annotation.JSONField;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -37,50 +38,34 @@ import java.util.Date;
 public abstract class CreateEntity<T> extends BaseEntity<T> {
     private static final long serialVersionUID = 8724055578251954450L;
 
-    /**
-     * 状态（0删除 1启用 2禁用）
-     */
+    @ApiModelProperty(value = "数据状态（0删除 1启用 2禁用）")
     protected Integer status;
 
-    /**
-     * 创建人
-     */
+    @ApiModelProperty(value = "创建人")
     @JSONField(serialize = false)
     protected String createBy;
 
-    /**
-     * 创建人名称
-     */
+    @ApiModelProperty(value = "创建人名称")
     @JSONField(serialize = false)
     protected String createByName;
 
-    /**
-     * 创建时间
-     */
+    @ApiModelProperty(value = "创建时间")
     @JSONField(format="yyyy-MM-dd HH:mm")
     protected Date createDate;
 
-    /**
-     * 修改人
-     */
+    @ApiModelProperty(value = "修改人")
     @JSONField(serialize = false)
     protected String updateBy;
 
-    /**
-     * 修改人名称
-     */
+    @ApiModelProperty(value = "修改人名称")
     @JSONField(serialize = false)
     protected String updateByName;
 
-    /**
-     * 修改时间
-     */
+    @ApiModelProperty(value = "修改时间")
     @JSONField(format="yyyy-MM-dd HH:mm")
     protected Date updateDate;
 
-    /**
-     * 备注
-     */
+    @ApiModelProperty(value = "备注")
     protected String comments;
 
     @Override

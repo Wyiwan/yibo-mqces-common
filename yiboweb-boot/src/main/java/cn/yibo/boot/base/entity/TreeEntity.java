@@ -20,6 +20,7 @@
 
 package cn.yibo.boot.base.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -34,33 +35,21 @@ import java.util.List;
 public abstract class TreeEntity<D extends TreeEntity, T> extends DataEntity<T> {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 父级ID
-     */
+    @ApiModelProperty(value = "父级ID")
     private String parentId;
 
-    /**
-     * 所有父级ID
-     */
+    @ApiModelProperty(value = "所有父级ID")
     private String ancestorId;
 
-    /**
-     * 所有子级
-     */
+    @ApiModelProperty(value = "所有子级")
     private List<D> children;
 
-    /**
-     * 是否叶子节点 前端所需
-     */
+    @ApiModelProperty(value = "是否叶子节点")
     private Boolean isLeaf = true;
 
-    /**
-     * 是否选中 前端所需
-     */
+    @ApiModelProperty(value = "是否选中")
     private Boolean selected;
 
-    /**
-     * 是否禁用 前端所需
-     */
+    @ApiModelProperty(value = "是否禁用")
     private Boolean disabled;
 }

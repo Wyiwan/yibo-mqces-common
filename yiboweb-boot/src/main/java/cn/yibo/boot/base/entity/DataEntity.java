@@ -22,10 +22,8 @@ package cn.yibo.boot.base.entity;
 
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.config.security.context.UserContext;
-import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.common.base.entity.CreateEntity;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -38,26 +36,14 @@ import lombok.Data;
 public abstract class DataEntity<T> extends CreateEntity<T> {
     private static final long serialVersionUID = -2284090858176882512L;
 
-    /** 租户ID */
+    @ApiModelProperty(value = "租户ID")
     protected String tenantId;
-
-    /** 当前登录用户 */
-    @JsonIgnore
-    @JSONField(serialize = false)
-    protected User currentUser;
 
     public String getTenantId(){
         if( StrUtil.isEmpty(tenantId) && UserContext.getUser() != null ){
             this.tenantId = UserContext.getUser().getTenantId();
         }
         return tenantId;
-    }
-
-    public User getCurrentUser(){
-        if( this.currentUser == null ){
-            this.currentUser = UserContext.getUser();
-        }
-        return currentUser;
     }
 
     @Override

@@ -99,7 +99,6 @@ public class LogUtils {
 
         // 用户信息
         log.setExecuteTime(executeTime);
-        log.setCurrentUser(user);
         log.setCreateByName(user.getUsername());
         log.setTenantId(user.getTenantId());
         log.preInsert();

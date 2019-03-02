@@ -23,6 +23,7 @@ package cn.yibo.boot.modules.base.entity;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
+import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.common.utils.ListUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -84,7 +85,7 @@ public class Role extends DataEntity<String> {
         super.preInsert();
 
         this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
-        if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
+        if( !UserContext.getUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
             this.isSys = CommonConstant.NO;
         }
     }
@@ -94,7 +95,7 @@ public class Role extends DataEntity<String> {
         super.preUpdate();
 
         this.userType = StrUtil.emptyToDefault(this.userType, CommonConstant.USER_TYPE_NORMAL);
-        if( !this.getCurrentUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
+        if( !UserContext.getUser().isSuperAdmin() || StrUtil.isEmpty(this.isSys) ){
             this.isSys = CommonConstant.NO;
         }
     }
