@@ -64,26 +64,26 @@ public interface UserService extends IBaseService<UserDao, User> {
     User fetched(String id) throws BizException;
 
     /**
-     *  获取用户相关信息
+     * 分配角色
+     * @param user
+     */
+    void assignRoles(User user);
+
+    /**
+     * 获取用户相关信息
      * @return
      */
     Map<String, Object> userInfo(String type);
 
     /**
-     * 保存用户个人信息
+     * 修改个人信息
      * @param user
      */
-    void saveUserInfo(User user);
+    void editUserInfo(User user);
 
     /**
-     * 用户密码修改
+     * 修改个人密码
      * @param newPassword
      */
-    void saveUserPassword(String newPassword);
-
-    /**
-     * 角色授权
-     * @param user
-     */
-    void authorizedRole(User user);
+    void editUserPwd(String newPassword);
 }

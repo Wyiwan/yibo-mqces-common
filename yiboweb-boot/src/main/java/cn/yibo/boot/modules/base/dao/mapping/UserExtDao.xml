@@ -16,11 +16,11 @@
         left join sys_organ o on o.id = u.tenant_id and o.status = 1
         left join sys_dept d on d.id = u.dept_id and d.status = 1
         <!-- 未授权用户 -->
-        <if test='condition.queryType=="grantUser"'>
+        <if test='condition.authorizeType=="0"'>
             left join sys_user_role r on u.id = r.user_id and r.role_id = #{condition.roleId}
         </if>
         <!-- 已授权用户 -->
-        <if test='condition.queryType=="grantedUser"'>
+        <if test='condition.authorizeType=="1"'>
             inner join sys_user_role r on u.id = r.user_id and r.role_id = #{condition.roleId}
         </if>
         where 1 = 1
@@ -58,7 +58,7 @@
             <if test="condition.tenantId != null">
                 and u.tenant_id = #{condition.tenantId}
             </if>
-            <if test='condition.queryType=="grantUser"'>
+            <if test='condition.authorizeType=="0"'>
                 and r.user_id is null
             </if>
         <choose>
@@ -113,7 +113,7 @@
     </delete>
 
     <!-- 角色授权 -->
-    <update id="roleAuthorized" parameterType="cn.yibo.boot.modules.base.entity.User">
+    <update id="assignRoles" parameterType="cn.yibo.boot.modules.base.entity.User">
         delete from sys_user_role where user_id = #{id};
         <if test="roles != null">
             <foreach collection="roles" item="role">

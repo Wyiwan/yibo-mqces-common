@@ -26,6 +26,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.common.constant.LoginFailEnum;
@@ -39,7 +40,6 @@ import cn.yibo.boot.modules.base.service.OrganService;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.base.controller.BaseForm;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.common.base.service.impl.AbstractBaseService;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
@@ -79,7 +79,6 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Autowired
     private MsgUtils msgUtils;
 
-
     /**
      * 重写新增
      * @param user
@@ -89,7 +88,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void insert(User user){
         super.insert(user);
-        this.authorizedRole(user);
+        this.assignRoles(user);
         msgUtils.sendMessage(user.getId());
     }
 
@@ -137,8 +136,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         params.put("mgrType", StrUtil.emptyToDefault(mgrType, CommonConstant.USER_MGR_TYPE_NORMAL));
 
         // 角色管理：查询授权用户的标识
-        String queryType = ObjectUtils.toString(params.get("queryType"));
-        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(queryType) ){
+        String authorizeType = ObjectUtils.toString(params.get("authorizeType"));
+        if( !CommonConstant.USER_MGR_TYPE_ADMIN.equals(mgrType) || StrUtil.isNotBlank(authorizeType) ){
             params.put("tenantId", UserContext.getUser().getTenantId());
         }
         this.logger.info("分页请求参数："+params);
@@ -210,26 +209,22 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 获取用户相关信息
-     * @param type
-     * @return
+     * 授权角色
+     * @param user
      */
     @Override
-    public Map<String, Object> userInfo(String type) {
-        if("login".equals(type)){
-            return loginInfo();
-        }else if("personal".equals(type)){
-            return personalInfo();
-        }
-        return MapUtil.newHashMap();
+    @Transactional(readOnly = false)
+    public void assignRoles(User user){
+        dao.assignRoles(user);
+        clearUsersCacheByUserId(CollUtil.newArrayList(user.getId()));
     }
 
     /**
-     * 保存用户个人信息
+     * 修改个人信息
      * @param user
      */
     @Transactional(readOnly = false)
-    public void saveUserInfo(User user){
+    public void editUserInfo(User user){
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("id", UserContext.getUser().getId());
         map.put("name", user.getName());
@@ -244,11 +239,11 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 用户密码修改
+     * 修改个人密码
      * @param newPassword
      */
     @Transactional(readOnly = false)
-    public void saveUserPassword(String newPassword){
+    public void editUserPwd(String newPassword){
         Map<String, Object> map = MapUtil.newHashMap();
         map.put("id", UserContext.getUser().getId());
         map.put("password", new BCryptPasswordEncoder().encode(newPassword));
@@ -259,14 +254,33 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
-     * 角色授权
-     * @param user
+     * 获取用户相关信息
+     * @param type
+     * @return
      */
     @Override
-    @Transactional(readOnly = false)
-    public void authorizedRole(User user){
-        dao.roleAuthorized(user);
-        clearUsersCacheByUserId(CollUtil.newArrayList(user.getId()));
+    public Map<String, Object> userInfo(String type){
+        if( StrUtil.equals("basic", type) ){
+            User user = dao.fetch(UserContext.getUser().getId());
+            Map<String, Object> map = MapUtil.newHashMap();
+            if( user != null ){
+                map.put("userId", UserContext.getUser().getId());
+                map.put("userName", UserContext.getUser().getUsername());
+                map.put("empCode", UserContext.getUser().getEmpCode());
+                map.put("deptName", UserContext.getUser().getDeptName());
+                map.put("organName", UserContext.getUser().getOrganName());
+                map.put("roleNames", UserContext.getUser().getRoleNames());
+                map.put("name", user.getName());
+                map.put("avatar", user.getAvatar());
+                map.put("sex", user.getSex());
+                map.put("email", user.getEmail());
+                map.put("mobile", user.getMobile());
+                map.put("lastVisitDate", DateUtil.format(user.getLastVisitDate(), DatePattern.NORM_DATETIME_MINUTE_FORMAT));
+            }
+            return map;
+        }else{
+            return loginInfo();
+        }
     }
 
     /**
@@ -274,73 +288,40 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * @return
      */
     public Map<String, Object> loginInfo(){
-        Map<String, Object> map = MapUtil.newHashMap();
-
         User user = UserContext.getUser();
-        if( user != null ){
-            map.put("userId", user.getId());
-            map.put("userName", user.getUsername());
-            map.put("name", user.getName());
-
-            map.put("organId", user.getTenantId());
-            map.put("organName", user.getOrganName());
-            map.put("deptId", user.getDeptId());
-            map.put("deptName", user.getDeptName());
-
-            map.put("admin", user.isAdmin());
-            map.put("superAdmin", user.isSuperAdmin());
-            map.put("userWeight", user.getUserWeight());
-
-            map.put("empCode", user.getEmpCode());
-            map.put("empStatus", user.getEmpStatus());
-            map.put("sex", user.getSex());
-            map.put("avatar", user.getAvatar());
-            map.put("lastVisitDate", user.getLastVisitDate());
-
-            // 菜单权限
-            List<Permission> menuPermissions = PermUtils.getPermissionsByType(user.getPermissions(), CommonConstant.PERMISSION_PAGE);
-            if( !CollUtil.isEmpty(menuPermissions) ){
-                map.put("menuAuthorities", new TreeBuild(menuPermissions).getTreeList());
-            }
-
-            // 操作权限(用于前端按钮权限控制)
-            Map<String, List<String>> btnPermissions = PermUtils.getButtonPermissions(user.getPermissions());
-            if( !CollUtil.isEmpty(btnPermissions) ){
-                map.put("authorities", btnPermissions);
-            }
-
-            // 所属角色
-            List<Role> roles = user.getRoles();
-            if( !CollUtil.isEmpty(roles) ){
-                map.put("roles", roles);
-            }
-        }
-        return map;
-    }
-
-    /**
-     * 用户个人信息
-     * @return
-     */
-    public Map<String, Object> personalInfo(){
         Map<String, Object> map = MapUtil.newHashMap();
-        if( UserContext.getUser() != null ){
-            User user = dao.fetch(UserContext.getUser().getId());
+        map.put("userId", user.getId());
+        map.put("userName", user.getUsername());
+        map.put("name", user.getName());
+        map.put("organId", user.getTenantId());
+        map.put("organName", user.getOrganName());
+        map.put("deptId", user.getDeptId());
+        map.put("deptName", user.getDeptName());
+        map.put("admin", user.isAdmin());
+        map.put("superAdmin", user.isSuperAdmin());
+        map.put("userWeight", user.getUserWeight());
+        map.put("empCode", user.getEmpCode());
+        map.put("empStatus", user.getEmpStatus());
+        map.put("sex", user.getSex());
+        map.put("avatar", user.getAvatar());
+        map.put("lastVisitDate", user.getLastVisitDate());
 
-            if( user != null ){
-                map.put("userId", UserContext.getUser().getId());
-                map.put("userName", UserContext.getUser().getUsername());
-                map.put("name", user.getName());
-                map.put("avatar", user.getAvatar());
-                map.put("empCode", UserContext.getUser().getEmpCode());
-                map.put("deptName", UserContext.getUser().getDeptName());
-                map.put("organName", UserContext.getUser().getOrganName());
-                map.put("roleNames", UserContext.getUser().getRoleNames());
-                map.put("sex", user.getSex());
-                map.put("email", user.getEmail());
-                map.put("mobile", user.getMobile());
-                map.put("lastVisitDate", DateUtil.format(user.getLastVisitDate(), DatePattern.NORM_DATETIME_MINUTE_FORMAT));
-            }
+        // 菜单权限
+        List<Permission> menuPermissions = PermUtils.getPermissionsByType(user.getPermissions(), CommonConstant.PERMISSION_PAGE);
+        if( !CollUtil.isEmpty(menuPermissions) ){
+            map.put("menuAuthorities", new TreeBuild(menuPermissions).getTreeList());
+        }
+
+        // 操作权限(用于前端按钮权限控制)
+        Map<String, List<String>> btnPermissions = PermUtils.getButtonPermissions(user.getPermissions());
+        if( !CollUtil.isEmpty(btnPermissions) ){
+            map.put("authorities", btnPermissions);
+        }
+
+        // 所属角色
+        List<Role> roles = user.getRoles();
+        if( !CollUtil.isEmpty(roles) ){
+            map.put("roles", roles);
         }
         return map;
     }

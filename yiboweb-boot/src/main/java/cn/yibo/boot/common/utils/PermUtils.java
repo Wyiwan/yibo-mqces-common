@@ -76,7 +76,7 @@ public class PermUtils {
      * 获取用户可授权的权限
      * @return
      */
-    public List<Permission> getAuthorizationPermissions(){
+    public List<Permission> getAuthorizablePermissions(){
         List<Permission> permissions = ListUtils.newArrayList();
 
         User user = UserContext.getUser();

@@ -57,8 +57,8 @@ public interface UserDao extends CrudDao<User> {
     int deleteByIdsExt(List list);
 
     /**
-     * 角色授权
+     * 分配角色
      * @param user
      */
-    void roleAuthorized(User user);
+    void assignRoles(User user);
 }

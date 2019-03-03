@@ -206,19 +206,19 @@ public class UserController extends CrudController<UserService, User> {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // @角色授权相关
+    // @授权角色相关
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 获取已授权的角色
+     * 获取已授权角色
      * @return
      */
     @IgnoredLog
-    @ApiOperation("用户管理/查询已授权角色ID")
-    @GetMapping("/get-granted-role")
+    @ApiOperation("获取已授权的角色")
+    @GetMapping("/assigned-roles")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true)
     })
-    public List getGrantedRole(String id){
+    public List assignedRoles(String id){
         List<Role> roleList = roleService.findByUserId(id);
         if( !CollUtil.isEmpty(roleList) ){
             return ListUtils.extractToList(roleList, "id");
@@ -227,71 +227,61 @@ public class UserController extends CrudController<UserService, User> {
     }
 
     /**
-     * 角色授权
+     * 授权角色
      * @param user
      * @return
      */
-    @ApiOperation("用户管理/角色授权")
-    @PostMapping("/granted-role")
+    @ApiOperation("授权角色")
+    @PostMapping("/assign-roles")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "用户ID", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "roleIds", value = "角色ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
-    public String grantedRole(@RequestBody User user){
-        this.baseSevice.authorizedRole(user);
-        return "角色授权成功";
+    public String assignRoles(@RequestBody User user){
+        this.baseSevice.assignRoles(user);
+        return "授权角色成功";
     }
 
     //------------------------------------------------------------------------------------------------------------------
     // @其他
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 查询登录信息
+     * 获取登录(个人)信息
      * @return
      */
     @IgnoredLog
-    @ApiOperation("查询登录信息")
-    @GetMapping("/login-info")
-    public Map<String, Object> loginInfo(){
-        return this.baseSevice.userInfo("login");
+    @ApiOperation("获取登录(个人)信息")
+    @GetMapping("/{type}-info")
+    public Map<String, Object> userInfo(@PathVariable("type") String type){
+        return this.baseSevice.userInfo(type);
     }
 
     /**
-     * 查询个人信息
+     * 修改个人信息
      * @return
      */
-    @ApiOperation("查询个人信息")
-    @GetMapping("/pers-info")
-    public Map<String, Object> persInfo(){
-        return this.baseSevice.userInfo("personal");
-    }
-
-    /**
-     * 保存个人信息
-     * @return
-     */
-    @ApiOperation("保存个人信息")
-    @PostMapping("/pers-save")
-    public String saveUserInfo(@RequestBody User user){
+    @ApiOperation("修改个人信息")
+    @PostMapping("/edit-info")
+    public String editUserInfo(@RequestBody User user){
         if( StrUtil.isEmpty(user.getName()) ){
             throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "姓名不能为空");
         }
-        this.baseSevice.saveUserInfo(user);
+        this.baseSevice.editUserInfo(user);
         return SAVE_SUCCEED;
     }
 
     /**
-     * 用户密码修改
+     * 修改个人密码
      * @return
      */
-    @ApiOperation("用户密码修改")
+    @ApiOperation("修改个人密码")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "oldPassword", value = "旧密码", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "newPassword", value = "新密码", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "confirmNewPassword", value = "确认新密码", paramType = "query", dataType = "String", required = true)
     })
-    @PostMapping("/pwd-save")
-    public String updatedPassword(@RequestBody JSONObject jsonObject){
+    @PostMapping("/edit-pwd")
+    public String editUserPwd(@RequestBody JSONObject jsonObject){
         User vo = this.baseSevice.fetch(UserContext.getUser().getId());
         if( vo != null ){
             String oldPassword = jsonObject.getString("oldPassword");
@@ -305,7 +295,7 @@ public class UserController extends CrudController<UserService, User> {
             }else if( !StrUtil.equals(newPassword, confirmNewPassword) ){
                 throw new BizException(ReturnCodeEnum.VALIDATE_ERROR.getCode(), "两次密码不一致");
             }else{
-                this.baseSevice.saveUserPassword(newPassword);
+                this.baseSevice.editUserPwd(newPassword);
             }
         }
         return UPDATE_SUCCEED;

@@ -148,29 +148,29 @@ public class RoleController extends CrudController<RoleService, Role> {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // @菜单授权相关
+    // @授权菜单相关
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 获取授权菜单的树结构
+     * 获取可授权菜单权限
      * @return
      */
     @IgnoredLog
-    @ApiOperation("角色管理/查询可授权菜单")
-    @GetMapping("/get-grant-permission")
-    public List findGrantPermission(){
-        List<Permission> list = permUtils.getAuthorizationPermissions();
+    @ApiOperation("获取可授权的菜单权限")
+    @GetMapping("/authorizable-permissions")
+    public List getAuthorizablePermissions(){
+        List<Permission> list = permUtils.getAuthorizablePermissions();
         return new TreeBuild(list).getTreeList();
     }
 
     /**
-     * 获取已授权的菜单权限
+     * 获取已授权菜单权限
      * @return
      */
     @IgnoredLog
-    @ApiOperation("角色管理/查询已授权菜单ID")
-    @GetMapping("/get-granted-permission")
+    @ApiOperation("获取已授权的菜单权限")
+    @GetMapping("/authorized-permissions")
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
-    public List findGrantedPermision(String roleId){
+    public List getAuthorizedPermissions(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
         if( !CollUtil.isEmpty(permissionList) ){
             return ListUtils.extractToList(permissionList, "id");
@@ -179,81 +179,81 @@ public class RoleController extends CrudController<RoleService, Role> {
     }
 
     /**
-     * 菜单授权
+     * 授权菜单权限
      * @param role
      * @return
      */
-    @ApiOperation("角色管理/菜单授权")
-    @PostMapping("/granted-permission")
+    @ApiOperation("授权菜单权限")
+    @PostMapping("/authorize-permissions")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "permissionIds", value = "菜单ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
-    public String grantedPermision(@RequestBody Role role) throws Exception{
+    public String authorizePermisions(@RequestBody Role role) throws Exception{
         Role fetchRole = this.baseSevice.fetch(role.getId());
         verifyUserIdentity(fetchRole);
 
         this.baseSevice.saveAuthorize(role);
-        return "菜单授权成功";
+        return "授权菜单权限成功";
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // @分配用户相关
+    // @授权成员相关
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * 获取未授权的用户
+     * 获取未授权的成员
      * @return
      */
     @IgnoredLog
-    @ApiOperation("角色管理/查询可授权用户")
-    @GetMapping("/grant-user-paged")
+    @ApiOperation("获取可授权的成员")
+    @GetMapping("/authorizable-member")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     })
-    public PageInfo<T> getGrantUser(){
+    public PageInfo<T> getAuthorizableMember(){
         BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("queryType", "grantUser");
+        baseForm.set("authorizeType", "0");
         return userService.queryPage(baseForm);
     }
 
     /**
-     * 获取已授权的用户
+     * 获取已授权的成员
      * @return
      */
     @IgnoredLog
-    @ApiOperation("角色管理/查询已授权用户")
-    @GetMapping("/granted-user-paged")
+    @ApiOperation("获取已授权的成员")
+    @GetMapping("/authorized-member")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "rows", value = "页大小", paramType = "query",dataType = "Number"),
             @ApiImplicitParam(name = "page", value = "当前页", paramType = "query", dataType = "Number"),
             @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     })
-    public PageInfo<T> getGrantedUser(){
+    public PageInfo<T> getAuthorizedMember(){
         BaseForm<T> baseForm = new BaseForm<T>();
-        baseForm.set("queryType", "grantedUser");
+        baseForm.set("authorizeType", "1");
         return userService.queryPage(baseForm);
     }
 
     /**
-     * 用户授权
+     * 授权成员
      * @param id
      * @param userIds
      * @return
      */
-    @ApiOperation("角色管理/用户授权")
-    @GetMapping("/granted-user")
+    @ApiOperation("授权成员")
+    @GetMapping("/authorize-member")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "角色ID", paramType = "query", dataType = "String", required = true),
             @ApiImplicitParam(name = "userIds", value = "用户ID以逗号隔开的字符串", paramType = "query", dataType = "String", required = true)
     })
-    public String grantedUser(String id, String userIds){
+    public String authorizeMember(String id, String userIds){
         List<String> userIdList = Lists.newArrayList();
         if( StrUtil.isNotBlank(userIds) ){
             userIdList = Arrays.asList( userIds.split(",") );
         }
         this.baseSevice.saveMember(id, userIdList);
-        return "用户授权成功";
+        return "授权用户成功";
     }
 }
