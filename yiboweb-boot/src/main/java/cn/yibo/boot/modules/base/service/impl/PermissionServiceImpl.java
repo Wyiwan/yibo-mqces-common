@@ -84,6 +84,21 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     }
 
     /**
+     * 重写查询所有权限数据（缓存起来）
+     * @return
+     */
+    @Override
+    public List findAll(){
+        List permissionList = (List)CacheUtils.get(CacheConstant.PERMS_CACHE_NAME, "allPermissions");
+
+        if( permissionList == null ){
+            permissionList = dao.findAll(null, null);
+            CacheUtils.put(CacheConstant.PERMS_CACHE_NAME, "allPermissions", permissionList);
+        }
+        return permissionList;
+    }
+
+    /**
      * 根据类型查询权限
      * @param type
      * @return

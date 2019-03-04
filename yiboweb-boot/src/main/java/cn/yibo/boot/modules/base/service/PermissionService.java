@@ -37,10 +37,6 @@ import java.util.List;
  */
 @CacheConfig(cacheNames = CacheConstant.PERMS_CACHE_NAME)
 public interface PermissionService extends IBaseService<PermissionDao, Permission> {
-    @Override
-    @Cacheable(key = "ALL_PERMS", unless = "#result == null")
-    List<Permission> findAll();
-
     /**
      * 根据类型查询权限
      * @param type
@@ -72,5 +68,4 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @return
      */
     List<Permission> findByWeight(Integer min, Integer max, String type);
-
 }

@@ -113,13 +113,12 @@ public class UserDetailsServiceImpl implements UserDetailsService{
                     user.setRole(resultList.get(0));
                     user.setPermissions(permissionService.findByRoleId(roleId));
                 }
-            }
-            /*// 默认身份
-            else{
+            // 默认身份
+            }else{
                 Role dftRole = user.getRoles().get(0);
                 user.setRole(dftRole);
                 user.setPermissions(permissionService.findByRoleId(dftRole.getId()));
-            }*/
+            }
         }
         return new SecurityUserDetails(user);
     }
