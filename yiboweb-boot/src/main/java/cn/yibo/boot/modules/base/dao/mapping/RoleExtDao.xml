@@ -95,13 +95,21 @@
         </if>
     </update>
 
-    <!-- 用户授权 -->
+    <!-- 成员授权 -->
     <update id="saveMember">
         delete from sys_user_role where role_id = #{roleId};
         <if test="userIds != null">
             <foreach collection="userIds" item="userId">
                 insert into sys_user_role(role_id, user_id) values(#{roleId}, #{userId});
             </foreach>
+        </if>
+    </update>
+
+    <!-- 特定用户授权 -->
+    <update id="assignUser">
+        delete from sys_user_role where role_id = #{roleId} and user_id = #{userId};
+        <if test="flag">
+            insert into sys_user_role(role_id, user_id) values(#{roleId}, #{userId});
         </if>
     </update>
 </mapper>

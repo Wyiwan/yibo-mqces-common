@@ -159,6 +159,17 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     }
 
     /**
+     * 特定用户授权
+     * @param roleId
+     * @param userId
+     * @param flag
+     */
+    @Override
+    public void assignUser(String roleId, String userId, boolean flag){
+        dao.assignUser(roleId, userId, flag);
+    }
+
+    /**
      * 根据角色ID清除用户缓存
      * @param roleIdList
      */

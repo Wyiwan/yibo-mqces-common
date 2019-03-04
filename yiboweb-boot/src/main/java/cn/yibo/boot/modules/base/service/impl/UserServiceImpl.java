@@ -229,6 +229,18 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     }
 
     /**
+     * 分配指定角色
+     * @param roleId
+     * @param userId
+     * @param flag
+     */
+    @Override
+    public void assignRole(String roleId, String userId, boolean flag){
+        roleService.assignUser(roleId, userId, flag);
+        clearUsersCacheByUserId(ListUtils.newArrayList(userId));
+    }
+
+    /**
      * 修改个人信息
      * @param user
      */

@@ -70,6 +70,14 @@ public interface UserService extends IBaseService<UserDao, User> {
     void assignRoles(User user);
 
     /**
+     * 分配指定角色
+     * @param roleId
+     * @param userId
+     * @param flag
+     */
+    void assignRole(String roleId, String userId, boolean flag);
+
+    /**
      * 获取用户相关信息
      * @return
      */

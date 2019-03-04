@@ -53,4 +53,11 @@ public interface RoleService extends IBaseService<RoleDao, Role> {
      */
     void saveMember(String roleId, List<String> userIds);
 
+    /**
+     * 特定用户授权
+     * @param roleId
+     * @param userId
+     * @param flag
+     */
+    void assignUser(String roleId, String userId, boolean flag);
 }
