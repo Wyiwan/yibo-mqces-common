@@ -20,7 +20,6 @@
 
 package cn.yibo.boot.modules.base.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.controller.CrudController;
 import cn.yibo.boot.common.annotation.IgnoredLog;
@@ -220,7 +219,7 @@ public class UserController extends CrudController<UserService, User> {
     })
     public List assignedRoles(String id){
         List<Role> roleList = roleService.findByUserId(id);
-        if( !CollUtil.isEmpty(roleList) ){
+        if( !ListUtils.isEmpty(roleList) ){
             return ListUtils.extractToList(roleList, "id");
         }
         return ListUtils.newArrayList();

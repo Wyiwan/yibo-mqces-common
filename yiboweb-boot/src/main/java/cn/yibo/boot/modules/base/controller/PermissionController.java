@@ -22,10 +22,10 @@ package cn.yibo.boot.modules.base.controller;
 
 import cn.hutool.core.map.MapUtil;
 import cn.yibo.boot.base.controller.CrudController;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.annotation.IgnoredLog;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.service.PermissionService;
-import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.core.protocol.ReturnCodeEnum;
 import cn.yibo.core.web.exception.BizException;
 import io.swagger.annotations.Api;
@@ -78,8 +78,8 @@ public class PermissionController extends CrudController<PermissionService, Perm
     @IgnoredLog
     @ApiOperation("树结构查询")
     @GetMapping("/tree")
-    public List tree(Permission permission){
-        List list = this.baseSevice.queryTree(permission);
+    public List tree(){
+        List list = this.baseSevice.findAll();
         return new TreeBuild(list).getTreeList();
     }
 

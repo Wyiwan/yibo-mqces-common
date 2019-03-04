@@ -24,12 +24,17 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.LoginFailEnum;
 import cn.yibo.boot.common.exception.LoginFailLimitException;
-import cn.yibo.boot.modules.base.entity.Log;
-import cn.yibo.boot.modules.base.entity.User;
-import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.boot.common.utils.LogUtils;
+import cn.yibo.boot.modules.base.entity.Log;
+import cn.yibo.boot.modules.base.entity.Role;
+import cn.yibo.boot.modules.base.entity.User;
+import cn.yibo.boot.modules.base.service.PermissionService;
+import cn.yibo.boot.modules.base.service.UserService;
+import cn.yibo.common.utils.ListUtils;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,8 +43,10 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  *  描述: 一句话描述该类的用途
@@ -57,6 +64,12 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PermissionService permissionService;
+
+    @Value("${webapp.allow-multi-identity}")
+    private Boolean allowMultiIdentity;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String flagKey = "loginFailFlag:"+username;
@@ -71,6 +84,42 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         User user = userService.findByUsername(username);
         if( user == null ){
             throw new UsernameNotFoundException(LoginFailEnum.INCORRECT_ERROR.getDesc());
+        }
+        return new SecurityUserDetails(user);
+    }
+
+    /**
+     * 根据登录名查询用户对象
+     * @param username
+     * @param roleId
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    public UserDetails loadUserByUsername(String username, String roleId) throws UsernameNotFoundException {
+        // 缓存获取用户对象(引用对象)
+        User user = userService.findByUsername(username);
+        if( user == null ){
+            throw new UsernameNotFoundException(LoginFailEnum.INCORRECT_ERROR.getDesc());
+        }
+
+        // 单身份使用系统
+        if( !allowMultiIdentity && ListUtils.isNotEmpty(user.getRoles()) ){
+            // 切换身份
+            if( !StrUtil.isEmptyOrUndefined(roleId) ){
+                List<String> condition = Lists.newArrayList(roleId);
+                List<Role> resultList = user.getRoles().stream().filter((Role role) -> condition.contains((role.getId()))).collect(Collectors.toList());
+
+                if( ListUtils.isNotEmpty(resultList) ){
+                    user.setRole(resultList.get(0));
+                    user.setPermissions(permissionService.findByRoleId(roleId));
+                }
+            }
+            /*// 默认身份
+            else{
+                Role dftRole = user.getRoles().get(0);
+                user.setRole(dftRole);
+                user.setPermissions(permissionService.findByRoleId(dftRole.getId()));
+            }*/
         }
         return new SecurityUserDetails(user);
     }

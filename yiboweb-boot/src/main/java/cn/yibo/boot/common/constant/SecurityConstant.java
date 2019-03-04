@@ -49,6 +49,11 @@ public interface SecurityConstant {
     String TENANT_KEY = "organId";
 
     /**
+     * 切换角色身份接收参数名称
+     */
+    String IDENTITY_KEY = "roleId";
+
+    /**
      * JWT签名用户ID参数名称
      */
     String CLAIM_KEY_USER_ID = "userId";

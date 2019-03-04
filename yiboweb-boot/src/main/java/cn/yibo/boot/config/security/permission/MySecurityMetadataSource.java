@@ -20,11 +20,11 @@
 
 package cn.yibo.boot.config.security.permission;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.service.PermissionService;
+import cn.yibo.common.utils.ListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -101,10 +101,10 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
         // 获取所有启用的操作权限
         List<Permission> permissionList = permissionService.findByType(CommonConstant.PERMISSION_OPERATION);
-        if( !CollUtil.isEmpty(permissionList) ){
+        if( !ListUtils.isEmpty(permissionList) ){
             for( Permission permission : permissionList ){
                 if( StrUtil.isNotBlank(permission.getPermsName()) && StrUtil.isNotBlank(permission.getPermsUrl()) ){
-                    configAttributes = CollUtil.newArrayList(new SecurityConfig(permission.getPermsName().trim()));
+                    configAttributes = ListUtils.newArrayList(new SecurityConfig(permission.getPermsName().trim()));
                     map.put(permission.getPermsUrl().trim(), configAttributes);
                 }
             }

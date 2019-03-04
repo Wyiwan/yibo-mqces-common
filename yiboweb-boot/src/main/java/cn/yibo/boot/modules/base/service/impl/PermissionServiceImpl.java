@@ -22,7 +22,6 @@ package cn.yibo.boot.modules.base.service.impl;
 
 import cn.hutool.core.map.MapUtil;
 import cn.yibo.boot.common.constant.CacheConstant;
-import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.service.PermissionService;
@@ -54,8 +53,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void insert(Permission permission){
         super.insert(permission);
         dao.updateAncestor(permission);
-
-        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        CacheUtils.removeAll(CacheConstant.PERMS_CACHE_NAME);
     }
 
     /**
@@ -68,8 +66,7 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     public void updateNull(Permission permission){
         super.updateNull(permission);
         dao.updateAncestor(permission);
-
-        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        CacheUtils.removeAll(CacheConstant.PERMS_CACHE_NAME);
         CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
     }
 
@@ -81,25 +78,9 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
     @Override
     @Transactional(readOnly = false)
     public void deleteByIds(List list){
-        dao.deleteCascade(list);
-
-        CacheUtils.remove(CacheConstant.CACHE_MENU_LIST);
+        dao.deleteByIdsExt(list);
+        CacheUtils.removeAll(CacheConstant.PERMS_CACHE_NAME);
         CacheUtils.removeAll(CacheConstant.USER_CACHE_NAME);
-    }
-
-    /**
-     * 重写树结构查询
-     * @return
-     */
-    @Override
-    public List queryTree(Permission permission){
-        List permissionList = (List)CacheUtils.get(CacheConstant.CACHE_MENU_LIST);
-
-        if( permissionList == null ){
-            permissionList = dao.queryTree(permission);
-            CacheUtils.put(CacheConstant.CACHE_MENU_LIST, permissionList);
-        }
-        return permissionList;
     }
 
     /**
@@ -112,7 +93,6 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
         Map<String, Object> condition = MapUtil.newHashMap();
         condition.put("status", StatusEnum.N.getCode());
         condition.put("permsType", type);
-
         return dao.queryList(condition, "perms_sort", null);
     }
 
@@ -122,8 +102,8 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionDao, Pe
      * @return
      */
     @Override
-    public List<Permission> findByUserId(String userId, String type){
-        return dao.findByUserId(userId, type);
+    public List<Permission> findByUserId(String userId){
+        return dao.findByUserId(userId, null);
     }
 
     /**

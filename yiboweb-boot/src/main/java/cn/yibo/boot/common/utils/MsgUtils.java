@@ -19,7 +19,6 @@
 */
 package cn.yibo.boot.common.utils;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.Message;
 import cn.yibo.boot.modules.base.entity.MessageSend;
@@ -52,7 +51,7 @@ public class MsgUtils {
         List<Message> messageList = messageService.findList("creator_send", true, "create_date", "desc");
         List<MessageSend> sendList = ListUtils.newArrayList();
 
-        if( !CollUtil.isEmpty(messageList) ){
+        if( !ListUtils.isEmpty(messageList) ){
             messageList.forEach(message -> {
                 MessageSend ms = new MessageSend();
                 ms.setUserId(userId);

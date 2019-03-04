@@ -20,7 +20,7 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
@@ -41,11 +41,13 @@ import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.boot.modules.base.service.UserService;
 import cn.yibo.common.base.controller.BaseForm;
 import cn.yibo.common.base.service.impl.AbstractBaseService;
+import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,6 +80,9 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
 
     @Autowired
     private MsgUtils msgUtils;
+
+    @Value("${webapp.allow-multi-identity}")
+    private Boolean allowMultiIdentity;
 
     /**
      * 重写新增
@@ -169,12 +174,16 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
             }
             // 关联角色
             List<Role> roles = roleService.findByUserId(user.getId());
-            if( !CollUtil.isEmpty(roles) ){
+            if( !ListUtils.isEmpty(roles) ){
+                // 单角色使用系统时，默认角色为权重最大的角色
+                if( !allowMultiIdentity ){
+                    user.setRole(roles.get(0));
+                }
                 user.setRoles(roles);
             }
             // 关联权限
             List<Permission> permissions = permUtils.getUserAllPermissions(user);
-            if( !CollUtil.isEmpty(permissions) ){
+            if( !ListUtils.isEmpty(permissions) ){
                 user.setPermissions(permissions);
             }
         }
@@ -216,7 +225,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Transactional(readOnly = false)
     public void assignRoles(User user){
         dao.assignRoles(user);
-        clearUsersCacheByUserId(CollUtil.newArrayList(user.getId()));
+        clearUsersCacheByUserId(ListUtils.newArrayList(user.getId()));
     }
 
     /**
@@ -235,7 +244,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         map.put("updateBy", UserContext.getUser().getId());
         map.put("updateDate", new Date());
         dao.updateMap(map);
-        clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+        clearUsersCacheByUserId(ListUtils.newArrayList(UserContext.getUser().getId()));
     }
 
     /**
@@ -250,7 +259,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         map.put("updateBy", UserContext.getUser().getId());
         map.put("updateDate", new Date());
         dao.updateMap(map);
-        clearUsersCacheByUserId(CollUtil.newArrayList(UserContext.getUser().getId()));
+        clearUsersCacheByUserId(ListUtils.newArrayList(UserContext.getUser().getId()));
     }
 
     /**
@@ -307,20 +316,24 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
         map.put("lastVisitDate", user.getLastVisitDate());
 
         // 菜单权限
-        List<Permission> menuPermissions = PermUtils.getPermissionsByType(user.getPermissions(), CommonConstant.PERMISSION_PAGE);
-        if( !CollUtil.isEmpty(menuPermissions) ){
+        List<Permission> menuPermissions = PermUtils.filterPermissionsByType(user.getPermissions(), CommonConstant.PERMISSION_PAGE);
+        if( !ListUtils.isEmpty(menuPermissions) ){
             map.put("menuAuthorities", new TreeBuild(menuPermissions).getTreeList());
         }
 
         // 操作权限(用于前端按钮权限控制)
         Map<String, List<String>> btnPermissions = PermUtils.getButtonPermissions(user.getPermissions());
-        if( !CollUtil.isEmpty(btnPermissions) ){
+        if( !CollectionUtil.isEmpty(btnPermissions) ){
             map.put("authorities", btnPermissions);
         }
 
         // 所属角色
         List<Role> roles = user.getRoles();
-        if( !CollUtil.isEmpty(roles) ){
+        if( !ListUtils.isEmpty(roles) ){
+            // 单角色使用系统
+            if( !allowMultiIdentity ){
+                map.put("currRole", user.getRole());
+            }
             map.put("roles", roles);
         }
         return map;
@@ -331,10 +344,8 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * @param userIdList
      */
     public void clearUsersCacheByUserId(List userIdList){
-        if( !CollUtil.isEmpty(userIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setUserIdList(userIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
+        ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+        clearUserCacheThread.setUserIdList(userIdList);
+        ThreadUtil.execute(clearUserCacheThread);
     }
 }

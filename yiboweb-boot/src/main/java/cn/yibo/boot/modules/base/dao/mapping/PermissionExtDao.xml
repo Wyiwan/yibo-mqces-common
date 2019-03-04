@@ -70,16 +70,6 @@
         order by p.perms_sort asc
     </select>
 
-    <!-- 查询树结构数据 -->
-    <select id="queryTree" resultType="cn.yibo.boot.modules.base.entity.Permission">
-        select
-            <include refid="Base_Column_List_Ext" />
-        from sys_permission p
-        where 1 = 1
-            and p.status != 0
-        order by p.perms_sort
-    </select>
-
     <!-- 调用存储过程更新祖先ID字段 -->
     <select id="updateAncestor" parameterType="cn.yibo.boot.modules.base.entity.Permission" statementType="CALLABLE" resultType="java.util.Map">
 	    {call sp_deal_perms_ancestor(#{id,jdbcType=VARCHAR,mode=IN})}
@@ -101,8 +91,8 @@
             and status != 0
     </select>
 
-    <!-- 级联删除 -->
-    <update id="deleteCascade">
+    <!-- 删除扩展 -->
+    <update id="deleteByIdsExt">
         <foreach collection="list" item="id">
             update sys_permission set status = 0 where ancestor_id like concat('%', #{id} , '%');
         </foreach>

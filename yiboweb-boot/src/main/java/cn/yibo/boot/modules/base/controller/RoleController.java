@@ -20,7 +20,6 @@
 
 package cn.yibo.boot.modules.base.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.controller.CrudController;
@@ -172,7 +171,7 @@ public class RoleController extends CrudController<RoleService, Role> {
     @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "String", required = true)
     public List getAuthorizedPermissions(String roleId){
         List<Permission> permissionList = permissionService.findByRoleId(roleId);
-        if( !CollUtil.isEmpty(permissionList) ){
+        if( !ListUtils.isEmpty(permissionList) ){
             return ListUtils.extractToList(permissionList, "id");
         }
         return ListUtils.newArrayList();

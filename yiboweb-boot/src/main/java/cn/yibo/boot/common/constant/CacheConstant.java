@@ -34,9 +34,9 @@ public interface CacheConstant {
     String USER_CACHE_NAME = "userCache";
 
     /**
-     * 菜单缓存名称（存放在系统缓存对象中）
+     * 权限缓存对象名称
      */
-    String CACHE_MENU_LIST = "menuList";
+    String PERMS_CACHE_NAME = "permsCache";
 
     /**
      * 字典缓存名称（存放在系统缓存对象中）

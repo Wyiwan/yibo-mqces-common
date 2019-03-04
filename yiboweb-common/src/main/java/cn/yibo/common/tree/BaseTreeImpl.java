@@ -20,7 +20,7 @@
 
 package cn.yibo.common.tree;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 
 import java.util.*;
@@ -104,7 +104,7 @@ public abstract class BaseTreeImpl<N, K> implements BaseTree<N, K> {
         //新建一个map
         LinkedHashMap<K, N> selfMap = new LinkedHashMap<>(initialCapacity);
         //遍历所有
-        if( !CollUtil.isEmpty(nodeList) ){
+        if( !CollectionUtil.isEmpty(nodeList) ){
             for( N node : nodeList ){
                 selfMap.put(getKey(node), (N)ObjectUtil.clone(node));
             }

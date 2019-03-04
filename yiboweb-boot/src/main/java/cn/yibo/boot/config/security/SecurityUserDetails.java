@@ -20,12 +20,12 @@
 
 package cn.yibo.boot.config.security;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.common.constant.StatusEnum;
+import cn.yibo.common.utils.ListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,22 +52,19 @@ public class SecurityUserDetails extends User implements UserDetails{
             this.setName(user.getName());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
-
             this.setTenantId(user.getTenantId());
             this.setOrganName(user.getOrganName());
             this.setDeptId(user.getDeptId());
             this.setDeptName(user.getDeptName());
-
+            this.setRole(user.getRole());
             this.setMgrType(user.getMgrType());
             this.setUserWeight(user.getUserWeight());
-
             this.setEmpCode(user.getEmpCode());
             this.setEmpStatus(user.getEmpStatus());
             this.setSex(user.getSex());
             this.setAvatar(user.getAvatar());
             this.setFirstVisitDate(user.getFirstVisitDate());
             this.setLastVisitDate(user.getLastVisitDate());
-
             this.setDept(user.getDept());
             this.setRoles(user.getRoles());
             this.setPermissions(user.getPermissions());
@@ -84,7 +81,7 @@ public class SecurityUserDetails extends User implements UserDetails{
 
         // 添加请求权限
         List<Permission> permissions = this.getPermissions();
-        if( !CollUtil.isEmpty(permissions) ){
+        if( !ListUtils.isEmpty(permissions) ){
             for( Permission p : permissions ) {
                 if( CommonConstant.PERMISSION_OPERATION.equals(p.getPermsType()) && StrUtil.isNotBlank(p.getPermsName()) && StrUtil.isNotBlank(p.getPermsUrl()) ){
                     authorityList.add(new SimpleGrantedAuthority(p.getPermsName()));

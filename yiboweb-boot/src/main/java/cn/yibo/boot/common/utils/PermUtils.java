@@ -19,19 +19,20 @@
 */
 package cn.yibo.boot.common.utils;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.yibo.boot.base.entity.TreeBuild;
 import cn.yibo.boot.common.constant.CommonConstant;
 import cn.yibo.boot.config.security.context.UserContext;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.boot.modules.base.entity.User;
 import cn.yibo.boot.modules.base.service.PermissionService;
-import cn.yibo.boot.base.entity.TreeBuild;
-import cn.yibo.common.utils.PropertiesUtils;
 import cn.yibo.common.utils.ListUtils;
 import cn.yibo.common.utils.ObjectUtils;
+import cn.yibo.common.utils.PropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -51,6 +52,9 @@ public class PermUtils {
     @Autowired
     private PermissionService permissionService;
 
+    @Value("${webapp.allow-multi-identity}")
+    private Boolean allowMultiIdentity;
+
     /**
      * 获取用户所有权限
      * @param user
@@ -66,7 +70,11 @@ public class PermUtils {
             }else if( user.isAdmin() ){
                 permissions = permissionService.findByWeight(CommonConstant.ADMIN_PERMS_WEIGHT, CommonConstant.SUPER_ADMIN_PERMS_WEIGHT, null);
             }else{
-                permissions = permissionService.findByUserId(user.getId(), null);
+                if( !allowMultiIdentity && user.getRole() != null ){
+                    permissions = permissionService.findByRoleId(user.getRole().getId());
+                }else{
+                    permissions = permissionService.findByUserId(user.getId());
+                }
             }
         }
         return permissions;
@@ -86,7 +94,7 @@ public class PermUtils {
             }else if( user.isAdmin() ){
                 permissions = permissionService.findByWeight(CommonConstant.USER_PERMS_WEIGHT, CommonConstant.ADMIN_PERMS_WEIGHT, null);
             }else{
-                permissions = permissionService.findByUserId(user.getId(), null);
+                permissions = permissionService.findByUserId(user.getId());
             }
         }
         return permissions;
@@ -98,9 +106,9 @@ public class PermUtils {
      * @param type
      * @return
      */
-    public static List<Permission> getPermissionsByType(List<Permission> permissions, String type){
+    public static List<Permission> filterPermissionsByType(List<Permission> permissions, String type){
         List<Permission> list = ListUtils.newArrayList();
-        if( !CollUtil.isEmpty(permissions) ){
+        if( !ListUtils.isEmpty(permissions) ){
             for( Permission p : permissions ){
                 if( StrUtil.equals(p.getPermsType(),type) ){
                     list.add(p);
@@ -118,8 +126,8 @@ public class PermUtils {
     public static Map<String, List<String>> getButtonPermissions(List<Permission> permissions){
         Map<String, List<String>> map = MapUtil.newHashMap();
 
-        List<Permission> opearPermissions = PermUtils.getPermissionsByType(permissions, CommonConstant.PERMISSION_OPERATION);
-        if( !CollUtil.isEmpty(opearPermissions) ) {
+        List<Permission> opearPermissions = PermUtils.filterPermissionsByType(permissions, CommonConstant.PERMISSION_OPERATION);
+        if( !ListUtils.isEmpty(opearPermissions) ) {
             TreeBuild treeBuild = new TreeBuild(permissions);
 
             for( Permission permission : opearPermissions ){
@@ -129,7 +137,7 @@ public class PermUtils {
                     String pageUrl = parentNode.getPermsUrl();
                     String btnType = permission.getButtonType();
 
-                    if( !CollUtil.isEmpty(map.get(pageUrl)) ){
+                    if( !ListUtils.isEmpty(map.get(pageUrl)) ){
                         map.get(pageUrl).add(btnType);
                     }else{
                         map.put(pageUrl, ListUtils.newArrayList(btnType));
@@ -146,7 +154,7 @@ public class PermUtils {
      * @return
      */
     public String getMenuNamePath(String menuUrl){
-        List<Permission> menuList = permissionService.queryTree(null);
+        List<Permission> menuList = permissionService.findAll();
 
         if( menuList != null ){
             Permission currNode = null;
@@ -160,10 +168,12 @@ public class PermUtils {
             if( currNode != null ){
                 List parentList = new TreeBuild(menuList).getParentsNode(currNode, false);
                 List<String> permsNameList = ListUtils.extractToList(parentList, "permsName");
-                return CollUtil.join(CollUtil.reverse(permsNameList), StrUtil.SLASH);
+                return CollectionUtil.join(CollectionUtil.reverse(permsNameList), StrUtil.SLASH);
             }
             return "false";
         }
         return "false";
     }
+
+
 }

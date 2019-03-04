@@ -20,9 +20,8 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.modules.base.dao.OrganDao;
 import cn.yibo.boot.modules.base.entity.Organ;
@@ -67,9 +66,9 @@ public class OrganServiceImpl extends AbstractBaseService<OrganDao, Organ> imple
             dao.update(organ);
 
             // 更新机构下所有用户的状态
-            Map updateMap = CollUtil.newHashMap();
+            Map updateMap = CollectionUtil.newHashMap();
             updateMap.put("status", organ.getStatus());
-            Map conditionMap = CollUtil.newHashMap();
+            Map conditionMap = CollectionUtil.newHashMap();
             conditionMap.put("tenantId", organ.getId());
             userService.updateByCondition(updateMap, conditionMap);
 
@@ -82,10 +81,8 @@ public class OrganServiceImpl extends AbstractBaseService<OrganDao, Organ> imple
      * 根据租户ID清除用户缓存
      */
     public void clearUsersCacheByTenantId(String tenantId){
-        if( StrUtil.isNotBlank(tenantId) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setTenantId(tenantId);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
+        ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+        clearUserCacheThread.setTenantId(tenantId);
+        ThreadUtil.execute(clearUserCacheThread);
     }
 }

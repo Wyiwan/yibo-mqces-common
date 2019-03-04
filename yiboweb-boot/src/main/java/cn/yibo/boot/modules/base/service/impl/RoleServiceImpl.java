@@ -20,7 +20,6 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.yibo.boot.common.aync.ClearUserCacheThread;
@@ -32,6 +31,7 @@ import cn.yibo.boot.modules.base.entity.Role;
 import cn.yibo.boot.modules.base.service.RoleService;
 import cn.yibo.common.base.controller.BaseForm;
 import cn.yibo.common.base.service.impl.AbstractBaseService;
+import cn.yibo.common.utils.ListUtils;
 import cn.yibo.core.web.exception.BizException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -71,7 +71,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void updateNull(Role role){
         super.updateNull(role);
-        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()));
+        clearUsersCacheByRoleId(ListUtils.newArrayList(role.getId()));
     }
 
     /**
@@ -88,7 +88,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             condition.put("ids", list);
 
             List<Role> roleList = dao.queryList(condition, null, null);
-            if( !CollUtil.isEmpty(roleList) ){
+            if( !ListUtils.isEmpty(roleList) ){
                 for( Role role : roleList ){
                     if( CommonConstant.YES.equals(role.getIsSys()) ){
                         throw new BizException(LoginFailEnum.UNDECLARED_ERROR.getCode(), "抱歉，您没有权限操作内置角色");
@@ -97,7 +97,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
             }
         }
         super.deleteByIds(list);
-        clearUsersCacheByIds(list);
+        clearUsersCacheByRoleId(list);
     }
 
     /**
@@ -143,7 +143,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Transactional(readOnly = false)
     public void saveAuthorize(Role role){
         dao.saveAuthorize(role);
-        clearUsersCacheByIds(CollUtil.newArrayList(role.getId()));
+        clearUsersCacheByRoleId(ListUtils.newArrayList(role.getId()));
     }
 
     /**
@@ -154,19 +154,17 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
     @Override
     @Transactional(readOnly = false)
     public void saveMember(String roleId, List<String> userIds){
+        clearUsersCacheByRoleId(ListUtils.newArrayList(roleId));
         dao.saveMember(roleId, userIds);
-        clearUsersCacheByIds(CollUtil.newArrayList(roleId));
     }
 
     /**
-     * 清除用户缓存
+     * 根据角色ID清除用户缓存
      * @param roleIdList
      */
-    public void clearUsersCacheByIds(List roleIdList){
-        if( !CollUtil.isEmpty(roleIdList) ){
-            ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
-            clearUserCacheThread.setRoleIdList(roleIdList);
-            ThreadUtil.execute(clearUserCacheThread);
-        }
+    public void clearUsersCacheByRoleId(List roleIdList){
+        ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
+        clearUserCacheThread.setRoleIdList(roleIdList);
+        ThreadUtil.execute(clearUserCacheThread);
     }
 }

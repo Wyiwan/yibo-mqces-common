@@ -20,7 +20,7 @@
 
 package cn.yibo.common.utils;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import org.springframework.http.HttpHeaders;
@@ -269,7 +269,7 @@ public class ServletUtils {
 	 */
 	public static Map<String, Object> getParameters(ServletRequest request) {
 		if (request == null){
-			return CollUtil.newHashMap();
+			return CollectionUtil.newHashMap();
 		}
 		return getParametersStartingWith(request, "");
 	}

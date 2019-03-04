@@ -20,7 +20,7 @@
 
 package cn.yibo.common.utils;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
@@ -61,14 +61,14 @@ public class PropertiesUtils {
 		}
 		public static void releadInstance(){
 			// 获取平台及模块相关的配置文件
-			Set<String> configSet = CollUtil.newLinkedHashSet();
+			Set<String> configSet = CollectionUtil.newLinkedHashSet();
 			Resource[] resources = ResourceUtils.getResources("classpath*:/config/yibo-*.*");
 			for(Resource resource : resources){
 				configSet.add("classpath:config/"+resource.getFilename());
 			}
 			configSet.add("classpath:config/yibo.yml");
 			// 获取全局设置默认的配置文件（以下是支持环境配置的属性文件）
-			Set<String> set = CollUtil.newLinkedHashSet();
+			Set<String> set = CollectionUtil.newLinkedHashSet();
 			for (String configFile : DEFAULT_CONFIG_FILE){
 				set.add(configFile);
 			}

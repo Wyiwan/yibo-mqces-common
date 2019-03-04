@@ -34,6 +34,9 @@
 
     <!-- 用户缓存 -->
     <cache name="userCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+
+    <!-- 权限缓存 -->
+    <cache name="permsCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 </ehcache>
 
 

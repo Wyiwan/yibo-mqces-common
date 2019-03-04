@@ -21,10 +21,11 @@
 package cn.yibo.boot.config.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
-import cn.yibo.boot.common.constant.SecurityConstant;
 import cn.yibo.boot.common.constant.LoginFailEnum;
+import cn.yibo.boot.common.constant.SecurityConstant;
 import cn.yibo.boot.common.exception.LoginFailLimitException;
 import cn.yibo.boot.config.security.SecurityUserDetails;
+import cn.yibo.boot.config.security.UserDetailsServiceImpl;
 import cn.yibo.core.protocol.ResponseTs;
 import cn.yibo.core.web.exception.BizException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -53,9 +53,9 @@ import java.io.IOException;
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
     private JWTUtil jwtUtil;
 
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService){
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsServiceImpl userDetailsService){
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
@@ -99,7 +99,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter{
         String username = jwtUtil.validateToken(headToken);
 
         if( StrUtil.isNotBlank(username) ) {
-            SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username);
+            String roleId = request.getHeader(SecurityConstant.IDENTITY_KEY);
+            SecurityUserDetails userDetails = (SecurityUserDetails)userDetailsService.loadUserByUsername(username, roleId);
 
             String tenantId = request.getHeader(SecurityConstant.TENANT_KEY);
             if( userDetails != null && userDetails.isSuperAdmin() && !StrUtil.isEmptyOrUndefined(tenantId)){

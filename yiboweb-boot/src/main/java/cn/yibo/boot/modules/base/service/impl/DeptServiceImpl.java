@@ -20,13 +20,13 @@
 
 package cn.yibo.boot.modules.base.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.yibo.boot.common.aync.ClearUserCacheThread;
 import cn.yibo.boot.modules.base.dao.DeptDao;
 import cn.yibo.boot.modules.base.entity.Dept;
 import cn.yibo.boot.modules.base.service.DeptService;
 import cn.yibo.common.base.service.impl.AbstractBaseService;
+import cn.yibo.common.utils.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,7 +76,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
     public void updateNull(Dept dept){
         super.updateNull(dept);
         dao.updateAncestor(dept);
-        clearUsersCacheByDeptId(CollUtil.newArrayList(dept.getId()));
+        clearUsersCacheByDeptId(ListUtils.newArrayList(dept.getId()));
     }
 
     /**
@@ -94,7 +94,7 @@ public class DeptServiceImpl extends AbstractBaseService<DeptDao, Dept> implemen
      * @param deptIdList
      */
     public void clearUsersCacheByDeptId(List deptIdList){
-        if( !CollUtil.isEmpty(deptIdList) ){
+        if( !ListUtils.isEmpty(deptIdList) ){
             ClearUserCacheThread clearUserCacheThread = new ClearUserCacheThread();
             clearUserCacheThread.setDeptIdList(deptIdList);
             ThreadUtil.execute(clearUserCacheThread);

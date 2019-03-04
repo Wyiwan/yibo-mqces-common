@@ -20,7 +20,6 @@
 
 package cn.yibo.boot.modules.base.entity;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.base.entity.DataEntity;
 import cn.yibo.boot.common.constant.CommonConstant;
@@ -62,6 +61,12 @@ public class User extends DataEntity<String> {
 
     @ApiModelProperty(value = "所属科室")
     private String deptId;
+
+    @ApiModelProperty(value = "所属机构名称")
+    private String organName;
+
+    @ApiModelProperty(value = "所属科室名称")
+    private String deptName;
 
     @NotEmpty(message="用户姓名不能为空")
     @ApiModelProperty(value = "用户姓名")
@@ -138,15 +143,13 @@ public class User extends DataEntity<String> {
     //------------------------------------------------------------------------------------------------------------------
     // 以下为扩展属性
     //------------------------------------------------------------------------------------------------------------------
-    @ApiModelProperty(value = "所属机构名称")
-    private String organName;
-
-    @ApiModelProperty(value = "所属科室名称")
-    private String deptName;
-
     @JsonIgnore
     @JSONField(serialize = false)
     private Dept dept;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private Role role;
 
     @JsonIgnore
     @JSONField(serialize = false)
@@ -169,7 +172,7 @@ public class User extends DataEntity<String> {
     }
 
     public String getRoleNames(){
-        if( !CollUtil.isEmpty(roles) ){
+        if( !ListUtils.isEmpty(roles) ){
             return ListUtils.extractToString(roles, "roleName", ",");
         }
         return "";

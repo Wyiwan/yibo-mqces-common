@@ -57,11 +57,11 @@ public interface PermissionDao extends CrudDao<Permission> {
     List<Permission> findByWeight(@Param("minWeight") Integer minWeight, @Param("maxWeight") Integer maxWeight, @Param("type") String type);
 
     /**
-     * 级联删除
+     * 删除扩展
      * @param list
      * @return
      */
-    int deleteCascade(List list);
+    int deleteByIdsExt(List list);
 
     /**
      * 更新Ancestor字段信息

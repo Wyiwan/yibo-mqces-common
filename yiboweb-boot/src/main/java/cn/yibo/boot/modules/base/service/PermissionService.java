@@ -20,9 +20,12 @@
 
 package cn.yibo.boot.modules.base.service;
 
+import cn.yibo.boot.common.constant.CacheConstant;
 import cn.yibo.boot.modules.base.dao.PermissionDao;
 import cn.yibo.boot.modules.base.entity.Permission;
 import cn.yibo.common.base.service.IBaseService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -32,7 +35,12 @@ import java.util.List;
  * @since 2018-12-03
  * @version v1.0
  */
+@CacheConfig(cacheNames = CacheConstant.PERMS_CACHE_NAME)
 public interface PermissionService extends IBaseService<PermissionDao, Permission> {
+    @Override
+    @Cacheable(key = "ALL_PERMS", unless = "#result == null")
+    List<Permission> findAll();
+
     /**
      * 根据类型查询权限
      * @param type
@@ -45,13 +53,15 @@ public interface PermissionService extends IBaseService<PermissionDao, Permissio
      * @param userId
      * @return
      */
-    List<Permission> findByUserId(String userId, String type);
+    @Cacheable(key = "#userId", unless = "#result == null")
+    List<Permission> findByUserId(String userId);
 
     /**
      * 根据角色ID查询权限
      * @param roleId
      * @return
      */
+    @Cacheable(key = "#roleId", unless = "#result == null")
     List<Permission> findByRoleId(String roleId);
 
     /**

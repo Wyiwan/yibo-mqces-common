@@ -19,7 +19,6 @@
 */
 package cn.yibo.boot.common.aync;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.map.MapUtil;
@@ -45,9 +44,9 @@ import java.util.Map;
 @Slf4j
 public class ClearUserCacheThread extends Thread{
     private String tenantId;
-    private List userIdList;
-    private List roleIdList;
-    private List deptIdList;
+    private List<String> userIdList;
+    private List<String>  roleIdList;
+    private List<String>  deptIdList;
 
     public ClearUserCacheThread(){
         super();
@@ -57,15 +56,15 @@ public class ClearUserCacheThread extends Thread{
         this.tenantId = tenantId;
     }
 
-    public void setUserIdList(List userIdList){
+    public void setUserIdList(List<String>  userIdList){
         this.userIdList = userIdList;
     }
 
-    public void setRoleIdList(List roleIdList){
+    public void setRoleIdList(List<String>  roleIdList){
         this.roleIdList = roleIdList;
     }
 
-    public void setDeptIdList(List deptIdList) {
+    public void setDeptIdList(List<String>  deptIdList) {
         this.deptIdList = deptIdList;
     }
 
@@ -75,44 +74,66 @@ public class ClearUserCacheThread extends Thread{
 
         if( userDao != null ){
             TimeInterval timer = DateUtil.timer();
-            log.info("======================= 清除用户缓存 =======================");
+            log.info("======================= 清除缓存Start =======================");
 
-            if( !CollUtil.isEmpty(userIdList) ){
+            if( !ListUtils.isEmpty(userIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("ids", userIdList);
                 List<User> userList = userDao.findByIds(condition);
-                this.clearCaches( ListUtils.extractToList(userList, "username") );
+
+                this.clearUserCaches(ListUtils.extractToList(userList, "username"));
+                this.clearUserPermsCaches(userIdList);
             }
 
-            if( !CollUtil.isEmpty(roleIdList) ){
+            if( !ListUtils.isEmpty(roleIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("roleIds", roleIdList);
                 List<User> userList = userDao.findByIds(condition);
 
-                this.clearCaches( ListUtils.extractToList(userList, "username") );
+                this.clearUserCaches(ListUtils.extractToList(userList, "username"));
+                this.clearUserPermsCaches(ListUtils.extractToList(userList, "id"));
+                this.clearRolePermsCaches(roleIdList);
             }
 
-            if( !CollUtil.isEmpty(deptIdList) ){
+            if( !ListUtils.isEmpty(deptIdList) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("deptIds", deptIdList);
                 List<User> userList = userDao.findByIds(condition);
 
-                this.clearCaches( ListUtils.extractToList(userList, "username") );
+                this.clearUserCaches( ListUtils.extractToList(userList, "username") );
             }
 
             if( StrUtil.isNotBlank(tenantId) ){
                 List<User> userList = userDao.findList("tenant_id",tenantId, null, null);
-                this.clearCaches( ListUtils.extractToList(userList, "username") );
+                this.clearUserCaches( ListUtils.extractToList(userList, "username") );
             }
-            log.info("=======================清除用户缓存耗时：" + timer.interval()+ "ms");
+            log.info("=======================清除缓存End，耗时：" + timer.interval()+ "ms");
         }
     }
 
-    private void clearCaches(List<String> list){
-        if( !CollUtil.isEmpty(list) ){
+    private void clearUserCaches(List<String> list){
+        if( !ListUtils.isEmpty(list) ){
             for( String username : list ){
                 CacheUtils.remove(CacheConstant.USER_CACHE_NAME, username);
                 log.info("清除用户[ "+username+" ]缓存...");
+            }
+        }
+    }
+
+    private void clearUserPermsCaches(List<String> list){
+        if( !ListUtils.isEmpty(list) ){
+            for( String userId : list ){
+                CacheUtils.remove(CacheConstant.PERMS_CACHE_NAME, userId);
+                log.info("清除用户[ "+userId+" ]的权限缓存...");
+            }
+        }
+    }
+
+    private void clearRolePermsCaches(List<String> list){
+        if( !ListUtils.isEmpty(list) ){
+            for( String roleId : list ){
+                CacheUtils.remove(CacheConstant.PERMS_CACHE_NAME, roleId);
+                log.info("清除角色[ "+roleId+" ]的权限缓存...");
             }
         }
     }

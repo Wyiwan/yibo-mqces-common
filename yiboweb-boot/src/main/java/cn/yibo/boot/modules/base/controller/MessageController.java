@@ -20,7 +20,6 @@
 
 package cn.yibo.boot.modules.base.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.yibo.boot.base.controller.CrudController;
 import cn.yibo.boot.common.constant.CommonConstant;
@@ -77,7 +76,7 @@ public class MessageController extends CrudController<MessageService, Message>{
             messagingTemplate.convertAndSend("/topic/subscribe", "您收到了新的系统消息");
          // 指定机构
         }else if(CommonConstant.MESSAGE_RANGE_ORGAN.equals(message.getRange())){
-            if( !CollUtil.isEmpty(message.getOrganIdList()) ){
+            if( !ListUtils.isEmpty(message.getOrganIdList()) ){
                 Map<String, Object> condition = MapUtil.newHashMap();
                 condition.put("organIds", message.getOrganIdList());
 
@@ -90,7 +89,7 @@ public class MessageController extends CrudController<MessageService, Message>{
             }
         // 指定用户
         }else{
-            if( !CollUtil.isEmpty(message.getUserIdList()) ){
+            if( !ListUtils.isEmpty(message.getUserIdList()) ){
                 for( String userId : message.getUserIdList() ){
                     msgSendList.add(new MessageSend(userId));
                     // 指定推送

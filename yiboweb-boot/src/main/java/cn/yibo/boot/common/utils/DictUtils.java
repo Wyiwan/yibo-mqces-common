@@ -19,7 +19,6 @@
 */
 package cn.yibo.boot.common.utils;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.yibo.boot.common.constant.CacheConstant;
@@ -62,14 +61,14 @@ public class DictUtils {
         Map<String, List> dictMap = MapUtil.newHashMap();
 
         List<DictKind> list = dictKindService.findList("status", StatusEnum.N.getCode());
-        if( !CollUtil.isEmpty(list) ){
+        if( !ListUtils.isEmpty(list) ){
             Iterator<DictKind> iterator = list.iterator();
             while( iterator.hasNext() ){
                 dictMap.put(iterator.next().getDictKind(), ListUtils.newArrayList());
             }
 
             List<DictItem> itemList = dictItemService.findList("i.status", StatusEnum.N.getCode());
-            if( !CollUtil.isEmpty(itemList) ){
+            if( !ListUtils.isEmpty(itemList) ){
                 Iterator<DictItem> itemIterator = itemList.iterator();
 
                 while( itemIterator.hasNext() ){
@@ -98,7 +97,7 @@ public class DictUtils {
         if( StrUtil.isNotBlank(dictKind) && StrUtil.isNotBlank(itemName) ){
             List<DictItem> dictItemList = getDictList(dictKind);
 
-            if( !CollUtil.isEmpty(dictItemList) ){
+            if( !ListUtils.isEmpty(dictItemList) ){
                 Iterator<DictItem> iterator = dictItemList.iterator();
 
                 while( iterator.hasNext() ){
@@ -123,7 +122,7 @@ public class DictUtils {
         if( StrUtil.isNotBlank(dictKind) && StrUtil.isNotBlank(itemValue) ){
             List<DictItem> dictItemList = getDictList(dictKind);
 
-            if( !CollUtil.isEmpty(dictItemList) ){
+            if( !ListUtils.isEmpty(dictItemList) ){
                 Iterator<DictItem> iterator = dictItemList.iterator();
 
                 while( iterator.hasNext() ){
