@@ -165,6 +165,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleDao, Role> implemen
      * @param flag
      */
     @Override
+    @Transactional(readOnly = false)
     public void assignUser(String roleId, String userId, boolean flag){
         dao.assignUser(roleId, userId, flag);
     }

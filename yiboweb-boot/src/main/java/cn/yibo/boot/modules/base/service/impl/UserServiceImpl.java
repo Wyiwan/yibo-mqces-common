@@ -235,6 +235,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
      * @param flag
      */
     @Override
+    @Transactional(readOnly = false)
     public void assignRole(String roleId, String userId, boolean flag){
         roleService.assignUser(roleId, userId, flag);
         clearUsersCacheByUserId(ListUtils.newArrayList(userId));
