@@ -81,7 +81,7 @@ public class UserServiceImpl extends AbstractBaseService<UserDao, User> implemen
     @Autowired
     private MsgUtils msgUtils;
 
-    @Value("${webapp.allow-multi-identity}")
+    @Value("${webapp.login.allow-multi-identity}")
     private Boolean allowMultiIdentity;
 
     /**

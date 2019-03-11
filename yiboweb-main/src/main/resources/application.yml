@@ -1,4 +1,4 @@
-#全局配置
+# 全局配置
 server:
   port: 8888
   tomcat:
@@ -11,15 +11,18 @@ jasypt:
     password: YiboYun
 
 webapp:
-  name: 医博基础技术框架V1.4.8
-  swagger-open: true
-  token-save-redis: false # token是否存储在redis上
-  token-expire-time: 60   # token过期时间（分钟）
-  save-login-time: 7      # 用户选择保存登录状态对应token过期时间（天）
-  login-time-limit: 5     # 限制用户登陆错误次数（次）
-  login-after-time: 10    # 错误超过次数后多少分钟后才能继续登录（分钟）
-  allow-multi-identity: false  # 允许用户多身份(角色)登录系统
-  #日志记录相关
+  name: 医博基础技术框架V1.4.9
+
+  # 登录相关
+  login:
+    token-save-redis: false # token是否存储在redis上
+    token-expire-time: 60   # token过期时间（分钟）
+    save-login-time: 7      # 用户选择保存登录状态对应token过期时间（天）
+    login-time-limit: 5     # 限制用户登陆错误次数（次）
+    login-after-time: 10    # 错误超过次数后多少分钟后才能继续登录（分钟）
+    allow-multi-identity: false  # 允许用户多身份(角色)登录系统
+
+  # 日志相关
   log:
     enabled: true
     addPathPatterns:
@@ -30,16 +33,17 @@ webapp:
       - /webjars/**
       - /error
 
-#Srping相关配置
+# Srping相关配置
 spring:
+  # 当前环境名称
   profiles:
     active: @spring.active@
 
-  #数据源配置
+  # 数据源配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
 
-    #Druid配置
+    # Druid配置
     druid:
       # 连接池配置
       initial-size: 5
@@ -74,21 +78,21 @@ spring:
         allow: # IP白名单
         deny:  # IP黑名单
 
-  # 文件大小上传配置
+  # 文件上传大小配置
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
 
-#Mybatis配置
+# Mybatis配置
 mybatis:
-  #指定sql映射文件位置
+  # 指定sql映射文件位置
   mapper-locations: classpath*:cn/yibo/**/modules/**/mapping/*.xml
-  #配置信息
+  # 配置信息
   configuration:
     map-underscore-to-camel-case: true
 
-#忽略鉴权url
+# 忽略鉴权url
 ignored:
   urls:
     - /common/**
@@ -103,8 +107,9 @@ ignored:
     - /**/*.png
     - /**/*.ico
 
-#Swagger界面内容配置
+# Swagger界面内容配置
 swagger:
+  open: true
   title: Yiboweb API接口文档
   description: Yiboweb Api Documentation
   version: 1.0.0
@@ -126,8 +131,8 @@ spring:
     url: jdbc:mysql://localhost:3306/yibo_frame?allowMultiQueries=true
   #Redis
   redis:
-    host: 192.168.1.244
-    port: 8379
+    host: 127.0.0.1
+    port: 6379
     password: ENC(108NCrFBdhsxAwdjy36x4g==)
 
 ---

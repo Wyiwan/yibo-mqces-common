@@ -53,13 +53,13 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JWTUtil {
-    @Value("${webapp.token-save-redis}")
+    @Value("${webapp.login.token-save-redis}")
     private Boolean tokenRedis;
 
-    @Value("${webapp.token-expire-time}")
+    @Value("${webapp.login.token-expire-time}")
     private Integer tokenExpireTime;
 
-    @Value("${webapp.save-login-time}")
+    @Value("${webapp.login.save-login-time}")
     private Integer saveLoginTime;
 
     @Autowired

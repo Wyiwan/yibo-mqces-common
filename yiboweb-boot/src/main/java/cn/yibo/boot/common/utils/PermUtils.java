@@ -52,7 +52,7 @@ public class PermUtils {
     @Autowired
     private PermissionService permissionService;
 
-    @Value("${webapp.allow-multi-identity}")
+    @Value("${webapp.login.allow-multi-identity}")
     private Boolean allowMultiIdentity;
 
     /**
@@ -101,7 +101,7 @@ public class PermUtils {
     }
 
     /***
-     * 根据权限类型从已有权限中筛选权限
+     * 根据权限类型过滤权限
      * @param permissions
      * @param type
      * @return
@@ -126,7 +126,7 @@ public class PermUtils {
     public static Map<String, List<String>> getButtonPermissions(List<Permission> permissions){
         Map<String, List<String>> map = MapUtil.newHashMap();
 
-        List<Permission> opearPermissions = PermUtils.filterPermissionsByType(permissions, CommonConstant.PERMISSION_OPERATION);
+        List<Permission> opearPermissions = filterPermissionsByType(permissions, CommonConstant.PERMISSION_OPERATION);
         if( !ListUtils.isEmpty(opearPermissions) ) {
             TreeBuild treeBuild = new TreeBuild(permissions);
 
@@ -174,6 +174,5 @@ public class PermUtils {
         }
         return "false";
     }
-
 
 }

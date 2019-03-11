@@ -43,7 +43,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@ConditionalOnProperty(prefix = "webapp", name = "swagger-open", havingValue = "true")
+@ConditionalOnProperty(prefix = "swagger", name = "open", havingValue = "true")
 public class SwaggerConfig {
     @Value("${swagger.title}")
     private String title;

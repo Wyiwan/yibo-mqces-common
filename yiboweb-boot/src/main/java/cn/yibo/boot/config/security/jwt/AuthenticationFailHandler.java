@@ -53,10 +53,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHandler {
-    @Value("${webapp.login-time-limit}")
+    @Value("${webapp.login.login-time-limit}")
     private Integer loginTimeLimit;
 
-    @Value("${webapp.login-after-time}")
+    @Value("${webapp.login.login-after-time}")
     private Integer loginAfterTime;
 
     @Autowired

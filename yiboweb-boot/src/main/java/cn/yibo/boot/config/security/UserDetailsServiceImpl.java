@@ -67,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     private PermissionService permissionService;
 
-    @Value("${webapp.allow-multi-identity}")
+    @Value("${webapp.login.allow-multi-identity}")
     private Boolean allowMultiIdentity;
 
     @Override
