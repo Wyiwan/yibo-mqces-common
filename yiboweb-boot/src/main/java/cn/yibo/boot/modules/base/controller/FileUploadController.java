@@ -48,7 +48,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/file")
-@Api(tags = "9011.文件管理")
+@Api(tags = "9011.文件上传管理")
 public class FileUploadController extends BaseController {
     @Autowired
     FileUploadService fileUploadService;
