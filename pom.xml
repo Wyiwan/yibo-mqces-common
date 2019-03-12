@@ -37,7 +37,7 @@
         <swagger.version>2.9.2</swagger.version>
         <jasypt.version>2.1.0</jasypt.version>
         <lombok.version>1.16.20</lombok.version>
-        <hutool.version>4.4.1</hutool.version>
+        <hutool.version>4.5.1</hutool.version>
         <poi.version>3.14</poi.version>
         <fastjson.version>1.2.49</fastjson.version>
     </properties>
