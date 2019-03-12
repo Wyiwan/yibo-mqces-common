@@ -33,6 +33,13 @@ webapp:
       - /webjars/**
       - /error
 
+  # 上传相关
+  file:
+    # 文件上传根路径
+    # baseDir: D:/yiboweb
+    # 上传文件的相对路径（支持：yyyy, MM, dd, HH, mm, ss）
+    uploadPath: '{yyyy}/{MM}/'
+
 # Srping相关配置
 spring:
   # 当前环境名称

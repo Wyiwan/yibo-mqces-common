@@ -42,7 +42,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("/api/message-send")
-@Api(tags = "90091.已推送消息管理")
+@Api(tags = "9010.已推送消息管理")
 public class MessageSendController extends BaseController {
     @Autowired
     MessageSendService messageSendService;
