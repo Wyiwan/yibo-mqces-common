@@ -39,7 +39,7 @@
         <lombok.version>1.16.20</lombok.version>
         <hutool.version>4.5.1</hutool.version>
         <poi.version>3.14</poi.version>
-        <fastjson.version>1.2.49</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
     </properties>
 
     <dependencyManagement>
